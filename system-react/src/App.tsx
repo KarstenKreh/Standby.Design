@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, useCallback, type CSSProperties } from 'react';
+import { useEffect, useMemo, useState, useCallback } from 'react';
 import { Toaster } from '@/components/ui/sonner';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
@@ -9,12 +9,9 @@ import { decodeState as decodeTypeState } from '@core/url-state/type';
 import { decodeState as decodeShapeState, type ShapeUrlState as ShapeState } from '@core/url-state/shape';
 import { decodeState as decodeSymbolState, type UrlState as SymbolState } from '@core/url-state/symbol';
 import { decodeState as decodeSpaceState, DEFAULT_SPACE_URL_STATE, type SpaceUrlState } from '@core/url-state/space';
-import { generatePalette, computeAutoErrorHex, computeAutoAccentHex, type PaletteEntry } from '@core/palette';
-import { hexToOklch } from '@core/color-math';
-import { customScale, traditionalScale, type ComputedLevel } from '@core/scale';
-import { applyTypography } from '@core/typography';
+import { buildPaletteSet, buildScale, type PaletteSet } from '@core/orchestrate';
+import { type ComputedLevel } from '@core/scale';
 import { computeSpacingTokens, type SpacingToken } from '@core/spacing';
-import type { AccentPalette } from '@/lib/color-code-export';
 import { SUCCESS_HUE, WARNING_HUE, INFO_HUE } from '@core/palette';
 import { ColorSummary } from '@/components/color-summary';
 import { TypeSummary } from '@/components/type-summary';
@@ -23,10 +20,6 @@ import { AppPreview } from '@/components/app-preview';
 import { SymbolSummary } from '@/components/symbol-summary';
 import { SpaceSummary } from '@/components/space-summary';
 import { SquarePen } from 'lucide-react';
-
-function accentCssName(name: string): string {
-  return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'accent';
-}
 
 const DEFAULT_COLOR_STATE: DecodedColorState = {
   brandHex: '#335A7F',
@@ -75,21 +68,6 @@ const DEFAULT_SHAPE_STATE: Partial<ShapeState> = {
   separationMode: 'shadow',
 };
 
-
-interface PaletteResult {
-  brand: PaletteEntry[];
-  surface: PaletteEntry[];
-  error: PaletteEntry[];
-  errorSurface: PaletteEntry[];
-  neutral: PaletteEntry[];
-  neutralExtended: PaletteEntry[];
-  slated: PaletteEntry[];
-  accentPalettes: AccentPalette[];
-  brandSwatchOverride: { hex: string; L: number } | null;
-  errorSwatchOverride: { hex: string; L: number } | null;
-  effectiveBgHex: string;
-  effectiveErrorHex: string;
-}
 
 function App() {
   const [colorState, setColorState] = useState<DecodedColorState | null>(null);
@@ -142,58 +120,12 @@ function App() {
       : 'Design System — standby.design';
   }, [themeName]);
 
-  const palette = useMemo<PaletteResult | null>(() => {
-    if (!colorState) return null;
-    const { brandHex, bgColorHex, bgAutoMatch, errorColorHex, errorAutoMatch, chromaScale, currentMode, extraAccents, brandPin, errorPin } = colorState;
-
-    const effectiveBgHex = bgAutoMatch ? brandHex : bgColorHex;
-    const effectiveErrorHex = errorAutoMatch ? computeAutoErrorHex(brandHex) : errorColorHex;
-
-    const brand = generatePalette(brandHex, 1.0, currentMode);
-    const surface = generatePalette(effectiveBgHex, chromaScale, currentMode);
-    const error = generatePalette(effectiveErrorHex, 1.0, currentMode);
-    const errorSurface = generatePalette(effectiveErrorHex, chromaScale, currentMode);
-    const neutral = generatePalette(effectiveBgHex, 0.0, currentMode);
-    const slated = generatePalette(effectiveBgHex, chromaScale, currentMode);
-
-    const accentPalettes: AccentPalette[] = (extraAccents || [])
-      .filter(a => a.autoMatch || /^#[0-9a-fA-F]{6}$/.test(a.hex))
-      .map(a => {
-        const effectiveHex = a.autoMatch ? computeAutoAccentHex(brandHex, a.autoHue) : a.hex;
-        return {
-          name: a.name,
-          hex: effectiveHex,
-          cssName: accentCssName(a.name),
-          palette: generatePalette(effectiveHex, 1.0, currentMode),
-          slatedPalette: generatePalette(effectiveHex, chromaScale, currentMode),
-          pin: a.pin,
-          invert: a.invert,
-        };
-      });
-
-    const brandSwatchOverride = brandPin ? { hex: brandHex, L: hexToOklch(brandHex)[0] } : null;
-    const errorSwatchOverride = errorPin ? { hex: effectiveErrorHex, L: hexToOklch(effectiveErrorHex)[0] } : null;
-
-    const neutralExtended: PaletteEntry[] = [
-      { step: 0 as PaletteEntry['step'], L: 1, C: 0, H: 0, hex: '#FFFFFF', css: 'oklch(1 0 0)' },
-      ...neutral,
-      { step: 1000 as PaletteEntry['step'], L: 0, C: 0, H: 0, hex: '#000000', css: 'oklch(0 0 0)' },
-    ];
-
-    return { brand, surface, error, errorSurface, neutral, neutralExtended, slated, accentPalettes, brandSwatchOverride, errorSwatchOverride, effectiveBgHex, effectiveErrorHex };
+  const palette = useMemo<PaletteSet | null>(() => {
+    return colorState ? buildPaletteSet(colorState) : null;
   }, [colorState]);
 
   const scale = useMemo<ComputedLevel[] | null>(() => {
-    if (!typeState) return null;
-    let s: ComputedLevel[];
-    if (typeState.scaleMode === 'traditional' && typeState.traditionalAssignments) {
-      s = traditionalScale(typeState.traditionalAssignments, typeState.traditionalAssignments);
-    } else {
-      const effectiveMobileRatio = typeState.mobileRatio;
-      s = customScale(typeState.baseSize, typeState.customRatio, effectiveMobileRatio, typeState.mobileBaseSize ?? typeState.baseSize);
-    }
-    s = applyTypography(s, typeState.lineHeightOverrides ?? {}, typeState.letterSpacingOverrides ?? {});
-    return s;
+    return typeState ? buildScale(typeState) : null;
   }, [typeState]);
 
   const spacing = useMemo<SpacingToken[]>(() => {
@@ -309,6 +241,8 @@ function App() {
               headingWeight={typeState?.headingWeight}
               screenIdx={screenIdx}
               fgContrastMode={colorState?.fgContrastMode}
+              iconSetId={symbolState?.selectedSet ?? null}
+              iconScale={symbolState?.iconScale}
             />
           </div>
         )}

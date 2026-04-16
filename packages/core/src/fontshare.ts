@@ -81,7 +81,9 @@ interface FontshareApiResponse {
 export function fetchFontCatalog(): Promise<FontEntry[]> {
   if (fetchPromise) return fetchPromise;
 
-  const apiUrl = import.meta.env.DEV
+  // Node/SSR tolerant: fall back to the production path if import.meta.env is unavailable.
+  const meta = (import.meta as unknown as { env?: { DEV?: boolean } });
+  const apiUrl = meta.env?.DEV
     ? 'https://api.fontshare.com/v2/fonts'
     : '/api/fonts';
 
@@ -138,8 +140,20 @@ export function fontFamily(slug: string): string {
   if (monoStack) return monoStack;
 
   const entry = catalogMap.get(slug);
-  if (!entry) return 'sans-serif';
-  return `'${entry.name}', ${entry.fallback}`;
+  if (entry) return `'${entry.name}', ${entry.fallback}`;
+
+  // Unknown slug (catalog not fetched yet, or font truly absent). Produce a
+  // named fallback that respects the slug so briefings/CSS don't silently
+  // collapse to a generic family. Heuristic: slug name hints at category.
+  if (!slug) return 'sans-serif';
+  const display = slug
+    .split('-')
+    .map((w) => (w ? w[0].toUpperCase() + w.slice(1) : ''))
+    .join(' ');
+  const fallback = /mono|code|typewriter/i.test(slug) ? 'monospace'
+    : /serif/i.test(slug) ? 'serif'
+    : 'sans-serif';
+  return `'${display}', ${fallback}`;
 }
 
 // ── URL builders ────────────────────────────────────────────────

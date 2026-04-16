@@ -23,14 +23,14 @@ import {
 import {
   generatePrimitivesOklch,
   generateSemantic,
-  generateLlmBriefing as generateColorLlmBriefing,
 } from '@/lib/color-code-export';
+import { generateColorBriefing } from '@core/exports/color-briefing';
+import { generateTypeBriefing } from '@core/exports/type-briefing';
 import { generateShadowValues } from '@core/shadows';
 import {
   generateCssExport as generateTypeCss,
   generateTailwindV4Export as generateTypeTailwind,
   generateFontEmbed,
-  generateLlmBriefing as generateTypeLlmBriefing,
 } from '@/lib/type-code-export';
 import {
   generateShapeCss,
@@ -250,26 +250,26 @@ export function CombinedExport({ colorState, palette, typeState, scale, spacing,
 
     // Color briefing
     if (colorState && palette) {
-      md += generateColorLlmBriefing(
-        colorState.brandHex,
-        palette.effectiveBgHex,
-        palette.effectiveErrorHex,
-        palette.accentPalettes,
-        colorState.chromaScale,
-        colorState.currentMode,
-        colorState.brandPin,
-        colorState.errorPin,
-        colorState.themeName,
-        colorState.fgContrastMode,
-      );
+      md += generateColorBriefing({
+        brandHex: colorState.brandHex,
+        effectiveBgHex: palette.effectiveBgHex,
+        effectiveErrorHex: palette.effectiveErrorHex,
+        accentPalettes: palette.accentPalettes,
+        chromaScale: colorState.chromaScale,
+        mode: colorState.currentMode,
+        brandPin: colorState.brandPin,
+        errorPin: colorState.errorPin,
+        themeName: colorState.themeName,
+        fgContrastMode: colorState.fgContrastMode,
+      });
     }
 
     // Type briefing
     if (typeState && scale) {
       if (md) md += '\n---\n\n';
-      md += generateTypeLlmBriefing({
+      md += generateTypeBriefing({
         levels: scale,
-        spacingTokens: [],
+        spacingTokens: spacing ?? [],
         headingFont: typeState.headingFont,
         bodyFont: typeState.bodyFont,
         monoFont: typeState.monoFont,

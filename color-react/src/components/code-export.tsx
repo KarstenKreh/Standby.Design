@@ -8,7 +8,8 @@ import { Copy } from 'lucide-react';
 import { toast } from 'sonner';
 import { usePalette } from '@/hooks/use-palette';
 import { useThemeStore } from '@/store/theme-store';
-import { generatePrimitivesOklch, generatePrimitivesHex, generateSemantic, generateLlmBriefing } from '@/lib/code-export';
+import { generatePrimitivesOklch, generatePrimitivesHex, generateSemantic } from '@/lib/code-export';
+import { generateColorBriefing } from '@core/exports/color-briefing';
 import { CodeBlock } from '@core/code-block';
 
 export function CodeExport() {
@@ -47,7 +48,10 @@ export function CodeExport() {
   );
 
   const llmCode = useMemo(() =>
-    generateLlmBriefing(brandHex, effectiveBgHex, effectiveErrorHex, accentPalettes, chromaScale, currentMode, brandPin, errorPin, themeName, fgContrastMode),
+    generateColorBriefing({
+      brandHex, effectiveBgHex, effectiveErrorHex, accentPalettes,
+      chromaScale, mode: currentMode, brandPin, errorPin, themeName, fgContrastMode,
+    }),
     [brandHex, effectiveBgHex, effectiveErrorHex, accentPalettes, chromaScale, currentMode, brandPin, errorPin, themeName, fgContrastMode]
   );
 

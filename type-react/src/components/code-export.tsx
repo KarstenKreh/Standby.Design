@@ -11,8 +11,8 @@ import {
   generateCssExport,
   generateTailwindV4Export,
   generateFontEmbed,
-  generateLlmBriefing,
 } from '@/lib/code-export';
+import { generateTypeBriefing } from '@core/exports/type-briefing';
 import { generateDesignTokens } from '@/lib/design-token-export';
 import { CodeBlock } from '@core/code-block';
 
@@ -64,7 +64,10 @@ export function CodeExport() {
     () => generateFontEmbed(store.headingFont, store.bodyFont, store.monoFont),
     [store.headingFont, store.bodyFont, store.monoFont],
   );
-  const llmCode = useMemo(() => generateLlmBriefing(opts), [opts]);
+  const llmCode = useMemo(
+    () => generateTypeBriefing({ ...opts, spacingTokens: [] }),
+    [opts],
+  );
 
   const handleCopyAll = useCallback(() => {
     const parts: string[] = [];
