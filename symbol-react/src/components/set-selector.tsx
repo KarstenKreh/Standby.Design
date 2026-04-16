@@ -2,28 +2,8 @@ import { useMemo } from 'react';
 import { cn } from '@/lib/utils';
 import { useSymbolStore } from '@/store/symbol-store';
 import { ICON_FAMILIES, getFamilyForVariant, type IconFamily } from '@core/icon-sets';
-import { SAMPLE_ICONS, type SampleIconName, type IconDef } from '@core/sample-icons';
-
-function SampleIcon({ def, size, viewBox }: { def: IconDef; size: number; viewBox: string }) {
-  const paths = Array.isArray(def.d) ? def.d : [def.d];
-  return (
-    <svg
-      viewBox={viewBox}
-      width={size}
-      height={size}
-      fill={def.type === 'fill' ? 'currentColor' : 'none'}
-      stroke={def.type === 'stroke' ? 'currentColor' : 'none'}
-      strokeWidth={def.type === 'stroke' ? (def.strokeWidth ?? 2) : 0}
-      strokeDasharray={def.strokeDasharray}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      {paths.map((d, i) => (
-        <path key={i} d={d} />
-      ))}
-    </svg>
-  );
-}
+import { SAMPLE_ICONS, type SampleIconName } from '@core/sample-icons';
+import { SampleIcon } from '@core/sample-icon';
 
 const PREVIEW_ICONS: SampleIconName[] = ['home', 'search', 'heart'];
 

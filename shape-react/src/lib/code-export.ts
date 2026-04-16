@@ -86,6 +86,36 @@ function scaleLabel(scale: number): string {
   return Math.abs(scale - 1.272) < 0.001 ? '√φ' : scale.toFixed(3);
 }
 
+/** Emit the press utility class matching the active shapeStyle. */
+function generateInteractiveCss(opts: ShapeExportOptions): string {
+  let css = `/* Interactive button states — matches preview, includes cursor: pointer */\n`;
+  if (opts.shapeStyle === 'glass') {
+    css += `.glass-press {\n  cursor: pointer;\n  transition: filter 120ms ease-out, transform 120ms ease-out;\n}\n`;
+    css += `.glass-press:hover { filter: brightness(1.1); }\n`;
+    css += `.glass-press:active { filter: brightness(0.9); transform: scale(0.98); }\n`;
+  } else if (opts.shapeStyle === 'neomorph') {
+    css += `.neomorph-press {\n  cursor: pointer;\n  transition: filter 200ms cubic-bezier(0.2, 0, 0, 1), box-shadow 200ms cubic-bezier(0.2, 0, 0, 1);\n}\n`;
+    css += `.neomorph-press:hover { filter: brightness(1.03); }\n`;
+    css += `.neomorph-press:active { filter: brightness(0.95); box-shadow: none !important; }\n`;
+  } else if (opts.shapeStyle === 'neobrutalism') {
+    css += `.neobrutalism-press {\n  cursor: pointer;\n  transition: transform 120ms ease-out;\n  --press-x: ${opts.shadowOffsetX}px;\n  --press-y: ${opts.shadowOffsetY}px;\n}\n`;
+    css += `.neobrutalism-press:hover { transform: translate(calc(var(--press-x) * 0.5), calc(var(--press-y) * 0.5)); }\n`;
+    css += `.neobrutalism-press:active { transform: translate(var(--press-x), var(--press-y)); }\n`;
+  } else {
+    css += `.paper-press {\n  cursor: pointer;\n  transition: filter 120ms ease-out;\n}\n`;
+    css += `.paper-press:hover { filter: brightness(1.05); }\n`;
+    css += `.paper-press:active { filter: brightness(0.92); }\n`;
+  }
+  return css;
+}
+
+function pressClassName(style: ShapeStyle): string {
+  if (style === 'glass') return 'glass-press';
+  if (style === 'neomorph') return 'neomorph-press';
+  if (style === 'neobrutalism') return 'neobrutalism-press';
+  return 'paper-press';
+}
+
 /* ------------------------------------------------------------------ */
 /*  CSS Custom Properties                                             */
 /* ------------------------------------------------------------------ */
@@ -148,6 +178,8 @@ export function generateCssExport(opts: ShapeExportOptions): string {
 
   // Separation mode (informational)
   css += `\n/* Surface separation strategy: ${opts.separationMode} */\n`;
+
+  css += `\n${generateInteractiveCss(opts)}`;
 
   return css;
 }
@@ -212,6 +244,8 @@ export function generateTailwindV4Export(opts: ShapeExportOptions): string {
   }
 
   css += `\n/* Surface separation strategy: ${opts.separationMode} */\n`;
+
+  css += `\n${generateInteractiveCss(opts)}`;
 
   return css;
 }
@@ -394,6 +428,10 @@ export function generateLlmBriefing(opts: ShapeExportOptions): string {
     mixed: 'Surfaces use a combination of shadow, border, and contrast.',
   };
   md += `${descriptions[opts.separationMode]}\n`;
+
+  // Interactive states
+  md += `\n## Interactive Button States\n\n`;
+  md += `Apply \`.${pressClassName(opts.shapeStyle)}\` to any button for a faithful reproduction of the preview's hover/active feedback plus \`cursor: pointer\`. The class is included in the CSS and Tailwind exports.\n`;
 
   // Usage hint
   md += `\n## Usage\n\n`;

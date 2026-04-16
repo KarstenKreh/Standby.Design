@@ -1,32 +1,13 @@
 import { useMemo } from 'react';
 import type { UrlState as SymbolState } from '@core/url-state/symbol';
 import { ICON_SETS, getSetById } from '@core/icon-sets';
-import { SAMPLE_ICONS, type SampleIconName, type IconDef } from '@core/sample-icons';
+import { SAMPLE_ICONS, type SampleIconName } from '@core/sample-icons';
+import { SampleIcon } from '@core/sample-icon';
 import { computeIconTokens, weightToStroke } from '@core/icon-tokens';
 import { recommendSets } from '@core/recommend';
 
 /** Subset of icons to show in the compact preview */
 const PREVIEW_ICONS: SampleIconName[] = ['home', 'search', 'settings', 'heart', 'mail', 'star'];
-
-function SampleIcon({ def, size, viewBox }: { def: IconDef; size: number; viewBox: string }) {
-  const paths = Array.isArray(def.d) ? def.d : [def.d];
-  return (
-    <svg
-      viewBox={viewBox}
-      width={size}
-      height={size}
-      fill={def.type === 'fill' ? 'currentColor' : 'none'}
-      stroke={def.type === 'stroke' ? 'currentColor' : 'none'}
-      strokeWidth={def.type === 'stroke' ? (def.strokeWidth ?? 2) : 0}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      {paths.map((d, i) => (
-        <path key={i} d={d} />
-      ))}
-    </svg>
-  );
-}
 
 export function SymbolSummary({ symbolState }: { symbolState: SymbolState }) {
   const set = useMemo(() => {

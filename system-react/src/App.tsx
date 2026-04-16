@@ -243,6 +243,7 @@ function App() {
               fgContrastMode={colorState?.fgContrastMode}
               iconSetId={symbolState?.selectedSet ?? null}
               iconScale={symbolState?.iconScale}
+              iconBaseSize={symbolState?.iconBaseSize}
             />
           </div>
         )}

@@ -1,30 +1,9 @@
 import { useMemo } from 'react';
 import { useSymbolStore } from '@/store/symbol-store';
 import { ICON_FAMILIES, getSetById } from '@core/icon-sets';
-import { SAMPLE_ICONS, SAMPLE_ICON_NAMES, type SampleIconName, type IconDef } from '@core/sample-icons';
+import { SAMPLE_ICONS, SAMPLE_ICON_NAMES, type SampleIconName } from '@core/sample-icons';
+import { SampleIcon } from '@core/sample-icon';
 import { computeIconTokens, weightToStroke } from '@core/icon-tokens';
-
-function SampleIcon({ def, size, viewBox }: { def: IconDef; size: number; viewBox: string }) {
-  const paths = Array.isArray(def.d) ? def.d : [def.d];
-  return (
-    <svg
-      viewBox={viewBox}
-      width={size}
-      height={size}
-      fill={def.type === 'fill' ? 'currentColor' : 'none'}
-      stroke={def.type === 'stroke' ? 'currentColor' : 'none'}
-      strokeWidth={def.type === 'stroke' ? (def.strokeWidth ?? 2) : 0}
-      strokeDasharray={def.strokeDasharray}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className="shrink-0"
-    >
-      {paths.map((d, i) => (
-        <path key={i} d={d} />
-      ))}
-    </svg>
-  );
-}
 
 export function SymbolPreview() {
   const selectedSet = useSymbolStore((s) => s.selectedSet);

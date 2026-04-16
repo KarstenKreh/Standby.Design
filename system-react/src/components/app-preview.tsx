@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { ChevronLeft, ChevronRight, Phone, MoreHorizontal, Plus, ArrowUp, Search, SquarePen, MessageCircle, Users, Settings, CheckCheck, Bell, Moon, Shield, HelpCircle, LogOut, Camera, Trash2, ListFilter } from 'lucide-react';
+import { AppIcon } from '@core/sample-icon';
+import type { SampleIconName } from '@core/sample-icons';
 import type { PaletteEntry } from '@core/palette';
 import type { AccentPalette } from '@/lib/color-code-export';
 import type { ComputedLevel } from '@core/scale';
@@ -34,6 +35,9 @@ interface AppPreviewProps {
   headingWeight?: number;
   screenIdx?: number;
   fgContrastMode?: FgContrastMode;
+  iconSetId?: string | null;
+  iconScale?: number;
+  iconBaseSize?: number;
 }
 
 function p(pal: PaletteEntry[], step: number): string {
@@ -82,6 +86,8 @@ interface Tokens {
   sp: (name: string) => string;
   headingFf?: string; bodyFf?: string;
   headingFw: number;
+  iconSetId: string | null;
+  iconSz: { tiny: number; small: number; medium: number; large: number };
 }
 
 function pickFg(bgHex: string, lightHex: string, darkHex: string, fgMode: FgContrastMode): string {
@@ -97,6 +103,9 @@ function buildTokens(
   spacing: SpacingToken[] | null, shape: Partial<ShapeState> | null,
   dark: boolean, headingFont?: string, bodyFont?: string, headingWeight?: number,
   fgContrastMode: FgContrastMode = 'best',
+  iconSetId: string | null = null,
+  iconScale: number = 1.272,
+  iconBaseSize: number = 1.25,
 ): Tokens {
   const brand = palette?.brand || [];
   const surface = palette?.surface || [];
@@ -215,6 +224,19 @@ function buildTokens(
     headingFf: headingFont ? `'${headingFont}', sans-serif` : undefined,
     bodyFf: bodyFont ? `'${bodyFont}', sans-serif` : undefined,
     headingFw: headingWeight ?? 700,
+    iconSetId,
+    // Semantic mockup icon sizes. Geometric series around a base that's nudged by the user's
+    // iconBaseSize (dampened — 1:1 would overflow the mockup) and spread by iconScale.
+    // baseSize 0.5 → 9.2, default 1.25 → 11, max 2.0 → 12.8.
+    iconSz: (() => {
+      const base = 8 + iconBaseSize * 2.4;
+      return {
+        tiny:   base * Math.pow(iconScale, -1.5),
+        small:  base * Math.pow(iconScale, -0.5),
+        medium: base * Math.pow(iconScale,  0.5),
+        large:  base * Math.pow(iconScale,  1.5),
+      };
+    })(),
   };
 }
 
@@ -361,12 +383,15 @@ function DashboardScreen({ t }: { t: Tokens }) {
       {/* Widget 2: Stat Cards */}
       <div style={{ display: 'flex', gap: '10px' }}>
         {([
-          { label: 'Revenue', value: '$12.4k', change: '+12%', color: t.success, secondaryBg: t.successSecondary },
-          { label: 'Users', value: '3,842', change: '+8%', color: t.accent, secondaryBg: t.accentSecondary },
-          { label: 'Errors', value: '23', change: '+3', color: t.destructive, secondaryBg: t.destructiveSecondary },
+          { label: 'Revenue', value: '$12.4k', change: '+12%', color: t.success, secondaryBg: t.successSecondary, iconName: 'arrow-up' as SampleIconName },
+          { label: 'Users', value: '3,842', change: '+8%', color: t.accent, secondaryBg: t.accentSecondary, iconName: 'user' as SampleIconName },
+          { label: 'Errors', value: '23', change: '+3', color: t.destructive, secondaryBg: t.destructiveSecondary, iconName: 'bell' as SampleIconName },
         ]).map((stat) => {
           const statContent = (
             <>
+              <span style={{ color: stat.color, display: 'inline-flex' }}>
+                <AppIcon name={stat.iconName} setId={t.iconSetId} size={t.iconSz.small} />
+              </span>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <span style={{ fontSize: '0.5rem', color: t.muted }}>{stat.label}</span>
                 <span style={{
@@ -378,14 +403,17 @@ function DashboardScreen({ t }: { t: Tokens }) {
               <div style={{ fontSize: t.fs('h5') || '0.95rem', fontWeight: t.headingFw, fontFamily: hFf, letterSpacing: t.ls('h5'), color: t.fg }}>{stat.value}</div>
             </>
           );
+          const cls = pressClass(t);
+          const vars = pressVars(t);
           if (t.isGlass) {
             return (
-              <div key={stat.label} style={{
+              <div key={stat.label} className={cls} style={{
                 flex: 1, position: 'relative',
                 backgroundColor: t.bgCard,
                 borderRadius: t.radius,
                 border: t.borderW ? `${t.borderW}px solid ${t.border}` : 'none',
                 overflow: 'hidden',
+                ...vars,
               }}>
                 <LiquidGlass depth={t.glassDepth} blur={t.glassBlur} dispersion={t.glassDispersion} cornerRadius={t.radius} onDark={t.isDark}>
                   <div style={{ padding: '6px 8px', display: 'flex', flexDirection: 'column', gap: '2px' }}>
@@ -399,13 +427,14 @@ function DashboardScreen({ t }: { t: Tokens }) {
             const isSolid = t.brutalistVariant === 'solid';
             return (
               <BrutalistWrap key={stat.label} t={t} level="sm" radius={t.radius} bg={t.bgCard} style={{ flex: 1 }}>
-                <div style={{
+                <div className={cls} style={{
                   position: 'relative',
                   backgroundColor: t.bgCard,
                   borderRadius: t.radius,
                   border: isSolid ? 'none' : `${t.brutalistStrokeWidth}px solid ${brutalBorder(t, t.bgCard)}`,
                   padding: '6px 8px',
                   display: 'flex', flexDirection: 'column', gap: '2px',
+                  ...vars,
                 }}>
                   {statContent}
                 </div>
@@ -413,7 +442,7 @@ function DashboardScreen({ t }: { t: Tokens }) {
             );
           }
           return (
-            <div key={stat.label} style={{
+            <div key={stat.label} className={cls} style={{
               flex: 1,
               backgroundColor: t.bgCard,
               borderRadius: t.radius,
@@ -421,6 +450,7 @@ function DashboardScreen({ t }: { t: Tokens }) {
               border: t.borderW ? `${t.borderW}px solid ${t.border}` : 'none',
               padding: '6px 8px',
               display: 'flex', flexDirection: 'column', gap: '2px',
+              ...vars,
             }}>
               {statContent}
             </div>
@@ -452,8 +482,11 @@ function DashboardScreen({ t }: { t: Tokens }) {
 
       {/* Widget 4: Activity List */}
       <Card t={t} pad="0 10px">
-        <div style={{ fontSize: t.fs('body-s') || '0.8rem', fontWeight: 600, fontFamily: hFf, color: t.fg, padding: '8px 0 4px' }}>
-          Recent Activity
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: t.fs('body-s') || '0.8rem', fontWeight: 600, fontFamily: hFf, color: t.fg, padding: '8px 0 4px' }}>
+          <span>Recent Activity</span>
+          <span style={{ color: t.muted, display: 'inline-flex', cursor: 'pointer' }}>
+            <AppIcon name="list-filter" setId={t.iconSetId} size={t.iconSz.small} />
+          </span>
         </div>
         {activities.map((act, i) => (
           <div key={act.name} style={{
@@ -558,22 +591,23 @@ function MessengerScreen({ t }: { t: Tokens }) {
   const avatarFgs = [t.primary, t.accent, t.success, t.destructive, t.primary, t.accent, t.success, t.destructive];
   const fsCaption = t.fs('caption') || '0.65rem';
   const fsBody = t.fs('body-s') || '0.75rem';
-  const iconSize = 12;
 
   if (view === 'chat') {
     return (
       <div style={{ backgroundColor: t.bg, color: t.fg, fontFamily: bFf, overflow: 'hidden', height: '100%', display: 'flex', flexDirection: 'column' }}>
         {/* Chat header */}
         <div style={{ backgroundColor: t.bgCard, borderBottom: t.borderW ? `${t.borderW}px solid ${t.border}` : 'none', padding: '5px 10px', display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
-          <ChevronLeft size={14} color={t.primary} style={{ cursor: 'pointer', flexShrink: 0 }} onClick={() => setView('list')} />
+          <span style={{ color: t.primary, cursor: 'pointer', flexShrink: 0, display: 'inline-flex' }} onClick={() => setView('list')}>
+            <AppIcon name="chevron-left" setId={t.iconSetId} size={t.iconSz.large} />
+          </span>
           <div style={{ width: '22px', height: '22px', borderRadius: '50%', backgroundColor: t.primary, display: 'flex', alignItems: 'center', justifyContent: 'center', color: t.primaryFg, fontSize: '0.5rem', fontWeight: 600, flexShrink: 0 }}>SC</div>
           <div style={{ flex: 1 }}>
             <div style={{ fontSize: fsCaption, fontWeight: 600, lineHeight: 1.2 }}>Sarah Chen</div>
             <div style={{ fontSize: '0.5rem', color: t.success }}>online</div>
           </div>
           <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-            <Phone size={iconSize} color={t.muted} />
-            <MoreHorizontal size={iconSize} color={t.muted} />
+            <AppIcon name="phone" setId={t.iconSetId} size={t.iconSz.medium} style={{ color: t.muted }} />
+            <AppIcon name="more-horizontal" setId={t.iconSetId} size={t.iconSz.medium} style={{ color: t.muted }} />
           </div>
         </div>
 
@@ -603,7 +637,7 @@ function MessengerScreen({ t }: { t: Tokens }) {
                 <div style={{ fontSize: fsCaption, lineHeight: 1.4 }}>{m.text}</div>
                 <div style={{ fontSize: '0.5rem', color: t.muted, textAlign: 'right', marginTop: '1px', display: 'flex', justifyContent: 'flex-end', gap: '2px', alignItems: 'center' }}>
                   {m.time}
-                  {m.sent && <CheckCheck size={8} color={m.read ? t.primary : t.muted} />}
+                  {m.sent && <AppIcon name="check-double" setId={t.iconSetId} size={t.iconSz.tiny} style={{ color: m.read ? t.primary : t.muted }} />}
                 </div>
               </>
             );
@@ -623,7 +657,9 @@ function MessengerScreen({ t }: { t: Tokens }) {
 
         {/* Input bar */}
         <div style={{ backgroundColor: t.bgCard, borderTop: t.borderW ? `${t.borderW}px solid ${t.border}` : 'none', padding: '4px 10px', display: 'flex', gap: '6px', alignItems: 'center', flexShrink: 0 }}>
-          <Plus size={14} color={t.muted} style={{ cursor: 'pointer', flexShrink: 0 }} />
+          <span style={{ color: t.muted, cursor: 'pointer', flexShrink: 0, display: 'inline-flex' }}>
+            <AppIcon name="plus" setId={t.iconSetId} size={t.iconSz.large} />
+          </span>
           {t.isGlass ? (
             <div style={{ flex: 1, position: 'relative', backgroundColor: t.bg, borderRadius: `${btnR}px`, border: t.borderW ? `${t.borderW}px solid ${t.border}` : 'none', overflow: 'hidden' }}>
               <LiquidGlass depth={t.glassDepth * 0.3} blur={t.glassBlur} dispersion={t.glassDispersion * 0.3} cornerRadius={btnR} onDark={t.isDark}>
@@ -636,7 +672,7 @@ function MessengerScreen({ t }: { t: Tokens }) {
             </div>
           )}
           <div style={{ width: '22px', height: '22px', borderRadius: '50%', backgroundColor: t.primary, color: t.primaryFg, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0 }}>
-            <ArrowUp size={12} />
+            <AppIcon name="arrow-up" setId={t.iconSetId} size={t.iconSz.medium} />
           </div>
         </div>
       </div>
@@ -649,16 +685,20 @@ function MessengerScreen({ t }: { t: Tokens }) {
       {/* Header */}
       <div style={{ padding: '6px 10px 4px', flexShrink: 0 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-          <ListFilter size={14} color={t.primary} style={{ cursor: 'pointer' }} />
+          <span style={{ color: t.primary, cursor: 'pointer', display: 'inline-flex' }}>
+            <AppIcon name="list-filter" setId={t.iconSetId} size={t.iconSz.large} />
+          </span>
           <span style={{ fontSize: fsBody, fontWeight: t.headingFw, fontFamily: hFf }}>Messages</span>
-          <SquarePen size={14} color={t.primary} style={{ cursor: 'pointer' }} />
+          <span style={{ color: t.primary, cursor: 'pointer', display: 'inline-flex' }}>
+            <AppIcon name="edit" setId={t.iconSetId} size={t.iconSz.large} />
+          </span>
         </div>
         {/* Search bar */}
         {t.isGlass ? (
           <div style={{ position: 'relative', backgroundColor: t.bgCard, borderRadius: `${btnR}px`, border: t.borderW ? `${t.borderW}px solid ${t.border}` : 'none', overflow: 'hidden' }}>
             <LiquidGlass depth={t.glassDepth * 0.3} blur={t.glassBlur} dispersion={t.glassDispersion * 0.3} cornerRadius={btnR} onDark={t.isDark}>
               <div style={{ padding: '4px 8px', fontSize: fsCaption, color: t.muted, display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <Search size={10} /> Search
+                <AppIcon name="search" setId={t.iconSetId} size={t.iconSz.small} /> Search
               </div>
             </LiquidGlass>
           </div>
@@ -670,7 +710,7 @@ function MessengerScreen({ t }: { t: Tokens }) {
             display: 'flex', alignItems: 'center', gap: '4px',
             boxShadow: t.isNeomorph ? t.shadowInset : undefined,
           }}>
-            <Search size={10} /> Search
+            <AppIcon name="search" setId={t.iconSetId} size={t.iconSz.small} /> Search
           </div>
         )}
       </div>
@@ -738,16 +778,15 @@ function MessengerScreen({ t }: { t: Tokens }) {
         padding: '4px 0 2px', flexShrink: 0,
       }}>
         {([
-          { icon: MessageCircle, label: 'Chats', active: true, badge: 7 },
-          { icon: Phone, label: 'Calls', active: false },
-          { icon: Users, label: 'Contacts', active: false },
-          { icon: Settings, label: 'Settings', active: false },
+          { iconName: 'chat' as SampleIconName, label: 'Chats', active: true, badge: 7 },
+          { iconName: 'phone' as SampleIconName, label: 'Calls', active: false },
+          { iconName: 'user' as SampleIconName, label: 'Contacts', active: false },
+          { iconName: 'settings' as SampleIconName, label: 'Settings', active: false },
         ] as const).map((tab) => {
-          const Icon = tab.icon;
           return (
             <div key={tab.label} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1px', position: 'relative' }}>
               <div style={{ position: 'relative' }}>
-                <Icon size={14} color={tab.active ? t.primary : t.muted} />
+                <AppIcon name={tab.iconName} setId={t.iconSetId} size={t.iconSz.large} style={{ color: tab.active ? t.primary : t.muted }} />
                 {tab.badge && (
                   <span style={{
                     position: 'absolute', top: '-3px', right: '-6px',
@@ -774,21 +813,20 @@ function ProfileScreen({ t }: { t: Tokens }) {
   const bFf = t.bodyFf || 'sans-serif';
   const fsCaption = t.fs('caption') || '0.65rem';
   const fsBody = t.fs('body-s') || '0.75rem';
-  const iconSize = 12;
   const btnR = Math.max(3, t.radius - 2);
 
-  const settingsGroups = [
+  const settingsGroups: { items: { iconName: SampleIconName; label: string; value: string; color: string; bg: string }[] }[] = [
     {
       items: [
-        { icon: Bell, label: 'Notifications', value: 'On', color: t.primary, bg: t.primarySecondary },
-        { icon: Moon, label: 'Appearance', value: 'System', color: t.accent, bg: t.accentSecondary },
-        { icon: Shield, label: 'Privacy', value: '', color: t.success, bg: t.successSecondary },
+        { iconName: 'bell', label: 'Notifications', value: 'On', color: t.primary, bg: t.primarySecondary },
+        { iconName: 'moon', label: 'Appearance', value: 'System', color: t.accent, bg: t.accentSecondary },
+        { iconName: 'shield', label: 'Privacy', value: '', color: t.success, bg: t.successSecondary },
       ],
     },
     {
       items: [
-        { icon: HelpCircle, label: 'Help & Support', value: '', color: t.muted, bg: t.border },
-        { icon: LogOut, label: 'Log Out', value: '', color: t.warning, bg: t.destructiveSecondary },
+        { iconName: 'help-circle', label: 'Help & Support', value: '', color: t.muted, bg: t.border },
+        { iconName: 'log-out', label: 'Log Out', value: '', color: t.warning, bg: t.destructiveSecondary },
       ],
     },
   ];
@@ -816,7 +854,7 @@ function ProfileScreen({ t }: { t: Tokens }) {
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             border: `1.5px solid ${t.bgCard}`,
           }}>
-            <Camera size={8} />
+            <AppIcon name="camera" setId={t.iconSetId} size={t.iconSz.tiny} />
           </div>
         </div>
         <div style={{ textAlign: 'center' }}>
@@ -874,7 +912,6 @@ function ProfileScreen({ t }: { t: Tokens }) {
         {settingsGroups.map((group, gi) => (
           <Card t={t} key={gi} pad="0 10px">
             {group.items.map((item, i) => {
-              const Icon = item.icon;
               return (
                 <div key={item.label} style={{
                   display: 'flex', alignItems: 'center', gap: '8px',
@@ -886,11 +923,11 @@ function ProfileScreen({ t }: { t: Tokens }) {
                     backgroundColor: item.bg,
                     display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
                   }}>
-                    <Icon size={10} color={item.color} />
+                    <AppIcon name={item.iconName} setId={t.iconSetId} size={t.iconSz.small} style={{ color: item.color }} />
                   </div>
                   <span style={{ flex: 1, fontSize: fsCaption, color: t.fg }}>{item.label}</span>
                   <span style={{ fontSize: '0.5rem', color: t.muted }}>{item.value}</span>
-                  <ChevronRight size={10} color={t.muted} />
+                  <AppIcon name="chevron-right" setId={t.iconSetId} size={t.iconSz.small} style={{ color: t.muted }} />
                 </div>
               );
             })}
@@ -914,7 +951,7 @@ function ProfileScreen({ t }: { t: Tokens }) {
           };
           const btn = (
             <button className={pressClass(t)} style={dangerStyle}>
-              <Trash2 size={10} /> Delete Account
+              <AppIcon name="trash" setId={t.iconSetId} size={t.iconSz.small} /> Delete Account
             </button>
           );
           if (t.isNeobrutalism) {
@@ -945,9 +982,9 @@ function PhoneContent({ t, screenIdx }: { t: Tokens; screenIdx: number }) {
 }
 
 /* ─── Main Export ─── */
-export function AppPreview({ palette, scale, spacing, shape, themeName, headingFont, bodyFont, headingWeight, screenIdx = 0, fgContrastMode = 'best' }: AppPreviewProps) {
-  const light = buildTokens(palette, scale, spacing, shape, false, headingFont, bodyFont, headingWeight, fgContrastMode);
-  const dark = buildTokens(palette, scale, spacing, shape, true, headingFont, bodyFont, headingWeight, fgContrastMode);
+export function AppPreview({ palette, scale, spacing, shape, themeName, headingFont, bodyFont, headingWeight, screenIdx = 0, fgContrastMode = 'best', iconSetId = null, iconScale = 1.272, iconBaseSize = 1.25 }: AppPreviewProps) {
+  const light = buildTokens(palette, scale, spacing, shape, false, headingFont, bodyFont, headingWeight, fgContrastMode, iconSetId, iconScale, iconBaseSize);
+  const dark = buildTokens(palette, scale, spacing, shape, true, headingFont, bodyFont, headingWeight, fgContrastMode, iconSetId, iconScale, iconBaseSize);
 
   return (
     <>
