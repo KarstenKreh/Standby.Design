@@ -1,0 +1,54 @@
+{
+  "name": "@standby-design/mcp",
+  "version": "0.1.0",
+  "description": "MCP server wrapping standby.design's color, typography, and design-system engines for LLMs.",
+  "type": "module",
+  "bin": {
+    "standby-design-mcp": "./dist/index.js"
+  },
+  "main": "./dist/index.js",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "design-system",
+    "oklch",
+    "color-palette",
+    "typography",
+    "tailwind",
+    "shadcn",
+    "llm-tools",
+    "standby.design"
+  ],
+  "author": "standby.design",
+  "license": "MIT",
+  "homepage": "https://standby.design",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/standby-design/standby.design"
+  },
+  "scripts": {
+    "dev": "tsup --watch",
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "inspect": "npx @modelcontextprotocol/inspector node dist/index.js",
+    "prepublishOnly": "npm run build && npm run typecheck && npm test"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.0",
+    "tsup": "^8.3.0",
+    "typescript": "~5.6.2",
+    "vitest": "^1.6.0"
+  }
+}
