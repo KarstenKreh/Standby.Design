@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 
 type Tool = 'home' | 'system' | 'color' | 'type' | 'shape' | 'symbol' | 'space';
 
@@ -10,7 +10,9 @@ interface ToolNavProps {
 const DEV_PORTS: Record<string, number> = { color: 5177, type: 5174, system: 5175, shape: 5176, symbol: 5178, space: 5179 };
 
 function toolUrl(key: Tool): string {
-  if (key === 'home') return '/';
+  if (key === 'home') {
+    return import.meta.env.DEV ? 'http://localhost:5173/' : '/';
+  }
   if (import.meta.env.DEV) {
     return `http://localhost:${DEV_PORTS[key]}/${key}/`;
   }
@@ -107,18 +109,34 @@ function LayersIcon({ className }: { className?: string }) {
   );
 }
 
+function ChevronUpIcon({ className }: { className?: string }) {
+  return (
+    <Icon className={className}>
+      <path d="m18 15-6-6-6 6" />
+    </Icon>
+  );
+}
+
 type IconComponent = (props: { className?: string }) => ReactNode;
 
-const tools: { key: Tool; label: string; icon: IconComponent }[] = [
-  { key: 'color', label: 'Color', icon: PaletteIcon },
-  { key: 'shape', label: 'Shape', icon: BoxIcon },
-  { key: 'space', label: 'Space', icon: GridIcon },
-  { key: 'symbol', label: 'Symbol', icon: StarIcon },
-  { key: 'type', label: 'Type', icon: TypeIcon },
+type ToolEntry = { key: Tool; label: string; icon: IconComponent; accent?: string };
+
+// Accent colors mirror the hub (index.html) tool-card accents.
+const tools: ToolEntry[] = [
+  { key: 'color', label: 'Color', icon: PaletteIcon, accent: 'oklch(0.6 0.08 230)' },
+  { key: 'shape', label: 'Shape', icon: BoxIcon, accent: 'oklch(0.6 0.12 50)' },
+  { key: 'space', label: 'Space', icon: GridIcon, accent: 'oklch(0.6 0.1 110)' },
+  { key: 'symbol', label: 'Symbol', icon: StarIcon, accent: 'oklch(0.6 0.12 320)' },
+  { key: 'type', label: 'Type', icon: TypeIcon, accent: 'oklch(0.55 0.15 290)' },
 ];
 
+const systemEntry: ToolEntry = { key: 'system', label: 'System', icon: LayersIcon, accent: 'oklch(0.6 0.1 160)' };
+const homeEntry: ToolEntry = { key: 'home', label: 'Home', icon: HomeIcon };
+
+const allEntries: ToolEntry[] = [homeEntry, ...tools, systemEntry];
+
 function NavLink({ tool, activeTool, buildHash, className }: {
-  tool: { key: Tool; label: string; icon: IconComponent };
+  tool: ToolEntry;
   activeTool: Tool;
   buildHash: () => string;
   className?: string;
@@ -130,18 +148,109 @@ function NavLink({ tool, activeTool, buildHash, className }: {
       href={isActive ? undefined : `${toolUrl(tool.key)}#${buildHash()}`}
       className={`flex flex-col items-center gap-0.5 py-2 px-1 rounded-lg text-[10px] font-medium transition-colors ${
         isActive
-          ? 'bg-muted text-foreground'
-          : 'text-muted-foreground hover:bg-muted/50 hover:text-foreground'
+          ? 'bg-muted text-foreground cursor-default'
+          : 'text-muted-foreground hover:bg-muted/50 hover:text-foreground cursor-pointer'
       } ${className || ''}`}
       aria-current={isActive ? 'page' : undefined}
     >
-      <IconComp className="size-4" />
+      <span style={tool.accent ? { color: tool.accent } : undefined} className="inline-flex">
+        <IconComp className="size-4" />
+      </span>
       {tool.label}
     </a>
   );
 }
 
-/** Desktop: vertical sidebar. Mobile: fixed bottom bar. */
+function MobileLauncher({ activeTool, buildHash }: { activeTool: Tool; buildHash: () => string }) {
+  const [open, setOpen] = useState(false);
+  const active = allEntries.find((t) => t.key === activeTool) ?? homeEntry;
+  const ActiveIcon = active.icon;
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', onKey);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [open]);
+
+  return (
+    <div className="md:hidden">
+      {/* Launcher pill */}
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        aria-label={`Switch tool (current: ${active.label})`}
+        aria-haspopup="dialog"
+        aria-expanded={open}
+        className="fixed bottom-3 left-1/2 -translate-x-1/2 z-40 flex items-center gap-2 pl-3 pr-2.5 py-2 rounded-full bg-background/95 backdrop-blur border border-border shadow-lg text-sm font-medium text-foreground cursor-pointer hover:bg-muted active:scale-95 transition-transform safe-bottom"
+      >
+        <span style={active.accent ? { color: active.accent } : undefined} className="inline-flex">
+          <ActiveIcon className="size-4" />
+        </span>
+        <span>{active.label}</span>
+        <ChevronUpIcon className="size-4 text-muted-foreground" />
+      </button>
+
+      {/* Sheet + backdrop */}
+      <div
+        className={`fixed inset-0 z-50 transition-opacity duration-200 ${
+          open ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        }`}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Tool switcher"
+      >
+        <div
+          className="absolute inset-0 bg-background/70 backdrop-blur-sm"
+          onClick={() => setOpen(false)}
+        />
+        <div
+          className={`absolute left-0 right-0 bottom-0 bg-background border-t border-border rounded-t-2xl p-4 pb-6 safe-bottom transition-transform duration-200 ease-out ${
+            open ? 'translate-y-0' : 'translate-y-full'
+          }`}
+        >
+          <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-border" />
+          <div className="grid grid-cols-3 gap-2">
+            {allEntries.map((entry) => {
+              const isActive = entry.key === activeTool;
+              const IconComp = entry.icon;
+              const href = isActive
+                ? undefined
+                : entry.key === 'home'
+                ? toolUrl('home')
+                : `${toolUrl(entry.key)}#${buildHash()}`;
+              return (
+                <a
+                  key={entry.key}
+                  href={href}
+                  onClick={() => setOpen(false)}
+                  aria-current={isActive ? 'page' : undefined}
+                  className={`flex flex-col items-center justify-center gap-1.5 py-4 px-2 rounded-xl text-xs font-medium transition-colors ${
+                    isActive
+                      ? 'bg-muted text-foreground cursor-default'
+                      : 'text-muted-foreground hover:bg-muted/60 hover:text-foreground cursor-pointer'
+                  }`}
+                >
+                  <span style={entry.accent ? { color: entry.accent } : undefined} className="inline-flex">
+                    <IconComp className="size-5" />
+                  </span>
+                  {entry.label}
+                </a>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/** Desktop: vertical sidebar. Mobile: floating launcher pill → bottom sheet. */
 export function ToolNav({ activeTool, buildHash }: ToolNavProps) {
   return (
     <>
@@ -170,25 +279,10 @@ export function ToolNav({ activeTool, buildHash }: ToolNavProps) {
         <div className="h-px bg-border mx-2 my-1" />
 
         {/* System — bottom CTA */}
-        <NavLink
-          tool={{ key: 'system', label: 'System', icon: LayersIcon }}
-          activeTool={activeTool}
-          buildHash={buildHash}
-        />
+        <NavLink tool={systemEntry} activeTool={activeTool} buildHash={buildHash} />
       </nav>
 
-      {/* Mobile bottom bar */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 flex justify-around items-center bg-background/95 backdrop-blur border-t border-border px-2 py-1 safe-bottom">
-        {tools.map((tool) => (
-          <NavLink key={tool.key} tool={tool} activeTool={activeTool} buildHash={buildHash} className="flex-1 max-w-[72px]" />
-        ))}
-        <NavLink
-          tool={{ key: 'system', label: 'System', icon: LayersIcon }}
-          activeTool={activeTool}
-          buildHash={buildHash}
-          className="flex-1 max-w-[72px]"
-        />
-      </nav>
+      <MobileLauncher activeTool={activeTool} buildHash={buildHash} />
     </>
   );
 }
