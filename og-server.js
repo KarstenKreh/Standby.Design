@@ -271,10 +271,13 @@ const server = http.createServer((req, res) => {
     const ext = path.extname(filePath).toLowerCase();
     const contentType = MIME_TYPES[ext] || 'application/octet-stream';
 
+    // Mutable, unversioned files: HTML and crawler-facing text files
+    // (llms.txt, robots.txt) must not be cached as immutable.
+    const isMutable = ext === '.html' || ext === '.txt';
     const stream = fs.createReadStream(filePath);
     res.writeHead(200, {
       'Content-Type': contentType,
-      'Cache-Control': ext === '.html' ? 'no-cache' : 'public, max-age=31536000, immutable',
+      'Cache-Control': isMutable ? 'no-cache' : 'public, max-age=31536000, immutable',
     });
     stream.pipe(res);
   });
