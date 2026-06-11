@@ -1,0 +1,66 @@
+# @standby/mcp-server
+
+MCP server for [standby.design](https://standby.design) — generate and export
+production-ready design systems directly from Claude (or any MCP client),
+without touching the web UI.
+
+All computation is shared with the standby.design web apps (`packages/core` +
+`system-react/src/lib`), so results are identical to what the UI produces.
+Every tool returns a shareable `standby.design/system` URL — open it in the
+browser to view and fine-tune the system visually; the URL *is* the state.
+
+## Tools
+
+| Tool | Purpose |
+|------|---------|
+| `generate_color_palette` | OKLCH palette from a brand color: 18-step scales, semantic tokens (shadcn/ui compatible), accents, light+dark |
+| `generate_type_scale` | Fluid type scale (CSS `clamp()`), 11 levels, Fontshare fonts, line heights & letter spacing |
+| `generate_shape_tokens` | Radii, shadows, borders, focus rings — styles: paper / glass / neomorph / neobrutalism |
+| `generate_icon_tokens` | Icon set recommendation/selection + sizing tokens (xs–2xl, stroke) |
+| `generate_space_tokens` | Spacing tokens, breakpoints, containers, prose measure, aspect ratios |
+| `get_design_system` | Decode any standby.design URL into a full overview |
+| `export_design_system` | Full code export: `css`, `tailwind`, `design-tokens` (DTCG), `llm-briefing`, `font-embed` |
+| `list_fonts` | Fontshare slugs for `generate_type_scale` |
+
+Each `generate_*` tool accepts an optional `url` and only changes its own
+section, so calls chain: color → type → shape → … accumulate into one URL.
+
+## Build
+
+```bash
+cd packages/mcp-server
+npm install
+npm run build        # bundles @core + system-react/src/lib into dist/index.js
+npm run smoke        # end-to-end protocol test against the built server
+```
+
+## Register with Claude Code
+
+```bash
+claude mcp add standby-design -- node "<absolute-path-to-repo>/packages/mcp-server/dist/index.js"
+```
+
+For Claude Desktop, add to `claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "standby-design": {
+      "command": "node",
+      "args": ["<absolute-path-to-repo>/packages/mcp-server/dist/index.js"]
+    }
+  }
+}
+```
+
+Then ask things like:
+
+> Build me a design system for a calm fintech product — dark blue brand,
+> sharp corners, corporate icons. Give me the Tailwind tokens.
+
+## Publishing (later)
+
+The package is `private: true` until the npm scope is settled. It is already
+`npx`-ready: `bin` points at the self-contained `dist/index.js` (only
+`@modelcontextprotocol/sdk` and `zod` are external). To publish: pick a name,
+remove `private`, add a `prepublishOnly: npm run build` script, `npm publish`.
