@@ -23,6 +23,7 @@ import {
 import {
   generatePrimitivesOklch,
   generateSemantic,
+  generateSeedComment,
   generateLlmBriefing as generateColorLlmBriefing,
 } from '@/lib/color-code-export';
 import { generateShadowValues } from '@core/shadows';
@@ -151,7 +152,7 @@ export function CombinedExport({ colorState, palette, typeState, scale, spacing,
   const colorCss = useMemo(() => {
     if (!colorState || !palette) return '';
 
-    let css = '';
+    let css = generateSeedComment(colorState, palette.effectiveBgHex, palette.effectiveErrorHex);
 
     // Primitives
     css += generatePrimitivesOklch(

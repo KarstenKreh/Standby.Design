@@ -4,6 +4,34 @@ import { hexToOklch, contrastRatio, invertHex } from '@core/color-math';
 import type { PaletteEntry } from '@core/palette';
 import type { AccentPalette } from '@/hooks/use-palette';
 import type { FgContrastMode } from '@/store/theme-store';
+import { encodeState as encodeColorState, type DecodedState as ColorSeedState } from '@core/url-state/color';
+
+/**
+ * Seed documentation header for code exports: records every input that went
+ * into the theme plus a Restore URL, so a generated theme can be traced and
+ * rebuilt later (issue #1).
+ */
+export function generateSeedComment(
+  state: ColorSeedState,
+  effectiveBgHex: string,
+  effectiveErrorHex: string,
+): string {
+  const title = state.themeName && state.themeName !== 'Standby.Design' ? `${state.themeName} — ` : '';
+  const accents = state.extraAccents.map(a =>
+    `${a.name} ${a.autoMatch ? `auto (hue ${Math.round(a.autoHue)}°)` : a.hex}${a.pin ? ', pinned' : ''}`
+  ).join(' · ');
+  const lines = [
+    `/*`,
+    ` * ${title}generated with standby.design`,
+    ` * Seed: brand ${state.brandHex}${state.brandPin ? ' (pinned)' : ''}${state.brandInvert ? ' (dark-inverted)' : ''} · mode ${state.currentMode} · text contrast ${state.fgContrastMode}`,
+    ` * Surface: ${state.bgAutoMatch ? 'auto from brand' : state.bgColorHex} → ${effectiveBgHex} · chroma ${Math.round(state.chromaScale * 100)}%`,
+    ` * Error: ${state.errorAutoMatch ? 'auto from brand hue' : state.errorColorHex} → ${effectiveErrorHex}${state.errorPin ? ' (pinned)' : ''}${state.errorInvert ? ' (dark-inverted)' : ''}`,
+    ...(accents ? [` * Accents: ${accents}`] : []),
+    ` * Restore: https://standby.design/color#c=${encodeColorState(state)}`,
+    ` */`,
+  ];
+  return lines.join('\n') + '\n\n';
+}
 
 interface PaletteMap { [step: number]: PaletteEntry }
 
@@ -202,6 +230,7 @@ export function generateSemantic(
     [null as unknown as string, null, 'Primary'],
     primaryLight, primaryFgLight,
     ...brandContrastWarnLight,
+    ['primary-subtle', 'brand', 100], ['primary-subtle-foreground', 'brand', 950],
     [null as unknown as string, null, 'Secondary — softened brand'],
     ['secondary', 'brand', 200], ['secondary-foreground', 'brand', fgStep(brandMap[200]?.hex, brandMap, 100, 900, fgMode)],
     [null as unknown as string, null, 'Muted'],
@@ -232,6 +261,7 @@ export function generateSemantic(
     [null as unknown as string, null, 'Primary'],
     primaryDark, primaryFgDark,
     ...brandContrastWarnDark,
+    ['primary-subtle', 'brand', 800], ['primary-subtle-foreground', 'brand', 50],
     [null as unknown as string, null, 'Secondary — softened brand'],
     ['secondary', 'brand', 800], ['secondary-foreground', 'brand', fgStep(brandMap[800]?.hex, brandMap, 100, 900, fgMode)],
     [null as unknown as string, null, 'Muted'],
@@ -372,15 +402,16 @@ ${pinnedNote}${pinnedContrastWarning}
 | \`--card\` | surface-25 | surface-825 | Card backgrounds |
 | \`--popover\` | surface-25 | surface-800 | Popover/dropdown |
 | \`--primary\` | brand-600 | brand-400 | Primary buttons, links |
-| \`--secondary\` | brand-100 | brand-900 | Secondary buttons |
+| \`--primary-subtle\` | brand-100 | brand-800 | Tinted brand fills: callouts, selected items |
+| \`--secondary\` | brand-200 | brand-800 | Secondary buttons |
 | \`--muted\` | surface-75 | surface-850 | Muted backgrounds |
-| \`--accent\` | brand-100 | brand-800 | Subtle highlights |
+| \`--accent\` | brand-100 | brand-800 | Interaction highlights (hover, selected) |
 | \`--destructive\` | error-600 | error-400 | Error/delete actions |
 | \`--destructive-subtle\` | error-100 | error-800 | Inline errors, alert backgrounds |
 | \`--destructive-border\` | error-surface-300 | error-surface-700 | Error borders |
 | \`--border\` | surface-300 | surface-600 | Default borders |
-| \`--border-muted\` | surface-100 | surface-800 | Subtle separators |
-| \`--input\` | surface-300 | surface-700 | Input borders |
+| \`--border-muted\` | surface-200 | surface-700 | Subtle separators |
+| \`--input\` | surface-300 | surface-700 | Form-control borders (input, select, textarea) |
 | \`--ring\` | surface-400 | surface-500 | Focus rings |
 
 ### Sidebar
@@ -408,7 +439,7 @@ ${accentPalettes.map(a => `- **${a.name}** (\`--${a.cssName}\`): \`-foreground\`
 1. **Use semantic tokens** (\`--primary\`, \`--background\`, etc.) in component code — never reference primitive step numbers directly.
 2. **Tailwind**: All tokens are available as Tailwind utilities (\`bg-primary\`, \`text-foreground\`, \`border-border\`, etc.).
 3. **Dark mode**: Add \`.dark\` to \`<html>\` or a container. All semantic tokens remap automatically.
-4. **Borders**: Default to \`--border-muted\` for subtle separation. Use \`--border\` for visible borders (inputs, focused elements).
+4. **Borders**: Default to \`--border-muted\` for subtle separation (dividers, table rows). Use \`--border\` for visible borders (cards, panels). Form controls (\`input\`, \`select\`, \`textarea\`) always use \`--input\` — never \`--border\`.
 5. **Shadows and radii**: see standby.design/shape for hue-matched shadow tokens and border-radius scales.
 
 ## Primitive Scale Reference

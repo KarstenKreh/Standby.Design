@@ -10,6 +10,7 @@ import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import {
   generatePrimitivesOklch,
   generateSemantic,
+  generateSeedComment,
   generateLlmBriefing as generateColorLlmBriefing,
 } from '@syslib/color-code-export';
 import {
@@ -207,7 +208,8 @@ export function registerSystemTools(server: McpServer): void {
       };
 
       const colorCss = (): string => {
-        let css = generatePrimitivesOklch(
+        let css = generateSeedComment(colorState, palette.effectiveBgHex, palette.effectiveErrorHex);
+        css += generatePrimitivesOklch(
           palette.brand, palette.surface, palette.error,
           palette.errorSurface, palette.neutralExtended,
           palette.accentPalettes, colorState.chromaScale,

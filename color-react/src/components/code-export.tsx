@@ -8,7 +8,7 @@ import { Copy } from 'lucide-react';
 import { toast } from 'sonner';
 import { usePalette } from '@/hooks/use-palette';
 import { useThemeStore } from '@/store/theme-store';
-import { generatePrimitivesOklch, generatePrimitivesHex, generateSemantic, generateLlmBriefing } from '@/lib/code-export';
+import { generatePrimitivesOklch, generatePrimitivesHex, generateSemantic, generateLlmBriefing, generateSeedComment } from '@/lib/code-export';
 import { CodeBlock } from '@core/code-block';
 
 export function CodeExport() {
@@ -26,14 +26,19 @@ export function CodeExport() {
 
   const customBgHex = effectiveBgHex.toLowerCase() !== brandHex.toLowerCase() ? effectiveBgHex : null;
 
+  const seedComment = useMemo(() =>
+    generateSeedComment(store, effectiveBgHex, effectiveErrorHex),
+    [store, effectiveBgHex, effectiveErrorHex]
+  );
+
   const oklchCode = useMemo(() =>
-    generatePrimitivesOklch(brand, surface, error, errorSurface, neutralExtended, accentPalettes, chromaScale, customBgHex, themeName),
-    [brand, surface, error, errorSurface, neutralExtended, accentPalettes, chromaScale, customBgHex, themeName]
+    seedComment + generatePrimitivesOklch(brand, surface, error, errorSurface, neutralExtended, accentPalettes, chromaScale, customBgHex, themeName),
+    [seedComment, brand, surface, error, errorSurface, neutralExtended, accentPalettes, chromaScale, customBgHex, themeName]
   );
 
   const hexCode = useMemo(() =>
-    generatePrimitivesHex(brand, surface, error, errorSurface, neutralExtended, accentPalettes, chromaScale, customBgHex, themeName),
-    [brand, surface, error, errorSurface, neutralExtended, accentPalettes, chromaScale, customBgHex, themeName]
+    seedComment + generatePrimitivesHex(brand, surface, error, errorSurface, neutralExtended, accentPalettes, chromaScale, customBgHex, themeName),
+    [seedComment, brand, surface, error, errorSurface, neutralExtended, accentPalettes, chromaScale, customBgHex, themeName]
   );
 
   const semanticCode = useMemo(() =>
