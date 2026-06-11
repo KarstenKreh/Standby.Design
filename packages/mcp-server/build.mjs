@@ -6,9 +6,11 @@ const root = path.dirname(fileURLToPath(import.meta.url));
 
 // Bundles @core (packages/core) and @syslib (system-react/src/lib) sources
 // directly into dist so the server runs with only npm dependencies installed.
+// Two entries: index.js (stdio, for npx/local) and http.js (Streamable HTTP,
+// for mcp.standby.design).
 await build({
-  entryPoints: [path.join(root, 'src/index.ts')],
-  outfile: path.join(root, 'dist/index.js'),
+  entryPoints: [path.join(root, 'src/index.ts'), path.join(root, 'src/http.ts')],
+  outdir: path.join(root, 'dist'),
   bundle: true,
   platform: 'node',
   format: 'esm',

@@ -17,6 +17,26 @@ services:
     networks:
       - traefik_web
 
+  standby-mcp:
+    build:
+      context: .
+      dockerfile: packages/mcp-server/Dockerfile
+    container_name: standby-mcp
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      # HTTPS
+      - "traefik.http.routers.standbymcp.rule=Host(`mcp.standby.design`)"
+      - "traefik.http.routers.standbymcp.entrypoints=websecure"
+      - "traefik.http.routers.standbymcp.tls.certresolver=letsencrypt"
+      - "traefik.http.services.standbymcp.loadbalancer.server.port=3000"
+      # HTTP → HTTPS redirect
+      - "traefik.http.routers.standbymcp-http.rule=Host(`mcp.standby.design`)"
+      - "traefik.http.routers.standbymcp-http.entrypoints=web"
+      - "traefik.http.routers.standbymcp-http.middlewares=redirect-to-https"
+    networks:
+      - traefik_web
+
 networks:
   traefik_web:
     external: true

@@ -24,6 +24,10 @@ scp public/* "$SERVER:$REMOTE_DIR/public/"
 echo "==> Uploading packages/core..."
 tar cf - packages/core/ | ssh "$SERVER" "cd $REMOTE_DIR && rm -rf packages/core && tar xf -"
 
+# Upload packages/mcp-server source (remote MCP server for mcp.standby.design)
+echo "==> Uploading packages/mcp-server source..."
+tar cf - --exclude='node_modules' --exclude='dist' packages/mcp-server/ | ssh "$SERVER" "cd $REMOTE_DIR && rm -rf packages/mcp-server && tar xf -"
+
 # Upload color-react source (tar to exclude node_modules/dist, unpack on server)
 echo "==> Uploading color-react source..."
 tar cf - --exclude='node_modules' --exclude='dist' --exclude='.git' color-react/ | ssh "$SERVER" "cd $REMOTE_DIR && rm -rf color-react && tar xf -"

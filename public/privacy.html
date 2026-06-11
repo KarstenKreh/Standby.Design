@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy — standby.design</title>
+  <meta name="description" content="Privacy policy for standby.design and the standby-design MCP server." />
+  <style>
+    :root { color-scheme: dark; }
+    body {
+      margin: 0; padding: 48px 24px; background: #15151f; color: #e7e7f3;
+      font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; line-height: 1.6;
+    }
+    main { max-width: 680px; margin: 0 auto; }
+    h1 { font-size: 1.75rem; margin-bottom: 0.25em; }
+    h2 { font-size: 1.15rem; margin-top: 2em; }
+    p, li { color: #b9b8d6; }
+    a { color: #958afa; }
+    .updated { color: #7b77b0; font-size: 0.85rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Privacy Policy</h1>
+    <p class="updated">standby.design &amp; the standby-design MCP server · Last updated: June 12, 2026</p>
+
+    <h2>The short version</h2>
+    <p>We do not collect, store, or share any personal data. There are no accounts,
+    no cookies, no trackers, and no analytics.</p>
+
+    <h2>How the tools work</h2>
+    <ul>
+      <li><strong>Web tools</strong> (standby.design/color, /type, /space, /shape, /symbol, /system):
+        all computation happens in your browser. Your configuration lives entirely in the
+        URL hash — nothing is sent to or stored on our servers.</li>
+      <li><strong>MCP server</strong> (mcp.standby.design and the <code>standby-design-mcp</code> npm package):
+        every request is computed statelessly and the response returned immediately.
+        Inputs are design parameters (colors, ratios, sizes) — never personal data.
+        Requests are not logged, stored, or shared. No authentication is required or offered.</li>
+    </ul>
+
+    <h2>Data retention</h2>
+    <p>None. We have nothing to retain.</p>
+
+    <h2>Third parties</h2>
+    <p>The Type tool can load font previews from
+    <a href="https://www.fontshare.com">Fontshare</a> (a free font service by the Indian Type
+    Foundry) when you browse fonts in your browser. That request goes from your browser to
+    Fontshare and is governed by their privacy policy. The MCP server makes no third-party
+    requests at all.</p>
+
+    <h2>Hosting</h2>
+    <p>The site and MCP endpoint are hosted on a server in Germany (Hetzner, Nuremberg).
+    Standard transport encryption (HTTPS) applies. Web server logs are limited to what the
+    infrastructure requires for operation and are not used for tracking.</p>
+
+    <h2>Contact</h2>
+    <p>Questions or concerns: open an issue at
+    <a href="https://github.com/KarstenKreh/Standby.Design/issues">github.com/KarstenKreh/Standby.Design</a>.</p>
+  </main>
+</body>
+</html>

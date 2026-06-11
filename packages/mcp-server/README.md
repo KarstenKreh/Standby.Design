@@ -58,10 +58,26 @@ Claude Desktop — add to `claude_desktop_config.json`
 
 Any other MCP client: run `npx -y standby-design-mcp` as a stdio server.
 
-Then ask things like:
+### Remote (no local install)
+
+A hosted, auth-free endpoint is available at `https://mcp.standby.design/mcp`
+(Streamable HTTP, stateless). In Claude: Settings → Connectors → Add custom
+connector → paste the URL. Privacy: nothing is collected or stored —
+see https://standby.design/privacy.html.
+
+## Example prompts
 
 > Build me a design system for a calm fintech product — dark blue brand,
 > sharp corners, corporate icons. Give me the Tailwind tokens.
+
+> Generate a color palette from #FF2D9C with vibrant surfaces and lime,
+> cyan and violet accents, then make the shapes neobrutalist.
+
+> Here is our design system URL: https://standby.design/system#… —
+> export it as CSS custom properties and explain the semantic tokens.
+
+> Make the typography bigger and switch the headings to Clash Display,
+> keep everything else.
 
 ## Local development
 
