@@ -34,33 +34,39 @@ npm run build        # bundles @core + system-react/src/lib into dist/index.js
 npm run smoke        # end-to-end protocol test against the built server
 ```
 
-## Register with Claude Code
+## Install
+
+Claude Code:
 
 ```bash
-claude mcp add standby-design -- node "<absolute-path-to-repo>/packages/mcp-server/dist/index.js"
+claude mcp add standby-design -- npx -y standby-design-mcp
 ```
 
-For Claude Desktop, add to `claude_desktop_config.json`:
+Claude Desktop — add to `claude_desktop_config.json`
+(Settings → Developer → Edit Config), then restart the app:
 
 ```json
 {
   "mcpServers": {
     "standby-design": {
-      "command": "node",
-      "args": ["<absolute-path-to-repo>/packages/mcp-server/dist/index.js"]
+      "command": "npx",
+      "args": ["-y", "standby-design-mcp"]
     }
   }
 }
 ```
+
+Any other MCP client: run `npx -y standby-design-mcp` as a stdio server.
 
 Then ask things like:
 
 > Build me a design system for a calm fintech product — dark blue brand,
 > sharp corners, corporate icons. Give me the Tailwind tokens.
 
-## Publishing (later)
+## Local development
 
-The package is `private: true` until the npm scope is settled. It is already
-`npx`-ready: `bin` points at the self-contained `dist/index.js` (only
-`@modelcontextprotocol/sdk` and `zod` are external). To publish: pick a name,
-remove `private`, add a `prepublishOnly: npm run build` script, `npm publish`.
+Register your local build instead of the npm package:
+
+```bash
+claude mcp add standby-design -- node "<absolute-path-to-repo>/packages/mcp-server/dist/index.js"
+```

@@ -1,12 +1,20 @@
 {
-  "name": "@standby/mcp-server",
+  "name": "standby-design-mcp",
   "version": "0.1.0",
   "description": "MCP server for standby.design — generate production-ready design systems (OKLCH color palettes, fluid type scales, spacing & layout, shape and icon tokens) and export them as CSS, Tailwind v4, or W3C design tokens. Every result links back to the standby.design web UI for visual fine-tuning.",
   "license": "MIT",
   "type": "module",
-  "private": true,
+  "homepage": "https://standby.design",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KarstenKreh/Standby.Design.git",
+    "directory": "packages/mcp-server"
+  },
+  "bugs": {
+    "url": "https://github.com/KarstenKreh/Standby.Design/issues"
+  },
   "bin": {
-    "standby-mcp": "./dist/index.js"
+    "standby-design-mcp": "./dist/index.js"
   },
   "files": [
     "dist"
@@ -16,6 +24,7 @@
   },
   "scripts": {
     "build": "node build.mjs",
+    "prepublishOnly": "node build.mjs && node smoke.mjs",
     "typecheck": "tsc --noEmit",
     "smoke": "node smoke.mjs",
     "start": "node dist/index.js"

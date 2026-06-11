@@ -20,10 +20,10 @@ agents can build complete design systems without the UI:
 - Every tool returns a shareable https://standby.design/system#... URL — the
   full configuration lives in the URL hash, so results are reproducible and
   can be fine-tuned visually in the browser
-- Source & setup: https://github.com/KarstenKreh/Standby.Design/tree/master/packages/mcp-server
-  (clone, `npm install && npm run build`, then register the stdio server,
-  e.g. `claude mcp add standby-design -- node <repo>/packages/mcp-server/dist/index.js`;
-  npm package coming)
+- Install (Claude Code): `claude mcp add standby-design -- npx -y standby-design-mcp`
+- Any MCP client: run `npx -y standby-design-mcp` as a stdio server
+- npm: https://www.npmjs.com/package/standby-design-mcp
+- Source: https://github.com/KarstenKreh/Standby.Design/tree/master/packages/mcp-server
 
 ## URL-as-state
 
