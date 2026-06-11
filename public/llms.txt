@@ -1,15 +1,45 @@
 # standby.design
 
-> Small tools for designers and developers.
+> Small tools for designers and developers. Generates production-ready design
+> systems: OKLCH color palettes, fluid type scales, spacing & layout, shape
+> tokens, and icon recommendations — exportable as CSS, Tailwind v4, or W3C
+> design tokens.
 > https://standby.design
+
+Open source (MIT): https://github.com/KarstenKreh/Standby.Design
+Free to use for everyone — humans and AI agents alike.
+
+## Use from AI agents (Model Context Protocol)
+
+standby.design ships an MCP server that exposes all generators as tools, so
+agents can build complete design systems without the UI:
+
+- Tools: generate_color_palette, generate_type_scale, generate_shape_tokens,
+  generate_icon_tokens, generate_space_tokens, get_design_system,
+  export_design_system, list_fonts
+- Every tool returns a shareable https://standby.design/system#... URL — the
+  full configuration lives in the URL hash, so results are reproducible and
+  can be fine-tuned visually in the browser
+- Source & setup: https://github.com/KarstenKreh/Standby.Design/tree/master/packages/mcp-server
+  (clone, `npm install && npm run build`, then register the stdio server,
+  e.g. `claude mcp add standby-design -- node <repo>/packages/mcp-server/dist/index.js`;
+  npm package coming)
+
+## URL-as-state
+
+All tools share one unified hash format:
+`#c=<color>&t=<type>&s=<shape>&y=<icons>&p=<spacing>`
+Each tool reads/writes only its own segment and preserves the rest, so links
+accumulate a full design system. There are no accounts and no server-side
+storage — the URL is the document.
 
 ## Tools
 
 ### Color Palette Generator
 - URL: https://standby.design/color
 - Purpose: Generate perceptually uniform color palettes in the OKLCH color space
-- Output formats: CSS Custom Properties, Tailwind v4 config, Design Tokens (JSON)
-- Features: Primitive & semantic tokens, shadow generation, light/dark/high-contrast modes, shadcn/ui compatible
+- Output formats: CSS Custom Properties, Tailwind v4 config, Design Tokens (JSON), LLM briefing (Markdown)
+- Features: Primitive & semantic tokens (shadcn/ui compatible), accent colors, shadow generation, light/dark/high-contrast modes; exports begin with a seed comment + restore URL so themes can be traced and rebuilt
 - Use case: Designers and developers building accessible, perceptually uniform color systems for web apps
 
 ### Type Scale Generator
@@ -26,9 +56,29 @@
 - Features: Harmonic and geometric (√φ) spacing modes, Tailwind-compatible breakpoints, container max-widths, aspect ratio tokens including golden and silver
 - Use case: Designers and developers building consistent spatial systems independent of typography
 
+### Shape Token Generator
+- URL: https://standby.design/shape
+- Purpose: Generate shape tokens — radii, shadows, borders, focus rings — in four visual styles
+- Styles: paper (layered shadows), glass (liquid glass), neomorph, neobrutalism
+- Output formats: CSS Custom Properties, Tailwind v4 config, LLM briefing
+- Use case: Giving an app a coherent physical character (elevation, edges, focus) that matches its palette
+
+### Icon Style Recommender
+- URL: https://standby.design/symbol
+- Purpose: Recommend an icon set matching the design's personality and generate icon sizing tokens
+- Sets: Material Symbols, Lucide, Phosphor, Solar, Tabler, Radix — with style/weight/corner variants
+- Output: size tokens (xs–2xl), stroke width, npm install command for the chosen set
+- Use case: Picking and sizing icons consistently instead of mixing sets ad hoc
+
+### Design System Viewer
+- URL: https://standby.design/system
+- Purpose: Combined view of color + type + spacing + shape + icons with a live app preview and a merged export
+- Output: one combined CSS / Tailwind v4 export plus an LLM briefing covering the entire system
+- Use case: Reviewing, sharing, and exporting the complete design system from one URL
+
 ## How to use the generated code
 
-Both tools export production-ready code. Copy and paste into your project:
+All tools export production-ready code. Copy and paste into your project:
 
 1. **CSS Custom Properties** — Copy into any global CSS file. Framework-agnostic. Works everywhere.
    - Color example: `var(--color-brand-500)`, `var(--color-surface-100)`, `var(--shadow-md)`
@@ -41,7 +91,9 @@ Both tools export production-ready code. Copy and paste into your project:
 3. **Design Tokens (JSON)** — W3C Design Tokens Community Group format with `$type` and `$value`.
    Import into Figma, Style Dictionary, or any token pipeline.
 
-4. **Fontshare Embed** (Type tool only) — `<link>` tag to load the selected fonts from Fontshare CDN.
+4. **LLM Briefing (Markdown)** — a usage guide for AI code generation: token tables, seed colors, and rules (e.g. form controls use `--input`, pair every background token with its `*-foreground`).
+
+5. **Fontshare Embed** (Type tool only) — `<link>` tag to load the selected fonts from Fontshare CDN.
 
 ## Design philosophy
 
@@ -54,7 +106,8 @@ The Type Scale Generator defaults to a ratio near √φ ≈ 1.272. Historical ty
 ## Technical details
 
 - Color space: OKLCH (perceptually uniform lightness, chroma, hue)
-- Color tokens: primitive scales (25–950), semantic mappings, shadow values with color-matched opacity
+- Color tokens: primitive scales (25–975), semantic mappings, shadow values with color-matched opacity
 - Typography: fluid sizing via CSS clamp() with viewport-based interpolation between mobile and desktop
-- Spacing: derived from the typographic scale for visual consistency
+- Spacing: harmonic or geometric scales; breakpoints, containers, prose measure, aspect ratios
 - All values are rem-based and respect user font-size preferences
+- All computation is client-side and deterministic; the same URL always produces the same system
