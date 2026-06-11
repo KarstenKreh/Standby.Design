@@ -42,7 +42,7 @@ export function parseUnifiedHash(raw: string): UnifiedSegments {
 }
 
 /** Build a unified hash string (without leading #). */
-export function buildUnifiedHash(segments: { c?: string; t?: string; s?: string; y?: string; p?: string }): string {
+export function buildUnifiedHash(segments: { c?: string | null; t?: string | null; s?: string | null; y?: string | null; p?: string | null }): string {
   const parts: string[] = [];
   if (segments.c) parts.push('c=' + segments.c);
   if (segments.t) parts.push('t=' + segments.t);
