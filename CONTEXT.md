@@ -471,7 +471,7 @@ Lightweight Node.js HTTP server (no framework) running on port 80 inside Docker.
 | **Host** | Hetzner VPS at `46.225.131.97` |
 | **Proxy** | Traefik v3 (Let's Encrypt SSL, HTTP→HTTPS redirect) |
 | **DNS** | Namecheap A records → Hetzner IP |
-| **SSH Key** | `C:/Users/karst/repositories/SSH Keys/hetzner_ed25519` |
+| **SSH Auth** | 1Password SSH agent (item "Personal - SSH Hetzner CPX42"); no key file on disk. deploy.sh uses Windows OpenSSH — Git Bash's ssh cannot reach the agent |
 | **Remote Dir** | `/opt/oklch-palette` |
 | **Container** | Docker multi-stage: build color → build type → Node.js Alpine + sharp |
 | **Orchestration** | Docker Compose with Traefik labels |
