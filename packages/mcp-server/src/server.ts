@@ -9,7 +9,7 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { registerGenerateTools } from './tools-generate.js';
 import { registerSystemTools } from './tools-system.js';
 
-export const SERVER_VERSION = '0.1.1';
+export const SERVER_VERSION = '0.1.3';
 
 export function createServer(): McpServer {
   const server = new McpServer(
