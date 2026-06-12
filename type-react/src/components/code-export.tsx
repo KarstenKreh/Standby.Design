@@ -14,6 +14,8 @@ import {
   generateLlmBriefing,
 } from '@/lib/code-export';
 import { generateDesignTokens } from '@/lib/design-token-export';
+import { encodeTypeStore } from '@/hooks/use-url-state';
+import { systemShareUrl, llmShareHeader } from '@core/share-link';
 import { CodeBlock } from '@core/code-block';
 
 const SCALE_LABELS: Record<string, string> = {
@@ -64,7 +66,10 @@ export function CodeExport() {
     () => generateFontEmbed(store.headingFont, store.bodyFont, store.monoFont),
     [store.headingFont, store.bodyFont, store.monoFont],
   );
-  const llmCode = useMemo(() => generateLlmBriefing(opts), [opts]);
+  const llmCode = useMemo(
+    () => llmShareHeader(systemShareUrl('t', encodeTypeStore(store), window.location.hash)) + generateLlmBriefing(opts),
+    [opts, store],
+  );
 
   const handleCopyAll = useCallback(() => {
     const parts: string[] = [];

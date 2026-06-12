@@ -9,6 +9,8 @@ import { toast } from 'sonner';
 import { usePalette } from '@/hooks/use-palette';
 import { useThemeStore } from '@/store/theme-store';
 import { generatePrimitivesOklch, generatePrimitivesHex, generateSemantic, generateLlmBriefing, generateSeedComment } from '@/lib/code-export';
+import { encodeState } from '@/lib/url-state';
+import { systemShareUrl, llmShareHeader } from '@core/share-link';
 import { CodeBlock } from '@core/code-block';
 
 export function CodeExport() {
@@ -52,8 +54,9 @@ export function CodeExport() {
   );
 
   const llmCode = useMemo(() =>
+    llmShareHeader(systemShareUrl('c', encodeState(store), window.location.hash)) +
     generateLlmBriefing(brandHex, effectiveBgHex, effectiveErrorHex, accentPalettes, chromaScale, currentMode, brandPin, errorPin, themeName, fgContrastMode),
-    [brandHex, effectiveBgHex, effectiveErrorHex, accentPalettes, chromaScale, currentMode, brandPin, errorPin, themeName, fgContrastMode]
+    [store, brandHex, effectiveBgHex, effectiveErrorHex, accentPalettes, chromaScale, currentMode, brandPin, errorPin, themeName, fgContrastMode]
   );
 
   const handleCopyAll = useCallback(() => {

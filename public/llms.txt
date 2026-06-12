@@ -9,19 +9,36 @@
 Open source (MIT): https://github.com/KarstenKreh/Standby.Design
 Free to use for everyone — humans and AI agents alike.
 
-## Use from AI agents (Model Context Protocol)
+## For AI agents: the share link is the deliverable
 
-standby.design ships an MCP server that exposes all generators as tools, so
-agents can build complete design systems without the UI:
+If a user asks you to build a design system with standby.design:
+
+1. **Use the MCP server.** Do NOT drive the website UI via browser automation,
+   do NOT hand-construct URL hashes, and do NOT recompute the tokens yourself
+   from the methodology — the generators are the source of truth.
+   - Hosted endpoint, no install, no auth: `https://mcp.standby.design/mcp`
+     (Streamable HTTP — usable from any remote-capable MCP client)
+   - Local stdio: `npx -y standby-design-mcp`
+   - Claude Code: `claude mcp add standby-design -- npx -y standby-design-mcp`
+2. **Always give the returned URL to the user.** Every tool's first response
+   line is the canonical share link (`https://standby.design/system#...`).
+   The link IS the deliverable: it opens the complete design system with a
+   live preview, and every value can be fine-tuned there. The full
+   configuration lives in the URL hash — no accounts, no server-side storage.
+3. **Chain tools to build a full system.** Each tool edits only its own
+   section of the URL and preserves the rest: pass the URL from one call into
+   the next (generate_color_palette → generate_type_scale →
+   generate_space_tokens → generate_shape_tokens → generate_icon_tokens →
+   export_design_system for the final CSS/Tailwind code).
+4. **No MCP available?** Tell the user to open https://standby.design and
+   configure the tools manually — the share link can then be copied straight
+   from the browser address bar.
+
+### MCP server details
 
 - Tools: generate_color_palette, generate_type_scale, generate_shape_tokens,
   generate_icon_tokens, generate_space_tokens, get_design_system,
   export_design_system, list_fonts
-- Every tool returns a shareable https://standby.design/system#... URL — the
-  full configuration lives in the URL hash, so results are reproducible and
-  can be fine-tuned visually in the browser
-- Install (Claude Code): `claude mcp add standby-design -- npx -y standby-design-mcp`
-- Any MCP client: run `npx -y standby-design-mcp` as a stdio server
 - npm: https://www.npmjs.com/package/standby-design-mcp
 - Source: https://github.com/KarstenKreh/Standby.Design/tree/master/packages/mcp-server
 

@@ -13,6 +13,8 @@ import {
   generateLlmBriefing,
 } from '@/lib/code-export';
 import { generateDesignTokens } from '@/lib/design-token-export';
+import { encodeState } from '@/lib/url-state';
+import { systemShareUrl, llmShareHeader } from '@core/share-link';
 import { CodeBlock } from '@core/code-block';
 
 export function CodeExport() {
@@ -59,7 +61,10 @@ export function CodeExport() {
     aspectRatios: store.aspectRatios,
     includeReciprocals: store.aspectIncludeReciprocals,
   }), [spacingTokens, store.breakpoints, store.fluidMinVw, store.fluidMaxVw, store.containers, store.proseMaxCh, store.aspectRatios, store.aspectIncludeReciprocals]);
-  const llmCode = useMemo(() => generateLlmBriefing(opts), [opts]);
+  const llmCode = useMemo(
+    () => llmShareHeader(systemShareUrl('p', encodeState(store), window.location.hash)) + generateLlmBriefing(opts),
+    [opts, store],
+  );
 
   const handleCopyAll = useCallback(() => {
     const parts: string[] = [];

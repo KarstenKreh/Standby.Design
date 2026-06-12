@@ -5,6 +5,27 @@ import { isUnifiedHash, getMySegment, buildUnifiedHash } from '@core/unified-has
 
 interface OtherSegments { c?: string; s?: string; y?: string; p?: string }
 
+/** Encode the type store into its URL hash segment (also used by CodeExport's share link). */
+export const encodeTypeStore = (s: ReturnType<typeof useTypeStore.getState>) => encodeState({
+  scaleMode: s.scaleMode,
+  baseSize: s.baseSize,
+  customRatio: s.customRatio,
+  mobileRatio: s.mobileRatio,
+  headingFont: s.headingFont,
+  bodyFont: s.bodyFont,
+  monoFont: s.monoFont,
+  headingWeight: s.headingWeight,
+  mobileBaseSize: s.mobileBaseSize,
+  mobileRatioMode: s.mobileRatioMode,
+  autoShrink: s.autoShrink,
+  lineHeightOverrides: s.lineHeightOverrides,
+  letterSpacingOverrides: s.letterSpacingOverrides,
+  traditionalAssignments:
+    s.scaleMode === 'traditional' ? s.traditionalAssignments : undefined,
+  traditionalMobileAssignments:
+    s.scaleMode === 'traditional' ? s.traditionalMobileAssignments : undefined,
+});
+
 /**
  * Returns the other tools' hash segments (c=, s=), captured at mount.
  * Uses state so it triggers a re-render for nav links.
@@ -16,25 +37,7 @@ export function useUrlState() {
   const [others, setOthers] = useState<OtherSegments>({});
   const othersRef = useRef<OtherSegments>({});
 
-  const encodeStore = (s: typeof store) => encodeState({
-    scaleMode: s.scaleMode,
-    baseSize: s.baseSize,
-    customRatio: s.customRatio,
-    mobileRatio: s.mobileRatio,
-    headingFont: s.headingFont,
-    bodyFont: s.bodyFont,
-    monoFont: s.monoFont,
-    headingWeight: s.headingWeight,
-    mobileBaseSize: s.mobileBaseSize,
-    mobileRatioMode: s.mobileRatioMode,
-    autoShrink: s.autoShrink,
-    lineHeightOverrides: s.lineHeightOverrides,
-    letterSpacingOverrides: s.letterSpacingOverrides,
-    traditionalAssignments:
-      s.scaleMode === 'traditional' ? s.traditionalAssignments : undefined,
-    traditionalMobileAssignments:
-      s.scaleMode === 'traditional' ? s.traditionalMobileAssignments : undefined,
-  });
+  const encodeStore = encodeTypeStore;
 
   useEffect(() => {
     const raw = window.location.hash.slice(1);
