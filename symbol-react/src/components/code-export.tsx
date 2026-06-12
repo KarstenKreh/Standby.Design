@@ -7,13 +7,16 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Copy } from 'lucide-react';
 import { useSymbolStore } from '@/store/symbol-store';
 import { generateCss, generateTailwind, generateDtcg, generateLlmBriefing } from '@/lib/code-export';
+import { encodeState } from '@/lib/url-state';
+import { systemShareUrl, llmShareHeader } from '@core/share-link';
 import { CodeBlock } from '@/components/code-block';
 
 export function CodeExport() {
+  const store = useSymbolStore();
   const {
     iconBaseSize, iconScale, snapTo4px, selectedSet,
     preferredStyle, preferredWeight, preferredCorners,
-  } = useSymbolStore();
+  } = store;
   const [tab, setTab] = useState('css');
 
   const [copyFormat, setCopyFormat] = useState<'css' | 'tw4'>('css');
@@ -31,7 +34,10 @@ export function CodeExport() {
   const cssCode = useMemo(() => generateCss(input), [input]);
   const twCode = useMemo(() => generateTailwind(input), [input]);
   const dtCode = useMemo(() => generateDtcg(input), [input]);
-  const llmCode = useMemo(() => generateLlmBriefing(input), [input]);
+  const llmCode = useMemo(
+    () => llmShareHeader(systemShareUrl('y', encodeState(store), window.location.hash)) + generateLlmBriefing(input),
+    [input, store],
+  );
 
   const handleCopyAll = useCallback(() => {
     const parts: string[] = [];

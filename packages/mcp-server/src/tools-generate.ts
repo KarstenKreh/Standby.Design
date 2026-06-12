@@ -52,7 +52,7 @@ export function registerGenerateTools(server: McpServer): void {
     'generate_color_palette',
     {
       title: 'Generate color palette',
-      description: 'Generate a perceptually uniform OKLCH color palette from a brand color: 18-step scales for brand/surface/error/accents, semantic tokens (shadcn/ui compatible), light+dark modes. Returns a shareable standby.design/system URL and a compact summary. Use export_design_system for full CSS/Tailwind output.',
+      description: 'Generate a perceptually uniform OKLCH color palette from a brand color: 18-step scales for brand/surface/error/accents, semantic tokens (shadcn/ui compatible), light+dark modes. Returns a shareable standby.design/system URL and a compact summary. Always give that URL to the user — the link is the deliverable; it opens the live system in the browser. Use export_design_system for full CSS/Tailwind output.',
       inputSchema: {
         url: URL_PARAM,
         brandHex: z.string().optional().describe('Brand color as 6-digit hex, e.g. "#335A7F". The palette midpoint is derived from this.'),
@@ -147,7 +147,7 @@ export function registerGenerateTools(server: McpServer): void {
     'generate_type_scale',
     {
       title: 'Generate type scale',
-      description: 'Generate a fluid typographic scale (CSS clamp() between 375px and 1920px viewports) with 11 levels (Display, H1–H6, Body L/M/S, Caption), Fontshare fonts, line heights and letter spacing. Returns a shareable standby.design/system URL and a summary table. Use list_fonts to discover font slugs.',
+      description: 'Generate a fluid typographic scale (CSS clamp() between 375px and 1920px viewports) with 11 levels (Display, H1–H6, Body L/M/S, Caption), Fontshare fonts, line heights and letter spacing. Returns a shareable standby.design/system URL and a summary table. Always give that URL to the user — the link is the deliverable. Use list_fonts to discover font slugs.',
       inputSchema: {
         url: URL_PARAM,
         scaleMode: z.enum(['custom', 'traditional']).optional().describe('"custom": compound ratio scale (default). "traditional": classical Renaissance point sizes per level.'),
@@ -225,7 +225,7 @@ export function registerGenerateTools(server: McpServer): void {
     'generate_shape_tokens',
     {
       title: 'Generate shape tokens',
-      description: 'Generate shape tokens — radii, shadows, borders, focus rings — in one of four visual styles: "paper" (classic surfaces with layered shadows), "glass" (liquid glass), "neomorph" (soft neumorphism), "neobrutalism" (hard offset shadows). Returns a shareable standby.design/system URL and a summary.',
+      description: 'Generate shape tokens — radii, shadows, borders, focus rings — in one of four visual styles: "paper" (classic surfaces with layered shadows), "glass" (liquid glass), "neomorph" (soft neumorphism), "neobrutalism" (hard offset shadows). Returns a shareable standby.design/system URL and a summary. Always give that URL to the user — the link is the deliverable.',
       inputSchema: {
         url: URL_PARAM,
         style: z.enum(['paper', 'glass', 'neomorph', 'neobrutalism']).optional().describe('Top-level visual style (default "paper").'),
@@ -305,7 +305,7 @@ export function registerGenerateTools(server: McpServer): void {
     'generate_icon_tokens',
     {
       title: 'Generate icon tokens',
-      description: `Pick an icon set and generate icon sizing tokens (xs–2xl + stroke width). Either select a specific set or state style preferences and get a recommendation. Available sets: ${SET_IDS.join(', ')}. Returns a shareable standby.design/system URL and a summary.`,
+      description: `Pick an icon set and generate icon sizing tokens (xs–2xl + stroke width). Either select a specific set or state style preferences and get a recommendation. Available sets: ${SET_IDS.join(', ')}. Returns a shareable standby.design/system URL and a summary. Always give that URL to the user — the link is the deliverable.`,
       inputSchema: {
         url: URL_PARAM,
         set: z.string().optional().describe(`Icon set variant id to select explicitly, e.g. "lucide-outlined". One of: ${SET_IDS.join(', ')}. Pass "auto" to clear the selection and use the recommendation instead.`),
@@ -349,7 +349,7 @@ export function registerGenerateTools(server: McpServer): void {
     'generate_space_tokens',
     {
       title: 'Generate spacing & layout tokens',
-      description: 'Generate spacing tokens (3xs–3xl), breakpoints, container widths, prose measure, and aspect ratios. Returns a shareable standby.design/system URL and a summary.',
+      description: 'Generate spacing tokens (3xs–3xl), breakpoints, container widths, prose measure, and aspect ratios. Returns a shareable standby.design/system URL and a summary. Always give that URL to the user — the link is the deliverable.',
       inputSchema: {
         url: URL_PARAM,
         mode: z.enum(['harmonic', 'geometric']).optional().describe('"harmonic": multiples of the base (default). "geometric": compound ratio steps.'),

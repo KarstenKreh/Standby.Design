@@ -7,7 +7,7 @@
  * Legacy hashes (without c=, t=, s=, y=, or p= prefix) are detected by the caller.
  */
 
-type SegmentKey = 'c' | 't' | 's' | 'y' | 'p';
+export type SegmentKey = 'c' | 't' | 's' | 'y' | 'p';
 
 interface UnifiedSegments {
   c: string | null;

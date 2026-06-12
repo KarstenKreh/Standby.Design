@@ -37,6 +37,7 @@ import type { UrlState as SymbolState } from '@core/url-state/symbol';
 import type { SpaceUrlState } from '@core/url-state/space';
 import { computeIconTokens, weightToStroke } from '@core/icon-tokens';
 import { getCatalog, fontsByCategory } from '@core/fontshare';
+import { llmShareHeader } from '@core/share-link';
 import {
   parseInput, systemUrl, toolUrl, textResult, errorResult,
   colorStateFrom, typeStateFrom, shapeStateFrom, symbolStateFrom, spaceStateFrom,
@@ -118,7 +119,7 @@ export function registerSystemTools(server: McpServer): void {
     'get_design_system',
     {
       title: 'Inspect design system',
-      description: 'Decode a standby.design URL (or raw hash) and return an overview of the full design system: color palette, type scale, spacing & layout, shape tokens, and icons — plus per-tool edit links.',
+      description: 'Decode a standby.design URL (or raw hash) and return an overview of the full design system: color palette, type scale, spacing & layout, shape tokens, and icons — plus per-tool edit links. Always give the standby.design/system URL to the user — the link is the deliverable.',
       inputSchema: {
         url: z.string().describe('A standby.design URL or raw unified hash (e.g. from a previous generate_* call or copied from the browser).'),
       },
@@ -164,7 +165,7 @@ export function registerSystemTools(server: McpServer): void {
     'export_design_system',
     {
       title: 'Export design system code',
-      description: 'Generate the full token code for a design system URL in one format: "css" (CSS custom properties incl. semantic shadcn/ui-compatible tokens), "tailwind" (Tailwind v4 @theme), "design-tokens" (W3C DTCG JSON — typography & spacing), "llm-briefing" (Markdown brief for AI code generation), or "font-embed" (Fontshare <link> snippet). Optionally restrict to specific sections.',
+      description: 'Generate the full token code for a design system URL in one format: "css" (CSS custom properties incl. semantic shadcn/ui-compatible tokens), "tailwind" (Tailwind v4 @theme), "design-tokens" (W3C DTCG JSON — typography & spacing), "llm-briefing" (Markdown brief for AI code generation), or "font-embed" (Fontshare <link> snippet). Optionally restrict to specific sections. Always give the returned standby.design/system URL to the user alongside the code — the link is the deliverable.',
       inputSchema: {
         url: z.string().describe('A standby.design URL or raw unified hash.'),
         format: z.enum(['css', 'tailwind', 'design-tokens', 'llm-briefing', 'font-embed']).describe('Output format.'),
@@ -281,7 +282,9 @@ export function registerSystemTools(server: McpServer): void {
           if (has('space')) parts.push(generateSpaceLlmBriefing(spaceOpts));
           if (has('shape')) parts.push(generateShapeLlmBriefing(shapeOptsFromState(shapeState, palette.effectiveBgHex)));
           if (has('symbol') && symbolState) parts.push(generateSymbolLlmBriefing(symbolState));
-          output = parts.join('\n---\n\n') || '<!-- No sections selected -->';
+          output = parts.length
+            ? llmShareHeader(systemUrl(segs)) + parts.join('\n---\n\n')
+            : '<!-- No sections selected -->';
           break;
         }
         case 'font-embed':

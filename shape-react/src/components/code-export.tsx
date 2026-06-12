@@ -13,6 +13,8 @@ import {
   generateLlmBriefing,
   type ShapeExportOptions,
 } from '@/lib/code-export';
+import { encodeState } from '@/lib/url-state';
+import { systemShareUrl, llmShareHeader } from '@core/share-link';
 import { CodeBlock } from '@core/code-block';
 
 export function CodeExport() {
@@ -62,7 +64,10 @@ export function CodeExport() {
   const cssCode = useMemo(() => generateCssExport(opts), [opts]);
   const twCode = useMemo(() => generateTailwindV4Export(opts), [opts]);
   const dtCode = useMemo(() => generateDesignTokensExport(opts), [opts]);
-  const llmCode = useMemo(() => generateLlmBriefing(opts), [opts]);
+  const llmCode = useMemo(
+    () => llmShareHeader(systemShareUrl('s', encodeState(store), window.location.hash)) + generateLlmBriefing(opts),
+    [opts, store],
+  );
 
   const handleCopyAll = useCallback(() => {
     const parts: string[] = [];
