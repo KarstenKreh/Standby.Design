@@ -202,7 +202,7 @@ exports[`generateSemantic > snapshot stability 1`] = `
   /* Primary */
   --primary: var(--color-brand-400);
   --primary-foreground: var(--color-brand-975);
-  --primary-subtle: var(--color-brand-800);
+  --primary-subtle: var(--color-brand-850);
   --primary-subtle-foreground: var(--color-brand-50);
   /* Secondary — softened brand */
   --secondary: var(--color-brand-800);
@@ -216,7 +216,7 @@ exports[`generateSemantic > snapshot stability 1`] = `
   /* Destructive */
   --destructive: var(--color-error-400);
   --destructive-foreground: var(--color-error-surface-900);
-  --destructive-subtle: var(--color-error-800);
+  --destructive-subtle: var(--color-error-850);
   --destructive-subtle-foreground: var(--color-error-50);
   --destructive-border: var(--color-error-surface-700);
   /* Border / Input / Ring */

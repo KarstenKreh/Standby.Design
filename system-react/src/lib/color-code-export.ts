@@ -269,7 +269,7 @@ export function generateSemantic(
     [null as unknown as string, null, 'Primary'],
     primaryDark, primaryFgDark,
     ...brandContrastWarnDark,
-    ['primary-subtle', 'brand', 800], ['primary-subtle-foreground', 'brand', 50],
+    ['primary-subtle', 'brand', 850], ['primary-subtle-foreground', 'brand', 50],
     [null as unknown as string, null, 'Secondary — softened brand'],
     ['secondary', 'brand', 800], ['secondary-foreground', 'brand', fgStep(brandMap[800]?.hex, brandMap, 100, 900, fgMode)],
     [null as unknown as string, null, 'Muted'],
@@ -278,7 +278,7 @@ export function generateSemantic(
     ['accent', 'brand', 800], ['accent-foreground', 'brand', fgStep(brandMap[800]?.hex, brandMap, 50, 950, fgMode)],
     [null as unknown as string, null, 'Destructive'],
     destDark, destFgDark,
-    ['destructive-subtle', 'error', 800], ['destructive-subtle-foreground', 'error', 50],
+    ['destructive-subtle', 'error', 850], ['destructive-subtle-foreground', 'error', 50],
     ['destructive-border', 'error-surface', 700],
     [null as unknown as string, null, 'Border / Input / Ring'],
     ['border', 'surface', 600], ['border-muted', 'surface', 700],
@@ -337,7 +337,7 @@ export function generateSemantic(
       [null as unknown as string, null, 'Muted / Subtle / Accent'],
       [`${n}-muted`, `${n}-surface`, 850], [`${n}-muted-foreground`, `${n}-surface`, 300],
       [`${n}-accent`, n, 800], [`${n}-accent-foreground`, n, 50],
-      [`${n}-subtle`, n, 800], [`${n}-subtle-foreground`, n, 50],
+      [`${n}-subtle`, n, 850], [`${n}-subtle-foreground`, n, 50],
       [null as unknown as string, null, 'Border / Input / Ring'],
       [`${n}-border`, `${n}-surface`, 700], [`${n}-border-muted`, `${n}-surface`, 700],
       [`${n}-input`, `${n}-surface`, 700], [`${n}-ring`, `${n}-surface`, 500],
@@ -410,12 +410,12 @@ ${pinnedNote}${pinnedContrastWarning}
 | \`--card\` | surface-25 | surface-825 | Card backgrounds |
 | \`--popover\` | surface-25 | surface-800 | Popover/dropdown |
 | \`--primary\` | brand-600 | brand-400 | Primary buttons, links |
-| \`--primary-subtle\` | brand-100 | brand-800 | Tinted brand fills: callouts, selected items |
+| \`--primary-subtle\` | brand-100 | brand-850 | Tinted brand fills: callouts, selected items |
 | \`--secondary\` | brand-200 | brand-800 | Secondary buttons |
 | \`--muted\` | surface-75 | surface-850 | Muted backgrounds |
 | \`--accent\` | brand-100 | brand-800 | Interaction highlights (hover, selected) |
 | \`--destructive\` | error-600 | error-400 | Error/delete actions |
-| \`--destructive-subtle\` | error-100 | error-800 | Inline errors, alert backgrounds |
+| \`--destructive-subtle\` | error-100 | error-850 | Inline errors, alert backgrounds |
 | \`--destructive-border\` | error-surface-300 | error-surface-700 | Error borders |
 | \`--border\` | surface-300 | surface-600 | Default borders |
 | \`--border-muted\` | surface-200 | surface-700 | Subtle separators |
