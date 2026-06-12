@@ -1,19 +1,19 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-09-29/server.schema.json",
-  "name": "io.github.karstenkreh/standby-design-mcp",
-  "description": "Generate production-ready design systems: OKLCH color palettes, fluid type scales, spacing, shape and icon tokens — exportable as CSS, Tailwind v4, or W3C design tokens.",
+  "name": "io.github.KarstenKreh/standby-design-mcp",
+  "description": "Generate design systems: OKLCH color palettes, fluid type scales, spacing, shape and icon tokens.",
   "status": "active",
   "repository": {
     "url": "https://github.com/KarstenKreh/Standby.Design",
     "source": "github"
   },
-  "version": "0.1.1",
+  "version": "0.1.2",
   "packages": [
     {
       "registryType": "npm",
       "registryBaseUrl": "https://registry.npmjs.org",
       "identifier": "standby-design-mcp",
-      "version": "0.1.1",
+      "version": "0.1.2",
       "transport": {
         "type": "stdio"
       }
