@@ -1,8 +1,15 @@
-# @standby/mcp-server
+# standby-design-mcp
+
+[![npm](https://img.shields.io/npm/v/standby-design-mcp)](https://www.npmjs.com/package/standby-design-mcp)
+[![MCP Registry](https://img.shields.io/badge/MCP_Registry-io.github.KarstenKreh%2Fstandby--design--mcp-blue)](https://registry.modelcontextprotocol.io/?search=standby)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
 
 MCP server for [standby.design](https://standby.design) — generate and export
-production-ready design systems directly from Claude (or any MCP client),
-without touching the web UI.
+production-ready **design systems** directly from Claude (or any MCP client):
+**OKLCH color palettes**, **fluid type scales**, **spacing & layout**,
+**shape tokens** (radii, shadows, glass, neobrutalism) and **icon tokens**,
+exportable as **CSS custom properties**, **Tailwind v4 themes**, or
+**W3C design tokens (DTCG)** — shadcn/ui compatible.
 
 All computation is shared with the standby.design web apps (`packages/core` +
 `system-react/src/lib`), so results are identical to what the UI produces.
