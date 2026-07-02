@@ -373,7 +373,7 @@ export function generateLlmBriefing(
   ].join('\n');
 
   const pinnedNote = (brandPin || errorPin || accentPalettes.some(a => a.pin))
-    ? `\n> **Pinned** means the exact input hex is used for primary/destructive button colors instead of the generated palette step (brand-600/400 or error-600/400).\n`
+    ? `\n> **Pinned** means the exact input hex is used instead of the generated palette step — for the primary (\`brand-600/400\`), destructive (\`error-600/400\`), or accent (\`{accent}-600/400\`) role of that color.\n`
     : '';
 
   let pinnedContrastWarning = '';
@@ -422,6 +422,7 @@ ${pinnedNote}${pinnedContrastWarning}
 | \`--sidebar-primary\` | brand-600 | brand-400 |
 | \`--sidebar-accent\` | brand-100 | brand-850 |
 | \`--sidebar-border\` | surface-300 | surface-600 |
+| \`--sidebar-ring\` | surface-400 | surface-500 |
 
 ### Surface Layering
 
@@ -437,7 +438,7 @@ ${accentPalettes.map(a => `- **${a.name}** (\`--${a.cssName}\`): \`-foreground\`
 ## How to Use
 
 1. **Use semantic tokens** (\`--primary\`, \`--background\`, etc.) in component code — never reference primitive step numbers directly.
-2. **Tailwind**: All tokens are available as Tailwind utilities (\`bg-primary\`, \`text-foreground\`, \`border-border\`, etc.).
+2. **Tailwind v4**: The export ships plain CSS custom properties. To get utilities like \`bg-primary\` or \`text-foreground\`, map the variables once via \`@theme inline { --color-primary: var(--primary); … }\` — see tailwindcss.com/docs/theme.
 3. **Dark mode**: Add \`.dark\` to \`<html>\` or a container. All semantic tokens remap automatically.
 4. **Borders**: Default to \`--border-muted\` for subtle separation (dividers, table rows). Use \`--border\` for visible borders (cards, panels). Form controls (\`input\`, \`select\`, \`textarea\`) always use \`--input\` — never \`--border\`.
 5. **Shadows and radii**: see standby.design/shape for hue-matched shadow tokens and border-radius scales.
@@ -450,10 +451,13 @@ Each color uses an 18-step scale: **25, 50, 75, 100, 200–800, 825, 850, 875, 9
 - **200–800** — core palette (buttons, text, accents)
 - **825–875** — dark-mode surfaces
 - **900–975** — high-contrast surfaces
+- **0 / 1000** — neutral only: pure white and pure black endpoints (\`--color-neutral-0\`, \`--color-neutral-1000\`)
 
-Two variants per color:
+Chroma variants:
 - \`--color-{name}-{step}\` — full chroma (interactive elements)
-- \`--color-{name}-surface-{step}\` — ${pct}% chroma (backgrounds, containers)
+- \`--color-surface-{step}\` — the brand's ${pct}%-chroma counterpart (backgrounds, containers)
+- \`--color-error-surface-{step}\` and \`--color-{accent}-surface-{step}\` — reduced-chroma twins for error and extra accents
+- \`--color-neutral-{step}\` — 0% chroma, no surface twin
 
 ## Settings
 
