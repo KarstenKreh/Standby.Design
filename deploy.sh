@@ -20,6 +20,10 @@ ssh "$SERVER" "mkdir -p $REMOTE_DIR/color-react $REMOTE_DIR/type-react $REMOTE_D
 scp index.html docker-compose.yml Dockerfile nginx.conf og-server.js shared.css "$SERVER:$REMOTE_DIR/"
 scp public/* "$SERVER:$REMOTE_DIR/public/"
 
+# OG-image assets (Satoshi fonts baked into the image for SVG text rendering)
+echo "==> Uploading og-assets..."
+tar cf - og-assets/ | ssh "$SERVER" "cd $REMOTE_DIR && rm -rf og-assets && tar xf -"
+
 # Upload packages/core (shared utilities)
 echo "==> Uploading packages/core..."
 tar cf - packages/core/ | ssh "$SERVER" "cd $REMOTE_DIR && rm -rf packages/core && tar xf -"
