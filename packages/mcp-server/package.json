@@ -1,6 +1,6 @@
 {
   "name": "standby-design-mcp",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "mcpName": "io.github.KarstenKreh/standby-design-mcp",
   "description": "MCP server for standby.design — generate production-ready design systems (OKLCH color palettes, fluid type scales, spacing & layout, shape and icon tokens) and export them as CSS, Tailwind v4, or W3C design tokens. Every result links back to the standby.design web UI for visual fine-tuning.",
   "license": "MIT",
