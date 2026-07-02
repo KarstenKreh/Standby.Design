@@ -68,6 +68,8 @@ COPY public/robots.txt /app/public/robots.txt
 COPY public/sitemap.xml /app/public/sitemap.xml
 COPY public/llms.txt /app/public/llms.txt
 COPY public/privacy.html /app/public/privacy.html
+COPY public/impressum.html /app/public/impressum.html
+COPY public/datenschutz.html /app/public/datenschutz.html
 COPY --from=build-color /app/color-react/dist /app/public/color/
 COPY --from=build-type /app/type-react/dist /app/public/type/
 COPY --from=build-system /app/system-react/dist /app/public/system/
