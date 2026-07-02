@@ -49,7 +49,10 @@ directory. Form: https://claude.com/docs/connectors/building/submission
 
 ## Submission status
 
-- [ ] DNS A record `mcp.standby.design` → 46.225.131.97 active
-- [ ] HTTPS endpoint live (Traefik/Let's Encrypt)
-- [ ] Validated with MCP Inspector against the live endpoint
+- [x] DNS A record `mcp.standby.design` → 46.225.131.97 active
+- [x] HTTPS endpoint live (Traefik/Let's Encrypt) — `/health` reports v0.1.3
+- [x] Validated against the live endpoint (2026-07-02, raw JSON-RPC over
+      Streamable HTTP): initialize handshake, tools/list (8 tools, all with
+      `readOnlyHint: true`), stateless tools/call, error path (`isError`,
+      helpful message), GET → 405
 - [ ] Form submitted (review queue typically 1–2 weeks; escalation: mcp-review@anthropic.com)
