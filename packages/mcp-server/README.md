@@ -93,3 +93,20 @@ Register your local build instead of the npm package:
 ```bash
 claude mcp add standby-design -- node "<absolute-path-to-repo>/packages/mcp-server/dist/index.js"
 ```
+
+## Privacy Policy
+
+Full policy: https://standby.design/privacy.html
+
+- **Data collection:** None. Tool inputs are design parameters only (colors,
+  ratios, sizes) — never personal data. There are no accounts and no
+  authentication.
+- **Storage & retention:** None. Both the npm package (local stdio) and the
+  hosted endpoint (`mcp.standby.design`) are stateless — every request is
+  computed, answered, and discarded. Requests are not logged for tracking.
+- **Third-party sharing:** None. The server makes no third-party requests.
+- **Hosting:** The remote endpoint runs on a server in Germany (Hetzner,
+  Nuremberg) over HTTPS; infrastructure-level server logs are kept only as
+  operationally required and deleted after a short time.
+- **Contact:** mail@karstenkreh.design or
+  https://github.com/KarstenKreh/Standby.Design/issues
