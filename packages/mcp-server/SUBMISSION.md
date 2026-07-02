@@ -1,7 +1,17 @@
 # Anthropic Connector Directory — Submission Sheet
 
 Prepared answers for submitting standby.design to the Claude connector
-directory. Form: https://claude.com/docs/connectors/building/submission
+directory. Process docs: https://claude.com/docs/connectors/building/submission
+
+> **⚠ Blocked (2026-07-02): there is no public form.** Remote MCP servers are
+> submitted through a portal in **Claude.ai admin settings**, which only
+> exists for **Team/Enterprise organizations** (Owner role). Karsten's account
+> is an individual plan — verified in the browser: the portal deep link
+> redirects to personal settings. Decision: proceed without the directory for
+> now (MCP Registry listing + aggregators already cover machine discovery);
+> optionally package an MCPB desktop extension, which has a separate
+> submission form without the portal requirement. Everything below stays
+> ready for when portal access exists.
 
 ## Listing
 
