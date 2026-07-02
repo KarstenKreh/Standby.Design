@@ -158,6 +158,7 @@ exports[`generateSemantic > snapshot stability 1`] = `
   --primary-foreground: var(--color-brand-50);
   --primary-subtle: var(--color-brand-100);
   --primary-subtle-foreground: var(--color-brand-950);
+  --primary-emphasis: var(--color-brand-700);
   /* Secondary — softened brand */
   --secondary: var(--color-brand-200);
   --secondary-foreground: var(--color-brand-900);
@@ -172,6 +173,7 @@ exports[`generateSemantic > snapshot stability 1`] = `
   --destructive-foreground: var(--color-error-surface-100);
   --destructive-subtle: var(--color-error-100);
   --destructive-subtle-foreground: var(--color-error-950);
+  --destructive-emphasis: var(--color-error-700);
   --destructive-border: var(--color-error-surface-300);
   /* Border / Input / Ring */
   --border: var(--color-surface-300);
@@ -204,6 +206,7 @@ exports[`generateSemantic > snapshot stability 1`] = `
   --primary-foreground: var(--color-brand-975);
   --primary-subtle: var(--color-brand-850);
   --primary-subtle-foreground: var(--color-brand-50);
+  --primary-emphasis: var(--color-brand-300);
   /* Secondary — softened brand */
   --secondary: var(--color-brand-800);
   --secondary-foreground: var(--color-brand-100);
@@ -218,6 +221,7 @@ exports[`generateSemantic > snapshot stability 1`] = `
   --destructive-foreground: var(--color-error-surface-900);
   --destructive-subtle: var(--color-error-850);
   --destructive-subtle-foreground: var(--color-error-50);
+  --destructive-emphasis: var(--color-error-300);
   --destructive-border: var(--color-error-surface-700);
   /* Border / Input / Ring */
   --border: var(--color-surface-600);

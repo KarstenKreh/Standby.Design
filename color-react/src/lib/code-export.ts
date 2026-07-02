@@ -231,6 +231,7 @@ export function generateSemantic(
     primaryLight, primaryFgLight,
     ...brandContrastWarnLight,
     ['primary-subtle', 'brand', 100], ['primary-subtle-foreground', 'brand', 950],
+    ['primary-emphasis', 'brand', 700],
     [null as unknown as string, null, 'Secondary — softened brand'],
     ['secondary', 'brand', 200], ['secondary-foreground', 'brand', fgStep(brandMap[200]?.hex, brandMap, 100, 900, fgMode)],
     [null as unknown as string, null, 'Muted'],
@@ -240,6 +241,7 @@ export function generateSemantic(
     [null as unknown as string, null, 'Destructive'],
     destLight, destFgLight,
     ['destructive-subtle', 'error', 100], ['destructive-subtle-foreground', 'error', 950],
+    ['destructive-emphasis', 'error', 700],
     ['destructive-border', 'error-surface', 300],
     [null as unknown as string, null, 'Border / Input / Ring'],
     ['border', 'surface', 300], ['border-muted', 'surface', 200],
@@ -262,6 +264,7 @@ export function generateSemantic(
     primaryDark, primaryFgDark,
     ...brandContrastWarnDark,
     ['primary-subtle', 'brand', 850], ['primary-subtle-foreground', 'brand', 50],
+    ['primary-emphasis', 'brand', 300],
     [null as unknown as string, null, 'Secondary — softened brand'],
     ['secondary', 'brand', 800], ['secondary-foreground', 'brand', fgStep(brandMap[800]?.hex, brandMap, 100, 900, fgMode)],
     [null as unknown as string, null, 'Muted'],
@@ -271,6 +274,7 @@ export function generateSemantic(
     [null as unknown as string, null, 'Destructive'],
     destDark, destFgDark,
     ['destructive-subtle', 'error', 850], ['destructive-subtle-foreground', 'error', 50],
+    ['destructive-emphasis', 'error', 300],
     ['destructive-border', 'error-surface', 700],
     [null as unknown as string, null, 'Border / Input / Ring'],
     ['border', 'surface', 600], ['border-muted', 'surface', 700],
@@ -313,6 +317,7 @@ export function generateSemantic(
       [`${n}-muted`, `${n}-surface`, 75], [`${n}-muted-foreground`, `${n}-surface`, 700],
       [`${n}-accent`, n, 100], [`${n}-accent-foreground`, n, fgStep(aMap[100]?.hex, aMap, 50, 950, fgMode)],
       [`${n}-subtle`, n, 100], [`${n}-subtle-foreground`, n, 950],
+      [`${n}-emphasis`, n, 700],
       [null as unknown as string, null, 'Border / Input / Ring'],
       [`${n}-border`, `${n}-surface`, 300], [`${n}-border-muted`, `${n}-surface`, 200],
       [`${n}-input`, `${n}-surface`, 300], [`${n}-ring`, `${n}-surface`, 400],
@@ -330,6 +335,7 @@ export function generateSemantic(
       [`${n}-muted`, `${n}-surface`, 850], [`${n}-muted-foreground`, `${n}-surface`, 300],
       [`${n}-accent`, n, 850], [`${n}-accent-foreground`, n, fgStep(aMap[850]?.hex, aMap, 50, 950, fgMode)],
       [`${n}-subtle`, n, 850], [`${n}-subtle-foreground`, n, 50],
+      [`${n}-emphasis`, n, 300],
       [null as unknown as string, null, 'Border / Input / Ring'],
       [`${n}-border`, `${n}-surface`, 600], [`${n}-border-muted`, `${n}-surface`, 700],
       [`${n}-input`, `${n}-surface`, 600], [`${n}-ring`, `${n}-surface`, 500],
@@ -403,11 +409,13 @@ ${pinnedNote}${pinnedContrastWarning}
 | \`--popover\` | surface-25 | surface-800 | Popover/dropdown |
 | \`--primary\` | brand-600 | brand-400 | Primary buttons, links |
 | \`--primary-subtle\` | brand-100 | brand-850 | Tinted brand fills: callouts, selected items |
+| \`--primary-emphasis\` | brand-700 | brand-300 | Brand-colored text, links, icons on background |
 | \`--secondary\` | brand-200 | brand-800 | Secondary buttons |
 | \`--muted\` | surface-75 | surface-850 | Muted backgrounds |
 | \`--accent\` | brand-100 | brand-850 | Interaction highlights (hover, selected) |
 | \`--destructive\` | error-600 | error-400 | Error/delete actions |
 | \`--destructive-subtle\` | error-100 | error-850 | Inline errors, alert backgrounds |
+| \`--destructive-emphasis\` | error-700 | error-300 | Error text and icons on background |
 | \`--destructive-border\` | error-surface-300 | error-surface-700 | Error borders |
 | \`--border\` | surface-300 | surface-600 | Default borders |
 | \`--border-muted\` | surface-200 | surface-700 | Subtle separators |
@@ -433,7 +441,7 @@ ${accentPalettes.length > 0 ? `
 ### Accent Scopes
 
 Each accent color provides a full semantic scope:
-${accentPalettes.map(a => `- **${a.name}** (\`--${a.cssName}\`): \`-foreground\`, \`-background\`, \`-card\`, \`-popover\`, \`-secondary\`, \`-muted\`, \`-accent\`, \`-subtle\`, \`-border\`, \`-border-muted\`, \`-input\`, \`-ring\` — each with light/dark variants.`).join('\n')}
+${accentPalettes.map(a => `- **${a.name}** (\`--${a.cssName}\`): \`-foreground\`, \`-background\`, \`-card\`, \`-popover\`, \`-secondary\`, \`-muted\`, \`-accent\`, \`-subtle\`, \`-emphasis\`, \`-border\`, \`-border-muted\`, \`-input\`, \`-ring\` — each with light/dark variants.`).join('\n')}
 ` : ''}
 ## How to Use
 
@@ -441,7 +449,8 @@ ${accentPalettes.map(a => `- **${a.name}** (\`--${a.cssName}\`): \`-foreground\`
 2. **Tailwind v4**: The export ships plain CSS custom properties. To get utilities like \`bg-primary\` or \`text-foreground\`, map the variables once via \`@theme inline { --color-primary: var(--primary); … }\` — see tailwindcss.com/docs/theme.
 3. **Dark mode**: Add \`.dark\` to \`<html>\` or a container. All semantic tokens remap automatically.
 4. **Borders**: Default to \`--border-muted\` for subtle separation (dividers, table rows). Use \`--border\` for visible borders (cards, panels). Form controls (\`input\`, \`select\`, \`textarea\`) always use \`--input\` — never \`--border\`.
-5. **Shadows and radii**: see standby.design/shape for hue-matched shadow tokens and border-radius scales.
+5. **Colored text**: For links, icons, and indicators placed directly on \`--background\` or \`--card\`, use \`--primary-emphasis\` / \`--destructive-emphasis\` / \`--{name}-emphasis\` — never the button colors (\`--primary\`, 600/400 steps), which may lack text contrast there.
+6. **Shadows and radii**: see standby.design/shape for hue-matched shadow tokens and border-radius scales.
 
 ## Primitive Scale Reference
 
