@@ -5,68 +5,169 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Privacy Policy — standby.design</title>
   <meta name="description" content="Privacy policy for standby.design and the standby-design MCP server." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23111'/%3E%3Ccircle cx='16' cy='16' r='6' fill='none' stroke='%234a7aaa' stroke-width='2'/%3E%3C/svg%3E">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@1,2&f[]=jet-brains-mono@1,2&display=swap" rel="stylesheet">
   <style>
-    :root { color-scheme: dark; }
+    :root {
+      color-scheme: dark;
+      --font-heading: 'Satoshi', sans-serif;
+      --font-body: 'Satoshi', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --text-h3: clamp(1.9344rem, 0.2719vw + 1.8707rem, 2.197rem);
+      --text-h5: clamp(1.246rem, 0.0559vw + 1.2329rem, 1.3rem);
+      --text-body-s: 1rem;
+      --text-caption: 0.7692rem;
+      --leading-h3: 1.2;
+      --leading-h5: 1.3;
+      --leading-body-s: 1.5;
+      --tracking-h3: -0.01em;
+      --tracking-body-s: 0.01em;
+      --background: oklch(0.145 0 0);
+      --foreground: oklch(0.985 0 0);
+      --card: oklch(0.205 0 0);
+      --muted-foreground: oklch(0.708 0 0);
+      --border: oklch(1 0 0 / 10%);
+      --accent: oklch(0.6 0.08 230);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      margin: 0; padding: 48px 24px; background: #15151f; color: #e7e7f3;
-      font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; line-height: 1.6;
+      font-family: var(--font-body);
+      font-size: var(--text-body-s);
+      line-height: var(--leading-body-s);
+      letter-spacing: var(--tracking-body-s);
+      background: var(--background);
+      color: var(--foreground);
+      padding: 2rem 1.5rem 3rem;
     }
     main { max-width: 680px; margin: 0 auto; }
-    h1 { font-size: 1.75rem; margin-bottom: 0.25em; }
-    h2 { font-size: 1.15rem; margin-top: 2em; }
-    p, li { color: #b9b8d6; }
-    a { color: #958afa; }
-    .updated { color: #7b77b0; font-size: 0.85rem; }
+    .back {
+      display: inline-block;
+      padding: 0.5rem 0.75rem;
+      margin: 0 0 2rem -0.75rem;
+      border-radius: 8px;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      transition: color 0.2s, background 0.2s;
+    }
+    .back:hover { color: var(--foreground); background: var(--card); }
+    h1 {
+      font-family: var(--font-heading);
+      font-size: var(--text-h3);
+      font-weight: 700;
+      line-height: var(--leading-h3);
+      letter-spacing: var(--tracking-h3);
+      margin-bottom: 0.25em;
+    }
+    h2 {
+      font-family: var(--font-heading);
+      font-size: var(--text-h5);
+      font-weight: 700;
+      line-height: var(--leading-h5);
+      margin-top: 2em;
+      margin-bottom: 0.4em;
+    }
+    p, li { color: var(--muted-foreground); margin-bottom: 0.75em; }
+    ul { padding-left: 1.25rem; margin-bottom: 0.75em; }
+    a { color: var(--accent); }
+    code { font-family: var(--font-mono); font-size: 0.9em; }
+    .updated { font-size: var(--text-caption); opacity: 0.75; }
+    .legal-links {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 3.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+    .legal-links a {
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      transition: color 0.2s, background 0.2s;
+    }
+    .legal-links a:hover { color: var(--foreground); background: var(--card); }
   </style>
 </head>
 <body>
   <main>
+    <a class="back" href="/">&larr; standby.design</a>
+
     <h1>Privacy Policy</h1>
-    <p class="updated">standby.design &amp; the standby-design MCP server · Last updated: June 12, 2026</p>
+    <p class="updated">standby.design &amp; the standby-design MCP server · Last updated: July 2, 2026</p>
 
     <h2>The short version</h2>
     <p>We do not collect, store, or share any personal data. There are no accounts,
     no cookies, and no cross-site trackers. The website uses self-hosted, cookieless,
     anonymous analytics (see below); the MCP server uses none at all.</p>
 
-    <h2>How the tools work</h2>
-    <ul>
-      <li><strong>Web tools</strong> (standby.design/color, /type, /space, /shape, /symbol, /system):
-        all computation happens in your browser. Your configuration lives entirely in the
-        URL hash — nothing is sent to or stored on our servers.</li>
-      <li><strong>MCP server</strong> (mcp.standby.design and the <code>standby-design-mcp</code> npm package):
-        every request is computed statelessly and the response returned immediately.
-        Inputs are design parameters (colors, ratios, sizes) — never personal data.
-        Requests are not logged, stored, or shared. No authentication is required or offered.</li>
-    </ul>
+    <h2>1. Controller</h2>
+    <p>
+      Karsten Kreh<br />
+      Schwanthalerstr. 141<br />
+      80339 Munich, Germany<br />
+      Email: <a href="mailto:mail@karstenkreh.design">mail@karstenkreh.design</a>
+    </p>
 
-    <h2>Analytics</h2>
+    <h2>2. Hosting and server logs</h2>
+    <p>The site and MCP endpoint are hosted on a server in Germany (Hetzner Online GmbH,
+    Nuremberg). When you access the site, the web server processes technically necessary
+    access data (IP address, time of request, requested resource, user agent) in log files.
+    These logs are required for secure operation, are not used for tracking, and are deleted
+    automatically after a short time.
+    Legal basis: Art. 6(1)(f) GDPR (legitimate interest in secure and stable operation).</p>
+
+    <h2>3. Analytics (self-hosted Umami)</h2>
     <p>The website (not the MCP server) uses <a href="https://umami.is">Umami</a>, an
     open-source analytics tool, self-hosted on the same server in Germany. It works without
-    cookies, does not store IP addresses, and only records anonymous, aggregated usage data
-    (pages viewed, referrer, browser type, device category, coarse region). No data is shared
-    with anyone, and individual visitors cannot be identified.</p>
+    cookies and without cross-device tracking, does not store IP addresses, and only records
+    anonymous, aggregated usage data (pages viewed, referrer, browser type, device category,
+    coarse region). Individual visitors cannot be identified, and no data is shared with
+    anyone. Legal basis: Art. 6(1)(f) GDPR (legitimate interest in understanding aggregate
+    usage). Since no personal data is stored and no information is read from your device
+    (§ 25 TDDDG), no consent banner is required.</p>
 
-    <h2>Data retention</h2>
-    <p>Beyond the anonymous, aggregated analytics described above: none. We have nothing to retain.</p>
-
-    <h2>Third parties</h2>
+    <h2>4. Font previews via Fontshare (Type tool)</h2>
     <p>The Type tool can load font previews from
-    <a href="https://www.fontshare.com">Fontshare</a> (a free font service by the Indian Type
-    Foundry) when you browse fonts in your browser. That request goes from your browser to
-    Fontshare and is governed by their privacy policy. The MCP server makes no third-party
-    requests at all.</p>
+    <a href="https://www.fontshare.com">Fontshare</a>, a free font service by the Indian Type
+    Foundry. Only when you browse or select such a font does your browser connect to
+    Fontshare's servers, which technically requires transmitting your IP address and may
+    involve a transfer to countries outside the EU. That request is governed by
+    <a href="https://www.fontshare.com/terms">Fontshare's terms and privacy policy</a>.
+    Legal basis: Art. 6(1)(f) GDPR (legitimate interest in rendering the fonts you chose);
+    the connection is only triggered by your active use.</p>
 
-    <h2>Hosting</h2>
-    <p>The site and MCP endpoint are hosted on a server in Germany (Hetzner, Nuremberg).
-    Standard transport encryption (HTTPS) applies. Web server logs are limited to what the
-    infrastructure requires for operation and are not used for tracking.</p>
+    <h2>5. MCP server</h2>
+    <p>The MCP endpoint (mcp.standby.design and the <code>standby-design-mcp</code> npm package)
+    is stateless: every request is computed, answered, and not stored. Inputs are design
+    parameters (colors, ratios, sizes) — never personal data. There are no accounts and no
+    authentication.</p>
+
+    <h2>6. Your rights</h2>
+    <p>Under the GDPR you have the right to:</p>
+    <ul>
+      <li>access the personal data we process about you (Art. 15),</li>
+      <li>rectification (Art. 16), erasure (Art. 17), and restriction of processing (Art. 18),</li>
+      <li>data portability (Art. 20),</li>
+      <li>object to processing based on Art. 6(1)(f) (Art. 21).</li>
+    </ul>
+    <p>Since we store practically no personal data, an access request will usually come back
+    empty. Send requests to the email address above.</p>
+
+    <h2>7. Complaints</h2>
+    <p>You have the right to lodge a complaint with a data protection supervisory authority,
+    for example the Bavarian State Office for Data Protection Supervision (BayLDA),
+    Promenade 18, 91522 Ansbach, Germany, <a href="https://www.lda.bayern.de">lda.bayern.de</a>.</p>
 
     <h2>Contact</h2>
     <p>Questions or concerns: open an issue at
-    <a href="https://github.com/KarstenKreh/Standby.Design/issues">github.com/KarstenKreh/Standby.Design</a>.</p>
+    <a href="https://github.com/KarstenKreh/Standby.Design/issues">github.com/KarstenKreh/Standby.Design</a>
+    or email <a href="mailto:mail@karstenkreh.design">mail@karstenkreh.design</a>.</p>
 
-    <p><a href="/impressum.html">Impressum</a> · <a href="/datenschutz.html">Datenschutzerklärung (DE)</a></p>
+    <nav class="legal-links">
+      <a href="/">Home</a>
+      <a href="/impressum.html">Imprint</a>
+    </nav>
   </main>
 </body>
 </html>

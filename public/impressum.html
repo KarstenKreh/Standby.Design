@@ -1,70 +1,140 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Impressum — standby.design</title>
-  <meta name="description" content="Impressum für standby.design und den standby-design MCP-Server." />
+  <title>Imprint — standby.design</title>
+  <meta name="description" content="Imprint (Impressum) for standby.design and the standby-design MCP server." />
   <meta name="robots" content="noindex" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23111'/%3E%3Ccircle cx='16' cy='16' r='6' fill='none' stroke='%234a7aaa' stroke-width='2'/%3E%3C/svg%3E">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@1,2&f[]=jet-brains-mono@1,2&display=swap" rel="stylesheet">
   <style>
-    :root { color-scheme: dark; }
+    :root {
+      color-scheme: dark;
+      --font-heading: 'Satoshi', sans-serif;
+      --font-body: 'Satoshi', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --text-h3: clamp(1.9344rem, 0.2719vw + 1.8707rem, 2.197rem);
+      --text-h5: clamp(1.246rem, 0.0559vw + 1.2329rem, 1.3rem);
+      --text-body-s: 1rem;
+      --text-caption: 0.7692rem;
+      --leading-h3: 1.2;
+      --leading-h5: 1.3;
+      --leading-body-s: 1.5;
+      --tracking-h3: -0.01em;
+      --tracking-body-s: 0.01em;
+      --background: oklch(0.145 0 0);
+      --foreground: oklch(0.985 0 0);
+      --card: oklch(0.205 0 0);
+      --muted-foreground: oklch(0.708 0 0);
+      --border: oklch(1 0 0 / 10%);
+      --accent: oklch(0.6 0.08 230);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      margin: 0; padding: 48px 24px; background: #15151f; color: #e7e7f3;
-      font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; line-height: 1.6;
+      font-family: var(--font-body);
+      font-size: var(--text-body-s);
+      line-height: var(--leading-body-s);
+      letter-spacing: var(--tracking-body-s);
+      background: var(--background);
+      color: var(--foreground);
+      padding: 2rem 1.5rem 3rem;
     }
     main { max-width: 680px; margin: 0 auto; }
-    h1 { font-size: 1.75rem; margin-bottom: 0.25em; }
-    h2 { font-size: 1.15rem; margin-top: 2em; }
-    p, li { color: #b9b8d6; }
-    a { color: #958afa; }
-    .updated { color: #7b77b0; font-size: 0.85rem; }
+    .back {
+      display: inline-block;
+      padding: 0.5rem 0.75rem;
+      margin: 0 0 2rem -0.75rem;
+      border-radius: 8px;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      transition: color 0.2s, background 0.2s;
+    }
+    .back:hover { color: var(--foreground); background: var(--card); }
+    h1 {
+      font-family: var(--font-heading);
+      font-size: var(--text-h3);
+      font-weight: 700;
+      line-height: var(--leading-h3);
+      letter-spacing: var(--tracking-h3);
+      margin-bottom: 0.25em;
+    }
+    h2 {
+      font-family: var(--font-heading);
+      font-size: var(--text-h5);
+      font-weight: 700;
+      line-height: var(--leading-h5);
+      margin-top: 2em;
+      margin-bottom: 0.4em;
+    }
+    p, li { color: var(--muted-foreground); margin-bottom: 0.75em; }
+    a { color: var(--accent); }
+    .updated { font-size: var(--text-caption); opacity: 0.75; }
+    .legal-links {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 3.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+    .legal-links a {
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      transition: color 0.2s, background 0.2s;
+    }
+    .legal-links a:hover { color: var(--foreground); background: var(--card); }
   </style>
 </head>
 <body>
   <main>
-    <h1>Impressum</h1>
-    <p class="updated">standby.design · Stand: 2. Juli 2026</p>
+    <a class="back" href="/">&larr; standby.design</a>
 
-    <h2>Angaben gemäß § 5 DDG</h2>
+    <h1>Imprint</h1>
+    <p class="updated">Impressum · standby.design · Last updated: July 2, 2026</p>
+
+    <h2>Information pursuant to § 5 DDG</h2>
     <p>
       Karsten Kreh<br />
       Schwanthalerstr. 141<br />
-      80339 München<br />
-      Deutschland
+      80339 Munich<br />
+      Germany
     </p>
 
-    <h2>Kontakt</h2>
+    <h2>Contact</h2>
     <p>
-      Telefon: +49 89 6282 7865<br />
-      E-Mail: <a href="mailto:mail@karstenkreh.design">mail@karstenkreh.design</a>
+      Phone: +49 89 6282 7865<br />
+      Email: <a href="mailto:mail@karstenkreh.design">mail@karstenkreh.design</a>
     </p>
 
-    <h2>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h2>
-    <p>Karsten Kreh (Anschrift wie oben)</p>
+    <h2>Responsible for content pursuant to § 18 (2) MStV</h2>
+    <p>Karsten Kreh (address as above)</p>
 
-    <h2>Haftung für Inhalte</h2>
-    <p>Alle Inhalte dieses Internetauftritts wurden mit größter Sorgfalt und nach bestem
-    Gewissen erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte kann
-    jedoch keine Gewähr übernommen werden.</p>
+    <h2>Liability for content</h2>
+    <p>All content on this site was created with great care and to the best of our knowledge.
+    However, no guarantee can be given for its accuracy, completeness, or currency.</p>
 
-    <h2>Haftung für Links</h2>
-    <p>Dieses Angebot enthält Links zu externen Websites Dritter, auf deren Inhalte kein
-    Einfluss besteht. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter
-    oder Betreiber der Seiten verantwortlich. Die verlinkten Seiten wurden zum Zeitpunkt der
-    Verlinkung auf mögliche Rechtsverstöße überprüft. Bei Bekanntwerden von Rechtsverletzungen
-    werden derartige Links umgehend entfernt.</p>
+    <h2>Liability for links</h2>
+    <p>This site contains links to external third-party websites over whose content we have
+    no control. The respective provider or operator is always responsible for the content of
+    linked pages. Linked pages were checked for possible legal violations at the time of
+    linking; if we become aware of any infringement, such links will be removed promptly.</p>
 
-    <h2>Urheberrecht</h2>
-    <p>Der Quellcode der hier angebotenen Werkzeuge und des MCP-Servers ist Open Source und
-    steht unter der <a href="https://github.com/KarstenKreh/Standby.Design/blob/master/LICENSE">MIT-Lizenz</a>.
-    Die mit den Werkzeugen erzeugten Design-Tokens und Exporte können ohne Einschränkung
-    verwendet werden.</p>
+    <h2>Copyright</h2>
+    <p>The source code of the tools and the MCP server is open source under the
+    <a href="https://github.com/KarstenKreh/Standby.Design/blob/master/LICENSE">MIT license</a>.
+    Design tokens and exports generated with the tools can be used without restriction.</p>
 
-    <h2>Verbraucherstreitbeilegung</h2>
-    <p>Es besteht weder Bereitschaft noch Verpflichtung, an Streitbeilegungsverfahren vor
-    einer Verbraucherschlichtungsstelle teilzunehmen.</p>
+    <h2>Consumer dispute resolution</h2>
+    <p>We are neither willing nor obliged to participate in dispute resolution proceedings
+    before a consumer arbitration board.</p>
 
-    <p><a href="/datenschutz.html">Datenschutzerklärung</a> · <a href="/privacy.html">Privacy Policy (EN)</a></p>
+    <nav class="legal-links">
+      <a href="/">Home</a>
+      <a href="/privacy.html">Privacy Policy</a>
+    </nav>
   </main>
 </body>
 </html>

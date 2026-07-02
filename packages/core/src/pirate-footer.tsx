@@ -11,10 +11,9 @@ export function PirateFooter() {
         </svg>
         No copyright — take what you need, make it yours.
       </div>
-      <div className="flex items-center gap-3">
-        <a href="/impressum.html" className="hover:text-foreground">Impressum</a>
-        <a href="/datenschutz.html" className="hover:text-foreground">Datenschutz</a>
-        <a href="/privacy.html" className="hover:text-foreground">Privacy</a>
+      <div className="flex items-center justify-center gap-1">
+        <a href="/impressum.html" className="px-4 py-2.5 rounded-lg hover:text-foreground hover:bg-card transition-colors">Imprint</a>
+        <a href="/privacy.html" className="px-4 py-2.5 rounded-lg hover:text-foreground hover:bg-card transition-colors">Privacy</a>
       </div>
     </footer>
   );
