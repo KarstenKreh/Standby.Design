@@ -275,18 +275,18 @@ export function generateSemantic(
     [null as unknown as string, null, 'Muted'],
     ['muted', 'surface', 850], ['muted-foreground', 'surface', 300],
     [null as unknown as string, null, 'Accent'],
-    ['accent', 'brand', 800], ['accent-foreground', 'brand', fgStep(brandMap[800]?.hex, brandMap, 50, 950, fgMode)],
+    ['accent', 'brand', 850], ['accent-foreground', 'brand', fgStep(brandMap[850]?.hex, brandMap, 50, 950, fgMode)],
     [null as unknown as string, null, 'Destructive'],
     destDark, destFgDark,
     ['destructive-subtle', 'error', 850], ['destructive-subtle-foreground', 'error', 50],
     ['destructive-border', 'error-surface', 700],
     [null as unknown as string, null, 'Border / Input / Ring'],
     ['border', 'surface', 600], ['border-muted', 'surface', 700],
-    ['input', 'surface', 700], ['ring', 'surface', 500],
+    ['input', 'surface', 600], ['ring', 'surface', 500],
     [null as unknown as string, null, 'Sidebar'],
-    ['sidebar', 'surface', 875], ['sidebar-foreground', 'surface', 25],
+    ['sidebar', 'surface', 825], ['sidebar-foreground', 'surface', 25],
     sbPrimDark, sbPrimFgDark,
-    ['sidebar-accent', 'brand', 800], ['sidebar-accent-foreground', 'brand', fgStep(brandMap[800]?.hex, brandMap, 50, 950, fgMode)],
+    ['sidebar-accent', 'brand', 850], ['sidebar-accent-foreground', 'brand', fgStep(brandMap[850]?.hex, brandMap, 50, 950, fgMode)],
     ['sidebar-border', 'surface', 600], ['sidebar-ring', 'surface', 500],
   ]);
 
@@ -316,10 +316,10 @@ export function generateSemantic(
       [`${n}-card`, `${n}-surface`, 25], [`${n}-card-foreground`, `${n}-surface`, 975],
       [`${n}-popover`, `${n}-surface`, 25], [`${n}-popover-foreground`, `${n}-surface`, 975],
       [null as unknown as string, null, 'Secondary'],
-      [`${n}-secondary`, n, 200], [`${n}-secondary-foreground`, n, 900],
+      [`${n}-secondary`, n, 200], [`${n}-secondary-foreground`, n, fgStep(aMap[200]?.hex, aMap, 100, 900, fgMode)],
       [null as unknown as string, null, 'Muted / Subtle / Accent'],
       [`${n}-muted`, `${n}-surface`, 75], [`${n}-muted-foreground`, `${n}-surface`, 700],
-      [`${n}-accent`, n, 100], [`${n}-accent-foreground`, n, 950],
+      [`${n}-accent`, n, 100], [`${n}-accent-foreground`, n, fgStep(aMap[100]?.hex, aMap, 50, 950, fgMode)],
       [`${n}-subtle`, n, 100], [`${n}-subtle-foreground`, n, 950],
       [null as unknown as string, null, 'Border / Input / Ring'],
       [`${n}-border`, `${n}-surface`, 300], [`${n}-border-muted`, `${n}-surface`, 200],
@@ -333,14 +333,14 @@ export function generateSemantic(
       [`${n}-card`, `${n}-surface`, 825], [`${n}-card-foreground`, `${n}-surface`, 25],
       [`${n}-popover`, `${n}-surface`, 800], [`${n}-popover-foreground`, `${n}-surface`, 25],
       [null as unknown as string, null, 'Secondary'],
-      [`${n}-secondary`, n, 800], [`${n}-secondary-foreground`, n, 100],
+      [`${n}-secondary`, n, 800], [`${n}-secondary-foreground`, n, fgStep(aMap[800]?.hex, aMap, 100, 900, fgMode)],
       [null as unknown as string, null, 'Muted / Subtle / Accent'],
       [`${n}-muted`, `${n}-surface`, 850], [`${n}-muted-foreground`, `${n}-surface`, 300],
-      [`${n}-accent`, n, 800], [`${n}-accent-foreground`, n, 50],
+      [`${n}-accent`, n, 850], [`${n}-accent-foreground`, n, fgStep(aMap[850]?.hex, aMap, 50, 950, fgMode)],
       [`${n}-subtle`, n, 850], [`${n}-subtle-foreground`, n, 50],
       [null as unknown as string, null, 'Border / Input / Ring'],
-      [`${n}-border`, `${n}-surface`, 700], [`${n}-border-muted`, `${n}-surface`, 700],
-      [`${n}-input`, `${n}-surface`, 700], [`${n}-ring`, `${n}-surface`, 500],
+      [`${n}-border`, `${n}-surface`, 600], [`${n}-border-muted`, `${n}-surface`, 700],
+      [`${n}-input`, `${n}-surface`, 600], [`${n}-ring`, `${n}-surface`, 500],
     ]);
     accentBlocks += `\n/* ${entry.name} Accent — semantic tokens */\n` + accentRoot + '\n' + accentDark;
   });
@@ -413,22 +413,22 @@ ${pinnedNote}${pinnedContrastWarning}
 | \`--primary-subtle\` | brand-100 | brand-850 | Tinted brand fills: callouts, selected items |
 | \`--secondary\` | brand-200 | brand-800 | Secondary buttons |
 | \`--muted\` | surface-75 | surface-850 | Muted backgrounds |
-| \`--accent\` | brand-100 | brand-800 | Interaction highlights (hover, selected) |
+| \`--accent\` | brand-100 | brand-850 | Interaction highlights (hover, selected) |
 | \`--destructive\` | error-600 | error-400 | Error/delete actions |
 | \`--destructive-subtle\` | error-100 | error-850 | Inline errors, alert backgrounds |
 | \`--destructive-border\` | error-surface-300 | error-surface-700 | Error borders |
 | \`--border\` | surface-300 | surface-600 | Default borders |
 | \`--border-muted\` | surface-200 | surface-700 | Subtle separators |
-| \`--input\` | surface-300 | surface-700 | Form-control borders (input, select, textarea) |
+| \`--input\` | surface-300 | surface-600 | Form-control borders (input, select, textarea) |
 | \`--ring\` | surface-400 | surface-500 | Focus rings |
 
 ### Sidebar
 
 | Token | Light | Dark |
 |-------|-------|------|
-| \`--sidebar\` | surface-25 | surface-875 |
+| \`--sidebar\` | surface-25 | surface-825 |
 | \`--sidebar-primary\` | brand-600 | brand-400 |
-| \`--sidebar-accent\` | brand-100 | brand-800 |
+| \`--sidebar-accent\` | brand-100 | brand-850 |
 | \`--sidebar-border\` | surface-300 | surface-600 |
 
 Every background token has a matching \`*-foreground\` counterpart. Always pair them.

@@ -211,7 +211,7 @@ exports[`generateSemantic > snapshot stability 1`] = `
   --muted: var(--color-surface-850);
   --muted-foreground: var(--color-surface-300);
   /* Accent */
-  --accent: var(--color-brand-800);
+  --accent: var(--color-brand-850);
   --accent-foreground: var(--color-brand-50);
   /* Destructive */
   --destructive: var(--color-error-400);
@@ -222,14 +222,14 @@ exports[`generateSemantic > snapshot stability 1`] = `
   /* Border / Input / Ring */
   --border: var(--color-surface-600);
   --border-muted: var(--color-surface-700);
-  --input: var(--color-surface-700);
+  --input: var(--color-surface-600);
   --ring: var(--color-surface-500);
   /* Sidebar */
-  --sidebar: var(--color-surface-875);
+  --sidebar: var(--color-surface-825);
   --sidebar-foreground: var(--color-surface-25);
   --sidebar-primary: var(--color-brand-400);
   --sidebar-primary-foreground: var(--color-brand-975);
-  --sidebar-accent: var(--color-brand-800);
+  --sidebar-accent: var(--color-brand-850);
   --sidebar-accent-foreground: var(--color-brand-50);
   --sidebar-border: var(--color-surface-600);
   --sidebar-ring: var(--color-surface-500);
