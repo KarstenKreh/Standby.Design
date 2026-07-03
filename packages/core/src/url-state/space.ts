@@ -136,6 +136,17 @@ const VALID_MODES = new Set<SpacingMode>(['harmonic', 'geometric']);
 export function decodeState(raw: string): Partial<SpaceUrlState> | null {
   if (!raw) return null;
 
+  // Share links travel through chats, markdown renderers, and address bars
+  // that percent-encode the pipe separator (| → %7C). The segment data itself
+  // never contains a literal %, so decoding is safe.
+  if (raw.includes('%')) {
+    try {
+      raw = decodeURIComponent(raw);
+    } catch {
+      // malformed escape sequence — parse as-is
+    }
+  }
+
   const [head, extStr] = raw.split('|');
   const parts = head.split(',');
   if (parts.length < 5) return null;

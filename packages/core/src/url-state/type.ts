@@ -103,8 +103,19 @@ function decodeOverrides(str: string): Partial<Record<TypeLevel, number>> {
 }
 
 export function decodeState(hash: string): UrlState | null {
-  const raw = hash.replace(/^#/, '');
+  let raw = hash.replace(/^#/, '');
   if (!raw) return null;
+
+  // Share links travel through chats, markdown renderers, and address bars
+  // that percent-encode the pipe separator (| → %7C). The segment data itself
+  // never contains a literal %, so decoding is safe.
+  if (raw.includes('%')) {
+    try {
+      raw = decodeURIComponent(raw);
+    } catch {
+      // malformed escape sequence — parse as-is
+    }
+  }
 
   const [positional, extStr] = raw.split('|');
   const parts = positional.split(',');

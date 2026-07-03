@@ -93,6 +93,7 @@ export function TypeSummary({
                     lineHeight: level.lineHeight,
                     letterSpacing: level.letterSpacing ? `${level.letterSpacing}em` : undefined,
                     fontWeight: isHeading ? headingWeight : undefined,
+                    fontFamily: fontFamily(isHeading ? headingFont : bodyFont),
                   }}
                 >
                   {level.level === 'display' ? 'Display' : level.level.toUpperCase()}

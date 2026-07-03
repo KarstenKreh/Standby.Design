@@ -134,6 +134,21 @@ describe('backward compatibility', () => {
   });
 });
 
+describe('percent-encoded input', () => {
+  it('decodes a %7C-encoded pipe separator (link passed through chat/markdown)', () => {
+    const decoded = decodeState('custom,1,1.333,1.19,zodiak,satoshi,system-mono%7Chw=700');
+    expect(decoded).not.toBeNull();
+    expect(decoded!.monoFont).toBe('system-mono');
+    expect(decoded!.headingWeight).toBe(700);
+  });
+
+  it('parses malformed escape sequences as-is instead of throwing', () => {
+    const decoded = decodeState('custom,1,1.333,1.19,zodiak,satoshi,system-mono%7');
+    expect(decoded).not.toBeNull();
+    expect(decoded!.headingFont).toBe('zodiak');
+  });
+});
+
 describe('decodeState edge cases', () => {
   it('returns null for empty string', () => {
     expect(decodeState('')).toBeNull();

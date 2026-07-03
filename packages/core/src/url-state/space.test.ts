@@ -37,6 +37,13 @@ describe('space url-state — spacing variations', () => {
     const decoded = decodeState(encodeState(state));
     expect(decoded?.spacingSnap).toBe(false);
   });
+
+  it('decodes a %7C-encoded pipe separator (link passed through chat/markdown)', () => {
+    const state: SpaceUrlState = { ...DEFAULT_SPACE_URL_STATE, aspectIncludeReciprocals: false };
+    const encoded = encodeState(state).replace('|', '%7C');
+    const decoded = decodeState(encoded);
+    expect(decoded?.aspectIncludeReciprocals).toBe(false);
+  });
 });
 
 describe('space url-state — extended sections', () => {
