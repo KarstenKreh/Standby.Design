@@ -22,6 +22,7 @@ import { CombinedExport } from '@/components/combined-export';
 import { AppPreview } from '@/components/app-preview';
 import { SymbolSummary } from '@/components/symbol-summary';
 import { SpaceSummary } from '@/components/space-summary';
+import { useFontLoader } from '@/hooks/use-font-loader';
 import { SquarePen } from 'lucide-react';
 
 function accentCssName(name: string): string {
@@ -103,6 +104,8 @@ function App() {
   const [symbolSegment, setSymbolSegment] = useState<string | null>(null);
   const [spaceSegment, setSpaceSegment] = useState<string | null>(null);
   const [themeName, setThemeName] = useState('');
+
+  useFontLoader(typeState?.headingFont, typeState?.bodyFont, typeState?.monoFont);
 
   useEffect(() => {
     const raw = window.location.hash.slice(1);

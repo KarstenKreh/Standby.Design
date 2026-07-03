@@ -1,6 +1,7 @@
 import type { ComputedLevel } from '@core/scale';
 import type { SpacingToken } from '@core/spacing';
 import type { UrlState } from '@core/url-state/type';
+import { fontFamily } from '@core/fontshare';
 
 const HEADING_LEVELS = new Set(['display', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']);
 
@@ -13,14 +14,13 @@ function formatFontName(slug: string): string {
 
 function FontCard({ role, slug, weight }: { role: string; slug: string; weight?: number }) {
   const displayName = formatFontName(slug);
-  const fontFamily = `'${slug}', sans-serif`;
 
   return (
     <div className="flex flex-col overflow-hidden rounded-lg border border-border">
       {/* Font specimen */}
       <div
         className="px-4 pt-4 pb-3 bg-background space-y-2"
-        style={{ fontFamily, fontWeight: weight }}
+        style={{ fontFamily: fontFamily(slug), fontWeight: weight }}
       >
         <div className="text-2xl text-foreground leading-tight">
           ABCDEFGHIJKLM<br />NOPQRSTUVWXYZ

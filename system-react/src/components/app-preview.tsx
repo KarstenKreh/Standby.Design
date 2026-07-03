@@ -7,6 +7,7 @@ import type { SpacingToken } from '@core/spacing';
 import type { ShapeUrlState as ShapeState } from '@core/url-state/shape';
 import { PhoneMockup } from '@/components/phone-mockup';
 import { contrastRatio } from '@core/color-math';
+import { fontFamily } from '@core/fontshare';
 import { generateShadows, generateNeumorphicInset, type ShadowConfig, type ShadowType } from '@core/shadows';
 import { LiquidGlass } from '@core/liquid-glass';
 import { BrutalistEcho, deriveBorderFromBg, type BrutalistLevel } from '@core/brutalist-echo';
@@ -212,8 +213,8 @@ function buildTokens(
       const tok = spacing?.find(s => s.name === name);
       return tok ? `${tok.rem}rem` : ({ '3xs': '0.25rem', '2xs': '0.375rem', xs: '0.5rem', sm: '0.75rem', md: '1rem', lg: '1.5rem' }[name] || '0.5rem');
     },
-    headingFf: headingFont ? `'${headingFont}', sans-serif` : undefined,
-    bodyFf: bodyFont ? `'${bodyFont}', sans-serif` : undefined,
+    headingFf: headingFont ? fontFamily(headingFont) : undefined,
+    bodyFf: bodyFont ? fontFamily(bodyFont) : undefined,
     headingFw: headingWeight ?? 700,
   };
 }
