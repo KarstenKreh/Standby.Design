@@ -81,6 +81,14 @@
       },
       {
         "@type": "WebApplication",
+        "name": "Interaction Roles",
+        "url": "https://standby.design/role",
+        "applicationCategory": "DesignApplication",
+        "description": "Explore the interaction roles of your design system — pressable, toggleable, editable, navigable, readable — and export state rules plus the grammar file for AI agents.",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+      },
+      {
+        "@type": "WebApplication",
         "name": "Design System Viewer",
         "url": "https://standby.design/system",
         "applicationCategory": "DesignApplication",
@@ -246,6 +254,7 @@
     }
 
     .tool-card--color { --card-accent: var(--color-accent); }
+    .tool-card--role  { --card-accent: oklch(0.62 0.13 20); }
     .tool-card--type  { --card-accent: var(--type-accent); }
     .tool-card--shape  { --card-accent: oklch(0.6 0.12 50); }
     .tool-card--symbol { --card-accent: oklch(0.6 0.12 320); }
@@ -397,6 +406,21 @@
       <span class="label">Space</span>
       <h2>Spacing &amp; Layout Generator</h2>
       <p>Spacing scales, breakpoints, container widths, and aspect ratios &mdash; production-ready layout tokens.</p>
+    </a>
+
+    <a href="/role" class="tool-card tool-card--role">
+      <div class="icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--card-accent)">
+          <path d="M14 4.1 12 6"/>
+          <path d="m5.1 8-2.9-.8"/>
+          <path d="m6 12-1.9 2"/>
+          <path d="M7.2 2.2 8 5.1"/>
+          <path d="M9.037 9.69a.498.498 0 0 1 .653-.653l11 4.5a.5.5 0 0 1-.074.949l-4.349 1.041a1 1 0 0 0-.74.739l-1.04 4.35a.5.5 0 0 1-.95.074z"/>
+        </svg>
+      </div>
+      <span class="label">Role</span>
+      <h2>Interaction Roles</h2>
+      <p>Behavior is platform truth &mdash; explore how states map to your tokens, and export the grammar file for AI agents.</p>
     </a>
 
     <div class="tool-card tool-card--motion tool-card--soon" aria-disabled="true">

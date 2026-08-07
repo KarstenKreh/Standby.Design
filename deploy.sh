@@ -16,7 +16,7 @@ echo "==> Checking Traefik..."
 ssh "$SERVER" 'docker network inspect traefik_web >/dev/null 2>&1 || { echo "ERROR: Traefik network not found. Run setup-traefik.sh first."; exit 1; }'
 
 echo "==> Deploying Color Palette Generator..."
-ssh "$SERVER" "mkdir -p $REMOTE_DIR/color-react $REMOTE_DIR/type-react $REMOTE_DIR/system-react $REMOTE_DIR/shape-react $REMOTE_DIR/symbol-react $REMOTE_DIR/space-react $REMOTE_DIR/qa-gallery $REMOTE_DIR/packages/core $REMOTE_DIR/public"
+ssh "$SERVER" "mkdir -p $REMOTE_DIR/color-react $REMOTE_DIR/type-react $REMOTE_DIR/system-react $REMOTE_DIR/shape-react $REMOTE_DIR/symbol-react $REMOTE_DIR/space-react $REMOTE_DIR/role-react $REMOTE_DIR/qa-gallery $REMOTE_DIR/packages/core $REMOTE_DIR/public"
 scp index.html docker-compose.yml Dockerfile nginx.conf og-server.js shared.css "$SERVER:$REMOTE_DIR/"
 scp public/* "$SERVER:$REMOTE_DIR/public/"
 
@@ -55,6 +55,10 @@ tar cf - --exclude='node_modules' --exclude='dist' --exclude='.git' symbol-react
 # Upload space-react source (tar to exclude node_modules/dist, unpack on server)
 echo "==> Uploading space-react source..."
 tar cf - --exclude='node_modules' --exclude='dist' --exclude='.git' space-react/ | ssh "$SERVER" "cd $REMOTE_DIR && rm -rf space-react && tar xf -"
+
+# Upload role-react source (tar to exclude node_modules/dist, unpack on server)
+echo "==> Uploading role-react source..."
+tar cf - --exclude='node_modules' --exclude='dist' --exclude='.git' role-react/ | ssh "$SERVER" "cd $REMOTE_DIR && rm -rf role-react && tar xf -"
 
 # Upload qa-gallery source (hidden internal QA gallery)
 echo "==> Uploading qa-gallery source..."

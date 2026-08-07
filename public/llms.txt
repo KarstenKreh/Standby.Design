@@ -87,6 +87,14 @@ storage — the URL is the document.
 - Output: size tokens (xs–2xl), stroke width, npm install command for the chosen set
 - Use case: Picking and sizing icons consistently instead of mixing sets ad hoc
 
+### Interaction Roles
+- URL: https://standby.design/role
+- Purpose: Show how interaction states (hover, pressed, focus, on, current, invalid) map onto the system's palette steps — and export the rules
+- Roles: pressable, toggleable, editable, navigable, readable
+- Output: CSS [data-*] state rules referencing the color export's tokens, plus a grammar.md file (role dictionary, combination rules, forbidden patterns) for AI agents
+- Principle: behavior is platform truth and is not configurable; momentary states shift steps within the active palette, persistent states switch the palette
+- Use case: Consistent interaction feedback without per-component state styling; grammar file as the single source of truth for AI-generated UI
+
 ### Design System Viewer
 - URL: https://standby.design/system
 - Purpose: Combined view of color + type + spacing + shape + icons with a live app preview and a merged export

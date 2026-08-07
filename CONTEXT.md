@@ -503,6 +503,7 @@ cd color-react  && npm run dev   # localhost:5177
 cd type-react   && npm run dev   # localhost:5174
 cd shape-react  && npm run dev   # localhost:5176
 cd symbol-react && npm run dev   # localhost:5178
+cd role-react   && npm run dev   # localhost:5180
 cd system-react && npm run dev   # localhost:5175
 ```
 
