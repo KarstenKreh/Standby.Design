@@ -66,9 +66,78 @@ function fgStep(bgHex: string | undefined, pMap: PaletteMap, ls: number, ds: num
   return lightCR >= darkCR ? ls : ds;
 }
 
-function fgDirect(bgHex: string, pMap: PaletteMap, ls: number, ds: number, pfx: string, fgMode: FgContrastMode): string {
-  const step = fgStep(bgHex, pMap, ls, ds, fgMode);
-  return pMap[step]?.css || `var(--color-${pfx}-${step})`;
+const AA_CONTRAST = 4.5;
+const FILL_FG_LIGHT_STEP = 25;
+const FILL_FG_DARK_STEP = 975;
+
+interface FgPick { step: number; cr: number; passes: boolean }
+
+function fillFgPick(bgHex: string, pMap: PaletteMap, fgMode: FgContrastMode): FgPick {
+  const rate = (step: number) => ({ step, cr: pMap[step]?.hex ? contrastRatio(pMap[step].hex, bgHex) : 0 });
+  const rated = [rate(FILL_FG_LIGHT_STEP), rate(FILL_FG_DARK_STEP)];
+  if (fgMode === 'preferDark') rated.reverse();
+  else if (fgMode !== 'preferLight') rated.sort((a, b) => b.cr - a.cr);
+
+  const winner = rated.find(c => c.cr >= AA_CONTRAST) || rated[0];
+  return { step: winner.step, cr: winner.cr, passes: winner.cr >= AA_CONTRAST };
+}
+
+function fillFgRow(name: string, bgHex: string | undefined, pMap: PaletteMap, pfx: string, fgMode: FgContrastMode): Row {
+  if (!bgHex) return [name, pfx, FILL_FG_LIGHT_STEP];
+  return [name, pfx, fillFgPick(bgHex, pMap, fgMode).step];
+}
+
+export interface FillContrastWarning {
+  token: string;
+  mode: 'light' | 'dark';
+  text: string;
+}
+
+function fillWarning(token: string, mode: 'light' | 'dark', bgHex: string | undefined, pMap: PaletteMap, fgMode: FgContrastMode): FillContrastWarning[] {
+  if (!bgHex) return [];
+  const pick = fillFgPick(bgHex, pMap, fgMode);
+  if (pick.passes) return [];
+  return [{
+    token,
+    mode,
+    text: `⚠ --${token} reaches only ${pick.cr.toFixed(2)}:1 on --${token.replace(/-foreground$/, '')} (${mode} mode) — below WCAG AA 4.5:1. Neither step ${FILL_FG_LIGHT_STEP} nor step ${FILL_FG_DARK_STEP} of this palette passes: the seed color sits too close to mid lightness for readable text on it. Do not put text on this fill, or pick a lighter or darker seed.`,
+  }];
+}
+
+export function collectFillContrastWarnings(
+  accentPalettes: AccentPalette[],
+  brandPal: PaletteEntry[], errPal: PaletteEntry[], errSurfPal: PaletteEntry[],
+  brandPin: boolean, pinnedBrandHex: string | null, brandInvert: boolean,
+  errorPin: boolean, pinnedErrorHex: string | null, errorInvert: boolean,
+  fgMode: FgContrastMode,
+): FillContrastWarning[] {
+  const brandMap = palMap(brandPal);
+  const errMap = palMap(errPal);
+  const errSurfMap = palMap(errSurfPal);
+
+  const bHex = brandPin ? pinnedBrandHex : null;
+  const bInvHex = bHex && brandInvert ? invertHex(bHex) : null;
+  const eHex = errorPin ? pinnedErrorHex : null;
+  const eInvHex = eHex && errorInvert ? invertHex(eHex) : null;
+
+  const out: FillContrastWarning[] = [
+    ...fillWarning('primary-foreground', 'light', bHex || brandMap[600]?.hex, brandMap, fgMode),
+    ...fillWarning('primary-foreground', 'dark', bHex ? (bInvHex || bHex) : brandMap[400]?.hex, brandMap, fgMode),
+    ...fillWarning('destructive-foreground', 'light', eHex || errMap[600]?.hex, errSurfMap, fgMode),
+    ...fillWarning('destructive-foreground', 'dark', eHex ? (eInvHex || eHex) : errMap[400]?.hex, errSurfMap, fgMode),
+  ];
+
+  accentPalettes.forEach(entry => {
+    const aMap = palMap(entry.palette || []);
+    const aHex = entry.pin ? entry.hex : null;
+    const aInvHex = aHex && entry.invert ? invertHex(aHex) : null;
+    out.push(
+      ...fillWarning(`${entry.cssName}-foreground`, 'light', aHex || aMap[600]?.hex, aMap, fgMode),
+      ...fillWarning(`${entry.cssName}-foreground`, 'dark', aHex ? (aInvHex || aHex) : aMap[400]?.hex, aMap, fgMode),
+    );
+  });
+
+  return out;
 }
 
 function hexToCss(hex: string): string {
@@ -181,21 +250,31 @@ export function generateSemantic(
 
   // Brand pin
   const bCss = bPin && bHex ? hexToCss(bHex) : null;
-  const bFgCss = bPin && bHex ? fgDirect(bHex, brandMap, 50, 975, 'brand', fgMode) : null;
 
   // Inverted brand for dark mode (lightness mirrored, hue/chroma preserved)
   const bInvHex = bPin && bHex && brandInvert ? invertHex(bHex) : null;
   const bInvCss = bInvHex ? hexToCss(bInvHex) : null;
-  const bInvFgCss = bInvHex ? fgDirect(bInvHex, brandMap, 50, 975, 'brand', fgMode) : null;
+
+  const primaryFillLight = bPin && bHex ? bHex : brandMap[600]?.hex;
+  const primaryFillDark = bPin && bHex ? (bInvHex || bHex) : brandMap[400]?.hex;
 
   const primaryLight: Row   = bPin && bHex ? ['primary', '#direct', bCss!] : ['primary', 'brand', 600];
-  const primaryFgLight: Row = bPin && bHex ? ['primary-foreground', '#direct', bFgCss!] : ['primary-foreground', 'brand', fgStep(brandMap[600]?.hex, brandMap, 50, 975, fgMode)];
+  const primaryFgLight: Row = fillFgRow('primary-foreground', primaryFillLight, brandMap, 'brand', fgMode);
   const primaryDark: Row    = bPin && bHex ? (bInvCss ? ['primary', '#direct', bInvCss] : ['primary', '#direct', bCss!]) : ['primary', 'brand', 400];
-  const primaryFgDark: Row  = bPin && bHex ? (bInvFgCss ? ['primary-foreground', '#direct', bInvFgCss] : ['primary-foreground', '#direct', bFgCss!]) : ['primary-foreground', 'brand', fgStep(brandMap[400]?.hex, brandMap, 50, 975, fgMode)];
+  const primaryFgDark: Row  = fillFgRow('primary-foreground', primaryFillDark, brandMap, 'brand', fgMode);
   const sbPrimLight: Row    = bPin && bHex ? ['sidebar-primary', '#direct', bCss!] : ['sidebar-primary', 'brand', 600];
-  const sbPrimFgLight: Row  = bPin && bHex ? ['sidebar-primary-foreground', '#direct', bFgCss!] : ['sidebar-primary-foreground', 'brand', fgStep(brandMap[600]?.hex, brandMap, 50, 975, fgMode)];
+  const sbPrimFgLight: Row  = fillFgRow('sidebar-primary-foreground', primaryFillLight, brandMap, 'brand', fgMode);
   const sbPrimDark: Row     = bPin && bHex ? (bInvCss ? ['sidebar-primary', '#direct', bInvCss] : ['sidebar-primary', '#direct', bCss!]) : ['sidebar-primary', 'brand', 400];
-  const sbPrimFgDark: Row   = bPin && bHex ? (bInvFgCss ? ['sidebar-primary-foreground', '#direct', bInvFgCss] : ['sidebar-primary-foreground', '#direct', bFgCss!]) : ['sidebar-primary-foreground', 'brand', fgStep(brandMap[400]?.hex, brandMap, 50, 975, fgMode)];
+  const sbPrimFgDark: Row   = fillFgRow('sidebar-primary-foreground', primaryFillDark, brandMap, 'brand', fgMode);
+
+  const fillWarnings = collectFillContrastWarnings(
+    accentPalettes, brandPal, errPal, errSurfPal,
+    brandPin, pinnedBrandHex, brandInvert,
+    errorPin, pinnedErrorHex, errorInvert,
+    fgMode,
+  );
+  const warnRows = (token: string, mode: 'light' | 'dark'): Row[] =>
+    fillWarnings.filter(w => w.token === token && w.mode === mode).map(w => ['#comment', null, w.text] as Row);
 
   const ringLight: Row      = bPin && bHex ? ['ring', '#direct', bCss!] : ['ring', 'brand', 600];
   const ringDark: Row       = bPin && bHex ? (bInvCss ? ['ring', '#direct', bInvCss] : ['ring', '#direct', bCss!]) : ['ring', 'brand', 400];
@@ -223,15 +302,16 @@ export function generateSemantic(
 
   // Error pin
   const eCss = ePin && eHex ? hexToCss(eHex) : null;
-  const eFgCss = ePin && eHex ? fgDirect(eHex, errSurfMap, 100, 900, 'error-surface', fgMode) : null;
   const eInvHex = ePin && eHex && errorInvert ? invertHex(eHex) : null;
   const eInvCss = eInvHex ? hexToCss(eInvHex) : null;
-  const eInvFgCss = eInvHex ? fgDirect(eInvHex, errSurfMap, 100, 900, 'error-surface', fgMode) : null;
+
+  const destFillLight = ePin && eHex ? eHex : errMap[600]?.hex;
+  const destFillDark = ePin && eHex ? (eInvHex || eHex) : errMap[400]?.hex;
 
   const destLight: Row   = ePin && eHex ? ['destructive', '#direct', eCss!] : ['destructive', 'error', 600];
-  const destFgLight: Row = ePin && eHex ? ['destructive-foreground', '#direct', eFgCss!] : ['destructive-foreground', 'error-surface', fgStep(errMap[600]?.hex, errSurfMap, 100, 900, fgMode)];
+  const destFgLight: Row = fillFgRow('destructive-foreground', destFillLight, errSurfMap, 'error-surface', fgMode);
   const destDark: Row    = ePin && eHex ? (eInvCss ? ['destructive', '#direct', eInvCss] : ['destructive', '#direct', eCss!]) : ['destructive', 'error', 400];
-  const destFgDark: Row  = ePin && eHex ? (eInvFgCss ? ['destructive-foreground', '#direct', eInvFgCss] : ['destructive-foreground', '#direct', eFgCss!]) : ['destructive-foreground', 'error-surface', fgStep(errMap[400]?.hex, errSurfMap, 100, 900, fgMode)];
+  const destFgDark: Row  = fillFgRow('destructive-foreground', destFillDark, errSurfMap, 'error-surface', fgMode);
 
   const root = buildBlock(':root', [
     [null as unknown as string, null, 'Base'],
@@ -244,6 +324,7 @@ export function generateSemantic(
     ['popover', 'surface', 25], ['popover-foreground', 'surface', 975],
     [null as unknown as string, null, 'Primary'],
     primaryLight, primaryFgLight,
+    ...warnRows('primary-foreground', 'light'),
     ...brandContrastWarnLight,
     ['primary-subtle', 'brand', 100], ['primary-subtle-foreground', 'brand', 950],
     ['primary-emphasis', 'brand', 700],
@@ -255,6 +336,7 @@ export function generateSemantic(
     ['accent', 'brand', 100], ['accent-foreground', 'brand', fgStep(brandMap[100]?.hex, brandMap, 50, 950, fgMode)],
     [null as unknown as string, null, 'Destructive'],
     destLight, destFgLight,
+    ...warnRows('destructive-foreground', 'light'),
     ['destructive-subtle', 'error', 100], ['destructive-subtle-foreground', 'error', 950],
     ['destructive-emphasis', 'error', 700],
     ['destructive-border', 'error-surface', 300],
@@ -276,9 +358,10 @@ export function generateSemantic(
     [null as unknown as string, null, 'Elevated — sits on a card'],
     ['elevated', 'surface', 800], ['elevated-foreground', 'surface', 25],
     [null as unknown as string, null, 'Popover'],
-    ['popover', 'surface', 800], ['popover-foreground', 'surface', 25],
+    ['popover', 'surface', 825], ['popover-foreground', 'surface', 25],
     [null as unknown as string, null, 'Primary'],
     primaryDark, primaryFgDark,
+    ...warnRows('primary-foreground', 'dark'),
     ...brandContrastWarnDark,
     ['primary-subtle', 'brand', 850], ['primary-subtle-foreground', 'brand', 50],
     ['primary-emphasis', 'brand', 300],
@@ -290,6 +373,7 @@ export function generateSemantic(
     ['accent', 'brand', 850], ['accent-foreground', 'brand', fgStep(brandMap[850]?.hex, brandMap, 50, 950, fgMode)],
     [null as unknown as string, null, 'Destructive'],
     destDark, destFgDark,
+    ...warnRows('destructive-foreground', 'dark'),
     ['destructive-subtle', 'error', 850], ['destructive-subtle-foreground', 'error', 50],
     ['destructive-emphasis', 'error', 300],
     ['destructive-border', 'error-surface', 700],
@@ -311,19 +395,21 @@ export function generateSemantic(
     const aHex = entry.hex;
     const aCss = aPin ? hexToCss(aHex) : null;
     const aMap = palMap(entry.palette || []);
-    const aFgCss = aPin ? fgDirect(aHex, aMap, 50, 975, n, fgMode) : null;
     const aInvHex = aPin && aInv ? invertHex(aHex) : null;
     const aInvCss = aInvHex ? hexToCss(aInvHex) : null;
-    const aInvFgCss = aInvHex ? fgDirect(aInvHex, aMap, 50, 975, n, fgMode) : null;
+
+    const aFillLight = aPin ? aHex : aMap[600]?.hex;
+    const aFillDark = aPin ? (aInvHex || aHex) : aMap[400]?.hex;
 
     const aLight: Row = aPin ? [n, '#direct', aCss!] : [n, n, 600];
-    const aFgL: Row = aPin ? [`${n}-foreground`, '#direct', aFgCss!] : [`${n}-foreground`, n, fgStep(aMap[600]?.hex, aMap, 50, 975, fgMode)];
+    const aFgL: Row = fillFgRow(`${n}-foreground`, aFillLight, aMap, n, fgMode);
     const aDark: Row = aPin ? (aInvCss ? [n, '#direct', aInvCss] : [n, '#direct', aCss!]) : [n, n, 400];
-    const aFgD: Row = aPin ? (aInvFgCss ? [`${n}-foreground`, '#direct', aInvFgCss] : [`${n}-foreground`, '#direct', aFgCss!]) : [`${n}-foreground`, n, fgStep(aMap[400]?.hex, aMap, 50, 975, fgMode)];
+    const aFgD: Row = fillFgRow(`${n}-foreground`, aFillDark, aMap, n, fgMode);
 
     const accentRoot = buildBlock(':root', [
       [null as unknown as string, null, `${entry.name} — light`],
       aLight, aFgL,
+      ...warnRows(`${n}-foreground`, 'light'),
       [null as unknown as string, null, 'Background / Card / Elevated / Popover'],
       [`${n}-background`, `${n}-surface`, 50], [`${n}-background-foreground`, `${n}-surface`, 975],
       [`${n}-card`, `${n}-surface`, 25], [`${n}-card-foreground`, `${n}-surface`, 975],
@@ -343,11 +429,12 @@ export function generateSemantic(
     const accentDark = buildBlock('.dark', [
       [null as unknown as string, null, `${entry.name} — dark`],
       aDark, aFgD,
+      ...warnRows(`${n}-foreground`, 'dark'),
       [null as unknown as string, null, 'Background / Card / Elevated / Popover'],
       [`${n}-background`, `${n}-surface`, 875], [`${n}-background-foreground`, `${n}-surface`, 25],
       [`${n}-card`, `${n}-surface`, 825], [`${n}-card-foreground`, `${n}-surface`, 25],
       [`${n}-elevated`, `${n}-surface`, 800], [`${n}-elevated-foreground`, `${n}-surface`, 25],
-      [`${n}-popover`, `${n}-surface`, 800], [`${n}-popover-foreground`, `${n}-surface`, 25],
+      [`${n}-popover`, `${n}-surface`, 825], [`${n}-popover-foreground`, `${n}-surface`, 25],
       [null as unknown as string, null, 'Secondary'],
       [`${n}-secondary`, n, 800], [`${n}-secondary-foreground`, n, fgStep(aMap[800]?.hex, aMap, 100, 900, fgMode)],
       [null as unknown as string, null, 'Muted / Subtle / Accent'],
@@ -380,6 +467,7 @@ export function generateLlmBriefing(
   errorPin: boolean,
   themeName: string,
   fgContrastMode: FgContrastMode,
+  fillContrastWarnings: FillContrastWarning[] = [],
 ): string {
   const pct = Math.round(chromaScale * 100);
   const title = themeName || 'Untitled Theme';
@@ -408,6 +496,12 @@ export function generateLlmBriefing(
 `;
   }
 
+  const fillWarningBlock = fillContrastWarnings.length ? `
+> ⚠ **Contrast warning — text on filled color roles**: Neither the lightest nor the darkest step of the palette reaches WCAG AA 4.5:1 on these fills. Avoid text on them, or move the seed color further away from mid lightness.
+>
+${fillContrastWarnings.map(w => `> - ${w.text.replace(/^⚠ /, '')}`).join('\n')}
+` : '';
+
   return `# ${title} — Theme Briefing
 
 All colors are generated in the **OKLCH** color space (perceptually uniform). Gamut mapping to sRGB is handled automatically — you never need to worry about out-of-gamut values.
@@ -417,7 +511,7 @@ All colors are generated in the **OKLCH** color space (perceptually uniform). Ga
 | Role | Hex | CSS prefix | Notes |
 |------|-----|------------|-------|
 ${colorRows}
-${pinnedNote}${pinnedContrastWarning}
+${pinnedNote}${pinnedContrastWarning}${fillWarningBlock}
 ## Semantic Token Mapping
 
 | Token | Light | Dark | Usage |
@@ -426,7 +520,7 @@ ${pinnedNote}${pinnedContrastWarning}
 | \`--foreground\` | surface-975 | surface-25 | Primary text |
 | \`--card\` | surface-25 | surface-825 | Card backgrounds |
 | \`--elevated\` | surface-0 | surface-800 | Sits **on** a card: input fills, lists inside cards, selected rows |
-| \`--popover\` | surface-25 | surface-800 | Popover/dropdown |
+| \`--popover\` | surface-25 | surface-825 | Popover/dropdown |
 | \`--primary\` | brand-600 | brand-400 | Primary buttons, links |
 | \`--primary-subtle\` | brand-100 | brand-850 | Tinted brand fills: callouts, selected items |
 | \`--primary-emphasis\` | brand-700 | brand-300 | Brand-colored text, links, icons on background |

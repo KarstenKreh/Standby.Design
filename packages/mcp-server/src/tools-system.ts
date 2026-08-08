@@ -12,6 +12,7 @@ import {
   generateSemantic,
   generateSeedComment,
   generateLlmBriefing as generateColorLlmBriefing,
+  collectFillContrastWarnings,
 } from '@syslib/color-code-export';
 import {
   generateCssExport as generateTypeCss,
@@ -290,6 +291,13 @@ export function registerSystemTools(server: McpServer): void {
               colorState.errorPin,
               colorState.themeName,
               colorState.fgContrastMode,
+              collectFillContrastWarnings(
+                palette.accentPalettes,
+                palette.brand, palette.error, palette.errorSurface,
+                colorState.brandPin, colorState.brandPin ? colorState.brandHex : null, colorState.brandInvert,
+                colorState.errorPin, colorState.errorPin ? palette.effectiveErrorHex : null, colorState.errorInvert,
+                colorState.fgContrastMode,
+              ),
             ));
           }
           if (has('type')) parts.push(generateTypeLlmBriefing(typeOpts));
