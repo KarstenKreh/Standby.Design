@@ -87,7 +87,7 @@ export const useThemeStore = create<ThemeState>((set) => ({
     ];
     const usedNames = new Set(s.extraAccents.map(a => a.name));
     const next = presets.find(p => !usedNames.has(p.name))
-      ?? { name: `Extra ${s.extraAccents.length + 1}`, hex: '#7C3AED', pin: true, invert: false, autoMatch: false, autoHue: 0 };
+      ?? { name: `Extra ${s.extraAccents.length + 1}`, hex: '#7C3AED', pin: true, invert: false, autoMatch: true, autoHue: 0 };
     return { extraAccents: [...s.extraAccents, { ...next }] };
   }),
   removeAccent: (index) => set((s) => ({

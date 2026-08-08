@@ -2,7 +2,7 @@
 
 import { hexToOklch, maxChromaInGamut, oklchToHex } from './color-math';
 
-export const STEPS = [25, 50, 75, 100, 200, 300, 400, 500, 600, 700, 800, 825, 850, 875, 900, 925, 950, 975] as const;
+export const STEPS = [0, 25, 50, 75, 100, 200, 300, 400, 500, 600, 700, 800, 825, 850, 875, 900, 925, 950, 975] as const;
 export type Step = (typeof STEPS)[number];
 
 export const L_WHITE = 0.98;
@@ -25,6 +25,29 @@ export interface PaletteEntry {
 function surfaceChromaCorrection(L: number): number {
   if (L >= 0.45) return 1.0;
   return Math.pow(L / 0.45, 1.2);
+}
+
+export const SEMANTIC_ACCENT_HUES: Record<string, number> = {
+  Success: SUCCESS_HUE,
+  Warning: WARNING_HUE,
+  Info: INFO_HUE,
+};
+
+export function isSemanticAccent(name: string): boolean {
+  return name in SEMANTIC_ACCENT_HUES;
+}
+
+export function resolveAccentHues(brandHue: number, accentNames: string[]): (number | null)[] {
+  const spreadCount = accentNames.filter(name => !isSemanticAccent(name)).length;
+  if (spreadCount === 0) return accentNames.map(() => null);
+
+  const stepDeg = 360 / (spreadCount + 1);
+  let slot = 0;
+  return accentNames.map(name => {
+    if (isSemanticAccent(name)) return null;
+    slot += 1;
+    return (((brandHue + slot * stepDeg) % 360) + 360) % 360;
+  });
 }
 
 export function computeAutoAccentHex(primaryHex: string, hue: number): string {

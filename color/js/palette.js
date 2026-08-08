@@ -5,7 +5,7 @@
 import { hexToOklch, maxChromaInGamut, oklchToHex } from './color-math.js';
 import { state } from './state.js';
 
-export const STEPS = [25, 50, 75, 100, 200, 300, 400, 500, 600, 700, 800, 825, 850, 875, 900, 925, 950, 975];
+export const STEPS = [0, 25, 50, 75, 100, 200, 300, 400, 500, 600, 700, 800, 825, 850, 875, 900, 925, 950, 975];
 export const L_WHITE = 0.98;
 export const L_BLACK = 0.10;
 

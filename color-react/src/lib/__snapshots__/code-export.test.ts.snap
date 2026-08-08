@@ -6,6 +6,7 @@ exports[`generatePrimitivesOklch > snapshot stability 1`] = `
 
   /* Brand */
   /* Light Surfaces */
+  --color-brand-0: oklch(0.9800 0.0095 248.61);
   --color-brand-25: oklch(0.9560 0.0204 248.61);
   --color-brand-50: oklch(0.9320 0.0308 248.61);
   --color-brand-75: oklch(0.9080 0.0406 248.61);
@@ -33,6 +34,7 @@ exports[`generatePrimitivesOklch > snapshot stability 1`] = `
 
   /* Surface — 25% chroma */
   /* Light Surfaces */
+  --color-surface-0: oklch(0.9800 0.0024 248.61);
   --color-surface-25: oklch(0.9560 0.0051 248.61);
   --color-surface-50: oklch(0.9320 0.0077 248.61);
   --color-surface-75: oklch(0.9080 0.0101 248.61);
@@ -60,6 +62,7 @@ exports[`generatePrimitivesOklch > snapshot stability 1`] = `
 
   /* Error */
   /* Light Surfaces */
+  --color-error-0: oklch(0.9800 0.0094 25.86);
   --color-error-25: oklch(0.9560 0.0208 25.86);
   --color-error-50: oklch(0.9320 0.0328 25.86);
   --color-error-75: oklch(0.9080 0.0453 25.86);
@@ -87,6 +90,7 @@ exports[`generatePrimitivesOklch > snapshot stability 1`] = `
 
   /* Error Surface — 25% chroma */
   /* Light Surfaces */
+  --color-error-surface-0: oklch(0.9800 0.0035 25.86);
   --color-error-surface-25: oklch(0.9560 0.0076 25.86);
   --color-error-surface-50: oklch(0.9320 0.0114 25.86);
   --color-error-surface-75: oklch(0.9080 0.0150 25.86);
@@ -114,6 +118,7 @@ exports[`generatePrimitivesOklch > snapshot stability 1`] = `
 
   /* Neutral */
   /* Light Surfaces */
+  --color-neutral-0: oklch(0.9800 0.0000 248.61);
   --color-neutral-25: oklch(0.9560 0.0000 248.61);
   --color-neutral-50: oklch(0.9320 0.0000 248.61);
   --color-neutral-75: oklch(0.9080 0.0000 248.61);
@@ -150,6 +155,9 @@ exports[`generateSemantic > snapshot stability 1`] = `
   /* Card */
   --card: var(--color-surface-25);
   --card-foreground: var(--color-surface-975);
+  /* Elevated — sits on a card */
+  --elevated: var(--color-surface-0);
+  --elevated-foreground: var(--color-surface-975);
   /* Popover */
   --popover: var(--color-surface-25);
   --popover-foreground: var(--color-surface-975);
@@ -179,7 +187,8 @@ exports[`generateSemantic > snapshot stability 1`] = `
   --border: var(--color-surface-300);
   --border-muted: var(--color-surface-200);
   --input: var(--color-surface-300);
-  --ring: var(--color-surface-400);
+  --input-hover: var(--color-surface-400);
+  --ring: var(--color-brand-600);
   /* Sidebar */
   --sidebar: var(--color-surface-25);
   --sidebar-foreground: var(--color-surface-975);
@@ -188,7 +197,7 @@ exports[`generateSemantic > snapshot stability 1`] = `
   --sidebar-accent: var(--color-brand-100);
   --sidebar-accent-foreground: var(--color-brand-950);
   --sidebar-border: var(--color-surface-300);
-  --sidebar-ring: var(--color-surface-400);
+  --sidebar-ring: var(--color-brand-600);
 }
 
 .dark {
@@ -198,6 +207,9 @@ exports[`generateSemantic > snapshot stability 1`] = `
   /* Card */
   --card: var(--color-surface-825);
   --card-foreground: var(--color-surface-25);
+  /* Elevated — sits on a card */
+  --elevated: var(--color-surface-800);
+  --elevated-foreground: var(--color-surface-25);
   /* Popover */
   --popover: var(--color-surface-800);
   --popover-foreground: var(--color-surface-25);
@@ -227,7 +239,8 @@ exports[`generateSemantic > snapshot stability 1`] = `
   --border: var(--color-surface-600);
   --border-muted: var(--color-surface-700);
   --input: var(--color-surface-600);
-  --ring: var(--color-surface-500);
+  --input-hover: var(--color-surface-500);
+  --ring: var(--color-brand-400);
   /* Sidebar */
   --sidebar: var(--color-surface-825);
   --sidebar-foreground: var(--color-surface-25);
@@ -236,7 +249,7 @@ exports[`generateSemantic > snapshot stability 1`] = `
   --sidebar-accent: var(--color-brand-850);
   --sidebar-accent-foreground: var(--color-brand-50);
   --sidebar-border: var(--color-surface-600);
-  --sidebar-ring: var(--color-surface-500);
+  --sidebar-ring: var(--color-brand-400);
 }
 "
 `;

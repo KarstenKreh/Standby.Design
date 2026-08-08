@@ -15,9 +15,8 @@ interface PaletteTableProps {
 }
 
 function stepZone(step: number): string {
-  if (step === 0) return 'White';
   if (step === 1000) return 'Black';
-  if (step >= 25 && step <= 100) return 'Light Surface';
+  if (step >= 0 && step <= 100) return 'Light Surface';
   if (step >= 200 && step <= 800) return 'Core';
   if (step >= 825 && step <= 875) return 'Dark Surface';
   if (step >= 900 && step <= 975) return 'High Contrast';
@@ -33,7 +32,7 @@ function copyToClipboard(value: string) {
 export function PaletteTable({ palette, showWhiteBlack }: PaletteTableProps) {
   const entries = showWhiteBlack
     ? palette
-    : palette.filter((e) => (e.step as number) !== 0 && (e.step as number) !== 1000);
+    : palette.filter((e) => (e.step as number) !== 1000);
 
   return (
     <Table>

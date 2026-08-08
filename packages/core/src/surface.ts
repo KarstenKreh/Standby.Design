@@ -96,7 +96,7 @@ export function deriveSurface(
     bg: isNeomorph ? monoBg : step(surface, 50),
     card: isNeomorph ? monoBg : step(surface, 25),
     raised: step(surface, 25),
-    elevated: isNeomorph ? monoBg : step(surface, 25),
+    elevated: isNeomorph ? monoBg : step(surface, 0),
     muted: isNeomorph ? monoBg : step(surface, 75),
     secondary: secondaryBg,
     secondaryFg: pickFgFromPalette(secondaryBg, brand, 100, 900),

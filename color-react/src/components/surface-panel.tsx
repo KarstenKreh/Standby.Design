@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { PaletteEntry } from '@core/palette';
 import type { AccentPalette } from '@/hooks/use-palette';
 import type { FgContrastMode } from '@/store/theme-store';
@@ -8,6 +9,8 @@ import { LiquidGlass } from '@core/liquid-glass';
 import { BrutalistEcho, deriveBorderFromBg } from '@core/brutalist-echo';
 import { PanelSvg } from '@/components/panel-svg';
 import { Sun, Moon, SunDim, MoonStar } from 'lucide-react';
+
+const microText = { fontSize: '0.6923rem', lineHeight: 1.4 } as const;
 
 export interface SurfacePanelProps {
   panelType: 'light' | 'dark' | 'light-hc' | 'dark-hc';
@@ -58,7 +61,7 @@ interface PanelConfig {
   isDark: boolean;
   cardHex: string;
   elevatedHex: string;
-  activeHex: string;
+  inputHoverHex: string;
   mutedHex: string;
   mutedFgHex: string;
   borderHex: string;
@@ -67,6 +70,53 @@ interface PanelConfig {
 
 function getHex(map: Record<number, PaletteEntry>, step: number): string {
   return map[step]?.hex ?? '#888888';
+}
+
+interface PreviewFieldProps {
+  id: string;
+  label: string;
+  placeholder: string;
+  bgHex: string;
+  textHex: string;
+  borderHex: string;
+  hoverBorderHex: string;
+  focusBorderHex: string;
+  ringHex: string;
+  borderWidth: number;
+  radius: number;
+}
+
+function PreviewField({
+  id, label, placeholder, bgHex, textHex, borderHex, hoverBorderHex, focusBorderHex, ringHex, borderWidth, radius,
+}: PreviewFieldProps) {
+  const [hovered, setHovered] = useState(false);
+  const [focused, setFocused] = useState(false);
+
+  const stateName = focused ? 'focus' : hovered ? 'hover' : 'rest';
+  const activeBorder = focused ? focusBorderHex : hovered ? hoverBorderHex : borderHex;
+
+  return (
+    <input
+      id={id}
+      type="text"
+      aria-label={label}
+      placeholder={placeholder}
+      className="w-full px-2.5 py-1.5 text-caption transition-colors"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      onFocus={() => setFocused(true)}
+      onBlur={() => setFocused(false)}
+      data-state={stateName}
+      style={{
+        backgroundColor: bgHex,
+        color: textHex,
+        border: `${borderWidth}px solid ${activeBorder}`,
+        borderRadius: radius,
+        outline: focused ? `2px solid ${ringHex}` : 'none',
+        outlineOffset: focused ? 1 : 0,
+      }}
+    />
+  );
 }
 
 function getPanelConfig(
@@ -82,8 +132,8 @@ function getPanelConfig(
         textHex: getHex(palette, 850),
         isDark: false,
         cardHex: getHex(palette, 25),
-        elevatedHex: getHex(palette, 50),
-        activeHex: getHex(palette, 75),
+        elevatedHex: getHex(palette, 0),
+        inputHoverHex: getHex(palette, 400),
         mutedHex: getHex(palette, 200),
         mutedFgHex: getHex(palette, 700),
         borderHex: getHex(palette, 300),
@@ -97,7 +147,7 @@ function getPanelConfig(
         isDark: true,
         cardHex: getHex(palette, 850),
         elevatedHex: getHex(palette, 825),
-        activeHex: getHex(palette, 800),
+        inputHoverHex: getHex(palette, 500),
         mutedHex: getHex(palette, 700),
         mutedFgHex: getHex(palette, 300),
         borderHex: getHex(palette, 600),
@@ -110,8 +160,8 @@ function getPanelConfig(
         textHex: '#000000',
         isDark: false,
         cardHex: '#FFFFFF',
-        elevatedHex: getHex(neutral, 25),
-        activeHex: getHex(neutral, 50),
+        elevatedHex: '#FFFFFF',
+        inputHoverHex: getHex(neutral, 500),
         mutedHex: getHex(neutral, 200),
         mutedFgHex: getHex(neutral, 700),
         borderHex: getHex(neutral, 400),
@@ -120,12 +170,12 @@ function getPanelConfig(
     case 'dark-hc':
       return {
         label: 'Dark High Contrast',
-        bgHex: getHex(neutral, 925),
+        bgHex: '#000000',
         textHex: '#FFFFFF',
         isDark: true,
-        cardHex: '#000000',
-        elevatedHex: getHex(neutral, 975),
-        activeHex: getHex(neutral, 950),
+        cardHex: getHex(neutral, 950),
+        elevatedHex: getHex(neutral, 950),
+        inputHoverHex: getHex(neutral, 400),
         mutedHex: getHex(neutral, 700),
         mutedFgHex: getHex(neutral, 300),
         borderHex: getHex(neutral, 500),
@@ -144,29 +194,29 @@ function getSurfaceCards(
   switch (panelType) {
     case 'light':
       return [
+        { name: 'Elevated', bg: c.elevatedHex, token: 'surface-0' },
         { name: 'Card', bg: c.cardHex, token: 'surface-25' },
-        { name: 'Elevated', bg: c.elevatedHex, token: 'surface-50' },
         { name: 'Accent', bg: getHex(brand, 100), token: 'brand-100' },
         { name: 'Muted', bg: c.mutedHex, token: 'surface-200' },
       ];
     case 'dark':
       return [
-        { name: 'Card', bg: c.cardHex, token: 'surface-850' },
         { name: 'Elevated', bg: c.elevatedHex, token: 'surface-825' },
+        { name: 'Card', bg: c.cardHex, token: 'surface-850' },
         { name: 'Accent', bg: getHex(brand, 800), token: 'brand-800' },
         { name: 'Muted', bg: c.mutedHex, token: 'surface-700' },
       ];
     case 'light-hc':
       return [
+        { name: 'Elevated', bg: c.elevatedHex, token: '#fff — collapsed' },
         { name: 'Card', bg: c.cardHex, token: '#fff' },
-        { name: 'Elevated', bg: c.elevatedHex, token: 'neutral-25' },
         { name: 'Accent', bg: getHex(brand, 100), token: 'brand-100' },
         { name: 'Muted', bg: c.mutedHex, token: 'neutral-200' },
       ];
     case 'dark-hc':
       return [
-        { name: 'Card', bg: c.cardHex, token: '#000' },
-        { name: 'Elevated', bg: c.elevatedHex, token: 'neutral-975' },
+        { name: 'Elevated', bg: c.elevatedHex, token: 'neutral-950 — collapsed' },
+        { name: 'Card', bg: c.cardHex, token: 'neutral-950' },
         { name: 'Accent', bg: getHex(brand, 800), token: 'brand-800' },
         { name: 'Muted', bg: c.mutedHex, token: 'neutral-700' },
       ];
@@ -190,7 +240,7 @@ export function SurfacePanel({
   shape,
 }: SurfacePanelProps) {
   const config = getPanelConfig(panelType, palette, neutral);
-  const { label, bgHex, textHex, isDark, cardHex, elevatedHex, activeHex, mutedHex, mutedFgHex, borderHex, borderMutedHex } = config;
+  const { label, bgHex, textHex, isDark, cardHex, elevatedHex, inputHoverHex, mutedFgHex, borderHex, borderMutedHex } = config;
 
   const bw = shapeTokens?.borderEnabled !== false ? (shapeTokens?.borderWidth ?? 1) : 0;
   const br = shapeTokens?.borderRadius ?? 8;
@@ -286,58 +336,44 @@ export function SurfacePanel({
     return { name: accent.name, dotBg, badgeBg, badgeBorder, badgeText };
   });
 
+  const errDotBg = isDark ? getHex(error, 400) : getHex(error, 600);
+  const errNoticeBg = isDark ? getHex(errorSurface, 800) : getHex(errorSurface, 100);
+  const errNoticeText = isDark ? getHex(error, 50) : getHex(error, 950);
+  const errNoticeBorder = isDark ? getHex(errorSurface, 700) : getHex(errorSurface, 300);
+
+  const innerRadius = Math.max(4, br - 2);
+  const cardBorderHex = brutalistEnabled ? brutalBorder(cardHex) : borderMutedHex;
+
   return (
     <div
       className="p-5 flex flex-col gap-4"
       style={{ backgroundColor: bgHex, color: textHex, border: bw ? `${bw}px solid ${borderMutedHex}` : 'none', borderRadius: br + 4 }}
     >
-      {/* Header row: label + title + borders left, illustration right */}
-      <div className="flex items-start justify-between">
-        <div className="flex-1 min-w-0">
-          <span
-            className="text-caption font-semibold uppercase tracking-wider px-1.5 py-0.5 inline-flex items-center gap-1 mb-1"
-            style={{
-              backgroundColor: cardHex,
-              border: bw ? `${bw}px solid ${borderMutedHex}` : 'none',
-              borderRadius: Math.max(4, br - 4),
-              color: textHex,
-            }}
-          >
-            {panelType === 'light' && <Sun size={11} />}
-            {panelType === 'dark' && <Moon size={11} />}
-            {panelType === 'light-hc' && <SunDim size={11} />}
-            {panelType === 'dark-hc' && <MoonStar size={11} />}
-            {label}
-          </span>
-          <h3 className="text-body-s font-semibold mb-3" style={{ color: textHex }}>
-            {panelType === 'light' ? 'Surfaces' :
-             panelType === 'dark' ? 'Surfaces' :
-             'Neutral Surfaces'}
-          </h3>
-          {/* Borders */}
-          <div className="flex gap-3 pr-3">
-            <div className="flex-1">
-              <div className="h-px" style={{ backgroundColor: borderHex }} />
-              <span className="text-caption font-semibold mt-1 block" style={{ color: mutedFgHex }}>Border</span>
-            </div>
-            <div className="flex-1">
-              <div className="h-px" style={{ backgroundColor: borderMutedHex }} />
-              <span className="text-caption font-semibold mt-1 block" style={{ color: mutedFgHex }}>Border Muted</span>
-            </div>
-          </div>
-        </div>
-        <div className="w-28 -mt-1 -mr-1">
-          <PanelSvg
-            key={`${panelType}-${getHex(brand, 300)}-${getHex(brand, 500)}-${getHex(palette, 75)}-${accentPalettes.map(a => a.hex).join(',')}`}
-            idx={['light', 'dark', 'light-hc', 'dark-hc'].indexOf(panelType)}
-            panelType={panelType}
-            brand={brand}
-          />
-        </div>
+      <div className="flex items-center gap-2">
+        <h3 className="text-body-s font-semibold min-w-0" style={{ color: textHex }}>
+          {panelType === 'light' ? 'Surfaces' :
+           panelType === 'dark' ? 'Surfaces' :
+           'Neutral Surfaces'}
+        </h3>
+        <span
+          className="text-caption font-semibold px-1.5 py-0.5 inline-flex items-center gap-1 shrink-0"
+          style={{
+            backgroundColor: cardHex,
+            border: bw ? `${bw}px solid ${borderMutedHex}` : 'none',
+            borderRadius: Math.max(4, br - 2),
+            color: textHex,
+          }}
+        >
+          {panelType === 'light' && <Sun size={11} />}
+          {panelType === 'dark' && <Moon size={11} />}
+          {panelType === 'light-hc' && <SunDim size={11} />}
+          {panelType === 'dark-hc' && <MoonStar size={11} />}
+          {label}
+        </span>
       </div>
 
       {/* Surface cards — full width */}
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-4 gap-2">
         {surfaceCards.map((card) => {
           if (isGlass) {
             return (
@@ -353,7 +389,7 @@ export function SurfacePanel({
                 <LiquidGlass depth={glassDepth} blur={glassBlur} dispersion={glassDispersion} cornerRadius={br} onDark={isDark}>
                   <div className="p-2.5 text-caption flex flex-col justify-between min-h-20" style={{ color: textHex }}>
                     <span className="font-medium">{card.name}</span>
-                    <span className="text-caption font-mono" style={{ color: mutedFgHex }}>{card.token}</span>
+                    <span className="font-mono" style={{ ...microText, color: mutedFgHex }}>{card.token}</span>
                   </div>
                 </LiquidGlass>
               </div>
@@ -374,93 +410,143 @@ export function SurfacePanel({
               }}
             >
               <span className="font-medium">{card.name}</span>
-              <span className="text-caption font-mono" style={{ color: mutedFgHex }}>{card.token}</span>
+              <span className="font-mono" style={{ ...microText, color: mutedFgHex }}>{card.token}</span>
             </div>
           );
         })}
       </div>
 
-      {/* Buttons */}
-      <div className="flex gap-2">
-        {([
-          { label: 'Primary', bg: primaryBg, fg: primaryFg },
-          { label: 'Secondary', bg: secondaryBg, fg: secondaryFg },
-          { label: 'Destructive', bg: destructiveBg, fg: destructiveFg },
-        ] as const).map((btn) => {
-          const btnR = Math.max(4, br - 2);
-          const showBtnBorder = brutalistEnabled && brutalistVariant !== 'solid';
-          const pressCls =
-            brutalistEnabled ? 'neobrutalism-press' :
-            isGlass ? 'glass-press' :
-            isNeomorph ? 'neomorph-press' :
-            'paper-press';
-          const pressVars = brutalistEnabled
-            ? {
-                ['--press-x' as string]: `${brutalistOffsetX / brutalistScale}px`,
-                ['--press-y' as string]: `${brutalistOffsetY / brutalistScale}px`,
-              }
-            : {};
-          return (
-            <div key={btn.label} className="relative inline-flex">
-              {brutalEcho('sm', btnR, btn.bg)}
-              <button
-                className={`relative px-3 py-1.5 text-caption font-medium ${pressCls}`}
-                style={{
-                  backgroundColor: btn.bg,
-                  color: btn.fg,
-                  borderRadius: btnR,
-                  border: showBtnBorder ? `${brutalistStrokeWidth}px solid ${brutalBorder(btn.bg)}` : 'none',
-                  boxShadow: brutalistEnabled ? undefined : shadowSm,
-                  cursor: 'pointer',
-                  ...pressVars,
-                }}
-              >
-                {btn.label}
-              </button>
+      <div className="relative">
+        {brutalEcho('md', br, cardHex)}
+        <div
+          className="relative p-4 flex flex-col gap-3.5"
+          style={{
+            backgroundColor: cardHex,
+            border: bw || brutalistEnabled ? `${bw || 1}px solid ${cardBorderHex}` : 'none',
+            borderRadius: br,
+            boxShadow: brutalistEnabled || isGlass ? undefined : shadowMd,
+          }}
+        >
+          <div className="flex items-center justify-between gap-3">
+            <div className="min-w-0 flex flex-col gap-2">
+              <div>
+                <h4 className="text-body-s font-semibold" style={{ color: textHex }}>
+                  Team access
+                </h4>
+                <p className="text-caption mt-0.5" style={{ color: mutedFgHex }}>
+                  Invite a teammate and choose what they can see.
+                </p>
+              </div>
+              <div className="flex gap-1.5 flex-wrap">
+                <div
+                  className="inline-flex items-center gap-1 px-2 py-0.5 font-semibold"
+                  style={{
+                    ...microText,
+                    backgroundColor: errNoticeBg,
+                    color: errNoticeText,
+                    border: bw ? `${bw}px solid ${errNoticeBorder}` : 'none',
+                    borderRadius: innerRadius,
+                  }}
+                >
+                  <span className="inline-block w-1.5 h-1.5 rounded-full" style={{ backgroundColor: errDotBg }} />
+                  Error
+                </div>
+                {accentItems.map((item) => (
+                  <div
+                    key={item.name}
+                    className="inline-flex items-center gap-1 px-2 py-0.5 font-semibold"
+                    style={{
+                      ...microText,
+                      backgroundColor: item.badgeBg,
+                      color: item.badgeText,
+                      border: bw ? `${bw}px solid ${item.badgeBorder}` : 'none',
+                      borderRadius: innerRadius,
+                    }}
+                  >
+                    <span className="inline-block w-1.5 h-1.5 rounded-full" style={{ backgroundColor: item.dotBg }} />
+                    {item.name}
+                  </div>
+                ))}
+              </div>
             </div>
-          );
-        })}
-      </div>
-
-      {/* Badges: Error + Accents */}
-      <div className="flex gap-2 flex-wrap">
-        {/* Error badge — stays flat across all styles, buttons carry the elevation signal */}
-        {(() => {
-          const errDotBg = isDark ? getHex(error, 400) : getHex(error, 600);
-          const errBadgeBg = isDark ? getHex(errorSurface, 800) : getHex(errorSurface, 100);
-          const errBadgeText = isDark ? getHex(error, 50) : getHex(error, 950);
-          const errBorderHex = isDark ? getHex(errorSurface, 700) : getHex(errorSurface, 300);
-          return (
-            <div
-              className="inline-flex items-center gap-1.5 px-2.5 py-1 text-caption font-semibold"
-              style={{
-                backgroundColor: errBadgeBg,
-                color: errBadgeText,
-                border: bw ? `${bw}px solid ${errBorderHex}` : 'none',
-                borderRadius: br,
-              }}
-            >
-              <span className="inline-block w-2 h-2 rounded-full" style={{ backgroundColor: errDotBg }} />
-              Error
+            <div className="w-[90px] shrink-0">
+              <PanelSvg
+                key={`${panelType}-${getHex(brand, 300)}-${getHex(brand, 500)}-${getHex(palette, 75)}-${accentPalettes.map(a => a.hex).join(',')}`}
+                idx={['light', 'dark', 'light-hc', 'dark-hc'].indexOf(panelType)}
+                panelType={panelType}
+                brand={brand}
+                className="w-full h-[90px] block"
+              />
             </div>
-          );
-        })()}
-        {/* Accent badges — also flat */}
-        {accentItems.map((item) => (
-          <div
-            key={item.name}
-            className="inline-flex items-center gap-1.5 px-2.5 py-1 text-caption font-semibold"
-            style={{
-              backgroundColor: item.badgeBg,
-              color: item.badgeText,
-              border: bw ? `${bw}px solid ${item.badgeBorder}` : 'none',
-              borderRadius: br,
-            }}
-          >
-            <span className="inline-block w-2 h-2 rounded-full" style={{ backgroundColor: item.dotBg }} />
-            {item.name}
           </div>
-        ))}
+
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor={`${panelType}-email`} className="text-caption font-medium" style={{ color: textHex }}>
+              Email address
+            </label>
+            <PreviewField
+              id={`${panelType}-email`}
+              label="Email address"
+              placeholder="name@company.com"
+              bgHex={elevatedHex}
+              textHex={textHex}
+              borderHex={borderHex}
+              hoverBorderHex={inputHoverHex}
+              focusBorderHex={primaryBg}
+              ringHex={primaryBg}
+              borderWidth={bw || 1}
+              radius={innerRadius}
+            />
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span className="font-semibold shrink-0" style={{ ...microText, color: mutedFgHex }}>Border</span>
+            <div className="h-px flex-1" style={{ backgroundColor: borderHex }} />
+            <span className="font-semibold shrink-0 ml-2" style={{ ...microText, color: mutedFgHex }}>Border Muted</span>
+            <div className="h-px flex-1" style={{ backgroundColor: borderMutedHex }} />
+          </div>
+
+          <div className="flex gap-2">
+            {([
+              { label: 'Delete', bg: destructiveBg, fg: destructiveFg },
+              { label: 'Cancel', bg: secondaryBg, fg: secondaryFg },
+              { label: 'Send invite', bg: primaryBg, fg: primaryFg },
+            ] as const).map((btn) => {
+              const btnR = innerRadius;
+              const showBtnBorder = brutalistEnabled && brutalistVariant !== 'solid';
+              const pressCls =
+                brutalistEnabled ? 'neobrutalism-press' :
+                isGlass ? 'glass-press' :
+                isNeomorph ? 'neomorph-press' :
+                'paper-press';
+              const pressVars = brutalistEnabled
+                ? {
+                    ['--press-x' as string]: `${brutalistOffsetX / brutalistScale}px`,
+                    ['--press-y' as string]: `${brutalistOffsetY / brutalistScale}px`,
+                  }
+                : {};
+              return (
+                <div key={btn.label} className="relative inline-flex">
+                  {brutalEcho('sm', btnR, btn.bg)}
+                  <button
+                    className={`relative px-3 py-1.5 text-caption font-medium ${pressCls}`}
+                    style={{
+                      backgroundColor: btn.bg,
+                      color: btn.fg,
+                      borderRadius: btnR,
+                      border: showBtnBorder ? `${brutalistStrokeWidth}px solid ${brutalBorder(btn.bg)}` : 'none',
+                      boxShadow: brutalistEnabled ? undefined : shadowSm,
+                      cursor: 'pointer',
+                      ...pressVars,
+                    }}
+                  >
+                    {btn.label}
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </div>
 
     </div>

@@ -4,13 +4,14 @@ import {
   computeAutoErrorHex,
   computeAutoAccentHex,
   STEPS,
+  resolveAccentHues,
 } from './palette';
 import { hexToOklch } from './color-math';
 
 describe('generatePalette', () => {
-  it('returns 18 entries', () => {
+  it('returns 19 entries', () => {
     const palette = generatePalette('#335A7F');
-    expect(palette).toHaveLength(18);
+    expect(palette).toHaveLength(19);
   });
 
   it('steps match STEPS constant', () => {
@@ -62,17 +63,17 @@ describe('generatePalette', () => {
 
   it('works with pure red', () => {
     const palette = generatePalette('#FF0000');
-    expect(palette).toHaveLength(18);
+    expect(palette).toHaveLength(19);
   });
 
   it('works with black', () => {
     const palette = generatePalette('#000000');
-    expect(palette).toHaveLength(18);
+    expect(palette).toHaveLength(19);
   });
 
   it('works with white', () => {
     const palette = generatePalette('#FFFFFF');
-    expect(palette).toHaveLength(18);
+    expect(palette).toHaveLength(19);
   });
 });
 
@@ -97,5 +98,34 @@ describe('computeAutoAccentHex', () => {
   it('returns valid hex for info hue', () => {
     const result = computeAutoAccentHex('#335A7F', 255);
     expect(result).toMatch(/^#[0-9A-F]{6}$/);
+  });
+});
+
+describe('resolveAccentHues', () => {
+  const SEMANTIC = ['Success', 'Warning', 'Info'];
+
+  it('leaves semantic accents untouched', () => {
+    expect(resolveAccentHues(255, SEMANTIC)).toEqual([null, null, null]);
+  });
+
+  it('places a single extra opposite the brand', () => {
+    const [hue] = resolveAccentHues(255, ['Extra 4']);
+    expect(hue).toBeCloseTo(75, 5);
+  });
+
+  it('spreads extras evenly, brand included in the spacing', () => {
+    const hues = resolveAccentHues(0, ['Extra 4', 'Extra 5', 'Extra 6']);
+    expect(hues).toEqual([90, 180, 270]);
+  });
+
+  it('skips semantic accents when counting slots', () => {
+    const hues = resolveAccentHues(0, [...SEMANTIC, 'Extra 4', 'Extra 5']);
+    expect(hues).toEqual([null, null, null, 120, 240]);
+  });
+
+  it('wraps past 360', () => {
+    const hues = resolveAccentHues(300, ['Extra 4', 'Extra 5']);
+    expect(hues[0]).toBeCloseTo(60, 5);
+    expect(hues[1]).toBeCloseTo(180, 5);
   });
 });

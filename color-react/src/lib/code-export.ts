@@ -189,6 +189,11 @@ export function generateSemantic(
   const sbPrimDark: Row     = bPin && bHex ? (bInvCss ? ['sidebar-primary', '#direct', bInvCss] : ['sidebar-primary', '#direct', bCss!]) : ['sidebar-primary', 'brand', 400];
   const sbPrimFgDark: Row   = bPin && bHex ? (bInvFgCss ? ['sidebar-primary-foreground', '#direct', bInvFgCss] : ['sidebar-primary-foreground', '#direct', bFgCss!]) : ['sidebar-primary-foreground', 'brand', fgStep(brandMap[400]?.hex, brandMap, 50, 975, fgMode)];
 
+  const ringLight: Row      = bPin && bHex ? ['ring', '#direct', bCss!] : ['ring', 'brand', 600];
+  const ringDark: Row       = bPin && bHex ? (bInvCss ? ['ring', '#direct', bInvCss] : ['ring', '#direct', bCss!]) : ['ring', 'brand', 400];
+  const sbRingLight: Row    = bPin && bHex ? ['sidebar-ring', '#direct', bCss!] : ['sidebar-ring', 'brand', 600];
+  const sbRingDark: Row     = bPin && bHex ? (bInvCss ? ['sidebar-ring', '#direct', bInvCss] : ['sidebar-ring', '#direct', bCss!]) : ['sidebar-ring', 'brand', 400];
+
   // Contrast warning for pinned brand used as text color
   const brandContrastWarnLight: Row[] = [];
   const brandContrastWarnDark: Row[] = [];
@@ -225,6 +230,8 @@ export function generateSemantic(
     ['background', 'surface', 50], ['foreground', 'surface', 975],
     [null as unknown as string, null, 'Card'],
     ['card', 'surface', 25], ['card-foreground', 'surface', 975],
+    [null as unknown as string, null, 'Elevated — sits on a card'],
+    ['elevated', 'surface', 0], ['elevated-foreground', 'surface', 975],
     [null as unknown as string, null, 'Popover'],
     ['popover', 'surface', 25], ['popover-foreground', 'surface', 975],
     [null as unknown as string, null, 'Primary'],
@@ -245,12 +252,12 @@ export function generateSemantic(
     ['destructive-border', 'error-surface', 300],
     [null as unknown as string, null, 'Border / Input / Ring'],
     ['border', 'surface', 300], ['border-muted', 'surface', 200],
-    ['input', 'surface', 300], ['ring', 'surface', 400],
+    ['input', 'surface', 300], ['input-hover', 'surface', 400], ringLight,
     [null as unknown as string, null, 'Sidebar'],
     ['sidebar', 'surface', 25], ['sidebar-foreground', 'surface', 975],
     sbPrimLight, sbPrimFgLight,
     ['sidebar-accent', 'brand', 100], ['sidebar-accent-foreground', 'brand', fgStep(brandMap[100]?.hex, brandMap, 50, 950, fgMode)],
-    ['sidebar-border', 'surface', 300], ['sidebar-ring', 'surface', 400],
+    ['sidebar-border', 'surface', 300], sbRingLight,
   ]);
 
   const dark = buildBlock('.dark', [
@@ -258,6 +265,8 @@ export function generateSemantic(
     ['background', 'surface', 875], ['foreground', 'surface', 25],
     [null as unknown as string, null, 'Card'],
     ['card', 'surface', 825], ['card-foreground', 'surface', 25],
+    [null as unknown as string, null, 'Elevated — sits on a card'],
+    ['elevated', 'surface', 800], ['elevated-foreground', 'surface', 25],
     [null as unknown as string, null, 'Popover'],
     ['popover', 'surface', 800], ['popover-foreground', 'surface', 25],
     [null as unknown as string, null, 'Primary'],
@@ -278,12 +287,12 @@ export function generateSemantic(
     ['destructive-border', 'error-surface', 700],
     [null as unknown as string, null, 'Border / Input / Ring'],
     ['border', 'surface', 600], ['border-muted', 'surface', 700],
-    ['input', 'surface', 600], ['ring', 'surface', 500],
+    ['input', 'surface', 600], ['input-hover', 'surface', 500], ringDark,
     [null as unknown as string, null, 'Sidebar'],
     ['sidebar', 'surface', 825], ['sidebar-foreground', 'surface', 25],
     sbPrimDark, sbPrimFgDark,
     ['sidebar-accent', 'brand', 850], ['sidebar-accent-foreground', 'brand', fgStep(brandMap[850]?.hex, brandMap, 50, 950, fgMode)],
-    ['sidebar-border', 'surface', 600], ['sidebar-ring', 'surface', 500],
+    ['sidebar-border', 'surface', 600], sbRingDark,
   ]);
 
   let accentBlocks = '';
@@ -307,9 +316,10 @@ export function generateSemantic(
     const accentRoot = buildBlock(':root', [
       [null as unknown as string, null, `${entry.name} — light`],
       aLight, aFgL,
-      [null as unknown as string, null, 'Background / Card / Popover'],
+      [null as unknown as string, null, 'Background / Card / Elevated / Popover'],
       [`${n}-background`, `${n}-surface`, 50], [`${n}-background-foreground`, `${n}-surface`, 975],
       [`${n}-card`, `${n}-surface`, 25], [`${n}-card-foreground`, `${n}-surface`, 975],
+      [`${n}-elevated`, `${n}-surface`, 0], [`${n}-elevated-foreground`, `${n}-surface`, 975],
       [`${n}-popover`, `${n}-surface`, 25], [`${n}-popover-foreground`, `${n}-surface`, 975],
       [null as unknown as string, null, 'Secondary'],
       [`${n}-secondary`, n, 200], [`${n}-secondary-foreground`, n, fgStep(aMap[200]?.hex, aMap, 100, 900, fgMode)],
@@ -320,14 +330,15 @@ export function generateSemantic(
       [`${n}-emphasis`, n, 700],
       [null as unknown as string, null, 'Border / Input / Ring'],
       [`${n}-border`, `${n}-surface`, 300], [`${n}-border-muted`, `${n}-surface`, 200],
-      [`${n}-input`, `${n}-surface`, 300], [`${n}-ring`, `${n}-surface`, 400],
+      [`${n}-input`, `${n}-surface`, 300], [`${n}-input-hover`, `${n}-surface`, 400], [`${n}-ring`, n, 600],
     ]);
     const accentDark = buildBlock('.dark', [
       [null as unknown as string, null, `${entry.name} — dark`],
       aDark, aFgD,
-      [null as unknown as string, null, 'Background / Card / Popover'],
+      [null as unknown as string, null, 'Background / Card / Elevated / Popover'],
       [`${n}-background`, `${n}-surface`, 875], [`${n}-background-foreground`, `${n}-surface`, 25],
       [`${n}-card`, `${n}-surface`, 825], [`${n}-card-foreground`, `${n}-surface`, 25],
+      [`${n}-elevated`, `${n}-surface`, 800], [`${n}-elevated-foreground`, `${n}-surface`, 25],
       [`${n}-popover`, `${n}-surface`, 800], [`${n}-popover-foreground`, `${n}-surface`, 25],
       [null as unknown as string, null, 'Secondary'],
       [`${n}-secondary`, n, 800], [`${n}-secondary-foreground`, n, fgStep(aMap[800]?.hex, aMap, 100, 900, fgMode)],
@@ -338,7 +349,7 @@ export function generateSemantic(
       [`${n}-emphasis`, n, 300],
       [null as unknown as string, null, 'Border / Input / Ring'],
       [`${n}-border`, `${n}-surface`, 600], [`${n}-border-muted`, `${n}-surface`, 700],
-      [`${n}-input`, `${n}-surface`, 600], [`${n}-ring`, `${n}-surface`, 500],
+      [`${n}-input`, `${n}-surface`, 600], [`${n}-input-hover`, `${n}-surface`, 500], [`${n}-ring`, n, 400],
     ]);
     accentBlocks += `\n/* ${entry.name} Accent — semantic tokens */\n` + accentRoot + '\n' + accentDark;
   });
@@ -406,6 +417,7 @@ ${pinnedNote}${pinnedContrastWarning}
 | \`--background\` | surface-50 | surface-875 | Page background |
 | \`--foreground\` | surface-975 | surface-25 | Primary text |
 | \`--card\` | surface-25 | surface-825 | Card backgrounds |
+| \`--elevated\` | surface-0 | surface-800 | Sits **on** a card: input fills, lists inside cards, selected rows |
 | \`--popover\` | surface-25 | surface-800 | Popover/dropdown |
 | \`--primary\` | brand-600 | brand-400 | Primary buttons, links |
 | \`--primary-subtle\` | brand-100 | brand-850 | Tinted brand fills: callouts, selected items |
@@ -420,7 +432,8 @@ ${pinnedNote}${pinnedContrastWarning}
 | \`--border\` | surface-300 | surface-600 | Default borders |
 | \`--border-muted\` | surface-200 | surface-700 | Subtle separators |
 | \`--input\` | surface-300 | surface-600 | Form-control borders (input, select, textarea) |
-| \`--ring\` | surface-400 | surface-500 | Focus rings |
+| \`--input-hover\` | surface-400 | surface-500 | Form-control border on hover — one rung stronger, still neutral |
+| \`--ring\` | brand-600 | brand-400 | Focus rings — brand-colored, so focus never reads as "the border got darker" |
 
 ### Sidebar
 
@@ -441,26 +454,27 @@ ${accentPalettes.length > 0 ? `
 ### Accent Scopes
 
 Each accent color provides a full semantic scope:
-${accentPalettes.map(a => `- **${a.name}** (\`--${a.cssName}\`): \`-foreground\`, \`-background\`, \`-card\`, \`-popover\`, \`-secondary\`, \`-muted\`, \`-accent\`, \`-subtle\`, \`-emphasis\`, \`-border\`, \`-border-muted\`, \`-input\`, \`-ring\` — each with light/dark variants.`).join('\n')}
+${accentPalettes.map(a => `- **${a.name}** (\`--${a.cssName}\`): \`-foreground\`, \`-background\`, \`-card\`, \`-elevated\`, \`-popover\`, \`-secondary\`, \`-muted\`, \`-accent\`, \`-subtle\`, \`-emphasis\`, \`-border\`, \`-border-muted\`, \`-input\`, \`-ring\` — each with light/dark variants.`).join('\n')}
 ` : ''}
 ## How to Use
 
 1. **Use semantic tokens** (\`--primary\`, \`--background\`, etc.) in component code — never reference primitive step numbers directly.
 2. **Tailwind v4**: The export ships plain CSS custom properties. To get utilities like \`bg-primary\` or \`text-foreground\`, map the variables once via \`@theme inline { --color-primary: var(--primary); … }\` — see tailwindcss.com/docs/theme.
 3. **Dark mode**: Add \`.dark\` to \`<html>\` or a container. All semantic tokens remap automatically.
-4. **Borders**: Default to \`--border-muted\` for subtle separation (dividers, table rows). Use \`--border\` for visible borders (cards, panels). Form controls (\`input\`, \`select\`, \`textarea\`) always use \`--input\` — never \`--border\`.
-5. **Colored text**: For links, icons, and indicators placed directly on \`--background\` or \`--card\`, use \`--primary-emphasis\` / \`--destructive-emphasis\` / \`--{name}-emphasis\` — never the button colors (\`--primary\`, 600/400 steps), which may lack text contrast there.
-6. **Shadows and radii**: see standby.design/shape for hue-matched shadow tokens and border-radius scales.
+4. **Surface depth — three levels, never more**: \`--background\` (the page) → \`--card\` (sits on the page) → \`--elevated\` (sits on a card: input fills, lists inside cards, dropdowns, selected rows). Each level is exactly one step lighter than the one below it, in both light and dark mode. Depth does not stack: a field inside a list inside a card still uses \`--elevated\`, not a fourth tone. \`--muted\` runs the other way (recessed, one step darker than \`--card\`) and is not part of the ladder.
+5. **Borders**: Default to \`--border-muted\` for subtle separation (dividers, table rows). Use \`--border\` for visible borders (cards, panels). Form controls (\`input\`, \`select\`, \`textarea\`) always use \`--input\` — never \`--border\`.
+6. **Colored text**: For links, icons, and indicators placed directly on \`--background\` or \`--card\`, use \`--primary-emphasis\` / \`--destructive-emphasis\` / \`--{name}-emphasis\` — never the button colors (\`--primary\`, 600/400 steps), which may lack text contrast there.
+7. **Shadows and radii**: see standby.design/shape for hue-matched shadow tokens and border-radius scales.
 
 ## Primitive Scale Reference
 
-Each color uses an 18-step scale: **25, 50, 75, 100, 200–800, 825, 850, 875, 900, 925, 950, 975**
+Each color uses a 19-step scale: **0, 25, 50, 75, 100, 200–800, 825, 850, 875, 900, 925, 950, 975**
 
-- **25–100** — light surfaces (backgrounds, cards)
+- **0–100** — light surfaces (elevated, cards, backgrounds)
 - **200–800** — core palette (buttons, text, accents)
 - **825–875** — dark-mode surfaces
 - **900–975** — high-contrast surfaces
-- **0 / 1000** — neutral only: pure white and pure black endpoints (\`--color-neutral-0\`, \`--color-neutral-1000\`)
+- **1000** — neutral only: pure black endpoint (\`--color-neutral-1000\`). In the neutral scale, \`--color-neutral-0\` is pure white; in all other scales step 0 is the tinted lightest surface.
 
 Chroma variants:
 - \`--color-{name}-{step}\` — full chroma (interactive elements)

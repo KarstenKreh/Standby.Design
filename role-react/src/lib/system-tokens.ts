@@ -159,7 +159,7 @@ export function buildRoleTheme(segments: Segments, isDark = true): RoleTheme {
     isDark,
     bg: entryHex(surface, isDark ? 875 : 50),
     card: entryHex(surface, isDark ? 825 : 25),
-    elevated: entryHex(surface, isDark ? 800 : 25),
+    elevated: entryHex(surface, isDark ? 800 : 0),
     fg: entryHex(surface, isDark ? 25 : 975),
     muted: entryHex(surface, isDark ? 300 : 700),
     border: entryHex(surface, isDark ? 700 : 300),
