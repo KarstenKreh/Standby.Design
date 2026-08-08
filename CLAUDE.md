@@ -40,6 +40,13 @@ file is the how-to-not-get-stuck.
   `%LOCALAPPDATA%\1Password\config\ssh\agent.toml`.
 - The script must use Windows OpenSSH (it prepends the PATH itself) —
   Git Bash's bundled ssh cannot reach the 1Password agent pipe.
+- **Never pipe `deploy.sh` through `tail`/`head` in a background task.** Those
+  buffer until EOF, so the log stays empty for the whole run and the deploy
+  looks hung when it is only building images on the server (several minutes,
+  normal). Run it bare and read the output file as it grows. Before blaming
+  SSH, verify with
+  `ssh -v -o BatchMode=yes -o ConnectTimeout=10 root@46.225.131.97 'echo ok'` —
+  that fails fast instead of waiting on a prompt.
 - **New root-level static files** (`public/*.html`, `*.txt`) also need a
   `COPY` line in the root `Dockerfile`, or they 404 in production while
   working locally.
