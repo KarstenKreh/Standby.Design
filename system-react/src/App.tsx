@@ -11,7 +11,7 @@ import { decodeState as decodeSymbolState, type UrlState as SymbolState } from '
 import { decodeState as decodeSpaceState, DEFAULT_SPACE_URL_STATE, type SpaceUrlState } from '@core/url-state/space';
 import { generatePalette, computeAutoErrorHex, computeAutoAccentHex, resolveAccentHues, type PaletteEntry } from '@core/palette';
 import { hexToOklch } from '@core/color-math';
-import { customScale, traditionalScale, DEFAULT_TRADITIONAL_MOBILE, type ComputedLevel } from '@core/scale';
+import { customScale, traditionalScale, resolveMobileRatio, DEFAULT_TRADITIONAL_MOBILE, type ComputedLevel } from '@core/scale';
 import { applyTypography } from '@core/typography';
 import { computeSpacingTokens, type SpacingToken } from '@core/spacing';
 import type { AccentPalette } from '@/lib/color-code-export';
@@ -50,7 +50,7 @@ const DEFAULT_COLOR_STATE: DecodedColorState = {
   ],
 };
 
-const DEFAULT_TYPE_HASH = 'custom,1,1.272,1.19,satoshi,satoshi,system-mono';
+const DEFAULT_TYPE_HASH = 'custom,1,1.272,1.204,satoshi,satoshi,system-mono';
 
 const DEFAULT_SHAPE_STATE: Partial<ShapeState> = {
   shapeStyle: 'paper',
@@ -200,7 +200,12 @@ function App() {
         typeState.traditionalMobileAssignments ?? DEFAULT_TRADITIONAL_MOBILE,
       );
     } else {
-      const effectiveMobileRatio = typeState.mobileRatio;
+      const effectiveMobileRatio = resolveMobileRatio(
+        typeState.mobileRatioMode,
+        typeState.customRatio,
+        typeState.autoShrink,
+        typeState.mobileRatio,
+      );
       s = customScale(typeState.baseSize, typeState.customRatio, effectiveMobileRatio, typeState.mobileBaseSize ?? typeState.baseSize);
     }
     s = applyTypography(s, typeState.lineHeightOverrides ?? {}, typeState.letterSpacingOverrides ?? {});

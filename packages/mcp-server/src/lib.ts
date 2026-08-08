@@ -16,7 +16,7 @@ import {
   type PaletteEntry, type Step,
 } from '@core/palette';
 import { hexToOklch } from '@core/color-math';
-import { customScale, traditionalScale, DEFAULT_TRADITIONAL, DEFAULT_TRADITIONAL_MOBILE, type ComputedLevel } from '@core/scale';
+import { customScale, traditionalScale, resolveMobileRatio, DEFAULT_TRADITIONAL, DEFAULT_TRADITIONAL_MOBILE, type ComputedLevel } from '@core/scale';
 import { applyTypography } from '@core/typography';
 import { computeSpacingTokens, type SpacingToken } from '@core/spacing';
 import type { AccentPalette } from '@syslib/color-code-export';
@@ -101,7 +101,7 @@ export const DEFAULT_COLOR_STATE: ColorState = {
   ],
 };
 
-export const DEFAULT_TYPE_HASH = 'custom,1,1.272,1.19,satoshi,satoshi,system-mono';
+export const DEFAULT_TYPE_HASH = 'custom,1,1.272,1.204,satoshi,satoshi,system-mono';
 
 export function defaultTypeState(): TypeState {
   // The default hash always decodes successfully.
@@ -238,7 +238,13 @@ export function buildScale(typeState: TypeState): ComputedLevel[] {
     const mobile = typeState.traditionalMobileAssignments ?? DEFAULT_TRADITIONAL_MOBILE;
     s = traditionalScale(desktop, mobile);
   } else {
-    s = customScale(typeState.baseSize, typeState.customRatio, typeState.mobileRatio, typeState.mobileBaseSize ?? typeState.baseSize);
+    const effectiveMobileRatio = resolveMobileRatio(
+      typeState.mobileRatioMode,
+      typeState.customRatio,
+      typeState.autoShrink,
+      typeState.mobileRatio,
+    );
+    s = customScale(typeState.baseSize, typeState.customRatio, effectiveMobileRatio, typeState.mobileBaseSize ?? typeState.baseSize);
   }
   return applyTypography(s, typeState.lineHeightOverrides ?? {}, typeState.letterSpacingOverrides ?? {});
 }
