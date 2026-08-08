@@ -49,6 +49,23 @@ for (const format of ['css', 'tailwind', 'design-tokens', 'llm-briefing', 'font-
   console.log(`\n=== export ${format}: ${res.content[0].text.length} chars OK ===`);
 }
 
+const withoutCssComments = (css) => css.replace(/\/\*[\s\S]*?\*\//g, '').trimStart();
+
+for (const format of ['css', 'tailwind']) {
+  res = await client.callTool({ name: 'export_design_system', arguments: { url, format } });
+  const body = withoutCssComments(res.content[0].text);
+  if (!body.startsWith(':root')) {
+    throw new Error(`export ${format}: first rule is not :root — the share header is not a CSS comment:\n` + body.slice(0, 200));
+  }
+  if (!body.includes('--color-')) {
+    throw new Error(`export ${format}: primitives block missing — the first :root block was swallowed`);
+  }
+  console.log(`\n=== export ${format} is parseable CSS OK ===`);
+}
+
+res = await client.callTool({ name: 'export_design_system', arguments: { url, format: 'design-tokens' } });
+if (!res.content[0].text.includes('Design system: ')) throw new Error('design-tokens export lost its share link');
+
 res = await client.callTool({ name: 'export_design_system', arguments: { url, format: 'css' } });
 console.log('\n=== css export (first 800 chars) ===\n' + res.content[0].text.slice(0, 800));
 
