@@ -49,6 +49,15 @@ import { colorSummary, typeSummary, shapeSummary, symbolSummary, spaceSummary, r
 type Section = 'color' | 'type' | 'space' | 'shape' | 'symbol';
 const ALL_SECTIONS: Section[] = ['color', 'type', 'space', 'shape', 'symbol'];
 
+type ExportFormat = 'css' | 'tailwind' | 'design-tokens' | 'llm-briefing' | 'font-embed';
+
+function shareHeaderFor(format: ExportFormat, url: string): string {
+  const line = `Design system: ${url}`;
+  if (format === 'css' || format === 'tailwind') return `/* ${line} */`;
+  if (format === 'font-embed') return `<!-- ${line} -->`;
+  return line;
+}
+
 /* ── Labels (mirrored from combined-export.tsx) ── */
 
 function getScaleLabel(typeState: TypeState): string {
@@ -292,7 +301,7 @@ export function registerSystemTools(server: McpServer): void {
           break;
       }
 
-      return textResult(`Design system: ${systemUrl(segs)}\n\n${output}`);
+      return textResult(`${shareHeaderFor(args.format, systemUrl(segs))}\n\n${output}`);
     }
   );
 
