@@ -163,7 +163,7 @@ exports[`generateSemantic > snapshot stability 1`] = `
   --popover-foreground: var(--color-surface-975);
   /* Primary */
   --primary: var(--color-brand-600);
-  --primary-foreground: var(--color-brand-50);
+  --primary-foreground: var(--color-brand-25);
   --primary-subtle: var(--color-brand-100);
   --primary-subtle-foreground: var(--color-brand-950);
   --primary-emphasis: var(--color-brand-700);
@@ -178,7 +178,7 @@ exports[`generateSemantic > snapshot stability 1`] = `
   --accent-foreground: var(--color-brand-950);
   /* Destructive */
   --destructive: var(--color-error-600);
-  --destructive-foreground: var(--color-error-surface-100);
+  --destructive-foreground: var(--color-error-surface-25);
   --destructive-subtle: var(--color-error-100);
   --destructive-subtle-foreground: var(--color-error-950);
   --destructive-emphasis: var(--color-error-700);
@@ -193,7 +193,7 @@ exports[`generateSemantic > snapshot stability 1`] = `
   --sidebar: var(--color-surface-25);
   --sidebar-foreground: var(--color-surface-975);
   --sidebar-primary: var(--color-brand-600);
-  --sidebar-primary-foreground: var(--color-brand-50);
+  --sidebar-primary-foreground: var(--color-brand-25);
   --sidebar-accent: var(--color-brand-100);
   --sidebar-accent-foreground: var(--color-brand-950);
   --sidebar-border: var(--color-surface-300);
@@ -211,7 +211,7 @@ exports[`generateSemantic > snapshot stability 1`] = `
   --elevated: var(--color-surface-800);
   --elevated-foreground: var(--color-surface-25);
   /* Popover */
-  --popover: var(--color-surface-800);
+  --popover: var(--color-surface-825);
   --popover-foreground: var(--color-surface-25);
   /* Primary */
   --primary: var(--color-brand-400);
@@ -230,7 +230,7 @@ exports[`generateSemantic > snapshot stability 1`] = `
   --accent-foreground: var(--color-brand-50);
   /* Destructive */
   --destructive: var(--color-error-400);
-  --destructive-foreground: var(--color-error-surface-900);
+  --destructive-foreground: var(--color-error-surface-975);
   --destructive-subtle: var(--color-error-850);
   --destructive-subtle-foreground: var(--color-error-50);
   --destructive-emphasis: var(--color-error-300);

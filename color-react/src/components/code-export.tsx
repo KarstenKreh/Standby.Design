@@ -8,7 +8,7 @@ import { Copy } from 'lucide-react';
 import { toast } from 'sonner';
 import { usePalette } from '@/hooks/use-palette';
 import { useThemeStore } from '@/store/theme-store';
-import { generatePrimitivesOklch, generatePrimitivesHex, generateSemantic, generateLlmBriefing, generateSeedComment } from '@/lib/code-export';
+import { generatePrimitivesOklch, generatePrimitivesHex, generateSemantic, generateLlmBriefing, generateSeedComment, collectFillContrastWarnings } from '@/lib/code-export';
 import { encodeState } from '@/lib/url-state';
 import { systemShareUrl, llmShareHeader } from '@core/share-link';
 import { CodeBlock } from '@core/code-block';
@@ -53,10 +53,20 @@ export function CodeExport() {
     [accentPalettes, brand, error, errorSurface, surface, brandPin, brandSwatchOverride, brandInvert, errorPin, errorSwatchOverride, errorInvert, fgContrastMode, themeName]
   );
 
+  const fillContrastWarnings = useMemo(() =>
+    collectFillContrastWarnings(
+      accentPalettes, brand, error, errorSurface,
+      brandPin, brandSwatchOverride?.hex ?? null, brandInvert,
+      errorPin, errorSwatchOverride?.hex ?? null, errorInvert,
+      fgContrastMode
+    ),
+    [accentPalettes, brand, error, errorSurface, brandPin, brandSwatchOverride, brandInvert, errorPin, errorSwatchOverride, errorInvert, fgContrastMode]
+  );
+
   const llmCode = useMemo(() =>
     llmShareHeader(systemShareUrl('c', encodeState(store), window.location.hash)) +
-    generateLlmBriefing(brandHex, effectiveBgHex, effectiveErrorHex, accentPalettes, chromaScale, currentMode, brandPin, errorPin, themeName, fgContrastMode),
-    [store, brandHex, effectiveBgHex, effectiveErrorHex, accentPalettes, chromaScale, currentMode, brandPin, errorPin, themeName, fgContrastMode]
+    generateLlmBriefing(brandHex, effectiveBgHex, effectiveErrorHex, accentPalettes, chromaScale, currentMode, brandPin, errorPin, themeName, fgContrastMode, fillContrastWarnings),
+    [store, brandHex, effectiveBgHex, effectiveErrorHex, accentPalettes, chromaScale, currentMode, brandPin, errorPin, themeName, fgContrastMode, fillContrastWarnings]
   );
 
   const handleCopyAll = useCallback(() => {

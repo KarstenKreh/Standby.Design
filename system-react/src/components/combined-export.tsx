@@ -26,6 +26,7 @@ import {
   generateSemantic,
   generateSeedComment,
   generateLlmBriefing as generateColorLlmBriefing,
+  collectFillContrastWarnings,
 } from '@/lib/color-code-export';
 import { generateShadowValues } from '@core/shadows';
 import {
@@ -266,6 +267,13 @@ export function CombinedExport({ colorState, palette, typeState, scale, spacing,
         colorState.errorPin,
         colorState.themeName,
         colorState.fgContrastMode,
+        collectFillContrastWarnings(
+          palette.accentPalettes,
+          palette.brand, palette.error, palette.errorSurface,
+          colorState.brandPin, colorState.brandPin ? colorState.brandHex : null, colorState.brandInvert,
+          colorState.errorPin, colorState.errorPin ? palette.effectiveErrorHex : null, colorState.errorInvert,
+          colorState.fgContrastMode,
+        ),
       );
     }
 
