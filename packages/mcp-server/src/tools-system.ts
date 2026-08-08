@@ -55,6 +55,7 @@ function shareHeaderFor(format: ExportFormat, url: string): string {
   const line = `Design system: ${url}`;
   if (format === 'css' || format === 'tailwind') return `/* ${line} */`;
   if (format === 'font-embed') return `<!-- ${line} -->`;
+  if (format === 'design-tokens') return '';
   return line;
 }
 
@@ -178,7 +179,7 @@ export function registerSystemTools(server: McpServer): void {
       inputSchema: {
         url: z.string().describe('A standby.design URL or raw unified hash.'),
         format: z.enum(['css', 'tailwind', 'design-tokens', 'llm-briefing', 'font-embed']).describe('Output format.'),
-        sections: z.array(z.enum(['color', 'type', 'space', 'shape', 'symbol'])).optional().describe('Which sections to include. Default: all configured sections (symbol only when configured).'),
+        sections: z.array(z.enum(['color', 'type', 'space', 'shape', 'symbol'])).optional().describe('Which sections to include. Only honoured by "css", "tailwind" and "llm-briefing". By default color, type, space and shape are always included — with their defaults when the URL does not configure them — and symbol only when the URL configures it. Ignored by "design-tokens" (typography and spacing only) and "font-embed".'),
       },
       annotations: { readOnlyHint: true, openWorldHint: false },
     },
@@ -260,17 +261,21 @@ export function registerSystemTools(server: McpServer): void {
             has('symbol') && symbolState ? generateSymbolTailwind(symbolState) : '',
           ].filter(Boolean).join('\n') || '/* No sections selected */';
           break;
-        case 'design-tokens':
-          output = generateDesignTokens({
+        case 'design-tokens': {
+          const tokens = JSON.parse(generateDesignTokens({
             levels: scale,
             spacingTokens: spacing,
             headingFont: typeState.headingFont,
             bodyFont: typeState.bodyFont,
             monoFont: typeState.monoFont,
             headingWeight: typeState.headingWeight,
-          });
-          output += '\n\n/* Note: the DTCG export covers typography & spacing (matching the web app). Use format "css" or "tailwind" for color and shape tokens. */';
+          }));
+          output = JSON.stringify({
+            $description: `Design system: ${systemUrl(segs)} — typography and spacing only. Use format "css" or "tailwind" for color and shape tokens.`,
+            ...tokens,
+          }, null, 2);
           break;
+        }
         case 'llm-briefing': {
           const parts: string[] = [];
           if (has('color')) {
@@ -301,7 +306,8 @@ export function registerSystemTools(server: McpServer): void {
           break;
       }
 
-      return textResult(`${shareHeaderFor(args.format, systemUrl(segs))}\n\n${output}`);
+      const header = shareHeaderFor(args.format, systemUrl(segs));
+      return textResult(header ? `${header}\n\n${output}` : output);
     }
   );
 
