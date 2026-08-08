@@ -77,7 +77,7 @@ function App() {
 
       <div className="bg-card border border-border rounded-lg p-4 mb-6">
         <h3 className="font-semibold mb-3" style={{ fontSize: 'var(--text-body-s)' }}>Export</h3>
-        <CodeExport themeName={theme.themeName} />
+        <CodeExport themeName={theme.themeName} ringStyle={theme.ringStyle} />
       </div>
     </AppShell>
   );

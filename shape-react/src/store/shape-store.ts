@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 import type { PaletteMode } from '@core/palette';
-import type { ShapeStyle, ShadowType, ColorMode, SeparationMode, BrutalistVariant } from '@core/url-state/shape';
+import type { ShapeStyle, ShadowType, ColorMode, SeparationMode, BrutalistVariant, RingStyle } from '@core/url-state/shape';
 
-export type { ShapeStyle, ShadowType, ColorMode, SeparationMode, BrutalistVariant } from '@core/url-state/shape';
+export type { ShapeStyle, ShadowType, ColorMode, SeparationMode, BrutalistVariant, RingStyle } from '@core/url-state/shape';
 
 export interface ShapeState {
   // Style (top-level mode)
@@ -42,6 +42,8 @@ export interface ShapeState {
   ringOffset: number;
   ringColorMode: ColorMode;
   ringCustomColor: string;
+  /** 'soft' = translucent halo at the edge; 'solid' = hard outline with offset. */
+  ringStyle: RingStyle;
 
   // Surface Separation
   separationMode: SeparationMode;
@@ -79,6 +81,7 @@ export interface ShapeState {
   setRingOffset: (v: number) => void;
   setRingColorMode: (v: ColorMode) => void;
   setRingCustomColor: (v: string) => void;
+  setRingStyle: (v: RingStyle) => void;
   setSeparationMode: (v: SeparationMode) => void;
   setSurfaceHex: (v: string) => void;
   setPaletteMode: (v: PaletteMode) => void;
@@ -127,6 +130,7 @@ export const useShapeStore = create<ShapeState>((set) => ({
   ringOffset: 2,
   ringColorMode: 'auto',
   ringCustomColor: '#000000',
+  ringStyle: 'soft' as RingStyle,
 
   // Separation
   separationMode: 'shadow',
@@ -157,7 +161,8 @@ export const useShapeStore = create<ShapeState>((set) => ({
         shadowStrength: 1.0,
         shadowColorMode: 'auto',
         ringWidth: 2,
-        ringOffset: 4,
+        ringOffset: 2,
+        ringStyle: 'solid' as RingStyle,
       };
     }
     // Leaving brutalism: restore default elevation ladder so paper/neomorph/glass have staggered shadows again.
@@ -188,6 +193,7 @@ export const useShapeStore = create<ShapeState>((set) => ({
   setRingOffset: (v) => set({ ringOffset: v }),
   setRingColorMode: (v) => set({ ringColorMode: v }),
   setRingCustomColor: (v) => set({ ringCustomColor: v }),
+  setRingStyle: (v) => set({ ringStyle: v }),
   setSeparationMode: (v) => set({ separationMode: v }),
   setSurfaceHex: (v) => set({ surfaceHex: v }),
   setPaletteMode: (v) => set({ paletteMode: v }),

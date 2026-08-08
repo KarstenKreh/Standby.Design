@@ -1,5 +1,28 @@
-export function generateRoleCss(themeName: string): string {
+import type { RingStyle } from '@core/url-state/shape';
+
+/* The soft ring is a translucent halo hugging the edge; the full-color border
+   next to it is what carries the WCAG 2.2 3:1 focus contrast. The solid ring is
+   a hard outline set off from the element. Both come from the shape module. */
+const FOCUS_RING_RULES: Record<RingStyle, { pressable: string; editable: string }> = {
+  soft: {
+    pressable: `  outline: var(--ring-width, 2px) solid transparent;
+  border-color: var(--ring);
+  box-shadow: 0 0 0 var(--ring-halo-width, 3px) var(--ring-halo, color-mix(in oklab, var(--ring) 40%, transparent));`,
+    editable: `  outline: var(--ring-width, 2px) solid transparent;
+  border-color: var(--ring);
+  box-shadow: 0 0 0 var(--ring-halo-width, 3px) var(--ring-halo, color-mix(in oklab, var(--ring) 40%, transparent));`,
+  },
+  solid: {
+    pressable: `  outline: var(--ring-width, 2px) solid var(--ring);
+  outline-offset: var(--ring-offset, 2px);`,
+    editable: `  outline: var(--ring-width, 2px) solid var(--ring);
+  outline-offset: 1px;`,
+  },
+};
+
+export function generateRoleCss(themeName: string, ringStyle: RingStyle = 'soft'): string {
   const header = themeName ? `/* ${themeName} — Role State Rules */` : `/* Role State Rules */`;
+  const ring = FOCUS_RING_RULES[ringStyle];
   return `${header}
 /* Requires the color export (primitive + semantic tokens) from standby.design/system */
 
@@ -57,8 +80,7 @@ export function generateRoleCss(themeName: string): string {
 [data-pressable]:focus-visible,
 [data-toggleable]:focus-visible,
 [data-navigable]:focus-visible {
-  outline: var(--ring-width, 2px) solid var(--ring);
-  outline-offset: var(--ring-offset, 2px);
+${ring.pressable}
 }
 
 /* editable — typing IS focus, so the ring shows on plain :focus */
@@ -70,10 +92,9 @@ export function generateRoleCss(themeName: string): string {
 }
 [data-editable]:hover { --state: var(--state-hover); }
 [data-editable]:focus {
-  outline: var(--ring-width, 2px) solid var(--ring);
-  outline-offset: 1px;
+${ring.editable}
 }
-[data-editable][readonly] { outline: none; }
+[data-editable][readonly] { outline: none; box-shadow: none; }
 
 /* readable — the cell without a soul: no feedback, ever */
 [data-readable] { cursor: default; user-select: text; }

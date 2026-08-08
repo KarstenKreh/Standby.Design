@@ -2,7 +2,8 @@ import { useState } from 'react';
 import type { PaletteEntry } from '@core/palette';
 import type { AccentPalette } from '@/hooks/use-palette';
 import type { FgContrastMode } from '@/store/theme-store';
-import type { ShapeUrlState } from '@core/url-state/shape';
+import type { ShapeUrlState, RingStyle } from '@core/url-state/shape';
+import { focusRingCss, mergeBoxShadow } from '@core/ring';
 import { contrastRatio, invertHex } from '@core/color-math';
 import { generateShadows, type ShadowConfig } from '@core/shadows';
 import { LiquidGlass } from '@core/liquid-glass';
@@ -84,16 +85,23 @@ interface PreviewFieldProps {
   ringHex: string;
   borderWidth: number;
   radius: number;
+  ringStyle: RingStyle;
+  ringWidth: number;
+  ringOffset: number;
 }
 
 function PreviewField({
   id, label, placeholder, bgHex, textHex, borderHex, hoverBorderHex, focusBorderHex, ringHex, borderWidth, radius,
+  ringStyle, ringWidth, ringOffset,
 }: PreviewFieldProps) {
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
 
   const stateName = focused ? 'focus' : hovered ? 'hover' : 'rest';
-  const activeBorder = focused ? focusBorderHex : hovered ? hoverBorderHex : borderHex;
+  const ring = focusRingCss(ringStyle, ringWidth, ringOffset, ringHex);
+  const activeBorder = focused
+    ? (ring.borderColor || focusBorderHex)
+    : hovered ? hoverBorderHex : borderHex;
 
   return (
     <input
@@ -112,8 +120,9 @@ function PreviewField({
         color: textHex,
         border: `${borderWidth}px solid ${activeBorder}`,
         borderRadius: radius,
-        outline: focused ? `2px solid ${ringHex}` : 'none',
-        outlineOffset: focused ? 1 : 0,
+        outline: focused ? ring.outline : 'none',
+        outlineOffset: focused ? ring.outlineOffset : 0,
+        boxShadow: focused ? mergeBoxShadow(ring.glow) : undefined,
       }}
     />
   );
@@ -244,6 +253,9 @@ export function SurfacePanel({
 
   const bw = shapeTokens?.borderEnabled !== false ? (shapeTokens?.borderWidth ?? 1) : 0;
   const br = shapeTokens?.borderRadius ?? 8;
+  const ringStyle = shape?.ringStyle ?? 'soft';
+  const ringWidth = shape?.ringWidth ?? 2;
+  const ringOffset = shape?.ringOffset ?? 1;
 
   // Neomorph / Glass / Neobrutalism only for Standard panels — HC panels stay paper-like by constraint.
   const isStandardPanel = panelType === 'light' || panelType === 'dark';
@@ -496,6 +508,9 @@ export function SurfacePanel({
               ringHex={primaryBg}
               borderWidth={bw || 1}
               radius={innerRadius}
+              ringStyle={ringStyle}
+              ringWidth={ringWidth}
+              ringOffset={ringOffset}
             />
           </div>
 

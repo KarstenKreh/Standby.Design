@@ -6,6 +6,7 @@ import { deriveSurface } from '@core/surface';
 import { hexToOklch, oklchToHex, maxChromaInGamut } from '@core/color-math';
 import { LiquidGlass } from '@core/liquid-glass';
 import { BrutalistEcho as CoreBrutalistEcho } from '@core/brutalist-echo';
+import { focusRingCss, mergeBoxShadow } from '@core/ring';
 
 /** Derive a brutalist border color by darkening the bg by ~1 palette step (ΔL ≈ 0.10 in OKLCH).
  *  Darkens in both light and dark modes — keeps the hue, Gamut-safe chroma. */
@@ -59,6 +60,7 @@ function PreviewPanel({ isDark }: { isDark: boolean }) {
   const radius = store.borderRadius;
   // Cards/inputs use the native CSS border only — no inset shadow border (avoids visible double line).
   const ringColor = store.ringColorMode === 'custom' ? store.ringCustomColor : colors.primary;
+  const ring = focusRingCss(store.ringStyle, store.ringWidth, store.ringOffset, ringColor);
 
   const brutalistEchoColor = store.shadowColorMode === 'custom' ? store.shadowCustomColor : colors.border;
   const brutalistStrokeWidth = store.borderEnabled ? store.borderWidth : 1;
@@ -242,8 +244,10 @@ function PreviewPanel({ isDark }: { isDark: boolean }) {
             cornerRadius={radius}
             onDark={isDark}
             style={{
-              outline: `${store.ringWidth}px solid ${ringColor}`,
-              outlineOffset: `${store.ringOffset}px`,
+              outline: ring.outline,
+              outlineOffset: ring.outlineOffset,
+              boxShadow: mergeBoxShadow(ring.glow),
+              ...(ring.borderColor && { border: `${store.borderEnabled ? store.borderWidth : 1}px solid ${ring.borderColor}` }),
             }}
           >
             <div
@@ -259,11 +263,12 @@ function PreviewPanel({ isDark }: { isDark: boolean }) {
             style={{
               backgroundColor: colors.card,
               borderRadius: `${radius}px`,
-              boxShadow: isNeomorph ? insetShadows.find(s => s.name === 'sm')?.shadow : undefined,
-              outline: `${store.ringWidth}px solid ${ringColor}`,
-              outlineOffset: `${store.ringOffset}px`,
+              boxShadow: mergeBoxShadow(ring.glow, isNeomorph ? insetShadows.find(s => s.name === 'sm')?.shadow : undefined),
+              outline: ring.outline,
+              outlineOffset: ring.outlineOffset,
               color: colors.textMuted,
               ...(store.borderEnabled && { border: `${store.borderWidth}px solid ${isNeobrutalism ? deriveBorderFromBg(colors.card) : colors.borderMuted}` }),
+              ...(ring.borderColor && { border: `${store.borderEnabled ? store.borderWidth : 1}px solid ${ring.borderColor}` }),
             }}
           >
             Input with focus ring

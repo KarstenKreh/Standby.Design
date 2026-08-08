@@ -6,6 +6,7 @@ export type ShadowType = 'normal' | 'flat';
 export type BrutalistVariant = 'outlined' | 'solid';
 export type ColorMode = 'auto' | 'custom';
 export type SeparationMode = 'shadow' | 'border' | 'contrast' | 'gap' | 'mixed';
+export type RingStyle = 'soft' | 'solid';
 
 /** The subset of Shape state that is encoded in the URL hash. */
 export interface ShapeUrlState {
@@ -29,6 +30,7 @@ export interface ShapeUrlState {
   ringOffset: number;
   ringColorMode: ColorMode;
   ringCustomColor: string;
+  ringStyle: RingStyle;
   separationMode: SeparationMode;
   shadowOffsetX: number;
   shadowOffsetY: number;
@@ -45,7 +47,7 @@ export interface ShapeUrlState {
  *         glassDepth,glassBlur,glassDispersion,
  *         ringWidth,ringOffset,ringColorMode,ringCustomHex,
  *         separationMode,
- *         shadowOffsetX,shadowOffsetY,brutalistVariant
+ *         shadowOffsetX,shadowOffsetY,brutalistVariant,ringStyle
  */
 export function encodeState(s: ShapeUrlState): string {
   return [
@@ -73,6 +75,7 @@ export function encodeState(s: ShapeUrlState): string {
     s.shadowOffsetX,
     s.shadowOffsetY,
     s.brutalistVariant === 'solid' ? 's' : 'o',
+    s.ringStyle === 'solid' ? 's' : 'f',
   ].join(',');
 }
 
@@ -146,6 +149,9 @@ export function decodeState(raw: string): Partial<ShapeUrlState> | null {
   if (parts[23] === 's' || parts[23] === 'o') {
     result.brutalistVariant = parts[23] === 's' ? 'solid' : 'outlined';
   }
+
+  // Hashes written before ringStyle existed always meant the hard outline ring.
+  result.ringStyle = parts[24] === 'f' ? 'soft' : 'solid';
 
   return result;
 }

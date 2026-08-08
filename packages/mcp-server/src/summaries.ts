@@ -83,7 +83,10 @@ export function shapeSummary(state: ShapeState): string {
       break;
   }
   lines.push(`Border: ${state.borderEnabled ? `${state.borderWidth}px (color ${state.borderColorMode === 'custom' ? state.borderCustomColor : 'auto'})` : 'off'}`);
-  lines.push(`Focus ring: ${state.ringWidth}px width, ${state.ringOffset}px offset (color ${state.ringColorMode === 'custom' ? state.ringCustomColor : 'auto'})`);
+  const ringShape = state.ringStyle === 'solid'
+    ? `solid outline, ${state.ringOffset}px offset`
+    : 'soft halo at the edge plus a full-color border';
+  lines.push(`Focus ring: ${state.ringWidth}px width, ${ringShape} (color ${state.ringColorMode === 'custom' ? state.ringCustomColor : 'auto'})`);
   lines.push(`Separation mode: ${state.separationMode}`);
   return lines.join('\n');
 }
