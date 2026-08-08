@@ -9,7 +9,7 @@ import { decodeState as decodeTypeState } from '@core/url-state/type';
 import { decodeState as decodeShapeState, type ShapeUrlState as ShapeState } from '@core/url-state/shape';
 import { decodeState as decodeSymbolState, type UrlState as SymbolState } from '@core/url-state/symbol';
 import { decodeState as decodeSpaceState, DEFAULT_SPACE_URL_STATE, type SpaceUrlState } from '@core/url-state/space';
-import { generatePalette, computeAutoErrorHex, computeAutoAccentHex, type PaletteEntry } from '@core/palette';
+import { generatePalette, computeAutoErrorHex, computeAutoAccentHex, resolveAccentHues, type PaletteEntry } from '@core/palette';
 import { hexToOklch } from '@core/color-math';
 import { customScale, traditionalScale, type ComputedLevel } from '@core/scale';
 import { applyTypography } from '@core/typography';
@@ -159,10 +159,14 @@ function App() {
     const neutral = generatePalette(effectiveBgHex, 0.0, currentMode);
     const slated = generatePalette(effectiveBgHex, chromaScale, currentMode);
 
+    const brandHue = hexToOklch(brandHex)[2];
+    const spreadHues = resolveAccentHues(brandHue, (extraAccents || []).map(a => a.name));
+
     const accentPalettes: AccentPalette[] = (extraAccents || [])
-      .filter(a => a.autoMatch || /^#[0-9a-fA-F]{6}$/.test(a.hex))
-      .map(a => {
-        const effectiveHex = a.autoMatch ? computeAutoAccentHex(brandHex, a.autoHue) : a.hex;
+      .map((a, i) => ({ a, autoHue: spreadHues[i] ?? a.autoHue }))
+      .filter(({ a }) => a.autoMatch || /^#[0-9a-fA-F]{6}$/.test(a.hex))
+      .map(({ a, autoHue }) => {
+        const effectiveHex = a.autoMatch ? computeAutoAccentHex(brandHex, autoHue) : a.hex;
         return {
           name: a.name,
           hex: effectiveHex,
@@ -179,7 +183,7 @@ function App() {
 
     const neutralExtended: PaletteEntry[] = [
       { step: 0 as PaletteEntry['step'], L: 1, C: 0, H: 0, hex: '#FFFFFF', css: 'oklch(1 0 0)' },
-      ...neutral,
+      ...neutral.filter(e => (e.step as number) !== 0),
       { step: 1000 as PaletteEntry['step'], L: 0, C: 0, H: 0, hex: '#000000', css: 'oklch(0 0 0)' },
     ];
 

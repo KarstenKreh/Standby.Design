@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useThemeStore } from '@/store/theme-store';
-import { generatePalette, computeAutoErrorHex, computeAutoAccentHex, type PaletteEntry } from '@core/palette';
+import { generatePalette, computeAutoErrorHex, computeAutoAccentHex, resolveAccentHues, type PaletteEntry } from '@core/palette';
 import { hexToOklch } from '@core/color-math';
 
 export interface AccentPalette {
@@ -34,10 +34,14 @@ export function usePalette() {
     const neutral = generatePalette(effectiveBgHex, 0.0, currentMode);
     const slated = generatePalette(effectiveBgHex, chromaScale, currentMode);
 
+    const brandHue = hexToOklch(brandHex)[2];
+    const spreadHues = resolveAccentHues(brandHue, extraAccents.map(a => a.name));
+
     const accentPalettes: AccentPalette[] = extraAccents
-      .filter(a => a.autoMatch || /^#[0-9a-fA-F]{6}$/.test(a.hex))
-      .map(a => {
-        const effectiveHex = a.autoMatch ? computeAutoAccentHex(brandHex, a.autoHue) : a.hex;
+      .map((a, i) => ({ a, autoHue: spreadHues[i] ?? a.autoHue }))
+      .filter(({ a }) => a.autoMatch || /^#[0-9a-fA-F]{6}$/.test(a.hex))
+      .map(({ a, autoHue }) => {
+        const effectiveHex = a.autoMatch ? computeAutoAccentHex(brandHex, autoHue) : a.hex;
         return {
           name: a.name,
           hex: effectiveHex,
@@ -58,7 +62,7 @@ export function usePalette() {
 
     const neutralExtended: PaletteEntry[] = [
       { step: 0 as PaletteEntry['step'], L: 1, C: 0, H: 0, hex: '#FFFFFF', css: 'oklch(1 0 0)' },
-      ...neutral,
+      ...neutral.filter(e => (e.step as number) !== 0),
       { step: 1000 as PaletteEntry['step'], L: 0, C: 0, H: 0, hex: '#000000', css: 'oklch(0 0 0)' },
     ];
 

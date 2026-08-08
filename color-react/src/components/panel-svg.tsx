@@ -4,6 +4,7 @@ interface PanelSvgProps {
   idx: number;
   panelType: 'light' | 'dark' | 'light-hc' | 'dark-hc';
   brand: Record<number, PaletteEntry>;
+  className?: string;
 }
 
 function getHex(map: Record<number, PaletteEntry>, step: number): string {
@@ -59,12 +60,12 @@ const animCss = `
   }
 `;
 
-export function PanelSvg({ idx, panelType, brand }: PanelSvgProps) {
+export function PanelSvg({ idx, panelType, brand, className = 'w-full h-[140px] block my-1' }: PanelSvgProps) {
   const c = getSvgColors(panelType, brand);
   const fid = `svg-ps-${idx}`;
 
   return (
-    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" className="w-full h-[140px] block my-1">
+    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" className={className}>
       <style>{animCss}</style>
       <defs>
         <filter id={fid} x="-10%" y="-10%" width="120%" height="120%">

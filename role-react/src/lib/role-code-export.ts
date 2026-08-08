@@ -63,6 +63,8 @@ export function generateRoleCss(themeName: string): string {
 
 /* editable — typing IS focus, so the ring shows on plain :focus */
 [data-editable] {
+  --state-rest: var(--input);
+  --state-hover: var(--input-hover);
   --state: var(--state-rest);
   transition: border-color var(--state-motion) ease, outline-color var(--state-motion) ease;
 }
@@ -101,7 +103,7 @@ export function generateRoleCss(themeName: string): string {
 }
 
 [data-skin="field"] {
-  background-color: var(--card);
+  background-color: var(--elevated);
   border: 1px solid var(--state);
   border-radius: var(--radius-md, 8px);
   padding: 0.55rem 0.9rem;
