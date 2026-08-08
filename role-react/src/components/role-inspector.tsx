@@ -242,20 +242,16 @@ export function EditableCard({ theme, motionMs }: CardProps) {
   );
 }
 
-const NAV_ITEMS = [
-  { label: 'Overview', current: true },
-  { label: 'Documentation', current: false },
-  { label: 'Changelog', current: false },
-];
+const NAV_ITEMS = ['Overview', 'Documentation', 'Changelog'];
 
 export function NavigableCard({ theme, motionMs }: CardProps) {
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [target, setTarget] = useState<number | null>(null);
   const [pressed, setPressed] = useState(false);
   const [focusVis, setFocusVis] = useState<number | null>(null);
 
   const ladderOf = (current: boolean): Ladder => current ? theme.navCurrent : theme.navRow;
-  const hoveredItem = target === null ? null : NAV_ITEMS[target];
-  const activeLadder = ladderOf(hoveredItem?.current ?? false);
+  const activeLadder = ladderOf(target === currentIndex);
 
   const backgroundOf = (index: number, current: boolean): string => {
     const ladder = ladderOf(current);
@@ -274,22 +270,22 @@ export function NavigableCard({ theme, motionMs }: CardProps) {
       active={active}
       specimen={
         <nav className="w-56 flex flex-col gap-1">
-          {NAV_ITEMS.map((item, i) => (
+          {NAV_ITEMS.map((label, i) => (
             <a
-              key={item.label}
+              key={label}
               href="#"
-              aria-current={item.current ? 'page' : undefined}
-              onClick={(e) => e.preventDefault()}
+              aria-current={i === currentIndex ? 'page' : undefined}
+              onClick={(e) => { e.preventDefault(); setCurrentIndex(i); }}
               onMouseEnter={() => setTarget(i)}
               onMouseLeave={() => { setTarget(null); setPressed(false); }}
               onMouseDown={() => setPressed(true)}
               onMouseUp={() => setPressed(false)}
               onFocus={(e: FocusEvent<HTMLElement>) => setFocusVis(isFocusVisible(e) ? i : null)}
               onBlur={() => setFocusVis(null)}
-              className="relative block no-underline"
+              className="relative block no-underline cursor-pointer"
               style={{
-                background: backgroundOf(i, item.current),
-                color: item.current ? theme.fg : theme.muted,
+                background: backgroundOf(i, i === currentIndex),
+                color: i === currentIndex ? theme.fg : theme.muted,
                 fontSize: 'var(--text-body-s)',
                 border: '1px solid transparent',
                 borderRadius: Math.min(theme.radius, 10),
@@ -298,14 +294,14 @@ export function NavigableCard({ theme, motionMs }: CardProps) {
                 ...ringDecoration(theme, focusVis === i),
               }}
             >
-              {item.current && (
+              {i === currentIndex && (
                 <span
                   aria-hidden
                   className="absolute rounded-full"
                   style={{ left: 4, top: '25%', bottom: '25%', width: 3, background: theme.navMarker.hex }}
                 />
               )}
-              {item.label}
+              {label}
             </a>
           ))}
         </nav>
