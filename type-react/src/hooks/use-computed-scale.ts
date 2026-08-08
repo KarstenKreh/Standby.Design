@@ -3,6 +3,7 @@ import { useTypeStore } from '@/store/type-store';
 import {
   traditionalScale,
   customScale,
+  resolveMobileRatio,
   type ComputedLevel,
 } from '@core/scale';
 import { applyTypography } from '@core/typography';
@@ -27,10 +28,7 @@ export function useComputedScale(): ComputedLevel[] {
         scale = traditionalScale(traditionalAssignments, traditionalMobileAssignments);
         break;
       default: {
-        const effectiveMobileRatio =
-          mobileRatioMode === 'auto'
-            ? 1 + (customRatio - 1) * (1 - autoShrink / 100)
-            : mobileRatio;
+        const effectiveMobileRatio = resolveMobileRatio(mobileRatioMode, customRatio, autoShrink, mobileRatio);
         scale = customScale(baseSize, customRatio, effectiveMobileRatio, mobileBaseSize);
         break;
       }

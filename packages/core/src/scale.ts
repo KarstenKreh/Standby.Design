@@ -168,6 +168,18 @@ export const RATIO_PRESETS: { name: string; value: number }[] = [
   { name: 'Golden Ratio', value: 1.618 },
 ];
 
+export const DEFAULT_AUTO_SHRINK = 25;
+
+export function resolveMobileRatio(
+  mobileRatioMode: 'auto' | 'custom',
+  ratio: number,
+  autoShrink: number,
+  mobileRatio: number,
+): number {
+  if (mobileRatioMode !== 'auto') return mobileRatio;
+  return Math.round((1 + (ratio - 1) * (1 - autoShrink / 100)) * 1000) / 1000;
+}
+
 // Step mapping: H6/Body-S = 0, H1 = 5, Display = 6
 const LEVEL_STEPS: Record<TypeLevel, number> = {
   'display': 6, 'h1': 5, 'h2': 4, 'h3': 3,

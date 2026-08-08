@@ -6,6 +6,8 @@ import {
   TYPE_LEVELS,
   DEFAULT_TRADITIONAL,
   DEFAULT_TRADITIONAL_MOBILE,
+  DEFAULT_AUTO_SHRINK,
+  resolveMobileRatio,
   stepDown,
 } from './scale';
 
@@ -82,6 +84,39 @@ describe('traditionalScale', () => {
     for (let i = 1; i < headings.length; i++) {
       expect(headings[i].maxRem).toBeLessThanOrEqual(headings[i - 1].maxRem);
     }
+  });
+
+  it('emits clamp() for every level with the default mobile anchors', () => {
+    const levels = traditionalScale(DEFAULT_TRADITIONAL, DEFAULT_TRADITIONAL_MOBILE);
+    for (const level of levels) {
+      expect(level.isFluid).toBe(true);
+      expect(level.clampValue).toMatch(/^clamp\(/);
+    }
+  });
+
+  it('collapses to fixed rem when the desktop anchors are passed as mobile anchors', () => {
+    const levels = traditionalScale(DEFAULT_TRADITIONAL, DEFAULT_TRADITIONAL);
+    for (const level of levels) {
+      expect(level.isFluid).toBe(false);
+      expect(level.clampValue).not.toMatch(/clamp\(/);
+    }
+  });
+});
+
+describe('resolveMobileRatio', () => {
+  it('derives the ratio from the desktop ratio and the shrink percentage in auto mode', () => {
+    expect(resolveMobileRatio('auto', 1.272, DEFAULT_AUTO_SHRINK, 999)).toBe(1.204);
+    expect(resolveMobileRatio('auto', 1.5, 25, 999)).toBe(1.375);
+    expect(resolveMobileRatio('auto', 1.272, 0, 999)).toBe(1.272);
+    expect(resolveMobileRatio('auto', 1.272, 100, 999)).toBe(1);
+  });
+
+  it('returns the stored ratio untouched in custom mode', () => {
+    expect(resolveMobileRatio('custom', 1.272, 25, 1.19)).toBe(1.19);
+  });
+
+  it('ignores the stored ratio in auto mode, so a stale value cannot leak through', () => {
+    expect(resolveMobileRatio('auto', 1.272, 25, 1.19)).toBe(1.204);
   });
 });
 

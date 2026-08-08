@@ -15,7 +15,7 @@ import { encodeState as encodeShapeState } from '@core/url-state/shape';
 import { encodeState as encodeSymbolState } from '@core/url-state/symbol';
 import { encodeState as encodeSpaceState } from '@core/url-state/space';
 import { SUCCESS_HUE, WARNING_HUE, INFO_HUE } from '@core/palette';
-import { TYPE_LEVELS, type TypeLevel } from '@core/scale';
+import { TYPE_LEVELS, resolveMobileRatio, type TypeLevel } from '@core/scale';
 import { ICON_SETS } from '@core/icon-sets';
 import {
   parseInput, systemUrl, toolUrl, normalizeHex, textResult, errorResult,
@@ -193,7 +193,7 @@ export function registerGenerateTools(server: McpServer): void {
         state.mobileRatioMode = 'custom';
         state.mobileRatio = args.mobileRatio;
       } else if (state.mobileRatioMode === 'auto') {
-        state.mobileRatio = Math.round((1 + (state.customRatio - 1) * (1 - state.autoShrink / 100)) * 1000) / 1000;
+        state.mobileRatio = resolveMobileRatio('auto', state.customRatio, state.autoShrink, state.mobileRatio);
       }
       if (args.headingFont !== undefined) state.headingFont = args.headingFont;
       if (args.bodyFont !== undefined) state.bodyFont = args.bodyFont;
