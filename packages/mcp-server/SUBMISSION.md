@@ -68,19 +68,11 @@ directory. Process docs: https://claude.com/docs/connectors/building/submission
 - [x] npm: `standby-design-mcp` 0.1.5 is the published `latest`
 - [x] MCP registry: `io.github.KarstenKreh/standby-design-mcp` 0.1.5 active and
       flagged `isLatest` (npm package version matches)
-- [ ] Form submitted — **blocked**, see below
+- [ ] Form submitted — blocked, see the note at the top of this file. The
+      MCPB desktop-extension route is tracked in #33; everything in this file
+      is reusable there as-is.
 
-## Directory submission is blocked
-
-The Anthropic connector submission portal is Team/Enterprise-only, so the remote
-connector cannot be submitted from this account. The form linked above is not
-reachable without such a plan.
-
-Alternative route, tracked in #33: package the stdio server as an MCPB desktop
-extension and submit it through the desktop extension form, which needs no
-portal access. All listing content in this file is reusable there as-is.
-
-Verified 2026-08-08:
+Re-verified 2026-08-08:
 
 ```
 $ curl -s https://mcp.standby.design/health
