@@ -129,6 +129,7 @@ export const DEFAULT_SHAPE_STATE: ShapeState = {
   ringOffset: 2,
   ringColorMode: 'auto',
   ringCustomColor: '#000000',
+  ringStyle: 'soft',
   separationMode: 'shadow',
   shadowOffsetX: 2,
   shadowOffsetY: 4,

@@ -1,6 +1,7 @@
-import { useState, type ReactNode, type KeyboardEvent, type FocusEvent } from 'react';
+import { useState, type CSSProperties, type ReactNode, type KeyboardEvent, type FocusEvent } from 'react';
 import type { RoleTheme, Ladder } from '@/lib/system-tokens';
 import { TraceTable, type TraceRow } from '@/components/trace-table';
+import { focusRingCss } from '@core/ring';
 
 interface CardProps {
   theme: RoleTheme;
@@ -39,6 +40,25 @@ function isFocusVisible(e: FocusEvent<HTMLElement>): boolean {
   return e.target.matches(':focus-visible');
 }
 
+/** Focus decoration in whichever ring shape the shape module is set to.
+ *  Specimens carry a transparent border at rest so the soft ring can colour it
+ *  without shifting the layout. */
+function ringDecoration(
+  theme: RoleTheme,
+  focused: boolean,
+  opts: { color?: string; offset?: number } = {},
+): CSSProperties {
+  const color = opts.color ?? theme.ringColor;
+  if (!focused) return { outline: 'none' };
+  const ring = focusRingCss(theme.ringStyle, theme.ringWidth, opts.offset ?? theme.ringOffset, color);
+  return {
+    outline: ring.outline,
+    outlineOffset: ring.outlineOffset,
+    ...(ring.glow && { boxShadow: ring.glow }),
+    ...(ring.borderColor && { borderColor: ring.borderColor }),
+  };
+}
+
 export function PressableCard({ theme, motionMs }: CardProps) {
   const [hover, setHover] = useState(false);
   const [pressed, setPressed] = useState(false);
@@ -63,13 +83,12 @@ export function PressableCard({ theme, motionMs }: CardProps) {
           style={{
             background: bg,
             color: theme.brand.fg,
-            border: 'none',
+            border: '1px solid transparent',
             borderRadius: 999,
             padding: '0.6rem 1.4rem',
             fontSize: 'var(--text-body-s)',
             transition: `background ${motionMs}ms ease`,
-            outline: focusVis ? `${theme.ringWidth}px solid ${theme.ringColor}` : 'none',
-            outlineOffset: theme.ringOffset,
+            ...ringDecoration(theme, focusVis),
           }}
           onMouseEnter={() => setHover(true)}
           onMouseLeave={() => { setHover(false); setPressed(false); }}
@@ -87,7 +106,7 @@ export function PressableCard({ theme, motionMs }: CardProps) {
         { id: 'rest', state: 'rest', rule: 'skin defaults', token: theme.brand.rest },
         { id: 'hover', state: 'hover', rule: `one rung (100 step numbers) more intensity — away from the surface (${intensityNote(theme, theme.brand)}), cursor pointer`, token: theme.brand.hover },
         { id: 'pressed', state: 'pressed', rule: 'two rungs, same direction — never back toward rest; depth is the shape module’s job', token: theme.brand.pressed },
-        { id: 'focus', state: 'focus-visible', rule: 'ring from the shape module, keyboard only', tokenText: `ring ${theme.ringWidth}px` },
+        { id: 'focus', state: 'focus-visible', rule: 'ring from the shape module, keyboard only', tokenText: `ring ${theme.ringWidth}px ${theme.ringStyle}` },
         { id: 'disabled', state: 'disabled', rule: "forbidden — an element acts, or explains why it can't", tokenText: '∅', forbidden: true },
       ]}
     />
@@ -121,11 +140,10 @@ export function ToggleableCard({ theme, motionMs }: CardProps) {
             width: 46,
             height: 26,
             background: bg,
-            border: 'none',
+            border: '1px solid transparent',
             borderRadius: 999,
             transition: `background ${motionMs}ms ease`,
-            outline: focusVis ? `${theme.ringWidth}px solid ${theme.ringColor}` : 'none',
-            outlineOffset: theme.ringOffset,
+            ...ringDecoration(theme, focusVis),
           }}
           onClick={() => setOn(v => !v)}
           onMouseEnter={() => setHover(true)}
@@ -151,7 +169,7 @@ export function ToggleableCard({ theme, motionMs }: CardProps) {
         { id: 'off', state: 'off', rule: 'neutral palette', token: theme.track.rest },
         { id: 'on', state: 'on', rule: 'palette switch → brand', token: theme.brand.rest },
         { id: 'hover', state: 'hover', rule: `one rung more intensity, inside whichever palette is active (${intensityNote(theme, on ? theme.brand : theme.track)})`, token: on ? theme.brand.hover : theme.track.hover },
-        { id: 'focus', state: 'focus-visible', rule: 'ring from the shape module', tokenText: `ring ${theme.ringWidth}px` },
+        { id: 'focus', state: 'focus-visible', rule: 'ring from the shape module', tokenText: `ring ${theme.ringWidth}px ${theme.ringStyle}` },
       ]}
     />
   );
@@ -205,8 +223,7 @@ export function EditableCard({ theme, motionMs }: CardProps) {
             padding: '0.55rem 0.9rem',
             fontSize: 'var(--text-body-s)',
             transition: `border-color ${motionMs}ms ease`,
-            outline: focused ? `${theme.ringWidth}px solid ${ringColor}` : 'none',
-            outlineOffset: 1,
+            ...ringDecoration(theme, focused, { color: ringColor, offset: 1 }),
           }}
           onMouseEnter={() => setHover(true)}
           onMouseLeave={() => setHover(false)}
@@ -274,11 +291,11 @@ export function NavigableCard({ theme, motionMs }: CardProps) {
                 background: backgroundOf(i, item.current),
                 color: item.current ? theme.fg : theme.muted,
                 fontSize: 'var(--text-body-s)',
+                border: '1px solid transparent',
                 borderRadius: Math.min(theme.radius, 10),
                 padding: '0.45rem 0.75rem 0.45rem 1rem',
                 transition: `background ${motionMs}ms ease, color ${motionMs}ms ease`,
-                outline: focusVis === i ? `${theme.ringWidth}px solid ${theme.ringColor}` : 'none',
-                outlineOffset: theme.ringOffset,
+                ...ringDecoration(theme, focusVis === i),
               }}
             >
               {item.current && (
@@ -298,7 +315,7 @@ export function NavigableCard({ theme, motionMs }: CardProps) {
         { id: 'hover', state: 'hover', rule: `one rung more intensity, inside whichever palette is active (${intensityNote(theme, activeLadder)})`, token: activeLadder.hover },
         { id: 'pressed', state: 'pressed', rule: 'two rungs, same direction — same rule as every other pressable thing', token: activeLadder.pressed },
         { id: 'current', state: 'current', rule: 'aria-current → palette switch, plus a marker bar: colour is never the only signal', token: theme.navCurrent.rest },
-        { id: 'focus', state: 'focus-visible', rule: 'ring from the shape module', tokenText: `ring ${theme.ringWidth}px` },
+        { id: 'focus', state: 'focus-visible', rule: 'ring from the shape module', tokenText: `ring ${theme.ringWidth}px ${theme.ringStyle}` },
       ]}
     />
   );

@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { CodeBlock } from '@core/code-block';
 import { generateRoleCss, generateGrammarMd } from '@/lib/role-code-export';
+import type { RingStyle } from '@core/url-state/shape';
 
 type Tab = 'css' | 'grammar';
 
-export function CodeExport({ themeName }: { themeName: string }) {
+export function CodeExport({ themeName, ringStyle }: { themeName: string; ringStyle: RingStyle }) {
   const [tab, setTab] = useState<Tab>('css');
 
   const tabs: { id: Tab; label: string }[] = [
@@ -28,7 +29,7 @@ export function CodeExport({ themeName }: { themeName: string }) {
         ))}
       </div>
       {tab === 'css'
-        ? <CodeBlock code={generateRoleCss(themeName)} mode="css" />
+        ? <CodeBlock code={generateRoleCss(themeName, ringStyle)} mode="css" />
         : <CodeBlock code={generateGrammarMd(themeName)} mode="markdown" />}
     </div>
   );

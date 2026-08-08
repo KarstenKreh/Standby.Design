@@ -247,6 +247,7 @@ export function registerGenerateTools(server: McpServer): void {
         glassDispersion: z.number().min(0).max(2).optional().describe('Chromatic aberration intensity (default 0.4).'),
         ringWidth: z.number().int().min(0).max(8).optional().describe('Focus ring width in px (default 2).'),
         ringOffset: z.number().int().min(0).max(8).optional().describe('Focus ring offset in px (default 2).'),
+        ringStyle: z.enum(['soft', 'solid']).optional().describe('Focus ring shape: "soft" (default) is a translucent halo at the edge plus a full-color border, "solid" is a hard outline set off by ringOffset.'),
         ringColorHex: z.string().optional().describe('Custom focus ring color as hex, or "auto" (default).'),
         separationMode: z.enum(['shadow', 'border', 'contrast', 'gap', 'mixed']).optional().describe('How surfaces separate from the background.'),
       },
@@ -273,6 +274,7 @@ export function registerGenerateTools(server: McpServer): void {
       if (args.glassDispersion !== undefined) state.glassDispersion = args.glassDispersion;
       if (args.ringWidth !== undefined) state.ringWidth = args.ringWidth;
       if (args.ringOffset !== undefined) state.ringOffset = args.ringOffset;
+      if (args.ringStyle !== undefined) state.ringStyle = args.ringStyle;
       if (args.separationMode !== undefined) state.separationMode = args.separationMode;
 
       for (const [argKey, modeKey, colorKey] of [

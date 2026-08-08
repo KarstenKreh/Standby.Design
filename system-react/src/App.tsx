@@ -73,6 +73,7 @@ const DEFAULT_SHAPE_STATE: Partial<ShapeState> = {
   ringOffset: 2,
   ringColorMode: 'auto',
   ringCustomColor: '#000000',
+  ringStyle: 'soft',
   separationMode: 'shadow',
 };
 

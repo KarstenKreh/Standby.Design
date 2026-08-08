@@ -1,6 +1,6 @@
 import { parseUnifiedHash, isUnifiedHash } from '@core/unified-hash';
 import { decodeState as decodeColorState, type DecodedState as ColorState } from '@core/url-state/color';
-import { decodeState as decodeShapeState, type ShapeUrlState as ShapeState } from '@core/url-state/shape';
+import { decodeState as decodeShapeState, type ShapeUrlState as ShapeState, type RingStyle } from '@core/url-state/shape';
 import { generatePalette, computeAutoErrorHex, STEPS, L_WHITE, L_BLACK, type PaletteEntry, type Step } from '@core/palette';
 import { contrastRatio, hexToOklch, oklchToHex, maxChromaInGamut } from '@core/color-math';
 
@@ -38,6 +38,7 @@ export interface RoleTheme {
   ringWidth: number;
   ringOffset: number;
   ringColor: string;
+  ringStyle: RingStyle;
   brand: Ladder & { fg: string };
   track: Ladder;
   navRow: Ladder;
@@ -168,6 +169,7 @@ export function buildRoleTheme(segments: Segments, isDark = true): RoleTheme {
     ringWidth: shapeState.ringWidth ?? 2,
     ringOffset: shapeState.ringOffset ?? 2,
     ringColor: brandLadder.rest.hex,
+    ringStyle: shapeState.ringStyle ?? 'soft',
     brand: {
       ...brandLadder,
       fg: pickFg(brandLadder.rest.hex, entryHex(surface, 975), entryHex(surface, 25)),

@@ -4,7 +4,8 @@
 
 import { generateShadows, type ShadowConfig, type ShadowType } from '@core/shadows';
 import { generatePalette, type PaletteEntry, type Step } from '@core/palette';
-import type { ColorMode, SeparationMode, ShapeStyle, BrutalistVariant } from '@/store/shape-store';
+import { softRingSpread, SOFT_RING_ALPHA } from '@core/ring';
+import type { ColorMode, SeparationMode, ShapeStyle, BrutalistVariant, RingStyle } from '@/store/shape-store';
 
 export interface ShapeExportOptions {
   shapeStyle: ShapeStyle;
@@ -26,8 +27,31 @@ export interface ShapeExportOptions {
   glassDispersion: number;
   ringWidth: number;
   ringOffset: number;
+  ringStyle: RingStyle;
   separationMode: SeparationMode;
   surfaceHex: string;
+}
+
+/** Token lines for the focus ring — soft adds the halo, solid keeps the offset. */
+export function ringTokenLines(opts: Pick<ShapeExportOptions, 'ringWidth' | 'ringOffset' | 'ringStyle'>): string[] {
+  if (opts.ringStyle === 'solid') {
+    return [
+      `--ring-width: ${opts.ringWidth}px;`,
+      `--ring-offset: ${opts.ringOffset}px;`,
+    ];
+  }
+  return [
+    `--ring-width: ${opts.ringWidth}px;`,
+    `--ring-offset: 0px;`,
+    `--ring-halo-width: ${softRingSpread(opts.ringWidth)}px;`,
+    `--ring-halo: color-mix(in oklab, var(--ring) ${Math.round(SOFT_RING_ALPHA * 100)}%, transparent);`,
+  ];
+}
+
+export function ringUsageComment(ringStyle: RingStyle): string {
+  return ringStyle === 'solid'
+    ? `/* Focus Ring — solid: outline: var(--ring-width) solid var(--ring); outline-offset: var(--ring-offset); */`
+    : `/* Focus Ring — soft: border-color: var(--ring); box-shadow: 0 0 0 var(--ring-halo-width) var(--ring-halo);\n   The full-color border carries the WCAG 3:1 focus contrast, the halo is the extra. */`;
 }
 
 /* ------------------------------------------------------------------ */
@@ -121,9 +145,8 @@ export function generateCssExport(opts: ShapeExportOptions): string {
   }
 
   // Ring
-  css += `\n  /* Focus Ring */\n`;
-  css += `  --ring-width: ${opts.ringWidth}px;\n`;
-  css += `  --ring-offset: ${opts.ringOffset}px;\n`;
+  css += `\n  ${ringUsageComment(opts.ringStyle)}\n`;
+  for (const line of ringTokenLines(opts)) css += `  ${line}\n`;
 
   // Glass (Liquid Glass — use with liquid-glass-react or similar)
   if (opts.shapeStyle === 'glass') {
@@ -177,8 +200,8 @@ export function generateTailwindV4Export(opts: ShapeExportOptions): string {
   }
 
   // Ring
-  css += `\n  --ring-width: ${opts.ringWidth}px;\n`;
-  css += `  --ring-offset: ${opts.ringOffset}px;\n`;
+  css += `\n  ${ringUsageComment(opts.ringStyle)}\n`;
+  for (const line of ringTokenLines(opts)) css += `  ${line}\n`;
 
   // Glass (Liquid Glass — use with liquid-glass-react or similar)
   if (opts.shapeStyle === 'glass') {
@@ -266,8 +289,13 @@ export function generateDesignTokensExport(opts: ShapeExportOptions): string {
 
   // Ring
   tokens.ring = {
+    style: { $type: 'string', $value: opts.ringStyle },
     width: { $type: 'dimension', $value: `${opts.ringWidth}px` },
-    offset: { $type: 'dimension', $value: `${opts.ringOffset}px` },
+    offset: { $type: 'dimension', $value: opts.ringStyle === 'soft' ? '0px' : `${opts.ringOffset}px` },
+    ...(opts.ringStyle === 'soft' && {
+      haloWidth: { $type: 'dimension', $value: `${softRingSpread(opts.ringWidth)}px` },
+      haloOpacity: { $type: 'number', $value: SOFT_RING_ALPHA },
+    }),
   };
 
   // Glass
@@ -368,8 +396,16 @@ export function generateLlmBriefing(opts: ShapeExportOptions): string {
 
   // Ring
   md += `\n## Focus Ring\n\n`;
+  md += `- **Style:** ${opts.ringStyle === 'soft' ? 'soft — a translucent halo hugging the edge (box-shadow, no blur), plus the element border in the full ring color' : 'solid — a hard outline set off from the element'}\n`;
   md += `- **Width:** ${opts.ringWidth}px\n`;
-  md += `- **Offset:** ${opts.ringOffset}px\n`;
+  if (opts.ringStyle === 'soft') {
+    md += `- **Halo:** ${softRingSpread(opts.ringWidth)}px spread at ${Math.round(SOFT_RING_ALPHA * 100)}% opacity, no offset\n`;
+    md += `- **CSS:** \`border-color: var(--ring); box-shadow: 0 0 0 var(--ring-halo-width) var(--ring-halo);\`\n`;
+    md += `- **Contrast:** WCAG 2.2 wants 3:1 for focus. The full-color border carries that — never drop it and keep only the halo.\n`;
+  } else {
+    md += `- **Offset:** ${opts.ringOffset}px\n`;
+    md += `- **CSS:** \`outline: var(--ring-width) solid var(--ring); outline-offset: var(--ring-offset);\`\n`;
+  }
 
   // Glass
   md += `\n## Liquid Glass\n\n`;

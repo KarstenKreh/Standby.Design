@@ -47,6 +47,7 @@ export function CodeExport() {
       glassDispersion: store.glassDispersion,
       ringWidth: store.ringWidth,
       ringOffset: store.ringOffset,
+      ringStyle: store.ringStyle,
       separationMode: store.separationMode,
       surfaceHex: store.surfaceHex,
     }),
@@ -56,7 +57,7 @@ export function CodeExport() {
       store.shadowCustomColor, store.shadowOffsetX, store.shadowOffsetY,
       store.brutalistVariant, store.borderEnabled, store.borderWidth,
       store.borderRadius, store.glassDepth,
-      store.glassBlur, store.glassDispersion, store.ringWidth, store.ringOffset,
+      store.glassBlur, store.glassDispersion, store.ringWidth, store.ringOffset, store.ringStyle,
       store.separationMode, store.surfaceHex,
     ],
   );

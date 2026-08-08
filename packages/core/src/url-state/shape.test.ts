@@ -23,6 +23,7 @@ function makeState(overrides: Partial<ShapeUrlState> = {}): ShapeUrlState {
     ringOffset: 2,
     ringColorMode: 'auto',
     ringCustomColor: '#000000',
+    ringStyle: 'soft',
     separationMode: 'shadow',
     shadowOffsetX: 2,
     shadowOffsetY: 4,
@@ -51,7 +52,21 @@ describe('encodeState / decodeState round-trip', () => {
     expect(decoded!.glassDispersion).toBeCloseTo(0.5);
     expect(decoded!.ringWidth).toBe(2);
     expect(decoded!.ringOffset).toBe(2);
+    expect(decoded!.ringStyle).toBe('soft');
     expect(decoded!.separationMode).toBe('shadow');
+  });
+
+  it('round-trips both ring styles', () => {
+    for (const style of ['soft', 'solid'] as const) {
+      const decoded = decodeState(encodeState(makeState({ ringStyle: style })));
+      expect(decoded!.ringStyle).toBe(style);
+    }
+  });
+
+  it('falls back to the solid ring for hashes written before ringStyle existed', () => {
+    const legacy = encodeState(makeState()).split(',').slice(0, 24).join(',');
+    const decoded = decodeState(legacy);
+    expect(decoded!.ringStyle).toBe('solid');
   });
 
   it('round-trips glass style', () => {
@@ -157,11 +172,11 @@ describe('decodeState edge cases', () => {
     expect(decodeState('')).toBeNull();
   });
 
-  it('encodeState produces exactly 24 comma-separated fields', () => {
+  it('encodeState produces exactly 25 comma-separated fields', () => {
     const state = makeState();
     const encoded = encodeState(state);
     const parts = encoded.split(',');
-    expect(parts).toHaveLength(24);
+    expect(parts).toHaveLength(25);
   });
 
   it('validates shape style against allowed set', () => {
