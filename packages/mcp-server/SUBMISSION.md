@@ -60,9 +60,29 @@ directory. Process docs: https://claude.com/docs/connectors/building/submission
 ## Submission status
 
 - [x] DNS A record `mcp.standby.design` → 46.225.131.97 active
-- [x] HTTPS endpoint live (Traefik/Let's Encrypt) — `/health` reports v0.1.3
+- [x] HTTPS endpoint live (Traefik/Let's Encrypt) — `/health` reports v0.1.5
 - [x] Validated against the live endpoint (2026-07-02, raw JSON-RPC over
       Streamable HTTP): initialize handshake, tools/list (8 tools, all with
       `readOnlyHint: true`), stateless tools/call, error path (`isError`,
       helpful message), GET → 405
-- [ ] Form submitted (review queue typically 1–2 weeks; escalation: mcp-review@anthropic.com)
+- [x] npm: `standby-design-mcp` 0.1.5 is the published `latest`
+- [x] MCP registry: `io.github.KarstenKreh/standby-design-mcp` 0.1.5 active and
+      flagged `isLatest` (npm package version matches)
+- [ ] Form submitted — **blocked**, see below
+
+## Directory submission is blocked
+
+The Anthropic connector submission portal is Team/Enterprise-only, so the remote
+connector cannot be submitted from this account. The form linked above is not
+reachable without such a plan.
+
+Alternative route, tracked in #33: package the stdio server as an MCPB desktop
+extension and submit it through the desktop extension form, which needs no
+portal access. All listing content in this file is reusable there as-is.
+
+Verified 2026-08-08:
+
+```
+$ curl -s https://mcp.standby.design/health
+{"name":"standby-design","version":"0.1.5","status":"ok","endpoint":"/mcp","docs":"https://standby.design/llms.txt"}
+```
