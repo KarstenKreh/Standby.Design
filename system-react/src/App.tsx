@@ -11,7 +11,7 @@ import { decodeState as decodeSymbolState, type UrlState as SymbolState } from '
 import { decodeState as decodeSpaceState, DEFAULT_SPACE_URL_STATE, type SpaceUrlState } from '@core/url-state/space';
 import { generatePalette, computeAutoErrorHex, computeAutoAccentHex, resolveAccentHues, type PaletteEntry } from '@core/palette';
 import { hexToOklch } from '@core/color-math';
-import { customScale, traditionalScale, type ComputedLevel } from '@core/scale';
+import { customScale, traditionalScale, DEFAULT_TRADITIONAL_MOBILE, type ComputedLevel } from '@core/scale';
 import { applyTypography } from '@core/typography';
 import { computeSpacingTokens, type SpacingToken } from '@core/spacing';
 import type { AccentPalette } from '@/lib/color-code-export';
@@ -195,7 +195,10 @@ function App() {
     if (!typeState) return null;
     let s: ComputedLevel[];
     if (typeState.scaleMode === 'traditional' && typeState.traditionalAssignments) {
-      s = traditionalScale(typeState.traditionalAssignments, typeState.traditionalAssignments);
+      s = traditionalScale(
+        typeState.traditionalAssignments,
+        typeState.traditionalMobileAssignments ?? DEFAULT_TRADITIONAL_MOBILE,
+      );
     } else {
       const effectiveMobileRatio = typeState.mobileRatio;
       s = customScale(typeState.baseSize, typeState.customRatio, effectiveMobileRatio, typeState.mobileBaseSize ?? typeState.baseSize);

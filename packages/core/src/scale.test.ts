@@ -83,6 +83,22 @@ describe('traditionalScale', () => {
       expect(headings[i].maxRem).toBeLessThanOrEqual(headings[i - 1].maxRem);
     }
   });
+
+  it('emits clamp() for every level with the default mobile anchors', () => {
+    const levels = traditionalScale(DEFAULT_TRADITIONAL, DEFAULT_TRADITIONAL_MOBILE);
+    for (const level of levels) {
+      expect(level.isFluid).toBe(true);
+      expect(level.clampValue).toMatch(/^clamp\(/);
+    }
+  });
+
+  it('collapses to fixed rem when the desktop anchors are passed as mobile anchors', () => {
+    const levels = traditionalScale(DEFAULT_TRADITIONAL, DEFAULT_TRADITIONAL);
+    for (const level of levels) {
+      expect(level.isFluid).toBe(false);
+      expect(level.clampValue).not.toMatch(/clamp\(/);
+    }
+  });
 });
 
 describe('goldenScale', () => {
