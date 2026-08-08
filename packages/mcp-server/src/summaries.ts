@@ -14,7 +14,14 @@ import { computeIconTokens, weightToStroke } from '@core/icon-tokens';
 import { ICON_SETS, getSetById, type IconSetDefinition } from '@core/icon-sets';
 import { recommendSets } from '@core/recommend';
 import { fontFamily } from '@core/fontshare';
+import { invertHex } from '@core/color-math';
 import { type PaletteResult, stepHex } from './lib.js';
+
+function pinnedPair(pin: boolean, invert: boolean, hex: string): string | null {
+  if (!pin) return null;
+  const dark = invert ? invertHex(hex) : hex;
+  return `${hex} / ${dark} (pinned${invert ? ', inverted in dark' : ''})`;
+}
 
 export function colorSummary(state: ColorState, palette: PaletteResult): string {
   const lines: string[] = [];
@@ -29,9 +36,9 @@ export function colorSummary(state: ColorState, palette: PaletteResult): string 
   }
   lines.push('');
   lines.push('Key semantic tokens (light/dark):');
-  lines.push(`- primary: ${state.brandPin ? state.brandHex + ' (pinned)' : `${stepHex(palette.brand, 600)} / ${stepHex(palette.brand, 400)}`}`);
+  lines.push(`- primary: ${pinnedPair(state.brandPin, state.brandInvert, state.brandHex) ?? `${stepHex(palette.brand, 600)} / ${stepHex(palette.brand, 400)}`}`);
   lines.push(`- background: ${stepHex(palette.surface, 50)} / ${stepHex(palette.surface, 875)}`);
-  lines.push(`- destructive: ${state.errorPin ? palette.effectiveErrorHex + ' (pinned)' : `${stepHex(palette.error, 600)} / ${stepHex(palette.error, 400)}`}`);
+  lines.push(`- destructive: ${pinnedPair(state.errorPin, state.errorInvert, palette.effectiveErrorHex) ?? `${stepHex(palette.error, 600)} / ${stepHex(palette.error, 400)}`}`);
   return lines.join('\n');
 }
 
