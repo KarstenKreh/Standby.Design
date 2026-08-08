@@ -24,7 +24,7 @@ standby.design/              Hub landing page (static HTML)
 |-----|-----|-------|---------|
 | **Color** | `color-react/` | `/color` | OKLCH palette generation: 18-step scales, semantic tokens, shadows, light/dark/HC modes, shadcn/ui export |
 | **Type** | `type-react/` | `/type` | Fluid type scales with `clamp()`, three scale modes, Fontshare font preview, spacing derivation |
-| **Shape** | `shape-react/` | `/shape` | Shape tokens with style selector (Paper/Glass): shadows, borders, radii, liquid glass (vaso), focus rings |
+| **Shape** | `shape-react/` | `/shape` | Shape tokens with style selector (Paper/Glass/Neomorph/Neobrutalism): shadows, borders, radii, liquid glass, focus rings |
 | **Symbol** | `symbol-react/` | `/symbol` | Icon style recommender: curated sets (Material/Lucide/Phosphor) with style variants, sizing tokens |
 | **System** | `system-react/` | `/system` | Combined design system viewer: merges color + type + shape + symbol into a single export |
 | **Hub** | `index.html` | `/` | Landing page linking to all tools |
@@ -39,7 +39,7 @@ All four React apps share identical dependencies:
 - **Base UI React 1.3** (headless components)
 - **Lucide React** (icons), **Sonner** (toasts), **next-themes** (dark mode)
 - **shared.css** — full Standby.Design theme: primitive tokens (Brand/Surface/Error/Neutral/Success/Warning/Info), semantic tokens (light+dark, shadcn/ui compatible), Tailwind v4 `@theme inline` bridge
-- **packages/core/** — shared pure utility modules + a few shared React components, imported via `@core` alias. Contains: color-math, palette, shadows, scale, spacing, clamp, typography, fontshare, unified-hash, math, syntax-highlight, code-block, pirate-footer, tool-nav, app-shell
+- **packages/core/** — shared pure utility modules + a few shared React components, imported via `@core` alias. Contains: color-math, palette, shadows, ring, surface, scale, spacing, clamp, typography, fontshare, unified-hash, math, syntax-highlight, code-block, liquid-glass, brutalist-echo, pirate-footer, tool-nav, app-shell
 
 ### Shared Patterns
 
@@ -314,47 +314,73 @@ User controls → Zustand store → useComputedScale() memoized
 
 ### Core Concept
 
-Generates production-ready shape tokens (shadows, borders, radii, focus rings) with a **style selector** that switches between visual paradigms. Currently supports **Paper** (classic surfaces with shadows) and **Glass** (liquid glass distortion via the `vaso` library).
+Generates production-ready shape tokens (shadows, borders, radii, focus rings) with a **style selector** that switches between visual paradigms: **Paper**, **Glass**, **Neomorph** and **Neobrutalism**.
 
 ### Style System
 
-The `shapeStyle` field (`'paper' | 'glass'`) is the top-level mode. It determines which controls are visible, how the preview renders, and what tokens are exported.
+The `shapeStyle` field (`'paper' | 'glass' | 'neomorph' | 'neobrutalism'`) is the top-level mode. It determines which controls are visible, how the preview renders, and what tokens are exported. Switching style applies a preset (see `setShapeStyle` in the store) — e.g. Neomorph drops the border and pins the ring to the edge, Neobrutalism turns on hard offset shadows and the solid focus ring.
 
 | Style | Visual | Controls | Export |
 |-------|--------|----------|--------|
 | **Paper** | Solid surfaces, box-shadows, borders | Shadow type/strength/blur/scale, Border, Radius, Ring | `--shadow-*`, `--radius-*`, `--border-width`, `--ring-*` |
-| **Glass** | Liquid glass distortion (vaso library) | Depth, Blur, Dispersion, Radius, Ring | `--glass-depth`, `--glass-blur`, `--glass-dispersion`, `--radius-*`, `--ring-*` |
+| **Glass** | Liquid glass distortion (self-contained SVG filter) | Depth, Blur, Dispersion, Radius, Ring | `--glass-depth`, `--glass-blur`, `--glass-dispersion`, `--radius-*`, `--ring-*` |
+| **Neomorph** | Monochromatic surfaces, dual light/dark shadows | Shadow strength/blur, Radius, Ring | `--shadow-*` (neumorphic), `--radius-*`, `--ring-*` |
+| **Neobrutalism** | Hard offset outline shadow, required borders | Variant, Offset X/Y, Strength, Border, Radius, Ring | `--shadow-*` (zero blur), `--radius-*`, `--border-width`, `--ring-*` |
 
 ### State (`store/shape-store.ts`)
 
 | Field | Type | Default | Purpose |
 |-------|------|---------|---------|
-| `shapeStyle` | `'paper' \| 'glass'` | `'paper'` | Top-level visual style |
-| `shadowEnabled` | boolean | true | Enable shadows (paper) |
-| `shadowType` | `'normal' \| 'neumorphic' \| 'flat'` | `'normal'` | Shadow rendering style |
+| `shapeStyle` | `'paper' \| 'glass' \| 'neomorph' \| 'neobrutalism'` | `'paper'` | Top-level visual style |
+| `shadowEnabled` | boolean | true | Enable shadows |
+| `shadowType` | `'normal' \| 'flat'` | `'normal'` | Shadow rendering style (neumorphic and brutalist follow from `shapeStyle`) |
 | `shadowStrength` | number | 1.0 | Shadow alpha multiplier |
 | `shadowBlurScale` | number | 1.0 | Shadow blur multiplier |
 | `shadowScale` | number | 1.272 (√φ) | Level spread ratio |
+| `shadowColorMode` | `'auto' \| 'custom'` | `'auto'` | Shadow color source |
+| `shadowCustomColor` | string | `'#000000'` | Shadow color when custom |
+| `shadowOffsetX` | number | 2 | Brutalist shadow X offset in px |
+| `shadowOffsetY` | number | 4 | Brutalist shadow Y offset in px |
+| `brutalistVariant` | `'outlined' \| 'solid'` | `'outlined'` | Hollow echo vs. echo filled in border color |
 | `borderEnabled` | boolean | true | Show borders |
 | `borderWidth` | number | 1 | Border width in px |
+| `borderColorMode` | `'auto' \| 'custom'` | `'auto'` | Border color source |
+| `borderCustomColor` | string | `'#000000'` | Border color when custom |
 | `borderRadius` | number | 8 | Base radius in px (scales to xs/sm/md/lg/xl) |
-| `glassDepth` | number | 1.0 | Glass displacement intensity (-2 to 5) |
-| `glassBlur` | number | 2.0 | Glass backdrop blur amount |
-| `glassDispersion` | number | 0.4 | Chromatic aberration intensity |
+| `glassDepth` | number | 0.2 | Glass displacement intensity (-2 to 5) |
+| `glassBlur` | number | 1.0 | Glass backdrop blur amount |
+| `glassDispersion` | number | 0.5 | Chromatic aberration intensity |
 | `ringWidth` | number | 2 | Focus ring width in px |
-| `ringOffset` | number | 2 | Focus ring offset in px |
+| `ringOffset` | number | 2 | Focus ring offset in px (ignored when `ringStyle` is `soft`) |
+| `ringStyle` | `'soft' \| 'solid'` | `'soft'` | Ring shape — see Focus Ring below |
+| `ringColorMode` | `'auto' \| 'custom'` | `'auto'` | Ring color source |
+| `ringCustomColor` | string | `'#000000'` | Ring color when custom |
+| `separationMode` | `'shadow' \| 'border' \| 'contrast' \| 'gap' \| 'mixed'` | `'shadow'` | How surfaces separate from the background |
 | `surfaceHex` | string | `'#335A7F'` | Brand color (read from color hash) |
 | `paletteMode` | `'balanced' \| 'exact'` | `'balanced'` | Palette generation mode (from color hash) |
 | `chromaScale` | number | 1.0 | Surface chroma scale (from color hash) |
 | `brandPin` | boolean | false | Use exact brand hex for primary (from color hash) |
 
-### Glass Effect (`vaso` library)
+### Focus Ring (`packages/core/src/ring.ts`)
 
-The Glass style uses the [vaso](https://github.com/huozhi/vaso) React component for liquid glass distortion. Vaso renders an SVG `feDisplacementMap` filter with `backdrop-filter: blur()`.
+Two shapes for the same decision, switched by `ringStyle`:
 
-**Architecture**: Vaso wraps UI elements as a container. The glass overlay sits behind children in the DOM. Children need `relative z-10` to avoid being affected by the displacement filter.
+| Value | Rendering | Offset |
+|-------|-----------|--------|
+| `soft` (default) | `box-shadow: 0 0 0 <ringWidth + 1>px <ring at 40%>` hugging the edge, plus the element border in the full ring color | ignored, exported as `0px` |
+| `solid` | `outline: <ringWidth>px solid <ring>` | `outline-offset: <ringOffset>px` |
 
-**Known limitation**: Dispersion (chromatic aberration) creates colored edge artifacts (cyan top-left, yellow bottom-right) due to `feOffset` clipping at element boundaries. Mitigated with `clip-path: inset(1px)` on `[data-vaso]` elements. The `vaso` library has only 5% filter padding vs. 35% in `liquid-glass-react`. A future React 19 upgrade would enable switching to `liquid-glass-react` for proper edge masking.
+WCAG 2.2 asks for 3:1 contrast on focus. Under `soft` the **full-color border carries that requirement** — the translucent halo alone can miss it on light surfaces. Never strip the border and keep only the halo. Same solution shadcn uses.
+
+`focusRingCss()` returns the four pieces (outline, offset, glow layer, border color) so previews in Shape, Role and Color render the identical ring. The exports add `--ring-halo-width` and `--ring-halo` on top of `--ring-width` / `--ring-offset` when `soft` is active.
+
+Hashes written before `ringStyle` existed decode to `solid`, so shared links keep the ring they were designed with.
+
+### Glass Effect (`packages/core/src/liquid-glass.tsx`)
+
+Self-contained component — an SVG `feDisplacementMap` filter plus native `backdrop-filter`, no external runtime dependency. Chromatic aberration comes from three displacement passes with per-channel scale offsets. The filter has 35% padding, so there is no edge clipping.
+
+**Architecture**: `LiquidGlass` wraps UI elements as a container. The glass overlay sits behind children in the DOM; children render in a `relative z-1` wrapper so the displacement filter leaves them alone.
 
 ### Preview — Palette Integration
 
@@ -376,13 +402,15 @@ Semantic mapping matches the Color app exactly: `primary` = brand-600/400, `seco
 
 ### URL State
 
-Format: `shapeStyle,shadowEnabled,shadowType,strength,blurScale,scale,shadowColorMode,shadowCustomHex,borderEnabled,borderWidth,borderColorMode,borderCustomHex,borderRadius,glassDepth,glassBlur,glassDispersion,ringWidth,ringOffset,ringColorMode,ringCustomHex,separationMode` (21 fields)
+Format: `shapeStyle,shadowEnabled,shadowType,strength,blurScale,scale,shadowColorMode,shadowCustomHex,borderEnabled,borderWidth,borderColorMode,borderCustomHex,borderRadius,glassDepth,glassBlur,glassDispersion,ringWidth,ringOffset,ringColorMode,ringCustomHex,separationMode,shadowOffsetX,shadowOffsetY,brutalistVariant,ringStyle` (25 fields)
+
+Encoded and decoded in `packages/core/src/url-state/shape.ts`. Fields are appended, never reordered — `decodeState()` returns a `Partial` and simply leaves missing tail fields unset, so the store default applies and older links keep working. It rejects anything under 21 fields. Two legacy forms are migrated on read: a 20-field hash without `shapeStyle`, and `shadowType='neumorphic'`, which becomes `shapeStyle='neomorph'`. `ringStyle` is the exception to the "leave unset" rule: absent means `solid`, because that was the only ring at the time.
 
 ### Components
 
-**Controls**: `style-selector.tsx` (Paper/Glass segmented control), `shadow-controls.tsx`, `border-controls.tsx`, `radius-controls.tsx`, `ring-controls.tsx`, `glass-controls.tsx` (depth/blur/dispersion sliders + reset button)
+**Controls**: `style-selector.tsx` (four-way segmented control), `shadow-controls.tsx`, `brutalist-shadow-controls.tsx`, `border-controls.tsx`, `radius-controls.tsx`, `ring-controls.tsx` (style switch + width + offset), `glass-controls.tsx` (depth/blur/dispersion sliders + reset button), `separation-controls.tsx`
 
-**Preview**: `shape-preview.tsx` — unified `PreviewPanel` for both styles. Paper uses `backgroundColor` + `boxShadow`. Glass uses `<Vaso>` wrappers with `overflow-hidden` containers. Shows elevation cards (xs–xl horizontal), buttons (Primary/Secondary/Destructive), and input with focus ring.
+**Preview**: `shape-preview.tsx` — unified `PreviewPanel` for all styles, rendered side by side in light and dark. Paper and Neomorph use `backgroundColor` + `boxShadow`, Glass uses `<LiquidGlass>` wrappers, Neobrutalism adds a `<BrutalistEcho>` behind each surface. Shows elevation cards (xs–xl horizontal), buttons (Primary/Secondary/Destructive), and an input with the focus ring.
 
 **Export**: `code-export.tsx` (CSS / Tailwind v4 / Design Tokens / LLM Briefing). Glass mode suppresses shadow export.
 
@@ -391,10 +419,12 @@ Format: `shapeStyle,shadowEnabled,shadowType,strength,blurScale,scale,shadowColo
 ```
 User controls → Zustand store → PreviewPanel (style-conditional rendering)
   → deriveSurface() uses @core/palette (real palette engine)
-  → Paper: backgroundColor + boxShadow
-  → Glass: <Vaso> with depth/blur/dispersion
+  → Paper / Neomorph: backgroundColor + boxShadow
+  → Glass: <LiquidGlass> with depth/blur/dispersion
+  → Neobrutalism: <BrutalistEcho> + hard offset shadow
+  → focusRingCss() for the input's focus ring
   → CodeExport (style-conditional token generation)
-  → useUrlState() (hash sync, 21-field format)
+  → useUrlState() (hash sync, 25-field format)
 ```
 
 ---
