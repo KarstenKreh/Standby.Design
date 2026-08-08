@@ -8,8 +8,9 @@ MCP server for [standby.design](https://standby.design) — generate and export
 production-ready **design systems** directly from Claude (or any MCP client):
 **OKLCH color palettes**, **fluid type scales**, **spacing & layout**,
 **shape tokens** (radii, shadows, glass, neobrutalism) and **icon tokens**,
-exportable as **CSS custom properties**, **Tailwind v4 themes**, or
-**W3C design tokens (DTCG)** — shadcn/ui compatible.
+exportable as **CSS custom properties** or **Tailwind v4 themes** — shadcn/ui
+compatible. Typography and spacing are additionally available as
+**W3C design tokens (DTCG)**.
 
 All computation is shared with the standby.design web apps (`packages/core` +
 `system-react/src/lib`), so results are identical to what the UI produces.

@@ -308,7 +308,7 @@ export function registerGenerateTools(server: McpServer): void {
       description: `Pick an icon set and generate icon sizing tokens (xs–2xl + stroke width). Either select a specific set or state style preferences and get a recommendation. Available sets: ${SET_IDS.join(', ')}. Returns a shareable standby.design/system URL and a summary. Always give that URL to the user — the link is the deliverable.`,
       inputSchema: {
         url: URL_PARAM,
-        set: z.string().optional().describe(`Icon set variant id to select explicitly, e.g. "lucide-outlined". One of: ${SET_IDS.join(', ')}. Pass "auto" to clear the selection and use the recommendation instead.`),
+        set: z.string().optional().describe(`Icon set variant id to select explicitly, e.g. "${SET_IDS[0]}". One of: ${SET_IDS.join(', ')}. Pass "auto" to clear the selection and use the recommendation instead.`),
         style: z.enum(['outlined', 'filled', 'duotone', 'auto']).optional().describe('Preferred icon style for the recommendation.'),
         weight: z.enum(['thin', 'regular', 'bold', 'auto']).optional().describe('Preferred stroke weight.'),
         corners: z.enum(['sharp', 'rounded', 'auto']).optional().describe('Preferred corner style (sharp = corporate/precise, rounded = friendly).'),
@@ -366,7 +366,7 @@ export function registerGenerateTools(server: McpServer): void {
         containers: z.array(z.object({
           name: z.string().min(1),
           maxPx: z.number().int().min(0),
-        })).optional().describe('Replace the container list. Defaults: prose 680, narrow 880, default 1200, wide 1440.'),
+        })).optional().describe('Replace the container list. Defaults: prose 680, narrow 960, default 1200, wide 1440, full 1920.'),
         proseMaxCh: z.number().int().min(20).max(120).optional().describe('Prose measure in ch (default 65).'),
         aspectRatios: z.array(z.object({
           name: z.string().min(1),
