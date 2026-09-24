@@ -17,6 +17,12 @@ interface UnifiedSegments {
   p: string | null;
 }
 
+const SEGMENT_KEYS: readonly string[] = ['c', 't', 's', 'y', 'p'];
+
+function isSegmentKey(key: string): key is SegmentKey {
+  return SEGMENT_KEYS.includes(key);
+}
+
 /** Check whether a raw hash string uses the unified format. */
 export function isUnifiedHash(raw: string): boolean {
   const str = raw.replace(/^#/, '');
@@ -29,13 +35,15 @@ export function parseUnifiedHash(raw: string): UnifiedSegments {
   const result: UnifiedSegments = { c: null, t: null, s: null, y: null, p: null };
   if (!isUnifiedHash(str)) return result;
 
+  let currentKey: SegmentKey | null = null;
   for (const part of str.split('&')) {
     const eq = part.indexOf('=');
-    if (eq === -1) continue;
-    const key = part.slice(0, eq);
-    const value = part.slice(eq + 1);
-    if (key === 'c' || key === 't' || key === 's' || key === 'y' || key === 'p') {
-      result[key] = value || null;
+    const key = eq === -1 ? '' : part.slice(0, eq);
+    if (isSegmentKey(key)) {
+      currentKey = key;
+      result[key] = part.slice(eq + 1) || null;
+    } else if (currentKey && result[currentKey] !== null) {
+      result[currentKey] += '&' + part;
     }
   }
   return result;

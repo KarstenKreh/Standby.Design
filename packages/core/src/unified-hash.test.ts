@@ -6,6 +6,8 @@ import {
   getMySegment,
   setMySegment,
 } from './unified-hash';
+import { encodeState as encodeType, decodeState as decodeType, type UrlState } from './url-state/type';
+import { decodeState as decodeSpace } from './url-state/space';
 
 describe('isUnifiedHash', () => {
   it('detects unified format with c= segment', () => {
@@ -182,5 +184,67 @@ describe('round-trips', () => {
     expect(getMySegment(updated, 'c')).toBe('new');
     expect(getMySegment(updated, 't')).toBe('type');
     expect(getMySegment(updated, 'p')).toBe('space');
+  });
+});
+
+const typeState: UrlState = {
+  scaleMode: 'custom',
+  baseSize: 1,
+  customRatio: 1.414,
+  mobileRatio: 1.25,
+  headingFont: 'sentient',
+  bodyFont: 'satoshi',
+  monoFont: 'ibm-plex-mono',
+  headingWeight: 600,
+  mobileBaseSize: 0.9375,
+  mobileRatioMode: 'custom',
+  autoShrink: 40,
+  lineHeightOverrides: { h1: 1.1 },
+  letterSpacingOverrides: { h1: -0.02 },
+};
+
+describe('parseUnifiedHash with extension keys', () => {
+  it('keeps every type extension key when other segments follow', () => {
+    const t = 'custom,1,1.414,1.25,sentient,satoshi,ibm-plex-mono|hw=600&mbs=0.9375&mrm=custom&as=40';
+    const parsed = parseUnifiedHash(`#c=5B84D6&t=${t}&s=paper,1&p=harmonic,1000,1500,100,1`);
+    expect(parsed.t).toBe(t);
+    expect(parsed.c).toBe('5B84D6');
+    expect(parsed.s).toBe('paper,1');
+    expect(parsed.p).toBe('harmonic,1000,1500,100,1');
+  });
+
+  it('keeps every space extension key', () => {
+    const p = 'harmonic,1000,1500,100,1|fvw=360,1600&pch=70&arr=0';
+    expect(parseUnifiedHash(`c=AAAAAA&p=${p}`).p).toBe(p);
+  });
+
+  it('ignores stray parts before the first segment', () => {
+    expect(parseUnifiedHash('foo=1&bar&c=AAAAAA')).toMatchObject({ c: 'AAAAAA', t: null });
+  });
+});
+
+describe('segment round-trip across tool switches', () => {
+  it('type state survives other tools rewriting their own segments', () => {
+    let hash = setMySegment('', 't', encodeType(typeState));
+    hash = setMySegment(hash, 'c', '5B84D6');
+    hash = setMySegment(hash, 'p', 'harmonic,1000,1500,100,1');
+    hash = setMySegment(hash, 's', 'paper,1');
+    expect(decodeType(getMySegment(hash, 't')!)).toMatchObject({
+      headingWeight: 600,
+      mobileBaseSize: 0.9375,
+      mobileRatioMode: 'custom',
+      autoShrink: 40,
+      lineHeightOverrides: { h1: 1.1 },
+      letterSpacingOverrides: { h1: -0.02 },
+    });
+  });
+
+  it('space state survives other tools rewriting their own segments', () => {
+    const encoded = 'harmonic,1000,1500,100,1|fvw=360,1600&pch=70&arr=0';
+    let hash = setMySegment('', 'p', encoded);
+    hash = setMySegment(hash, 't', encodeType(typeState));
+    hash = setMySegment(hash, 'c', '5B84D6');
+    const decoded = decodeSpace(getMySegment(hash, 'p')!);
+    expect(decoded).toMatchObject({ fluidMinVw: 360, fluidMaxVw: 1600, proseMaxCh: 70, aspectIncludeReciprocals: false });
   });
 });
