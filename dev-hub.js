@@ -8,7 +8,7 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
-const PORT = 5173;
+const PORT = Number(process.env.PORT) || 5173;
 const ROOT = __dirname;
 
 // Map hub links (/color, /type, …) to their local Vite dev-server ports.
@@ -19,6 +19,7 @@ const TOOL_PORTS = {
   shape: 5176,
   symbol: 5178,
   space: 5179,
+  role: 5180,
   system: 5175,
   qa: 5180,
 };
@@ -50,8 +51,21 @@ http
       return;
     }
 
+    if (urlPath === '/mcp' || urlPath === '/mcp/') {
+      res.writeHead(301, { Location: '/docs/mcp' });
+      res.end();
+      return;
+    }
+
     const safe = path.normalize(urlPath).replace(/^(\.\.[\/\\])+/, '');
+    const docsMatch = safe.match(/^\/docs\/([a-z0-9-]+)\/?$/);
+    const publicPath = path.join(ROOT, 'public', safe);
     let filePath = path.join(ROOT, safe === '/' ? 'index.html' : safe);
+    if (docsMatch) {
+      filePath = path.join(ROOT, 'public', 'docs', `${docsMatch[1]}.html`);
+    } else if (safe !== '/' && !fs.existsSync(filePath) && fs.existsSync(publicPath)) {
+      filePath = publicPath;
+    }
 
     fs.stat(filePath, (err, stat) => {
       if (err || stat.isDirectory()) {

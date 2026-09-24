@@ -2,6 +2,8 @@
 
 Multi-Tool-Hub unter **standby.design** — kleine Tools für Designer und Entwickler. Kein Framework, kein Build-Step, reines HTML/CSS/JS.
 
+MCP-Server für KI-Agenten: https://standby.design/docs/mcp
+
 ## Struktur
 
 ```

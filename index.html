@@ -181,6 +181,14 @@
       font-style: italic;
       opacity: 0.75;
     }
+    header p.mcp-hint {
+      margin-top: 1.25rem;
+      font-size: var(--text-caption);
+    }
+    header p.mcp-hint a {
+      color: var(--foreground);
+      text-underline-offset: 0.2em;
+    }
     .tools {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -339,6 +347,7 @@
     <h1>standby.design</h1>
     <p>Design tools for systems thinkers.</p>
     <p class="tagline">Where human perception meets mathematical rigor.</p>
+    <p class="mcp-hint">Building with AI? <a href="/docs/mcp">Use the MCP server</a> and let your agent generate the system.</p>
   </header>
 
   <div class="tools">
@@ -457,6 +466,7 @@
       No copyright — take what you need, make it yours.
     </div>
     <div class="legal-links">
+      <a href="/docs/mcp">MCP Server</a>
       <a href="/impressum.html">Imprint</a>
       <a href="/privacy.html">Privacy</a>
     </div>
