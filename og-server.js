@@ -316,6 +316,31 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  if (pathname === '/mcp' || pathname === '/mcp/') {
+    res.writeHead(301, { Location: '/docs/mcp' });
+    res.end();
+    return;
+  }
+
+  const docsMatch = pathname.match(/^\/docs\/([a-z0-9-]+)(\/)?$/);
+  if (docsMatch) {
+    if (docsMatch[2]) {
+      res.writeHead(301, { Location: `/docs/${docsMatch[1]}` });
+      res.end();
+      return;
+    }
+    fs.readFile(path.join(STATIC_ROOT, 'docs', `${docsMatch[1]}.html`), (err, html) => {
+      if (err) {
+        res.writeHead(404, { 'Content-Type': 'text/plain' });
+        res.end('Not found');
+        return;
+      }
+      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-cache' });
+      res.end(html);
+    });
+    return;
+  }
+
   // Tool name mapping for OG descriptions
   const TOOL_META = {
     color:  { template: colorHtmlTemplate,  label: 'Color Palette Generator',    desc: 'color palette' },

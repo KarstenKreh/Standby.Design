@@ -17,6 +17,8 @@ All computation is shared with the standby.design web apps (`packages/core` +
 Every tool returns a shareable `standby.design/system` URL — open it in the
 browser to view and fine-tune the system visually; the URL *is* the state.
 
+Docs and install guide: https://standby.design/docs/mcp
+
 ## Tools
 
 | Tool | Purpose |
