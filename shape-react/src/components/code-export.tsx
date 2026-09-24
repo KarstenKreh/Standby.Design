@@ -11,10 +11,9 @@ import {
   generateTailwindV4Export,
   generateDesignTokensExport,
   generateLlmBriefing,
-  surfacesFromPalette,
+  previewSurfaces,
   type ShapeExportOptions,
 } from '@/lib/code-export';
-import { generatePalette } from '@core/palette';
 import { encodeState } from '@/lib/url-state';
 import { systemShareUrl, llmShareHeader } from '@core/share-link';
 import { CodeBlock } from '@core/code-block';
@@ -50,8 +49,10 @@ export function CodeExport() {
       ringWidth: store.ringWidth,
       ringOffset: store.ringOffset,
       ringStyle: store.ringStyle,
+      ringColorMode: store.ringColorMode,
+      ringCustomColor: store.ringCustomColor,
       separationMode: store.separationMode,
-      surfaces: surfacesFromPalette(generatePalette(store.surfaceHex, 0.1), store.shapeStyle),
+      surfaces: previewSurfaces(store.surfaceHex, store.paletteMode, store.chromaScale, store.shapeStyle),
     }),
     [
       store.shapeStyle, store.shadowEnabled, store.shadowType, store.shadowStrength,
@@ -60,7 +61,8 @@ export function CodeExport() {
       store.brutalistVariant, store.borderEnabled, store.borderWidth,
       store.borderRadius, store.glassDepth,
       store.glassBlur, store.glassDispersion, store.ringWidth, store.ringOffset, store.ringStyle,
-      store.separationMode, store.surfaceHex,
+      store.ringColorMode, store.ringCustomColor,
+      store.separationMode, store.surfaceHex, store.paletteMode, store.chromaScale,
     ],
   );
 

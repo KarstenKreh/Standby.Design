@@ -37,4 +37,33 @@ describe('shape code export', () => {
     });
     expect(generateShapeCss(opts)).toContain(`--shadow-md: ${expected.find(s => s.name === 'md')!.shadow};`);
   });
+
+  it('exports a custom ring color in light and dark, and in the design tokens', () => {
+    const opts = shapeOptsFromState({ ringColorMode: 'custom', ringCustomColor: '#FF6600', shadowEnabled: false });
+    const css = generateShapeCss(opts);
+    expect(css.match(/--ring: #FF6600;/g)).toHaveLength(2);
+    expect(css).toContain('.dark {');
+    expect(generateShapeTailwind(opts).match(/--ring: #FF6600;/g)).toHaveLength(2);
+    expect(JSON.parse(generateShapeDesignTokens(opts)).ring.color.$value).toBe('#FF6600');
+  });
+
+  it('leaves --ring to the color tokens in auto mode', () => {
+    const opts = shapeOptsFromState({ ringColorMode: 'auto' });
+    expect(generateShapeCss(opts)).not.toMatch(/--ring:/);
+    expect(JSON.parse(generateShapeDesignTokens(opts)).ring.color).toBeUndefined();
+  });
+
+  it('rounds derived radii to whole pixels like the preview', () => {
+    const css = generateShapeCss(shapeOptsFromState({ borderRadius: 10 }));
+    expect(css).toContain('--radius-xs: 0.1875rem;');
+    expect(css).toContain('--radius-sm: 0.3125rem;');
+    expect(css).toContain('--radius-lg: 0.9375rem;');
+  });
+
+  it('only asks for mode-dependent shadow blocks when shadows are exported', () => {
+    const rule = 'Shadows are mode-dependent';
+    expect(generateShapeLlmBriefing(shapeOptsFromState({ shapeStyle: 'paper' }))).toContain(rule);
+    expect(generateShapeLlmBriefing(shapeOptsFromState({ shapeStyle: 'glass' }))).not.toContain(rule);
+    expect(generateShapeLlmBriefing(shapeOptsFromState({ shapeStyle: 'paper', shadowEnabled: false }))).not.toContain(rule);
+  });
 });

@@ -372,7 +372,7 @@ Two shapes for the same decision, switched by `ringStyle`:
 
 WCAG 2.2 asks for 3:1 contrast on focus. Under `soft` the **full-color border carries that requirement** — the translucent halo alone can miss it on light surfaces. Never strip the border and keep only the halo. Same solution shadcn uses.
 
-`focusRingCss()` returns the four pieces (outline, offset, glow layer, border color) so previews in Shape, Role and Color render the identical ring. The exports add `--ring-halo-width` and `--ring-halo` on top of `--ring-width` / `--ring-offset` when `soft` is active.
+`focusRingCss()` returns the four pieces (outline, offset, glow layer, border color) so previews in Shape, Role and Color render the identical ring. The exports add `--ring-halo-width` and `--ring-halo` on top of `--ring-width` / `--ring-offset` when `soft` is active. The ring color defaults to the Color app's `--ring` (the primary color). With `ringColorMode: custom` the exports also set `--ring` in `:root` and `.dark`, so the custom color wins over the color tokens.
 
 Hashes written before `ringStyle` existed decode to `solid`, so shared links keep the ring they were designed with.
 

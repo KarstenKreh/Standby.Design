@@ -38,6 +38,8 @@ export interface ShapeExportOptions {
   ringWidth: number;
   ringOffset: number;
   ringStyle: RingStyle;
+  ringColorMode: ColorMode;
+  ringCustomColor: string;
   separationMode: SeparationMode;
   surfaces: ShapeSurfaces;
 }
@@ -103,6 +105,14 @@ export function surfacesFromPalette(surface: PaletteEntry[], shapeStyle: ShapeSt
   };
 }
 
+function exportsShadows(opts: ShapeExportOptions): boolean {
+  return opts.shapeStyle !== 'glass' && opts.shadowEnabled;
+}
+
+function customRingColor(opts: ShapeExportOptions): string | null {
+  return opts.ringColorMode === 'custom' && opts.ringCustomColor ? opts.ringCustomColor : null;
+}
+
 function shadowsFor(opts: ShapeExportOptions, isDark: boolean) {
   const tones = isDark ? opts.surfaces.dark : opts.surfaces.light;
   const backdrop = opts.shapeStyle === 'neobrutalism' ? tones.card : tones.background;
@@ -133,6 +143,8 @@ const SHAPE_DEFAULTS: Omit<ShapeExportOptions, 'surfaces'> = {
   ringWidth: 2,
   ringOffset: 2,
   ringStyle: 'soft',
+  ringColorMode: 'auto',
+  ringCustomColor: '#000000',
   separationMode: 'shadow',
 };
 
@@ -144,11 +156,11 @@ export function shapeOptsFromState(state: Partial<ShapeUrlState> | null, surface
 
 function radiusScale(base: number) {
   return {
-    xs: base / 4,
-    sm: base / 2,
+    xs: Math.round(base / 4),
+    sm: Math.round(base / 2),
     md: base,
-    lg: base * 1.5,
-    xl: base * 2,
+    lg: Math.round(base * 1.5),
+    xl: Math.round(base * 2),
   } as Record<string, number>;
 }
 
@@ -175,7 +187,7 @@ export function generateShapeCss(opts: ShapeExportOptions): string {
   css += `:root {\n`;
 
   // Shadows (light) — only for paper style
-  if (opts.shapeStyle !== 'glass' && opts.shadowEnabled) {
+  if (exportsShadows(opts)) {
     const lightShadows = shadowsFor(opts, false);
     css += `  /* Shadows — ${shadowTypeLabel(effectiveShadowType(opts))}, scale ${scaleLabel(opts.shadowScale)} */\n`;
     for (const s of lightShadows) {
@@ -198,6 +210,8 @@ export function generateShapeCss(opts: ShapeExportOptions): string {
 
   // Ring
   css += `\n  ${ringUsageComment(opts.ringStyle)}\n`;
+  const ringColor = customRingColor(opts);
+  if (ringColor) css += `  --ring: ${ringColor};\n`;
   for (const line of ringTokenLines(opts)) css += `  ${line}\n`;
 
   // Glass (Liquid Glass — use with liquid-glass-react or similar)
@@ -211,12 +225,14 @@ export function generateShapeCss(opts: ShapeExportOptions): string {
   css += `}\n`;
 
   // Dark overrides (only shadows, only for paper style)
-  if (opts.shapeStyle !== 'glass' && opts.shadowEnabled) {
-    const darkShadows = shadowsFor(opts, true);
+  if (exportsShadows(opts) || ringColor) {
     css += `\n.dark {\n`;
-    for (const s of darkShadows) {
-      css += `  --shadow-${s.name}: ${s.shadow};\n`;
+    if (exportsShadows(opts)) {
+      for (const s of shadowsFor(opts, true)) {
+        css += `  --shadow-${s.name}: ${s.shadow};\n`;
+      }
     }
+    if (ringColor) css += `  --ring: ${ringColor};\n`;
     css += `}\n`;
   }
 
@@ -264,21 +280,29 @@ export function generateShapeTailwind(opts: ShapeExportOptions): string {
   css += `}\n`;
 
   // Shadows are mode-dependent → CSS custom properties (paper only)
-  if (opts.shapeStyle !== 'glass' && opts.shadowEnabled) {
-    const lightShadows = shadowsFor(opts, false);
-    const darkShadows = shadowsFor(opts, true);
+  const ringColor = customRingColor(opts);
+  if (exportsShadows(opts) || ringColor) {
+    const lightShadows = exportsShadows(opts) ? shadowsFor(opts, false) : [];
+    const darkShadows = exportsShadows(opts) ? shadowsFor(opts, true) : [];
 
-    css += `\n/* Shadows — ${shadowTypeLabel(effectiveShadowType(opts))}, scale ${scaleLabel(opts.shadowScale)} */\n`;
+    if (lightShadows.length) {
+      css += `\n/* Shadows — ${shadowTypeLabel(effectiveShadowType(opts))}, scale ${scaleLabel(opts.shadowScale)} */\n`;
+    }
+    if (ringColor) {
+      css += `${lightShadows.length ? '' : '\n'}/* Custom focus ring color — overrides --ring from the color tokens in both modes */\n`;
+    }
     css += `/* Mode-dependent: use CSS custom properties with darkMode: "class" */\n`;
     css += `:root {\n`;
     for (const s of lightShadows) {
       css += `  --shadow-${s.name}: ${s.shadow};\n`;
     }
+    if (ringColor) css += `  --ring: ${ringColor};\n`;
     css += `}\n`;
     css += `.dark {\n`;
     for (const s of darkShadows) {
       css += `  --shadow-${s.name}: ${s.shadow};\n`;
     }
+    if (ringColor) css += `  --ring: ${ringColor};\n`;
     css += `}\n`;
   }
 
@@ -297,7 +321,7 @@ export function generateShapeDesignTokens(opts: ShapeExportOptions): string {
   const tokens: Record<string, unknown> = {};
 
   // Shadows (paper only)
-  if (opts.shapeStyle !== 'glass' && opts.shadowEnabled) {
+  if (exportsShadows(opts)) {
     const lightShadows = shadowsFor(opts, false);
     const darkShadows = shadowsFor(opts, true);
 
@@ -333,7 +357,9 @@ export function generateShapeDesignTokens(opts: ShapeExportOptions): string {
   }
 
   // Ring
+  const ringColor = customRingColor(opts);
   tokens.ring = {
+    ...(ringColor && { color: { $type: 'color', $value: ringColor } }),
     style: { $type: 'string', $value: opts.ringStyle },
     width: { $type: 'dimension', $value: `${opts.ringWidth}px` },
     offset: { $type: 'dimension', $value: opts.ringStyle === 'soft' ? '0px' : `${opts.ringOffset}px` },
@@ -447,6 +473,10 @@ export function generateShapeLlmBriefing(opts: ShapeExportOptions): string {
   // Ring
   md += `\n## Focus Ring\n\n`;
   md += `- **Style:** ${opts.ringStyle === 'soft' ? 'soft — a translucent halo hugging the edge (box-shadow, no blur), plus the element border in the full ring color' : 'solid — a hard outline set off from the element'}\n`;
+  const ringColor = customRingColor(opts);
+  md += ringColor
+    ? `- **Color:** custom \`${ringColor}\` in both modes — the export sets \`--ring\` in \`:root\` and \`.dark\`, overriding the color tokens\n`
+    : `- **Color:** \`--ring\` from the color tokens — the primary color (brand-600 light, brand-400 dark, or the pinned brand color)\n`;
   md += `- **Width:** ${opts.ringWidth}px\n`;
   if (opts.ringStyle === 'soft') {
     md += `- **Halo:** ${softRingSpread(opts.ringWidth)}px spread at ${Math.round(SOFT_RING_ALPHA * 100)}% opacity, no offset\n`;
@@ -484,7 +514,12 @@ export function generateShapeLlmBriefing(opts: ShapeExportOptions): string {
   // Usage hint
   md += `\n## Usage\n\n`;
   md += `Use the CSS custom properties from the CSS or Tailwind export.\n`;
-  md += `Shadows are mode-dependent — define both \`:root\` and \`.dark\` blocks.\n`;
+  if (exportsShadows(opts)) {
+    md += `Shadows are mode-dependent — define both \`:root\` and \`.dark\` blocks.\n`;
+  }
+  if (ringColor) {
+    md += `The custom ring color is set in both \`:root\` and \`.dark\` so it wins over \`--ring\` from the color tokens — load the shape tokens after the color tokens.\n`;
+  }
   md += `Combine with color tokens from standby.design/color and type tokens from standby.design/type.\n`;
 
   return md;
