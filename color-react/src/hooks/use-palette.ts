@@ -3,15 +3,9 @@ import { useThemeStore } from '@/store/theme-store';
 import { generatePalette, computeAutoErrorHex, computeAutoAccentHex, resolveAccentHues, type PaletteEntry } from '@core/palette';
 import { hexToOklch } from '@core/color-math';
 
-export interface AccentPalette {
-  name: string;
-  hex: string;
-  cssName: string;
-  palette: PaletteEntry[];
-  slatedPalette: PaletteEntry[];
-  pin: boolean;
-  invert: boolean;
-}
+import type { AccentPalette } from '@core/color-code-export';
+
+export type { AccentPalette };
 
 export function accentCssName(name: string): string {
   return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'accent';
