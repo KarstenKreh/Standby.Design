@@ -37,7 +37,9 @@ export function CodeExport() {
   const isGolden = store.scaleMode === 'custom' && store.customRatio === 1.272;
   const scaleLabel = isGolden
     ? '√φ Golden Ratio (area-based) — standby.design/type'
-    : `${SCALE_LABELS[store.scaleMode] ?? store.scaleMode} (${store.customRatio}) — standby.design/type`;
+    : store.scaleMode === 'traditional'
+      ? `${SCALE_LABELS.traditional} — standby.design/type`
+      : `${SCALE_LABELS[store.scaleMode] ?? store.scaleMode} (${store.customRatio}) — standby.design/type`;
 
   const opts = useMemo(
     () => ({
@@ -45,9 +47,10 @@ export function CodeExport() {
       headingFont: store.headingFont,
       bodyFont: store.bodyFont,
       monoFont: store.monoFont,
+      headingWeight: store.headingWeight,
       scaleLabel,
     }),
-    [levels, store.headingFont, store.bodyFont, store.monoFont, scaleLabel],
+    [levels, store.headingFont, store.bodyFont, store.monoFont, store.headingWeight, scaleLabel],
   );
 
   const cssCode = useMemo(() => generateCssExport(opts), [opts]);

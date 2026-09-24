@@ -275,11 +275,11 @@ Rounded to grid: <1rem → 0.25rem grid, <4rem → 0.5rem grid, else 1rem.
 
 | Format | Content |
 |--------|---------|
-| CSS Custom Properties | `--text-*`, `--leading-*`, `--tracking-*`, `--font-*`, `--space-*` |
+| CSS Custom Properties | `--text-*`, `--leading-*`, `--tracking-*`, `--font-*`, `--font-weight-heading`, `--space-*` |
 | Tailwind v4 | Same tokens in `@theme { }` block |
 | W3C Design Tokens | DTCG JSON (compatible with Figma, Style Dictionary) |
 | Fontshare Embed | `<link>` snippet for selected fonts |
-| LLM Briefing | Markdown doc: fonts, type scale (min/max/clamp), line heights, letter spacing, spacing tokens |
+| LLM Briefing | Markdown doc: fonts and heading weight, type scale (min/max/clamp), line heights, letter spacing, spacing tokens |
 
 ### URL State (`lib/url-state.ts`)
 

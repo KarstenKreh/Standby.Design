@@ -187,6 +187,7 @@ export function CombinedExport({ colorState, palette, typeState, scale, spacing,
       headingFont: typeState.headingFont,
       bodyFont: typeState.bodyFont,
       monoFont: typeState.monoFont,
+      headingWeight: typeState.headingWeight,
       scaleLabel: getScaleLabel(typeState),
     });
   }, [typeState, scale]);
@@ -199,6 +200,7 @@ export function CombinedExport({ colorState, palette, typeState, scale, spacing,
       headingFont: typeState.headingFont,
       bodyFont: typeState.bodyFont,
       monoFont: typeState.monoFont,
+      headingWeight: typeState.headingWeight,
       scaleLabel: getScaleLabel(typeState),
     });
   }, [typeState, scale]);
@@ -286,6 +288,7 @@ export function CombinedExport({ colorState, palette, typeState, scale, spacing,
         headingFont: typeState.headingFont,
         bodyFont: typeState.bodyFont,
         monoFont: typeState.monoFont,
+        headingWeight: typeState.headingWeight,
         scaleLabel: getScaleLabel(typeState),
       });
     }

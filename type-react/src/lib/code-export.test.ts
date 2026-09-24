@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { generateCssExport, generateTailwindV4Export } from './code-export';
+import { generateCssExport, generateTailwindV4Export, generateLlmBriefing } from './code-export';
 import { customScale } from '@core/scale';
 
 function makeOpts() {
@@ -9,6 +9,7 @@ function makeOpts() {
     headingFont: 'satoshi',
     bodyFont: 'satoshi',
     monoFont: 'system-mono',
+    headingWeight: 500,
     scaleLabel: 'Custom — 1.272',
   };
 }
@@ -24,6 +25,11 @@ describe('generateCssExport', () => {
     expect(output).toContain('--font-heading');
     expect(output).toContain('--font-body');
     expect(output).toContain('--font-mono');
+  });
+
+  it('contains the heading weight token', () => {
+    const output = generateCssExport({ ...makeOpts(), headingWeight: 700 });
+    expect(output).toContain('--font-weight-heading: 700;');
   });
 
   it('contains type scale tokens', () => {
@@ -74,11 +80,28 @@ describe('generateTailwindV4Export', () => {
     expect(output).toContain('--font-heading');
     expect(output).toContain('--leading-display');
     expect(output).toContain('--tracking-display');
+    expect(output).toContain('--font-weight-heading: 500;');
     expect(output).not.toContain('--space-sm');
   });
 
   it('snapshot stability', () => {
     const output = generateTailwindV4Export(makeOpts());
     expect(output).toMatchSnapshot();
+  });
+});
+
+describe('generateLlmBriefing', () => {
+  it('lists the heading weight', () => {
+    const output = generateLlmBriefing({ ...makeOpts(), headingWeight: 700 });
+    expect(output).toContain('weight 700');
+    expect(output).toContain('--font-weight-heading');
+  });
+
+  it('mentions clamp() only when a level is fluid', () => {
+    const fluid = generateLlmBriefing({ ...makeOpts(), levels: customScale(1.0, 1.272, 1.2) });
+    expect(fluid).toContain('clamp()` for fluid scaling');
+    const output = generateLlmBriefing(makeOpts());
+    expect(output).not.toContain('for fluid scaling');
+    expect(output).toContain('Font sizes are static');
   });
 });

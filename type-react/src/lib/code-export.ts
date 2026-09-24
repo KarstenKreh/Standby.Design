@@ -10,6 +10,7 @@ interface ExportOptions {
   headingFont: string;
   bodyFont: string;
   monoFont: string;
+  headingWeight: number;
   scaleLabel: string;
 }
 
@@ -31,6 +32,8 @@ export function generateCssExport(opts: ExportOptions): string {
   css += `  --font-heading: ${headingFF};\n`;
   css += `  --font-body: ${bodyFF};\n`;
   css += `  --font-mono: ${monoFF};\n`;
+  css += `\n  /* Font Weights */\n`;
+  css += `  --font-weight-heading: ${opts.headingWeight};\n`;
   css += `\n  /* Type Scale */\n`;
 
   for (const l of levels) {
@@ -68,6 +71,7 @@ export function generateTailwindV4Export(opts: ExportOptions): string {
   css += `  --font-heading: ${headingFF};\n`;
   css += `  --font-body: ${bodyFF};\n`;
   css += `  --font-mono: ${monoFF};\n`;
+  css += `  --font-weight-heading: ${opts.headingWeight};\n`;
   css += `\n`;
 
   for (const l of levels) {
@@ -99,7 +103,7 @@ export function generateLlmBriefing(opts: ExportOptions): string {
   let md = `# Type Scale — ${scaleLabel}\n\n`;
 
   md += `## Fonts\n\n`;
-  md += `- **Heading:** ${headingFF}\n`;
+  md += `- **Heading:** ${headingFF}, weight ${opts.headingWeight}\n`;
   md += `- **Body:** ${bodyFF}\n`;
   md += `- **Mono:** ${monoFF}\n`;
 
@@ -130,7 +134,12 @@ export function generateLlmBriefing(opts: ExportOptions): string {
 
   md += `\n## Usage\n\n`;
   md += `Use the CSS custom properties from the CSS or Tailwind export.\n`;
-  md += `Font sizes use \`clamp()\` for fluid scaling between 375px and 1920px viewport.\n`;
+  md += `Set headings in \`var(--font-heading)\` at \`font-weight: var(--font-weight-heading)\`.\n`;
+  if (levels.some((l) => l.isFluid)) {
+    md += `Font sizes use \`clamp()\` for fluid scaling between 375px and 1920px viewport.\n`;
+  } else {
+    md += `Font sizes are static and do not scale with the viewport.\n`;
+  }
   md += `Combine with color tokens from standby.design/color, shape tokens from standby.design/shape, and spacing/layout tokens from standby.design/space.\n`;
 
   return md;
