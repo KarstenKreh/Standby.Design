@@ -75,6 +75,7 @@ function buildShadowConfig(opts: ShapeExportOptions): ShadowConfig {
     offsetX: opts.shadowOffsetX,
     offsetY: opts.shadowOffsetY,
     borderWidth: opts.borderEnabled ? opts.borderWidth : 1,
+    brutalistVariant: opts.brutalistVariant,
   };
 }
 
@@ -86,6 +87,18 @@ function paletteStep(palette: PaletteEntry[], s: Step): string {
 function deriveBgHex(surfaceHex: string, isDark: boolean): string {
   const surface = generatePalette(surfaceHex, 0.1);
   return isDark ? paletteStep(surface, 875) : paletteStep(surface, 50);
+}
+
+function deriveCardHex(surfaceHex: string, isDark: boolean): string {
+  const surface = generatePalette(surfaceHex, 0.1);
+  return isDark ? paletteStep(surface, 825) : paletteStep(surface, 25);
+}
+
+function shadowsFor(opts: ShapeExportOptions, isDark: boolean) {
+  const backdrop = opts.shapeStyle === 'neobrutalism'
+    ? deriveCardHex(opts.surfaceHex, isDark)
+    : deriveBgHex(opts.surfaceHex, isDark);
+  return generateShadows(backdrop, isDark, buildShadowConfig(opts));
 }
 
 function radiusScale(base: number) {
@@ -115,7 +128,6 @@ function scaleLabel(scale: number): string {
 /* ------------------------------------------------------------------ */
 
 export function generateCssExport(opts: ShapeExportOptions): string {
-  const config = buildShadowConfig(opts);
   const radii = radiusScale(opts.borderRadius);
 
   let css = `/* Shape Tokens — standby.design/shape */\n`;
@@ -123,8 +135,7 @@ export function generateCssExport(opts: ShapeExportOptions): string {
 
   // Shadows (light) — only for paper style
   if (opts.shapeStyle !== 'glass' && opts.shadowEnabled) {
-    const lightBg = deriveBgHex(opts.surfaceHex, false);
-    const lightShadows = generateShadows(lightBg, false, config);
+    const lightShadows = shadowsFor(opts, false);
     css += `  /* Shadows — ${shadowTypeLabel(effectiveShadowType(opts))}, scale ${scaleLabel(opts.shadowScale)} */\n`;
     for (const s of lightShadows) {
       css += `  --shadow-${s.name}: ${s.shadow};\n`;
@@ -160,8 +171,7 @@ export function generateCssExport(opts: ShapeExportOptions): string {
 
   // Dark overrides (only shadows, only for paper style)
   if (opts.shapeStyle !== 'glass' && opts.shadowEnabled) {
-    const darkBg = deriveBgHex(opts.surfaceHex, true);
-    const darkShadows = generateShadows(darkBg, true, config);
+    const darkShadows = shadowsFor(opts, true);
     css += `\n.dark {\n`;
     for (const s of darkShadows) {
       css += `  --shadow-${s.name}: ${s.shadow};\n`;
@@ -180,7 +190,6 @@ export function generateCssExport(opts: ShapeExportOptions): string {
 /* ------------------------------------------------------------------ */
 
 export function generateTailwindV4Export(opts: ShapeExportOptions): string {
-  const config = buildShadowConfig(opts);
   const radii = radiusScale(opts.borderRadius);
 
   let css = `/* Shape Tokens — standby.design/shape */\n`;
@@ -215,10 +224,8 @@ export function generateTailwindV4Export(opts: ShapeExportOptions): string {
 
   // Shadows are mode-dependent → CSS custom properties (paper only)
   if (opts.shapeStyle !== 'glass' && opts.shadowEnabled) {
-    const lightBg = deriveBgHex(opts.surfaceHex, false);
-    const darkBg = deriveBgHex(opts.surfaceHex, true);
-    const lightShadows = generateShadows(lightBg, false, config);
-    const darkShadows = generateShadows(darkBg, true, config);
+    const lightShadows = shadowsFor(opts, false);
+    const darkShadows = shadowsFor(opts, true);
 
     css += `\n/* Shadows — ${shadowTypeLabel(effectiveShadowType(opts))}, scale ${scaleLabel(opts.shadowScale)} */\n`;
     css += `/* Mode-dependent: use CSS custom properties with darkMode: "class" */\n`;
@@ -244,17 +251,14 @@ export function generateTailwindV4Export(opts: ShapeExportOptions): string {
 /* ------------------------------------------------------------------ */
 
 export function generateDesignTokensExport(opts: ShapeExportOptions): string {
-  const config = buildShadowConfig(opts);
   const radii = radiusScale(opts.borderRadius);
 
   const tokens: Record<string, unknown> = {};
 
   // Shadows (paper only)
   if (opts.shapeStyle !== 'glass' && opts.shadowEnabled) {
-    const lightBg = deriveBgHex(opts.surfaceHex, false);
-    const darkBg = deriveBgHex(opts.surfaceHex, true);
-    const lightShadows = generateShadows(lightBg, false, config);
-    const darkShadows = generateShadows(darkBg, true, config);
+    const lightShadows = shadowsFor(opts, false);
+    const darkShadows = shadowsFor(opts, true);
 
     const shadow: Record<string, unknown> = {};
     for (let i = 0; i < lightShadows.length; i++) {
@@ -321,7 +325,6 @@ export function generateDesignTokensExport(opts: ShapeExportOptions): string {
 /* ------------------------------------------------------------------ */
 
 export function generateLlmBriefing(opts: ShapeExportOptions): string {
-  const config = buildShadowConfig(opts);
   const radii = radiusScale(opts.borderRadius);
 
   let md = `# Shape Tokens — standby.design/shape\n\n`;
@@ -342,12 +345,20 @@ export function generateLlmBriefing(opts: ShapeExportOptions): string {
   }
 
   if (opts.shapeStyle === 'neobrutalism') {
+    const isSolid = opts.brutalistVariant === 'solid';
+    const echoColor = opts.shadowColorMode === 'custom'
+      ? `the custom shadow color \`${opts.shadowCustomColor}\``
+      : `the surface's own background one palette step darker (OKLCH lightness −0.10, in both light and dark mode; the tokens use the card surface)`;
     md += `## Neobrutalism Notes\n\n`;
-    md += `- **Offset outline shadow:** A solid hollow rectangle sits behind each surface at offset (${opts.shadowOffsetX}px, ${opts.shadowOffsetY}px). Generated as a stacked \`box-shadow\` with zero blur.\n`;
-    md += `- **Variant:** \`${opts.brutalistVariant}\` — outlined renders a hollow echo with the surface's border color; solid fills the echo with the border color (no stroke).\n`;
-    md += `- **Borders carry the style:** Each surface has an explicit stroke matching the echo color (derived from the surface's own bg, one palette step darker). Borders are required, not optional.\n`;
+    md += `- **Offset echo:** A copy of each surface's outline sits behind it at offset (${opts.shadowOffsetX}px, ${opts.shadowOffsetY}px). Exported as \`--shadow-*\` with zero blur.\n`;
+    md += isSolid
+      ? `- **Variant:** \`solid\` — the echo is a filled block in ${echoColor}, with no stroke. The surface in front drops its own border.\n`
+      : `- **Variant:** \`outlined\` — the echo is hollow: filled with the card surface color and stroked (${opts.borderEnabled ? opts.borderWidth : 1}px) in ${echoColor}.\n`;
+    if (!isSolid) {
+      md += `- **Borders carry the style:** Each surface has an explicit border in the echo color, taken from its own background the same way. Borders are required, not optional.\n`;
+    }
     md += `- **No blur, no soft shadows:** This style is flat and hard-edged by design. Do not mix with gaussian drop shadows.\n`;
-    md += `- **Color ladder:** xs–xl levels scale the offset by the shadow scale (\`${scaleLabel(opts.shadowScale)}\`), so elevation reads even though all shadows are hard.\n\n`;
+    md += `- **Offset ladder:** xs–xl levels scale the offset by the shadow scale (\`${scaleLabel(opts.shadowScale)}\`), so elevation reads even though all shadows are hard.\n\n`;
   }
 
   // Shadows (paper + neomorph — skipped for glass)
@@ -360,10 +371,8 @@ export function generateLlmBriefing(opts: ShapeExportOptions): string {
     md += `- **Blur scale:** ${opts.shadowBlurScale}\n`;
     md += `- **Color mode:** ${opts.shadowColorMode}${opts.shadowColorMode === 'custom' ? ` (${opts.shadowCustomColor})` : ''}\n\n`;
 
-    const lightBg = deriveBgHex(opts.surfaceHex, false);
-    const darkBg = deriveBgHex(opts.surfaceHex, true);
-    const lightShadows = generateShadows(lightBg, false, config);
-    const darkShadows = generateShadows(darkBg, true, config);
+    const lightShadows = shadowsFor(opts, false);
+    const darkShadows = shadowsFor(opts, true);
 
     md += `### Light mode\n\n`;
     md += `| Level | box-shadow |\n|-------|------------|\n`;

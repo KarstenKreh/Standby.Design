@@ -8,18 +8,9 @@
  * the visible surface so the surface paints on top.
  */
 
-import { hexToOklch, oklchToHex, maxChromaInGamut } from './color-math';
+export { deriveBorderFromBg } from './shadows';
 
 export type BrutalistLevel = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
-
-/** Derive a brutalist border color by darkening the bg by ~1 palette step (ΔL ≈ 0.10 in OKLCH).
- *  Darkens in both light and dark modes — keeps the hue, gamut-safe chroma. */
-export function deriveBorderFromBg(bgHex: string): string {
-  const [L, C, H] = hexToOklch(bgHex);
-  const shifted = Math.max(0.05, L - 0.10);
-  const maxC = maxChromaInGamut(shifted, H);
-  return oklchToHex(shifted, Math.min(C, maxC * 0.95), H);
-}
 
 /** Per-level scaling factor applied to the base offset. Matches the shadow scale. */
 export function brutalistFactor(level: BrutalistLevel, scale: number): number {
