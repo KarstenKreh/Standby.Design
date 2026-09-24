@@ -412,7 +412,7 @@ Encoded and decoded in `packages/core/src/url-state/shape.ts`. Fields are append
 
 **Preview**: `shape-preview.tsx` — unified `PreviewPanel` for all styles, rendered side by side in light and dark. Paper and Neomorph use `backgroundColor` + `boxShadow`, Glass uses `<LiquidGlass>` wrappers, Neobrutalism adds a `<BrutalistEcho>` behind each surface. Shows elevation cards (xs–xl horizontal), buttons (Primary/Secondary/Destructive), and an input with the focus ring.
 
-**Export**: `code-export.tsx` (CSS / Tailwind v4 / Design Tokens / LLM Briefing). Glass mode suppresses shadow export.
+**Export**: `code-export.tsx` (CSS / Tailwind v4 / Design Tokens / LLM Briefing). Glass mode suppresses shadow export. The generators live in `packages/core/src/shape-code-export.ts` and are shared with the System export and the MCP server. Each caller passes the background and card colors its own preview renders (`surfaces`), so shadow tokens match what that preview shows.
 
 ### Data Flow
 

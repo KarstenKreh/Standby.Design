@@ -407,7 +407,6 @@ function App() {
               shapeState={shapeState}
               symbolState={symbolState}
               spaceState={spaceState}
-              surfaceHex={palette?.effectiveBgHex}
             />
           </div>
         )}

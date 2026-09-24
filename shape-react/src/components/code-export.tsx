@@ -11,8 +11,10 @@ import {
   generateTailwindV4Export,
   generateDesignTokensExport,
   generateLlmBriefing,
+  surfacesFromPalette,
   type ShapeExportOptions,
 } from '@/lib/code-export';
+import { generatePalette } from '@core/palette';
 import { encodeState } from '@/lib/url-state';
 import { systemShareUrl, llmShareHeader } from '@core/share-link';
 import { CodeBlock } from '@core/code-block';
@@ -49,7 +51,7 @@ export function CodeExport() {
       ringOffset: store.ringOffset,
       ringStyle: store.ringStyle,
       separationMode: store.separationMode,
-      surfaceHex: store.surfaceHex,
+      surfaces: surfacesFromPalette(generatePalette(store.surfaceHex, 0.1), store.shapeStyle),
     }),
     [
       store.shapeStyle, store.shadowEnabled, store.shadowType, store.shadowStrength,

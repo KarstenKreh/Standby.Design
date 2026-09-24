@@ -23,9 +23,9 @@ import {
 import {
   generateShapeCss,
   generateShapeTailwind,
-  generateLlmBriefing as generateShapeLlmBriefing,
-  optsFromState as shapeOptsFromState,
-} from '@syslib/shape-code-export';
+  generateShapeLlmBriefing,
+  shapeOptsFromState,
+} from '@core/shape-code-export';
 import { generateDesignTokens } from '@syslib/design-token-export';
 import {
   generateSpaceCss,
@@ -248,7 +248,7 @@ export function registerSystemTools(server: McpServer): void {
             has('color') ? colorCss() : '',
             has('type') ? generateTypeCss(typeOpts) : '',
             has('space') ? generateSpaceCss(spaceOpts) : '',
-            has('shape') ? generateShapeCss(shapeOptsFromState(shapeState, palette.effectiveBgHex)) : '',
+            has('shape') ? generateShapeCss(shapeOptsFromState(shapeState, palette.surface)) : '',
             has('symbol') && symbolState ? generateSymbolCss(symbolState) : '',
           ].filter(Boolean).join('\n') || '/* No sections selected */';
           break;
@@ -258,7 +258,7 @@ export function registerSystemTools(server: McpServer): void {
             has('color') ? colorCss() : '',
             has('type') ? generateTypeTailwind(typeOpts) : '',
             has('space') ? generateSpaceTailwind(spaceOpts) : '',
-            has('shape') ? generateShapeTailwind(shapeOptsFromState(shapeState, palette.effectiveBgHex)) : '',
+            has('shape') ? generateShapeTailwind(shapeOptsFromState(shapeState, palette.surface)) : '',
             has('symbol') && symbolState ? generateSymbolTailwind(symbolState) : '',
           ].filter(Boolean).join('\n') || '/* No sections selected */';
           break;
@@ -302,7 +302,7 @@ export function registerSystemTools(server: McpServer): void {
           }
           if (has('type')) parts.push(generateTypeLlmBriefing(typeOpts));
           if (has('space')) parts.push(generateSpaceLlmBriefing(spaceOpts));
-          if (has('shape')) parts.push(generateShapeLlmBriefing(shapeOptsFromState(shapeState, palette.effectiveBgHex)));
+          if (has('shape')) parts.push(generateShapeLlmBriefing(shapeOptsFromState(shapeState, palette.surface)));
           if (has('symbol') && symbolState) parts.push(generateSymbolLlmBriefing(symbolState));
           output = parts.length
             ? llmShareHeader(systemUrl(segs)) + parts.join('\n---\n\n')
