@@ -137,27 +137,27 @@ function getPanelConfig(
     case 'light':
       return {
         label: 'Light',
-        bgHex: getHex(palette, 75),
-        textHex: getHex(palette, 850),
+        bgHex: getHex(palette, 50),
+        textHex: getHex(palette, 975),
         isDark: false,
         cardHex: getHex(palette, 25),
         elevatedHex: getHex(palette, 0),
         inputHoverHex: getHex(palette, 400),
-        mutedHex: getHex(palette, 200),
+        mutedHex: getHex(palette, 75),
         mutedFgHex: getHex(palette, 700),
         borderHex: getHex(palette, 300),
-        borderMutedHex: getHex(palette, 100),
+        borderMutedHex: getHex(palette, 200),
       };
     case 'dark':
       return {
         label: 'Dark',
         bgHex: getHex(palette, 875),
-        textHex: getHex(palette, 75),
+        textHex: getHex(palette, 25),
         isDark: true,
-        cardHex: getHex(palette, 850),
-        elevatedHex: getHex(palette, 825),
+        cardHex: getHex(palette, 825),
+        elevatedHex: getHex(palette, 800),
         inputHoverHex: getHex(palette, 500),
-        mutedHex: getHex(palette, 700),
+        mutedHex: getHex(palette, 850),
         mutedFgHex: getHex(palette, 300),
         borderHex: getHex(palette, 600),
         borderMutedHex: getHex(palette, 700),
@@ -206,14 +206,14 @@ function getSurfaceCards(
         { name: 'Elevated', bg: c.elevatedHex, token: 'surface-0' },
         { name: 'Card', bg: c.cardHex, token: 'surface-25' },
         { name: 'Accent', bg: getHex(brand, 100), token: 'brand-100' },
-        { name: 'Muted', bg: c.mutedHex, token: 'surface-200' },
+        { name: 'Muted', bg: c.mutedHex, token: 'surface-75' },
       ];
     case 'dark':
       return [
-        { name: 'Elevated', bg: c.elevatedHex, token: 'surface-825' },
-        { name: 'Card', bg: c.cardHex, token: 'surface-850' },
-        { name: 'Accent', bg: getHex(brand, 800), token: 'brand-800' },
-        { name: 'Muted', bg: c.mutedHex, token: 'surface-700' },
+        { name: 'Elevated', bg: c.elevatedHex, token: 'surface-800' },
+        { name: 'Card', bg: c.cardHex, token: 'surface-825' },
+        { name: 'Accent', bg: getHex(brand, 850), token: 'brand-850' },
+        { name: 'Muted', bg: c.mutedHex, token: 'surface-850' },
       ];
     case 'light-hc':
       return [
@@ -326,8 +326,8 @@ export function SurfacePanel({
   // Use palette extremes (25/975) as fg candidates — tinted near-white/near-black
   // for richer contrast than pure #FFF/#1A1A1A, and per-palette consistency.
   const primaryFg = choosePaletteFg(primaryBg, getHex(brand, 25), getHex(brand, 975), fgContrastMode);
-  const secondaryFg = choosePaletteFg(secondaryBg, getHex(brand, 25), getHex(brand, 975), fgContrastMode);
-  const destructiveFg = choosePaletteFg(destructiveBg, getHex(error, 25), getHex(error, 975), fgContrastMode);
+  const secondaryFg = choosePaletteFg(secondaryBg, getHex(brand, 100), getHex(brand, 900), fgContrastMode);
+  const destructiveFg = choosePaletteFg(destructiveBg, getHex(errorSurface, 25), getHex(errorSurface, 975), fgContrastMode);
 
   // Accent items for mini badges
   const accentItems = accentPalettes.map((accent) => {
@@ -342,14 +342,14 @@ export function SurfacePanel({
     const dotBg = accent.pin
       ? (isDark && accent.invert ? invertHex(accent.hex) : accent.hex)
       : (isDark ? getHex(accentActionLookup, 400) : getHex(accentActionLookup, 600));
-    const badgeBg = isDark ? getHex(accentLookup, 800) : getHex(accentLookup, 100);
+    const badgeBg = isDark ? getHex(accentActionLookup, 850) : getHex(accentActionLookup, 100);
     const badgeBorder = isDark ? getHex(accentLookup, 700) : getHex(accentLookup, 300);
     const badgeText = isDark ? getHex(accentActionLookup, 50) : getHex(accentActionLookup, 950);
     return { name: accent.name, dotBg, badgeBg, badgeBorder, badgeText };
   });
 
   const errDotBg = isDark ? getHex(error, 400) : getHex(error, 600);
-  const errNoticeBg = isDark ? getHex(errorSurface, 800) : getHex(errorSurface, 100);
+  const errNoticeBg = isDark ? getHex(error, 850) : getHex(error, 100);
   const errNoticeText = isDark ? getHex(error, 50) : getHex(error, 950);
   const errNoticeBorder = isDark ? getHex(errorSurface, 700) : getHex(errorSurface, 300);
 

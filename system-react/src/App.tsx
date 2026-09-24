@@ -88,7 +88,9 @@ interface PaletteResult {
   slated: PaletteEntry[];
   accentPalettes: AccentPalette[];
   brandSwatchOverride: { hex: string; L: number } | null;
+  brandInvert: boolean;
   errorSwatchOverride: { hex: string; L: number } | null;
+  errorInvert: boolean;
   effectiveBgHex: string;
   effectiveErrorHex: string;
 }
@@ -148,7 +150,7 @@ function App() {
 
   const palette = useMemo<PaletteResult | null>(() => {
     if (!colorState) return null;
-    const { brandHex, bgColorHex, bgAutoMatch, errorColorHex, errorAutoMatch, chromaScale, currentMode, extraAccents, brandPin, errorPin } = colorState;
+    const { brandHex, bgColorHex, bgAutoMatch, errorColorHex, errorAutoMatch, chromaScale, currentMode, extraAccents, brandPin, brandInvert, errorPin, errorInvert } = colorState;
 
     const effectiveBgHex = bgAutoMatch ? brandHex : bgColorHex;
     const effectiveErrorHex = errorAutoMatch ? computeAutoErrorHex(brandHex) : errorColorHex;
@@ -188,7 +190,7 @@ function App() {
       { step: 1000 as PaletteEntry['step'], L: 0, C: 0, H: 0, hex: '#000000', css: 'oklch(0 0 0)' },
     ];
 
-    return { brand, surface, error, errorSurface, neutral, neutralExtended, slated, accentPalettes, brandSwatchOverride, errorSwatchOverride, effectiveBgHex, effectiveErrorHex };
+    return { brand, surface, error, errorSurface, neutral, neutralExtended, slated, accentPalettes, brandSwatchOverride, brandInvert, errorSwatchOverride, errorInvert, effectiveBgHex, effectiveErrorHex };
   }, [colorState]);
 
   const scale = useMemo<ComputedLevel[] | null>(() => {
