@@ -8,6 +8,8 @@
  * Mono fonts use system font stacks (no external loading needed).
  */
 
+import { FONTSHARE_CATALOG_SNAPSHOT } from './fontshare-catalog';
+
 export interface FontEntry {
   slug: string;
   name: string;
@@ -34,13 +36,7 @@ const SYSTEM_MONO_STACKS: Record<string, string> = {
 
 // ── Minimal seed catalog (used until API responds) ──────────────
 
-const SEED_CATALOG: FontEntry[] = [
-  { slug: 'satoshi', name: 'Satoshi', category: 'sans', fallback: 'sans-serif' },
-  { slug: 'general-sans', name: 'General Sans', category: 'sans', fallback: 'sans-serif' },
-  { slug: 'zodiak', name: 'Zodiak', category: 'serif', fallback: 'serif' },
-  { slug: 'clash-display', name: 'Clash Display', category: 'display', fallback: 'sans-serif' },
-  ...MONO_FONTS,
-];
+const SEED_CATALOG: FontEntry[] = [...FONTSHARE_CATALOG_SNAPSHOT, ...MONO_FONTS];
 
 // ── Dynamic catalog (populated from API) ────────────────────────
 
@@ -138,8 +134,15 @@ export function fontFamily(slug: string): string {
   if (monoStack) return monoStack;
 
   const entry = catalogMap.get(slug);
-  if (!entry) return 'sans-serif';
+  if (!entry) return slug ? `'${displayNameFromSlug(slug)}', sans-serif` : 'sans-serif';
   return `'${entry.name}', ${entry.fallback}`;
+}
+
+function displayNameFromSlug(slug: string): string {
+  return slug
+    .split('-')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
 }
 
 // ── URL builders ────────────────────────────────────────────────

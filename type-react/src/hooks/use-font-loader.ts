@@ -28,6 +28,8 @@ export function useFontLoader() {
     if (bodyFont) loadFont(bodyFont);
     if (monoFont) loadFont(monoFont);
   }, [headingFont, bodyFont, monoFont]);
+
+  useSyncExternalStore(subscribeCatalog, getCatalog);
 }
 
 /**
