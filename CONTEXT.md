@@ -372,7 +372,7 @@ Two shapes for the same decision, switched by `ringStyle`:
 
 WCAG 2.2 asks for 3:1 contrast on focus. Under `soft` the **full-color border carries that requirement** — the translucent halo alone can miss it on light surfaces. Never strip the border and keep only the halo. Same solution shadcn uses.
 
-`focusRingCss()` returns the four pieces (outline, offset, glow layer, border color) so previews in Shape, Role and Color render the identical ring. The exports add `--ring-halo-width` and `--ring-halo` on top of `--ring-width` / `--ring-offset` when `soft` is active.
+`focusRingCss()` returns the four pieces (outline, offset, glow layer, border color) so previews in Shape, Role and Color render the identical ring. The exports add `--ring-halo-width` and `--ring-halo` on top of `--ring-width` / `--ring-offset` when `soft` is active. The ring color defaults to the Color app's `--ring` (the primary color). With `ringColorMode: custom` the exports also set `--ring` in `:root` and `.dark`, so the custom color wins over the color tokens.
 
 Hashes written before `ringStyle` existed decode to `solid`, so shared links keep the ring they were designed with.
 
@@ -412,7 +412,7 @@ Encoded and decoded in `packages/core/src/url-state/shape.ts`. Fields are append
 
 **Preview**: `shape-preview.tsx` — unified `PreviewPanel` for all styles, rendered side by side in light and dark. Paper and Neomorph use `backgroundColor` + `boxShadow`, Glass uses `<LiquidGlass>` wrappers, Neobrutalism adds a `<BrutalistEcho>` behind each surface. Shows elevation cards (xs–xl horizontal), buttons (Primary/Secondary/Destructive), and an input with the focus ring.
 
-**Export**: `code-export.tsx` (CSS / Tailwind v4 / Design Tokens / LLM Briefing). Glass mode suppresses shadow export.
+**Export**: `code-export.tsx` (CSS / Tailwind v4 / Design Tokens / LLM Briefing). Glass mode suppresses shadow export. The generators live in `packages/core/src/shape-code-export.ts` and are shared with the System export and the MCP server. Each caller passes the background and card colors its own preview renders (`surfaces`), so shadow tokens match what that preview shows.
 
 ### Data Flow
 

@@ -38,9 +38,9 @@ import {
 import {
   generateShapeCss,
   generateShapeTailwind,
-  generateLlmBriefing as generateShapeLlmBriefing,
-  optsFromState as shapeOptsFromState,
-} from '@/lib/shape-code-export';
+  generateShapeLlmBriefing,
+  shapeOptsFromState,
+} from '@core/shape-code-export';
 import type { UrlState as SymbolState } from '@core/url-state/symbol';
 import { computeIconTokens, weightToStroke } from '@core/icon-tokens';
 import { ICON_SETS, getSetById } from '@core/icon-sets';
@@ -68,7 +68,6 @@ interface CombinedExportProps {
   shapeState: Partial<ShapeState> | null;
   symbolState: SymbolState | null;
   spaceState: SpaceUrlState;
-  surfaceHex?: string;
 }
 
 function getSpaceRatioLabel(s: SpaceUrlState): string {
@@ -143,7 +142,7 @@ function generateSymbolLlmBriefing(sym: SymbolState): string {
   ].join('\n');
 }
 
-export function CombinedExport({ colorState, palette, typeState, scale, spacing, shapeState, symbolState, spaceState, surfaceHex }: CombinedExportProps) {
+export function CombinedExport({ colorState, palette, typeState, scale, spacing, shapeState, symbolState, spaceState }: CombinedExportProps) {
   const [activeTab, setActiveTab] = useState('css');
 
   // Copy All state
@@ -207,15 +206,15 @@ export function CombinedExport({ colorState, palette, typeState, scale, spacing,
 
   const shapeCss = useMemo(() => {
     if (!shapeState) return '';
-    const opts = shapeOptsFromState(shapeState, surfaceHex);
+    const opts = shapeOptsFromState(shapeState, palette?.surface);
     return generateShapeCss(opts);
-  }, [shapeState, surfaceHex]);
+  }, [shapeState, palette]);
 
   const shapeTailwind = useMemo(() => {
     if (!shapeState) return '';
-    const opts = shapeOptsFromState(shapeState, surfaceHex);
+    const opts = shapeOptsFromState(shapeState, palette?.surface);
     return generateShapeTailwind(opts);
-  }, [shapeState, surfaceHex]);
+  }, [shapeState, palette]);
 
   const symbolCss = useMemo(() => {
     if (!symbolState) return '';
@@ -301,7 +300,7 @@ export function CombinedExport({ colorState, palette, typeState, scale, spacing,
 
     // Shape briefing
     if (shapeState) {
-      const opts = shapeOptsFromState(shapeState, surfaceHex);
+      const opts = shapeOptsFromState(shapeState, palette?.surface);
       if (md) md += '\n---\n\n';
       md += generateShapeLlmBriefing(opts);
     }
@@ -313,7 +312,7 @@ export function CombinedExport({ colorState, palette, typeState, scale, spacing,
     }
 
     return md || '<!-- No configuration available -->';
-  }, [colorState, palette, typeState, scale, spaceOpts, shapeState, surfaceHex, symbolState]);
+  }, [colorState, palette, typeState, scale, spaceOpts, shapeState, symbolState]);
 
   const outputs = useMemo(() => {
     const css = [colorCss, typeCss, spaceCss, shapeCss, symbolCss].filter(Boolean).join('\n') || '/* No configuration available */';

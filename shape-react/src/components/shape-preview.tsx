@@ -3,19 +3,9 @@ import { Sun, Moon } from 'lucide-react';
 import { useShapeStore } from '@/store/shape-store';
 import { generateShadows, generateNeumorphicInset, type ShadowConfig } from '@core/shadows';
 import { deriveSurface } from '@core/surface';
-import { hexToOklch, oklchToHex, maxChromaInGamut } from '@core/color-math';
 import { LiquidGlass } from '@core/liquid-glass';
-import { BrutalistEcho as CoreBrutalistEcho } from '@core/brutalist-echo';
+import { BrutalistEcho as CoreBrutalistEcho, deriveBorderFromBg } from '@core/brutalist-echo';
 import { focusRingCss, mergeBoxShadow } from '@core/ring';
-
-/** Derive a brutalist border color by darkening the bg by ~1 palette step (ΔL ≈ 0.10 in OKLCH).
- *  Darkens in both light and dark modes — keeps the hue, Gamut-safe chroma. */
-function deriveBorderFromBg(bgHex: string): string {
-  const [L, C, H] = hexToOklch(bgHex);
-  const shifted = Math.max(0.05, L - 0.10);
-  const maxC = maxChromaInGamut(shifted, H);
-  return oklchToHex(shifted, Math.min(C, maxC * 0.95), H);
-}
 
 /* ------------------------------------------------------------------ */
 /*  Unified Preview Panel                                              */
@@ -31,24 +21,23 @@ function PreviewPanel({ isDark }: { isDark: boolean }) {
   const isNeomorph = store.shapeStyle === 'neomorph';
   const isNeobrutalism = store.shapeStyle === 'neobrutalism';
 
-  // Brutalist shadow color: auto → match border, custom → user value.
-  const brutalistAuto = isNeobrutalism && store.shadowColorMode === 'auto';
   const shadowConfig: ShadowConfig = {
     type: isNeomorph ? 'neumorphic' : isNeobrutalism ? 'brutalist' : store.shadowType,
     strength: store.shadowStrength,
     blurScale: store.shadowBlurScale,
     scale: store.shadowScale,
-    colorMode: brutalistAuto ? 'custom' : store.shadowColorMode,
-    customColor: brutalistAuto ? colors.border : store.shadowCustomColor,
+    colorMode: store.shadowColorMode,
+    customColor: store.shadowCustomColor,
     offsetX: store.shadowOffsetX,
     offsetY: store.shadowOffsetY,
     borderWidth: store.borderEnabled ? store.borderWidth : 1,
+    brutalistVariant: store.brutalistVariant,
   };
 
   const shadows = useMemo(
     () => store.shadowEnabled ? generateShadows(colors.bg, isDark, shadowConfig) : [],
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [colors.bg, isDark, store.shadowEnabled, store.shadowType, store.shapeStyle, store.shadowStrength, store.shadowBlurScale, store.shadowScale, store.shadowColorMode, store.shadowCustomColor, store.shadowOffsetX, store.shadowOffsetY, store.borderEnabled, store.borderWidth, colors.border],
+    [colors.bg, isDark, store.shadowEnabled, store.shadowType, store.shapeStyle, store.shadowStrength, store.shadowBlurScale, store.shadowScale, store.shadowColorMode, store.shadowCustomColor, store.shadowOffsetX, store.shadowOffsetY, store.borderEnabled, store.borderWidth, store.brutalistVariant],
   );
 
   const insetShadows = useMemo(
@@ -62,7 +51,8 @@ function PreviewPanel({ isDark }: { isDark: boolean }) {
   const ringColor = store.ringColorMode === 'custom' ? store.ringCustomColor : colors.primary;
   const ring = focusRingCss(store.ringStyle, store.ringWidth, store.ringOffset, ringColor);
 
-  const brutalistEchoColor = store.shadowColorMode === 'custom' ? store.shadowCustomColor : colors.border;
+  const brutalistBorderFor = (bg: string) =>
+    store.shadowColorMode === 'custom' ? store.shadowCustomColor : deriveBorderFromBg(bg);
   const brutalistStrokeWidth = store.borderEnabled ? store.borderWidth : 1;
   function BrutalistEcho({
     level,
@@ -74,7 +64,7 @@ function PreviewPanel({ isDark }: { isDark: boolean }) {
     level: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
     borderRadius: number;
     bgColor: string;
-    borderColor?: string;
+    borderColor: string;
     strokeWidthOverride?: number;
   }) {
     if (!isNeobrutalism || !store.shadowEnabled) return null;
@@ -87,7 +77,7 @@ function PreviewPanel({ isDark }: { isDark: boolean }) {
         strokeWidth={strokeWidthOverride ?? brutalistStrokeWidth}
         borderRadius={borderRadius}
         bgColor={bgColor}
-        borderColor={borderColor ?? brutalistEchoColor}
+        borderColor={borderColor}
         opacity={store.shadowStrength}
       />
     );
@@ -167,7 +157,7 @@ function PreviewPanel({ isDark }: { isDark: boolean }) {
             );
           }
 
-          const cardBorderCol = isNeobrutalism ? deriveBorderFromBg(colors.card) : colors.borderMuted;
+          const cardBorderCol = isNeobrutalism ? brutalistBorderFor(colors.card) : colors.borderMuted;
           return (
             <div key={level} className="relative flex-1">
               <div
@@ -196,7 +186,7 @@ function PreviewPanel({ isDark }: { isDark: boolean }) {
           { label: 'Secondary', bg: colors.secondary, fg: colors.secondaryFg },
           { label: 'Destructive', bg: colors.destructive, fg: colors.destructiveFg },
         ] as const).map(({ label, bg, fg }) => {
-          const borderCol = deriveBorderFromBg(bg);
+          const borderCol = brutalistBorderFor(bg);
           const isSolidBtn = isNeobrutalism && store.brutalistVariant === 'solid';
           const buttonShadow = isNeomorph ? shadows.find(s => s.name === 'sm')?.shadow : undefined;
           return (
@@ -267,7 +257,7 @@ function PreviewPanel({ isDark }: { isDark: boolean }) {
               outline: ring.outline,
               outlineOffset: ring.outlineOffset,
               color: colors.textMuted,
-              ...(store.borderEnabled && { border: `${store.borderWidth}px solid ${isNeobrutalism ? deriveBorderFromBg(colors.card) : colors.borderMuted}` }),
+              ...(store.borderEnabled && { border: `${store.borderWidth}px solid ${isNeobrutalism ? brutalistBorderFor(colors.card) : colors.borderMuted}` }),
               ...(ring.borderColor && { border: `${store.borderEnabled ? store.borderWidth : 1}px solid ${ring.borderColor}` }),
             }}
           >
