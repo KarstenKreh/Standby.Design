@@ -53,11 +53,11 @@ file is the how-to-not-get-stuck.
 
 ## Pitfalls
 
-- The color export generators exist as **twin copies**:
+- The color export generator lives once in
+  `packages/core/src/color-code-export.ts`;
   `color-react/src/lib/code-export.ts` and
-  `system-react/src/lib/color-code-export.ts`. Change both, or they drift
-  (see issues #15–#28 from the 2026-06 export audit). The MCP server bundles
-  the **system copy** via the `@syslib` alias — rebuild it
+  `system-react/src/lib/color-code-export.ts` only re-export it. The MCP
+  server bundles it via the `@syslib` alias — rebuild it
   (`packages/mcp-server: npm run build`) after generator changes.
 - `color-react` has snapshot tests covering export output: review the diff
   first, then update with `npx vitest run -u`.
