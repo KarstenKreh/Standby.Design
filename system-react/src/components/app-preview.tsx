@@ -6,7 +6,7 @@ import type { ComputedLevel } from '@core/scale';
 import type { SpacingToken } from '@core/spacing';
 import type { ShapeUrlState as ShapeState } from '@core/url-state/shape';
 import { PhoneMockup } from '@/components/phone-mockup';
-import { contrastRatio } from '@core/color-math';
+import { contrastRatio, invertHex } from '@core/color-math';
 import { fontFamily } from '@core/fontshare';
 import { generateShadows, generateNeumorphicInset, type ShadowConfig, type ShadowType } from '@core/shadows';
 import { LiquidGlass } from '@core/liquid-glass';
@@ -17,11 +17,14 @@ interface PaletteResult {
   brand: PaletteEntry[];
   surface: PaletteEntry[];
   error: PaletteEntry[];
+  errorSurface: PaletteEntry[];
   neutral: PaletteEntry[];
   accentPalettes: AccentPalette[];
   effectiveBgHex: string;
   brandSwatchOverride: { hex: string; L: number } | null;
+  brandInvert: boolean;
   errorSwatchOverride: { hex: string; L: number } | null;
+  errorInvert: boolean;
 }
 
 interface AppPreviewProps {
@@ -57,7 +60,7 @@ interface Tokens {
   accentSecondary: string; destructiveSecondary: string;
   primarySecondaryFg: string; successSecondaryFg: string;
   accentSecondaryFg: string; destructiveSecondaryFg: string;
-  border: string;
+  border: string; borderMuted: string; input: string;
   radius: number; borderW: number;
   shadow: string;
   shadowSm: string;
@@ -88,8 +91,16 @@ interface Tokens {
 function pickFg(bgHex: string, lightHex: string, darkHex: string, fgMode: FgContrastMode): string {
   const lightCR = contrastRatio(lightHex, bgHex);
   const darkCR = contrastRatio(darkHex, bgHex);
-  if (fgMode === 'preferDark') return darkCR >= 4.5 ? darkHex : lightHex;
-  if (fgMode === 'preferLight') return lightCR >= 4.5 ? lightHex : darkHex;
+  if (fgMode === 'preferDark') {
+    if (darkCR >= 4.5) return darkHex;
+    if (lightCR >= 4.5) return lightHex;
+    return darkHex;
+  }
+  if (fgMode === 'preferLight') {
+    if (lightCR >= 4.5) return lightHex;
+    if (darkCR >= 4.5) return darkHex;
+    return lightHex;
+  }
   return lightCR >= darkCR ? lightHex : darkHex;
 }
 
@@ -103,6 +114,7 @@ function buildTokens(
   const surface = palette?.surface || [];
   const neutral = palette?.neutral || [];
   const error = palette?.error || [];
+  const errorSurface = palette?.errorSurface || [];
 
   const radius = shape?.borderRadius ?? 8;
   const borderW = (shape?.borderEnabled ?? true) ? (shape?.borderWidth ?? 1) : 0;
@@ -140,7 +152,7 @@ function buildTokens(
   /** Resolve an accent's semantic color, respecting pin (for buttons, text) */
   const resolveAccent = (ap: AccentPalette | undefined, fallbackPal: PaletteEntry[]) => {
     if (!ap) return dark ? p(fallbackPal, 400) : p(fallbackPal, 600);
-    if (ap.pin) return ap.hex;
+    if (ap.pin) return dark && ap.invert ? invertHex(ap.hex) : ap.hex;
     return dark ? p(ap.palette, 400) : p(ap.palette, 600);
   };
 
@@ -160,37 +172,49 @@ function buildTokens(
   const bgCardHex = isNeomorph ? baseBg : (dark ? p(surface, 825) : p(surface, 25));
   const bgElevatedHex = isNeomorph ? baseBg : (dark ? p(surface, 800) : p(surface, 25));
 
+  const pinnedFill = (pinnedHex: string, invert: boolean) => dark && invert ? invertHex(pinnedHex) : pinnedHex;
+  const primaryHex = palette?.brandSwatchOverride
+    ? pinnedFill(palette.brandSwatchOverride.hex, palette.brandInvert)
+    : (dark ? p(brand, 400) : p(brand, 600));
+  const destructiveHex = palette?.errorSwatchOverride
+    ? pinnedFill(palette.errorSwatchOverride.hex, palette.errorInvert)
+    : (dark ? p(error, 400) : p(error, 600));
+  const fillFg = (fillHex: string, pal: PaletteEntry[]) => pickFg(fillHex, p(pal, 25), p(pal, 975), fgContrastMode);
+  const secondaryFg = (secondaryHex: string, pal: PaletteEntry[]) => pickFg(secondaryHex, p(pal, 100), p(pal, 900), fgContrastMode);
+  const successSecondaryPal = successPal?.palette || brand;
+  const accentSecondaryPal = palette?.accentPalettes?.[0]?.palette || brand;
+  const primarySecondaryHex = dark ? p(brand, 800) : p(brand, 200);
+  const successSecondaryHex = p(successSecondaryPal, dark ? 800 : 200);
+  const accentSecondaryHex = p(accentSecondaryPal, dark ? 800 : 200);
+  const destructiveSecondaryHex = dark ? p(error, 800) : p(error, 200);
+
   return {
     bg: baseBg,
     bgCard: bgCardHex,
     bgElevated: bgElevatedHex,
     fg: dark ? p(surface, 25) : p(surface, 975),
     muted: dark ? p(surface, 300) : p(surface, 700),
-    primary: palette?.brandSwatchOverride ? palette.brandSwatchOverride.hex : (dark ? p(brand, 400) : p(brand, 600)),
-    primaryFg: (() => {
-      const primaryHex = palette?.brandSwatchOverride ? palette.brandSwatchOverride.hex : (dark ? p(brand, 400) : p(brand, 600));
-      return pickFg(primaryHex, p(surface, dark ? 975 : 50), p(surface, dark ? 50 : 975), fgContrastMode);
-    })(),
+    primary: primaryHex,
+    primaryFg: fillFg(primaryHex, brand),
     accent: resolveAccent(firstAccent, brand),
     accentVis: resolveAccentVisible(firstAccent, brand),
-    destructive: palette?.errorSwatchOverride ? palette.errorSwatchOverride.hex : (dark ? p(error, 400) : p(error, 600)),
-    destructiveFg: (() => {
-      const destHex = palette?.errorSwatchOverride ? palette.errorSwatchOverride.hex : (dark ? p(error, 400) : p(error, 600));
-      return pickFg(destHex, p(surface, dark ? 975 : 50), p(surface, dark ? 50 : 975), fgContrastMode);
-    })(),
+    destructive: destructiveHex,
+    destructiveFg: fillFg(destructiveHex, errorSurface),
     success: resolveAccent(successPal, brand),
     successVis: resolveAccentVisible(successPal, brand),
     warning: resolveAccent(warningPal, brand),
     warningVis: resolveAccentVisible(warningPal, brand),
-    primarySecondary: dark ? p(brand, 800) : p(brand, 200),
-    successSecondary: successPal ? p(successPal.palette, dark ? 800 : 200) : (dark ? p(brand, 800) : p(brand, 200)),
-    accentSecondary: palette?.accentPalettes?.[0] ? p(palette.accentPalettes[0].palette, dark ? 800 : 200) : (dark ? p(brand, 800) : p(brand, 200)),
-    destructiveSecondary: dark ? p(error, 800) : p(error, 200),
-    primarySecondaryFg: dark ? p(brand, 50) : p(brand, 950),
-    successSecondaryFg: successPal ? p(successPal.palette, dark ? 50 : 950) : (dark ? p(brand, 50) : p(brand, 950)),
-    accentSecondaryFg: palette?.accentPalettes?.[0] ? p(palette.accentPalettes[0].palette, dark ? 50 : 950) : (dark ? p(brand, 50) : p(brand, 950)),
-    destructiveSecondaryFg: dark ? p(error, 50) : p(error, 950),
-    border: dark ? p(surface, 700) : p(surface, 200),
+    primarySecondary: primarySecondaryHex,
+    successSecondary: successSecondaryHex,
+    accentSecondary: accentSecondaryHex,
+    destructiveSecondary: destructiveSecondaryHex,
+    primarySecondaryFg: secondaryFg(primarySecondaryHex, brand),
+    successSecondaryFg: secondaryFg(successSecondaryHex, successSecondaryPal),
+    accentSecondaryFg: secondaryFg(accentSecondaryHex, accentSecondaryPal),
+    destructiveSecondaryFg: secondaryFg(destructiveSecondaryHex, error),
+    border: dark ? p(surface, 600) : p(surface, 300),
+    borderMuted: dark ? p(surface, 700) : p(surface, 200),
+    input: dark ? p(surface, 600) : p(surface, 300),
     radius, borderW, shadow, shadowSm, shadowInset, isNeomorph,
     isGlass,
     isNeobrutalism,
@@ -460,7 +484,7 @@ function DashboardScreen({ t }: { t: Tokens }) {
           <div key={act.name} style={{
             display: 'flex', alignItems: 'center', gap: '6px',
             padding: '6px 0',
-            borderBottom: i < activities.length - 1 ? `${t.borderW || 1}px solid ${t.border}` : 'none',
+            borderBottom: i < activities.length - 1 ? `${t.borderW || 1}px solid ${t.borderMuted}` : 'none',
           }}>
             <div style={{
               width: '26px', height: '26px', borderRadius: '50%',
@@ -565,7 +589,7 @@ function MessengerScreen({ t }: { t: Tokens }) {
     return (
       <div style={{ backgroundColor: t.bg, color: t.fg, fontFamily: bFf, overflow: 'hidden', height: '100%', display: 'flex', flexDirection: 'column' }}>
         {/* Chat header */}
-        <div style={{ backgroundColor: t.bgCard, borderBottom: t.borderW ? `${t.borderW}px solid ${t.border}` : 'none', padding: '5px 10px', display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
+        <div style={{ backgroundColor: t.bgCard, borderBottom: t.borderW ? `${t.borderW}px solid ${t.borderMuted}` : 'none', padding: '5px 10px', display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
           <ChevronLeft size={14} color={t.primary} style={{ cursor: 'pointer', flexShrink: 0 }} onClick={() => setView('list')} />
           <div style={{ width: '22px', height: '22px', borderRadius: '50%', backgroundColor: t.primary, display: 'flex', alignItems: 'center', justifyContent: 'center', color: t.primaryFg, fontSize: '0.5rem', fontWeight: 600, flexShrink: 0 }}>SC</div>
           <div style={{ flex: 1 }}>
@@ -623,7 +647,7 @@ function MessengerScreen({ t }: { t: Tokens }) {
         </div>
 
         {/* Input bar */}
-        <div style={{ backgroundColor: t.bgCard, borderTop: t.borderW ? `${t.borderW}px solid ${t.border}` : 'none', padding: '4px 10px', display: 'flex', gap: '6px', alignItems: 'center', flexShrink: 0 }}>
+        <div style={{ backgroundColor: t.bgCard, borderTop: t.borderW ? `${t.borderW}px solid ${t.borderMuted}` : 'none', padding: '4px 10px', display: 'flex', gap: '6px', alignItems: 'center', flexShrink: 0 }}>
           <Plus size={14} color={t.muted} style={{ cursor: 'pointer', flexShrink: 0 }} />
           {t.isGlass ? (
             <div style={{ flex: 1, position: 'relative', backgroundColor: t.bg, borderRadius: `${btnR}px`, overflow: 'hidden' }}>
@@ -632,7 +656,7 @@ function MessengerScreen({ t }: { t: Tokens }) {
               </LiquidGlass>
             </div>
           ) : (
-            <div style={{ flex: 1, backgroundColor: t.bg, color: t.muted, border: t.borderW ? `${t.borderW}px solid ${t.border}` : 'none', borderRadius: `${btnR}px`, padding: '4px 8px', fontSize: fsCaption, boxShadow: t.isNeomorph ? t.shadowInset : undefined }}>
+            <div style={{ flex: 1, backgroundColor: t.bg, color: t.muted, border: t.borderW ? `${t.borderW}px solid ${t.input}` : 'none', borderRadius: `${btnR}px`, padding: '4px 8px', fontSize: fsCaption, boxShadow: t.isNeomorph ? t.shadowInset : undefined }}>
               Message...
             </div>
           )}
@@ -666,7 +690,7 @@ function MessengerScreen({ t }: { t: Tokens }) {
         ) : (
           <div style={{
             backgroundColor: t.bgCard, borderRadius: `${btnR}px`,
-            border: t.borderW ? `${t.borderW}px solid ${t.border}` : 'none',
+            border: t.borderW ? `${t.borderW}px solid ${t.input}` : 'none',
             padding: '4px 8px', fontSize: fsCaption, color: t.muted,
             display: 'flex', alignItems: 'center', gap: '4px',
             boxShadow: t.isNeomorph ? t.shadowInset : undefined,
@@ -685,7 +709,7 @@ function MessengerScreen({ t }: { t: Tokens }) {
             style={{
               display: 'flex', alignItems: 'center', gap: '8px',
               padding: '5px 10px',
-              borderBottom: `${t.borderW || 1}px solid ${t.border}`,
+              borderBottom: `${t.borderW || 1}px solid ${t.borderMuted}`,
               cursor: i === 0 ? 'pointer' : undefined,
             }}
           >
@@ -735,7 +759,7 @@ function MessengerScreen({ t }: { t: Tokens }) {
       <div style={{
         display: 'flex', justifyContent: 'space-around',
         backgroundColor: t.bgCard,
-        borderTop: t.borderW ? `${t.borderW}px solid ${t.border}` : 'none',
+        borderTop: t.borderW ? `${t.borderW}px solid ${t.borderMuted}` : 'none',
         padding: '4px 0 2px', flexShrink: 0,
       }}>
         {([
@@ -788,7 +812,7 @@ function ProfileScreen({ t }: { t: Tokens }) {
     },
     {
       items: [
-        { icon: HelpCircle, label: 'Help & Support', value: '', color: t.muted, bg: t.border },
+        { icon: HelpCircle, label: 'Help & Support', value: '', color: t.muted, bg: t.borderMuted },
         { icon: LogOut, label: 'Log Out', value: '', color: t.warning, bg: t.destructiveSecondary },
       ],
     },
@@ -800,7 +824,7 @@ function ProfileScreen({ t }: { t: Tokens }) {
       <div style={{
         backgroundColor: t.bgCard, padding: '12px 10px 10px',
         display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px',
-        borderBottom: t.borderW ? `${t.borderW}px solid ${t.border}` : 'none',
+        borderBottom: t.borderW ? `${t.borderW}px solid ${t.borderMuted}` : 'none',
       }}>
         {/* Avatar with camera badge */}
         <div style={{ position: 'relative' }}>
@@ -880,7 +904,7 @@ function ProfileScreen({ t }: { t: Tokens }) {
                 <div key={item.label} style={{
                   display: 'flex', alignItems: 'center', gap: '8px',
                   padding: '8px 0',
-                  borderBottom: i < group.items.length - 1 ? `${t.borderW || 1}px solid ${t.border}` : 'none',
+                  borderBottom: i < group.items.length - 1 ? `${t.borderW || 1}px solid ${t.borderMuted}` : 'none',
                 }}>
                   <div style={{
                     width: '20px', height: '20px', borderRadius: Math.max(3, t.radius - 4),
