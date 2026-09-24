@@ -8,6 +8,9 @@ exports[`generateCssExport > snapshot stability 1`] = `
   --font-body: 'Satoshi', sans-serif;
   --font-mono: ui-monospace, 'Cascadia Code', Consolas, 'SF Mono', Menlo, 'DejaVu Sans Mono', monospace;
 
+  /* Font Weights */
+  --font-weight-heading: 500;
+
   /* Type Scale */
   --text-display: 4.2357rem;
   --text-h1: 3.3299rem;
@@ -56,6 +59,7 @@ exports[`generateTailwindV4Export > snapshot stability 1`] = `
   --font-heading: 'Satoshi', sans-serif;
   --font-body: 'Satoshi', sans-serif;
   --font-mono: ui-monospace, 'Cascadia Code', Consolas, 'SF Mono', Menlo, 'DejaVu Sans Mono', monospace;
+  --font-weight-heading: 500;
 
   --text-display: 4.2357rem;
   --text-h1: 3.3299rem;

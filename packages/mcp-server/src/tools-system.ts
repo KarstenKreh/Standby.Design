@@ -216,6 +216,7 @@ export function registerSystemTools(server: McpServer): void {
         headingFont: typeState.headingFont,
         bodyFont: typeState.bodyFont,
         monoFont: typeState.monoFont,
+        headingWeight: typeState.headingWeight,
         scaleLabel: getScaleLabel(typeState),
       };
 
