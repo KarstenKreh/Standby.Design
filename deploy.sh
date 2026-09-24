@@ -18,7 +18,7 @@ ssh "$SERVER" 'docker network inspect traefik_web >/dev/null 2>&1 || { echo "ERR
 echo "==> Deploying Color Palette Generator..."
 ssh "$SERVER" "mkdir -p $REMOTE_DIR/color-react $REMOTE_DIR/type-react $REMOTE_DIR/system-react $REMOTE_DIR/shape-react $REMOTE_DIR/symbol-react $REMOTE_DIR/space-react $REMOTE_DIR/role-react $REMOTE_DIR/qa-gallery $REMOTE_DIR/packages/core $REMOTE_DIR/public"
 scp index.html docker-compose.yml Dockerfile nginx.conf og-server.js shared.css "$SERVER:$REMOTE_DIR/"
-scp public/* "$SERVER:$REMOTE_DIR/public/"
+tar cf - public/ | ssh "$SERVER" "cd $REMOTE_DIR && rm -rf public && tar xf -"
 
 # OG-image assets (Satoshi fonts baked into the image for SVG text rendering)
 echo "==> Uploading og-assets..."
