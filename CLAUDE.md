@@ -53,6 +53,10 @@ file is the how-to-not-get-stuck.
 
 ## Pitfalls
 
+- The design rules at `/docs/rules` are generated. Edit `docs/rules/*.md`,
+  then run `npm run build` in `docs/` and commit the output in `public/docs/`
+  (see `docs/README.md`).
+
 - The color export generator lives once in
   `packages/core/src/color-code-export.ts`;
   `color-react/src/lib/code-export.ts` and

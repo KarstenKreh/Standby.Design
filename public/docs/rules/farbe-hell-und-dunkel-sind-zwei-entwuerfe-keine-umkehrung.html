@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hell und Dunkel sind zwei Entwürfe, keine Umkehrung — Design Rules — standby.design</title>
+  <meta name="description" content="Kann ein Produkt beide Erscheinungen, ist jeder Wert in beiden festgelegt und in beiden geprüft. Dunkel ist nicht umgedrehtes Hell." />
+  <link rel="canonical" href="https://standby.design/docs/rules/farbe-hell-und-dunkel-sind-zwei-entwuerfe-keine-umkehrung" />
+  <link rel="alternate" type="text/markdown" href="https://standby.design/docs/rules.md" title="Design Rules (Markdown)" />
+
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Hell und Dunkel sind zwei Entwürfe, keine Umkehrung — Design Rules — standby.design" />
+  <meta property="og:description" content="Kann ein Produkt beide Erscheinungen, ist jeder Wert in beiden festgelegt und in beiden geprüft. Dunkel ist nicht umgedrehtes Hell." />
+  <meta property="og:url" content="https://standby.design/docs/rules/farbe-hell-und-dunkel-sind-zwei-entwuerfe-keine-umkehrung" />
+  <meta property="og:site_name" content="standby.design" />
+  <meta property="og:image" content="https://standby.design/og-image?tool=github" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://standby.design/og-image?tool=github" />
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23111'/%3E%3Ccircle cx='16' cy='16' r='6' fill='none' stroke='%234a7aaa' stroke-width='2'/%3E%3C/svg%3E">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@1,2&f[]=jet-brains-mono@1,2&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --font-heading: 'Satoshi', sans-serif;
+      --font-body: 'Satoshi', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --text-h3: clamp(1.9344rem, 0.2719vw + 1.8707rem, 2.197rem);
+      --text-h5: clamp(1.246rem, 0.0559vw + 1.2329rem, 1.3rem);
+      --text-body-s: 1rem;
+      --text-caption: 0.7692rem;
+      --leading-h3: 1.2;
+      --leading-h5: 1.3;
+      --leading-body-s: 1.5;
+      --tracking-h3: -0.01em;
+      --tracking-body-s: 0.01em;
+      --background: oklch(0.145 0 0);
+      --foreground: oklch(0.985 0 0);
+      --card: oklch(0.205 0 0);
+      --muted-foreground: oklch(0.708 0 0);
+      --border: oklch(1 0 0 / 10%);
+      --emphasis: oklch(0.78 0.1 230);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: var(--font-body);
+      font-size: var(--text-body-s);
+      line-height: var(--leading-body-s);
+      letter-spacing: var(--tracking-body-s);
+      background: var(--background);
+      color: var(--foreground);
+      padding: 2rem 1.5rem 3rem;
+    }
+    main { max-width: 720px; margin: 0 auto; }
+    .back {
+      display: inline-block;
+      padding: 0.5rem 0.75rem;
+      margin: 0 0 2rem -0.75rem;
+      border-radius: 8px;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      transition: color 0.2s, background 0.2s;
+    }
+    .back:hover { color: var(--foreground); background: var(--card); }
+    .eyebrow {
+      font-size: var(--text-caption);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted-foreground);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-heading);
+      font-size: var(--text-h3);
+      font-weight: 700;
+      line-height: var(--leading-h3);
+      letter-spacing: var(--tracking-h3);
+      margin-bottom: 0.4em;
+    }
+    h2 {
+      font-family: var(--font-heading);
+      font-size: var(--text-h5);
+      font-weight: 700;
+      line-height: var(--leading-h5);
+      margin-top: 2.25em;
+      margin-bottom: 0.5em;
+    }
+    h3 {
+      font-family: var(--font-heading);
+      font-size: var(--text-body-s);
+      font-weight: 700;
+      margin-top: 1.5em;
+      margin-bottom: 0.4em;
+    }
+    p, li { color: var(--muted-foreground); margin-bottom: 0.75em; }
+    strong { color: var(--foreground); font-weight: 500; }
+    ul, ol { padding-left: 1.25rem; margin-bottom: 0.75em; }
+    a { color: var(--emphasis); }
+    code { font-family: var(--font-mono); font-size: 0.9em; }
+    pre {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      line-height: 1.5;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.9rem 1rem;
+      margin-bottom: 1rem;
+      overflow-x: auto;
+      white-space: pre;
+    }
+    pre code { font-size: inherit; color: var(--foreground); }
+    hr { border: 0; border-top: 1px solid var(--border); margin: 2rem 0; }
+    .lead { font-size: 1.125rem; }
+    .table-wrap { overflow-x: auto; margin-bottom: 1rem; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td {
+      text-align: left;
+      vertical-align: top;
+      padding: 0.6rem 0.75rem 0.6rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    th { color: var(--foreground); font-weight: 500; }
+    td { color: var(--muted-foreground); }
+    td code { color: var(--foreground); }
+    blockquote {
+      border-left: 2px solid var(--border);
+      padding-left: 1rem;
+      margin-bottom: 0.9rem;
+    }
+    blockquote p { margin-bottom: 0; }
+    .callout {
+      background: var(--card);
+      border-radius: 8px;
+      padding: 0.9rem 1rem;
+      margin-bottom: 1.25rem;
+    }
+    .callout p:last-child, .callout ul:last-child { margin-bottom: 0; }
+    .callout-title {
+      font-size: var(--text-caption);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted-foreground);
+      margin-bottom: 0.35rem;
+    }
+    .callout-tip p:not(.callout-title) { color: var(--foreground); font-size: 1.125rem; }
+    .callout-tip .callout-title { color: var(--emphasis); }
+    .rule-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1.5rem;
+      margin: 0.25rem 0 1.75rem;
+      font-size: 0.875rem;
+    }
+    .rule-meta dt { color: var(--muted-foreground); }
+    .rule-meta dd { color: var(--foreground); }
+    .agent-hint { font-size: 0.875rem; }
+    .legal-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 3.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+    .legal-links a {
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      transition: color 0.2s, background 0.2s;
+    }
+    .legal-links a:hover { color: var(--foreground); background: var(--card); }
+  </style>
+  <script defer src="https://umami.standby.design/script.js" data-website-id="255e8c46-9a39-4cc8-ba66-5cb4fc53b91e"></script>
+</head>
+<body>
+  <main>
+    <a class="back" href="/docs/rules">&larr; Design Rules</a>
+
+    <p class="eyebrow">Farbe</p>
+    <h1>Hell und Dunkel sind zwei Entwürfe, keine Umkehrung</h1>
+    <dl class="rule-meta"><div><dt>Geltung</dt><dd>universal · web, react-native</dd></div></dl>
+
+<aside class="callout callout-tip"><p class="callout-title">Regel</p><p>Bietet ein Produkt beide Erscheinungen an, ist jeder Wert in beiden festgelegt und in beiden geprüft. Keine der beiden wird aus der anderen abgeleitet. Welche gilt, entscheidet der Nutzer.</p>
+</aside>
+<h2>Warum</h2>
+<p>Die Wahl gehört dem Nutzer. Manche sehen auf hellem Grund besser, manche auf dunklem, manche wechseln mit der Tageszeit, und für manche ist es eine Frage der Verträglichkeit und nicht des Geschmacks. Ein Produkt, das eine Erscheinung erzwingt, entscheidet über den Körper von jemandem, den es nicht kennt.</p>
+<p>Und die zweite Erscheinung ist keine Rechenaufgabe. Auf dunklem Grund verhält sich Wahrnehmung anders, in mindestens drei Punkten:</p>
+<p><strong>Helle Schrift auf dunklem Grund leuchtet aus.</strong> Die Buchstaben wirken fetter und die Innenräume enger als dieselbe Schrift dunkel auf hell. Ein Schnitt, der hell gut sitzt, wirkt dunkel oft zu schwer.</p>
+<p><strong>Gesättigte Farben flimmern auf Dunkel.</strong> Ein kräftiges Blau, das auf Weiß ruhig liegt, vibriert auf Schwarz und ist anstrengend zu lesen. Auf Dunkel gehören dieselben Farben heller und weniger gesättigt.</p>
+<p><strong>Schatten brauchen auf Dunkel eine andere Gewichtung.</strong> Sie funktionieren dort, aber der Unterschied zwischen einer dunklen Fläche und einem dunklen Schatten ist klein. Derselbe Schatten, der hell deutlich trägt, ist dunkel praktisch unsichtbar. Auf Dunkel muss er also deutlich stärker ausfallen, und meist kommt die Helligkeit der Fläche als zweites Mittel dazu: was höher liegt, ist zusätzlich heller. Schatten-Token brauchen deshalb eigene Werte je Erscheinung, genau wie Farben.</p>
+<p>Dazu kommt das Nüchterne: ein Kontrastverhältnis, das hell besteht, kann dunkel durchfallen und umgekehrt. Prüfen muss man beide, einzeln.</p>
+<h2>Kein reines Schwarz gegen reines Weiß</h2>
+<p>Weiße Schrift auf schwarzem Grund ist der höchstmögliche Kontrast, und genau deshalb unangenehm: die Schrift blüht aus, die Augen ermüden schnell, und Menschen mit Astigmatismus lesen es kaum. Ein sehr dunkles Grau als Grund und ein leicht abgesenktes Weiß als Schrift lesen sich deutlich ruhiger.</p>
+<p>Mehr Kontrast ist ab einem Punkt nicht mehr besser. Der Mindestwert ist eine Untergrenze, kein Ziel.</p>
+<h2>Wer entscheidet</h2>
+<p>Voreingestellt gilt, was der Nutzer im Betriebssystem eingestellt hat. Das ist bereits seine Antwort auf die Frage, man muss sie nicht noch einmal stellen.</p>
+<p>Bietet das Produkt zusätzlich einen eigenen Schalter, überschreibt dieser die Systemeinstellung und bleibt erhalten. Er hat drei Stellungen, nicht zwei: hell, dunkel, dem System folgen.</p>
+<h2>Woran Du den Verstoß erkennst</h2>
+<ul>
+<li>Die dunkle Erscheinung entsteht durch eine Umkehrung oder einen Filter über die ganze Oberfläche.</li>
+<li>Eine Farbe ist einmal festgelegt und wird in beiden Erscheinungen benutzt.</li>
+<li>Die Schatten-Token haben nur einen Wert, und im Dunklen ist die Tiefe deshalb verschwunden.</li>
+<li>Ein Text ist in einer Erscheinung gut lesbar und in der anderen grenzwertig.</li>
+<li>Die Seite steht auf reinem Schwarz, die Schrift auf reinem Weiß.</li>
+<li>Es gibt nur Screenshots aus einer Erscheinung. Dann wurde auch nur eine geprüft.</li>
+</ul>
+<h2>Grenzen</h2>
+<p>Ein Produkt darf sich bewusst auf eine Erscheinung festlegen. Dann gilt die Regel nicht — aber es sollte eine Entscheidung sein, die jemand getroffen hat, und kein Zustand, der entstanden ist, weil niemand an die zweite gedacht hat.</p>
+<p>Marketing- und Titelseiten mit eigener Haut können bei einer Erscheinung bleiben, auch wenn die Anwendung dahinter beide kann.</p>
+<h2>Verwandt</h2>
+<ul>
+<li><a href="/docs/rules/farbe-werte-kommen-aus-tokens-nie-aus-der-hand">Werte kommen aus Tokens, nie aus der Hand</a></li>
+<li><a href="/docs/rules/flaeche-die-ebene-folgt-der-rolle-nicht-der-schachtelung">Die Ebene folgt der Rolle, nicht der Schachtelung</a></li>
+<li><a href="/docs/rules/zustand-rot-ist-nicht-ein-rot">Rot ist nicht ein Rot</a></li>
+</ul>
+
+
+    <nav class="legal-links">
+      <a href="/">Home</a>
+      <a href="/docs/mcp">MCP Server</a>
+      <a href="/docs/rules">Design Rules</a>
+      <a href="/impressum.html">Impressum</a>
+      <a href="/datenschutz.html">Datenschutz</a>
+    </nav>
+  </main>
+</body>
+</html>

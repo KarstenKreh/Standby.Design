@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Die Karte hat kein Padding — Design Rules — standby.design</title>
+  <meta name="description" content="Die Karte ist nur Fläche, Rand und Radius. Das Padding sitzt in den Abschnitten darin, und ein Abschnitt darf es auf null setzen." />
+  <link rel="canonical" href="https://standby.design/docs/rules/layout-die-karte-hat-kein-padding" />
+  <link rel="alternate" type="text/markdown" href="https://standby.design/docs/rules.md" title="Design Rules (Markdown)" />
+
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Die Karte hat kein Padding — Design Rules — standby.design" />
+  <meta property="og:description" content="Die Karte ist nur Fläche, Rand und Radius. Das Padding sitzt in den Abschnitten darin, und ein Abschnitt darf es auf null setzen." />
+  <meta property="og:url" content="https://standby.design/docs/rules/layout-die-karte-hat-kein-padding" />
+  <meta property="og:site_name" content="standby.design" />
+  <meta property="og:image" content="https://standby.design/og-image?tool=github" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://standby.design/og-image?tool=github" />
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23111'/%3E%3Ccircle cx='16' cy='16' r='6' fill='none' stroke='%234a7aaa' stroke-width='2'/%3E%3C/svg%3E">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@1,2&f[]=jet-brains-mono@1,2&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --font-heading: 'Satoshi', sans-serif;
+      --font-body: 'Satoshi', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --text-h3: clamp(1.9344rem, 0.2719vw + 1.8707rem, 2.197rem);
+      --text-h5: clamp(1.246rem, 0.0559vw + 1.2329rem, 1.3rem);
+      --text-body-s: 1rem;
+      --text-caption: 0.7692rem;
+      --leading-h3: 1.2;
+      --leading-h5: 1.3;
+      --leading-body-s: 1.5;
+      --tracking-h3: -0.01em;
+      --tracking-body-s: 0.01em;
+      --background: oklch(0.145 0 0);
+      --foreground: oklch(0.985 0 0);
+      --card: oklch(0.205 0 0);
+      --muted-foreground: oklch(0.708 0 0);
+      --border: oklch(1 0 0 / 10%);
+      --emphasis: oklch(0.78 0.1 230);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: var(--font-body);
+      font-size: var(--text-body-s);
+      line-height: var(--leading-body-s);
+      letter-spacing: var(--tracking-body-s);
+      background: var(--background);
+      color: var(--foreground);
+      padding: 2rem 1.5rem 3rem;
+    }
+    main { max-width: 720px; margin: 0 auto; }
+    .back {
+      display: inline-block;
+      padding: 0.5rem 0.75rem;
+      margin: 0 0 2rem -0.75rem;
+      border-radius: 8px;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      transition: color 0.2s, background 0.2s;
+    }
+    .back:hover { color: var(--foreground); background: var(--card); }
+    .eyebrow {
+      font-size: var(--text-caption);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted-foreground);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-heading);
+      font-size: var(--text-h3);
+      font-weight: 700;
+      line-height: var(--leading-h3);
+      letter-spacing: var(--tracking-h3);
+      margin-bottom: 0.4em;
+    }
+    h2 {
+      font-family: var(--font-heading);
+      font-size: var(--text-h5);
+      font-weight: 700;
+      line-height: var(--leading-h5);
+      margin-top: 2.25em;
+      margin-bottom: 0.5em;
+    }
+    h3 {
+      font-family: var(--font-heading);
+      font-size: var(--text-body-s);
+      font-weight: 700;
+      margin-top: 1.5em;
+      margin-bottom: 0.4em;
+    }
+    p, li { color: var(--muted-foreground); margin-bottom: 0.75em; }
+    strong { color: var(--foreground); font-weight: 500; }
+    ul, ol { padding-left: 1.25rem; margin-bottom: 0.75em; }
+    a { color: var(--emphasis); }
+    code { font-family: var(--font-mono); font-size: 0.9em; }
+    pre {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      line-height: 1.5;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.9rem 1rem;
+      margin-bottom: 1rem;
+      overflow-x: auto;
+      white-space: pre;
+    }
+    pre code { font-size: inherit; color: var(--foreground); }
+    hr { border: 0; border-top: 1px solid var(--border); margin: 2rem 0; }
+    .lead { font-size: 1.125rem; }
+    .table-wrap { overflow-x: auto; margin-bottom: 1rem; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td {
+      text-align: left;
+      vertical-align: top;
+      padding: 0.6rem 0.75rem 0.6rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    th { color: var(--foreground); font-weight: 500; }
+    td { color: var(--muted-foreground); }
+    td code { color: var(--foreground); }
+    blockquote {
+      border-left: 2px solid var(--border);
+      padding-left: 1rem;
+      margin-bottom: 0.9rem;
+    }
+    blockquote p { margin-bottom: 0; }
+    .callout {
+      background: var(--card);
+      border-radius: 8px;
+      padding: 0.9rem 1rem;
+      margin-bottom: 1.25rem;
+    }
+    .callout p:last-child, .callout ul:last-child { margin-bottom: 0; }
+    .callout-title {
+      font-size: var(--text-caption);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted-foreground);
+      margin-bottom: 0.35rem;
+    }
+    .callout-tip p:not(.callout-title) { color: var(--foreground); font-size: 1.125rem; }
+    .callout-tip .callout-title { color: var(--emphasis); }
+    .rule-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1.5rem;
+      margin: 0.25rem 0 1.75rem;
+      font-size: 0.875rem;
+    }
+    .rule-meta dt { color: var(--muted-foreground); }
+    .rule-meta dd { color: var(--foreground); }
+    .agent-hint { font-size: 0.875rem; }
+    .legal-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 3.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+    .legal-links a {
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      transition: color 0.2s, background 0.2s;
+    }
+    .legal-links a:hover { color: var(--foreground); background: var(--card); }
+  </style>
+  <script defer src="https://umami.standby.design/script.js" data-website-id="255e8c46-9a39-4cc8-ba66-5cb4fc53b91e"></script>
+</head>
+<body>
+  <main>
+    <a class="back" href="/docs/rules">&larr; Design Rules</a>
+
+    <p class="eyebrow">Layout</p>
+    <h1>Die Karte hat kein Padding</h1>
+    <dl class="rule-meta"><div><dt>Geltung</dt><dd>universal · web, react-native</dd></div><div><dt>Vorgabe</dt><dd>14 senkrecht, 16 waagerecht</dd></div></dl>
+
+<aside class="callout callout-tip"><p class="callout-title">Regel</p><p>Gib der Karte kein eigenes Padding und kein Gap. Sie ist eine senkrechte Flexbox mit Fläche, Rand, Radius und beschnittenem Überlauf. Das Padding tragen die Abschnitte darin, und jeder Abschnitt entscheidet für sich, ob er welches braucht.</p>
+</aside>
+<h2>Warum</h2>
+<p>Wenn die Karte das Padding trägt, drückt sie jeden Inhalt nach innen, ausnahmslos. Ein Bild, ein Chart oder eine Tabelle kann dann nie bis an die Kante laufen, obwohl genau das oft die richtige Darstellung wäre. Der einzige Ausweg wären negative Margins, und die sind immer ein Hinweis darauf, dass etwas eine Ebene zu hoch sitzt.</p>
+<p>Liegt das Padding dagegen im Abschnitt, entscheidet jeder Abschnitt für sich: Text bekommt Abstand, ein Bild darf randlos sein, eine Tabelle darf ihre eigenen Spaltenabstände mitbringen. Der Abstand bleibt trotzdem überall gleich, weil alle Abschnitte aus denselben zwei Werten schöpfen.</p>
+<p>Die Regel nimmt der Karte nichts. Sie gibt den Abschnitten Freiheit.</p>
+<h2>Der Aufbau</h2>
+<pre><code>Karte        = flex-col · Fläche · Rand · Radius · Überlauf beschnitten · KEIN Padding · KEIN Gap
+└─ Abschnitt = volle Breite bis zur Kante · trägt das Padding
+   └─ Inhalt = Text | Chart | Bild | Tabelle | Hinweis | Button | Kennzahl
+</code></pre>
+<h2>Richtig / falsch</h2>
+<pre><code>        RICHTIG                             FALSCH
+   Padding im Abschnitt            Padding auf der Karte
+
+╔═════════════════════════╗       ╔═════════════════════════╗
+║┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄║       ║                         ║
+║                         ║       ║  ┌───────────────────┐  ║
+║     Titel               ║       ║  │ Titel             │  ║
+║                         ║       ║  └───────────────────┘  ║
+║┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄║       ║  ┌───────────────────┐  ║
+║█████████████████████████║       ║  │███████████████████│  ║
+║██ Bild bis zur Kante ███║       ║  │██ Bild eingerückt │  ║
+║█████████████████████████║       ║  └───────────────────┘  ║
+╚═════════════════════════╝       ╚═════════════════════════╝
+
+ Abschnitt berührt die Kante.      Karte drückt alles nach innen.
+ Randloses Bild möglich.           Randloses Bild unmöglich.
+</code></pre>
+<h2>Wann ein Abschnitt randlos läuft</h2>
+<p>Randlos ist für Inhalt, der <strong>bis an seine eigene Kante Farbe trägt</strong>: Bild, Chart, Tabelle, Heatmap, Landkarte, Video. Solcher Inhalt bringt seine Begrenzung selbst mit. Setzt Du ihn zusätzlich in einen Rahmen aus Hintergrundfläche, stehen zwei Kanten dicht nebeneinander, und keine der beiden wirkt gewollt. Läuft er bis an die Kante, ist die Karte selbst sein Rahmen.</p>
+<p>Nicht randlos läuft Inhalt, der seinen Weißraum schon mitbringt: ein freigestelltes Logo, eine Illustration auf hellem Grund, Text. Der braucht das Padding des Abschnitts.</p>
+<p>Damit die Ecke dabei sauber bleibt, muss die Karte ihren Überlauf beschneiden. Läuft ein Bild bis zur Kante und die Ecke ist trotzdem eckig, fehlt genau das.</p>
+<h2>Padding-Werte im Abschnitt</h2>
+<p>Nur das erste Kind bekommt oben Padding. Die weiteren nicht, weil der untere Abstand des Vorgängers den Abstand schon liefert. Sobald Trennlinien im Spiel sind, bekommt jeder Abschnitt oben und unten Padding, sonst klebt der Inhalt an der Linie.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Fall</th>
+<th>oben</th>
+<th>rechts</th>
+<th>unten</th>
+<th>links</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Erstes Kind, ohne Trennlinie</td>
+<td>14</td>
+<td>16</td>
+<td>14</td>
+<td>16</td>
+</tr>
+<tr>
+<td>Weitere Kinder, ohne Trennlinie</td>
+<td>0</td>
+<td>16</td>
+<td>14</td>
+<td>16</td>
+</tr>
+<tr>
+<td>Alle Kinder, mit Trennlinie</td>
+<td>14</td>
+<td>16</td>
+<td>14</td>
+<td>16</td>
+</tr>
+<tr>
+<td>Randloser Abschnitt</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody></table></div>
+<h2>Hart und weich</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Die Karte trägt kein Padding und kein Gap</td>
+<td>hart</td>
+</tr>
+<tr>
+<td>Das Padding sitzt im Abschnitt, randlose Abschnitte dürfen null setzen</td>
+<td>hart</td>
+</tr>
+<tr>
+<td>Zwei Werte für die ganze Karte, senkrecht kleiner als waagerecht</td>
+<td>hart</td>
+</tr>
+<tr>
+<td>Die konkreten Zahlen</td>
+<td>weich, Vorgabe 14 senkrecht, 16 waagerecht</td>
+</tr>
+</tbody></table></div>
+<p>Warum senkrecht kleiner: <a href="/docs/rules/form-senkrechtes-padding-wird-optisch-ausgeglichen">Senkrechtes Padding wird optisch ausgeglichen</a>.</p>
+<h2>Woran Du den Verstoß erkennst</h2>
+<ul>
+<li>Die Karte selbst trägt Padding oder ein Gap.</li>
+<li>Ein Abschnitt setzt sein Padding mit negativen Margins wieder zurück. Das ist der sichere Beweis, dass das Padding eine Ebene zu hoch sitzt.</li>
+<li>Ein Bild in einer Karte hat links und rechts denselben Abstand wie der Fließtext darüber, obwohl es bis an die Kante gehört.</li>
+<li>Ein Chart läuft bis zur Kante, aber die Ecke ist eckig.</li>
+</ul>
+<h2>Grenzen</h2>
+<p>Keine. Auch eine Karte, die nur einen Textblock enthält, bekommt kein Padding. Sonst ist die Ausnahme nach dem dritten Einsatz die Regel, und beim nächsten Mal steht wieder ein Padding auf der Karte.</p>
+<h2>Verwandt</h2>
+<ul>
+<li><a href="/docs/rules/layout-der-divider-ist-die-unterkante-einer-section">Der Divider ist die Unterkante einer Section</a></li>
+<li><a href="/docs/rules/form-senkrechtes-padding-wird-optisch-ausgeglichen">Senkrechtes Padding wird optisch ausgeglichen</a></li>
+<li><a href="/docs/rules/form-konzentrische-radien">Konzentrische Radien</a></li>
+</ul>
+
+
+    <nav class="legal-links">
+      <a href="/">Home</a>
+      <a href="/docs/mcp">MCP Server</a>
+      <a href="/docs/rules">Design Rules</a>
+      <a href="/impressum.html">Impressum</a>
+      <a href="/datenschutz.html">Datenschutz</a>
+    </nav>
+  </main>
+</body>
+</html>

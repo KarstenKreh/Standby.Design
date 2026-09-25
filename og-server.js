@@ -36,6 +36,7 @@ const MIME_TYPES = {
   '.woff': 'font/woff',
   '.ico': 'image/x-icon',
   '.txt': 'text/plain',
+  '.md': 'text/markdown; charset=utf-8',
   '.xml': 'application/xml',
 };
 
@@ -322,7 +323,7 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  const docsMatch = pathname.match(/^\/docs\/([a-z0-9-]+)(\/)?$/);
+  const docsMatch = pathname.match(/^\/docs\/([a-z0-9-]+(?:\/[a-z0-9-]+)?)(\/)?$/);
   if (docsMatch) {
     if (docsMatch[2]) {
       res.writeHead(301, { Location: `/docs/${docsMatch[1]}` });
@@ -397,7 +398,7 @@ const server = http.createServer((req, res) => {
 
     // Mutable, unversioned files: HTML and crawler-facing text files
     // (llms.txt, robots.txt) must not be cached as immutable.
-    const isMutable = ext === '.html' || ext === '.txt';
+    const isMutable = ext === '.html' || ext === '.txt' || ext === '.md';
     const stream = fs.createReadStream(filePath);
     res.writeHead(200, {
       'Content-Type': contentType,

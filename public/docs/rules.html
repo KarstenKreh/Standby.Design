@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Design Rules — standby.design</title>
+  <meta name="description" content="Übersicht über das qualitative Regelwerk für Layout und Bedienung. Eine Notiz pro Regel, hier die Tabelle mit Geltungsbereich und Einzeiler." />
+  <link rel="canonical" href="https://standby.design/docs/rules" />
+  <link rel="alternate" type="text/markdown" href="https://standby.design/docs/rules.md" title="Design Rules (Markdown)" />
+
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Design Rules — standby.design" />
+  <meta property="og:description" content="Übersicht über das qualitative Regelwerk für Layout und Bedienung. Eine Notiz pro Regel, hier die Tabelle mit Geltungsbereich und Einzeiler." />
+  <meta property="og:url" content="https://standby.design/docs/rules" />
+  <meta property="og:site_name" content="standby.design" />
+  <meta property="og:image" content="https://standby.design/og-image?tool=github" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://standby.design/og-image?tool=github" />
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23111'/%3E%3Ccircle cx='16' cy='16' r='6' fill='none' stroke='%234a7aaa' stroke-width='2'/%3E%3C/svg%3E">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@1,2&f[]=jet-brains-mono@1,2&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --font-heading: 'Satoshi', sans-serif;
+      --font-body: 'Satoshi', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --text-h3: clamp(1.9344rem, 0.2719vw + 1.8707rem, 2.197rem);
+      --text-h5: clamp(1.246rem, 0.0559vw + 1.2329rem, 1.3rem);
+      --text-body-s: 1rem;
+      --text-caption: 0.7692rem;
+      --leading-h3: 1.2;
+      --leading-h5: 1.3;
+      --leading-body-s: 1.5;
+      --tracking-h3: -0.01em;
+      --tracking-body-s: 0.01em;
+      --background: oklch(0.145 0 0);
+      --foreground: oklch(0.985 0 0);
+      --card: oklch(0.205 0 0);
+      --muted-foreground: oklch(0.708 0 0);
+      --border: oklch(1 0 0 / 10%);
+      --emphasis: oklch(0.78 0.1 230);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: var(--font-body);
+      font-size: var(--text-body-s);
+      line-height: var(--leading-body-s);
+      letter-spacing: var(--tracking-body-s);
+      background: var(--background);
+      color: var(--foreground);
+      padding: 2rem 1.5rem 3rem;
+    }
+    main { max-width: 720px; margin: 0 auto; }
+    .back {
+      display: inline-block;
+      padding: 0.5rem 0.75rem;
+      margin: 0 0 2rem -0.75rem;
+      border-radius: 8px;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      transition: color 0.2s, background 0.2s;
+    }
+    .back:hover { color: var(--foreground); background: var(--card); }
+    .eyebrow {
+      font-size: var(--text-caption);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted-foreground);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-heading);
+      font-size: var(--text-h3);
+      font-weight: 700;
+      line-height: var(--leading-h3);
+      letter-spacing: var(--tracking-h3);
+      margin-bottom: 0.4em;
+    }
+    h2 {
+      font-family: var(--font-heading);
+      font-size: var(--text-h5);
+      font-weight: 700;
+      line-height: var(--leading-h5);
+      margin-top: 2.25em;
+      margin-bottom: 0.5em;
+    }
+    h3 {
+      font-family: var(--font-heading);
+      font-size: var(--text-body-s);
+      font-weight: 700;
+      margin-top: 1.5em;
+      margin-bottom: 0.4em;
+    }
+    p, li { color: var(--muted-foreground); margin-bottom: 0.75em; }
+    strong { color: var(--foreground); font-weight: 500; }
+    ul, ol { padding-left: 1.25rem; margin-bottom: 0.75em; }
+    a { color: var(--emphasis); }
+    code { font-family: var(--font-mono); font-size: 0.9em; }
+    pre {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      line-height: 1.5;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.9rem 1rem;
+      margin-bottom: 1rem;
+      overflow-x: auto;
+      white-space: pre;
+    }
+    pre code { font-size: inherit; color: var(--foreground); }
+    hr { border: 0; border-top: 1px solid var(--border); margin: 2rem 0; }
+    .lead { font-size: 1.125rem; }
+    .table-wrap { overflow-x: auto; margin-bottom: 1rem; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td {
+      text-align: left;
+      vertical-align: top;
+      padding: 0.6rem 0.75rem 0.6rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    th { color: var(--foreground); font-weight: 500; }
+    td { color: var(--muted-foreground); }
+    td code { color: var(--foreground); }
+    blockquote {
+      border-left: 2px solid var(--border);
+      padding-left: 1rem;
+      margin-bottom: 0.9rem;
+    }
+    blockquote p { margin-bottom: 0; }
+    .callout {
+      background: var(--card);
+      border-radius: 8px;
+      padding: 0.9rem 1rem;
+      margin-bottom: 1.25rem;
+    }
+    .callout p:last-child, .callout ul:last-child { margin-bottom: 0; }
+    .callout-title {
+      font-size: var(--text-caption);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted-foreground);
+      margin-bottom: 0.35rem;
+    }
+    .callout-tip p:not(.callout-title) { color: var(--foreground); font-size: 1.125rem; }
+    .callout-tip .callout-title { color: var(--emphasis); }
+    .rule-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1.5rem;
+      margin: 0.25rem 0 1.75rem;
+      font-size: 0.875rem;
+    }
+    .rule-meta dt { color: var(--muted-foreground); }
+    .rule-meta dd { color: var(--foreground); }
+    .agent-hint { font-size: 0.875rem; }
+    .legal-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 3.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+    .legal-links a {
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      transition: color 0.2s, background 0.2s;
+    }
+    .legal-links a:hover { color: var(--foreground); background: var(--card); }
+  </style>
+  <script defer src="https://umami.standby.design/script.js" data-website-id="255e8c46-9a39-4cc8-ba66-5cb4fc53b91e"></script>
+</head>
+<body>
+  <main>
+    <a class="back" href="/">&larr; standby.design</a>
+
+    <h1>Design Rules</h1>
+    <p class="lead">Übersicht über das qualitative Regelwerk für Layout und Bedienung. Eine Notiz pro Regel, hier die Tabelle mit Geltungsbereich und Einzeiler.</p>
+
+    <p class="agent-hint">Für Agenten: alle Regeln in einer Datei als <a href="/docs/rules.md">Markdown</a>.</p>
+<aside class="callout callout-summary"><p class="callout-title">Was ist das?</p><p>Das qualitative Gegenstück zum Token-Generator. Der Generator liefert die messbaren Werte — Farben, Skalen, Radien, Schatten. Diese Sammlung liefert die Regeln, die man nicht exportieren kann: welches Verhalten wofür, wie eine Karte innen aufgebaut ist, wie Elemente gruppiert werden, wann Farbe etwas bedeuten darf. Zielgruppe sind Agenten, die Layouts bauen, und Menschen, die deren Ergebnis prüfen.</p>
+</aside>
+<hr>
+<h2>Wie eine Regel aufgebaut ist</h2>
+<p>Jede Notiz folgt demselben Schnitt:</p>
+<ul>
+<li><strong>Regel</strong> — ein Satz, Imperativ, ohne Einschränkung</li>
+<li><strong>Warum</strong> — der Grund, aus dem sich die Regel im Zweifel selbst herleiten lässt</li>
+<li><strong>Woran Du den Verstoß erkennst</strong> — das Merkmal, nach dem im Code gesucht werden kann</li>
+<li><strong>Richtig / falsch</strong> — Wireframe oder Minimalbeispiel</li>
+<li><strong>Grenzen</strong> — wann die Regel nicht greift</li>
+</ul>
+<p>Das Warum ist kein Beiwerk. Ohne Grund baut ein Agent die Regel weg, sobald sie im konkreten Fall unbequem wird.</p>
+<h2>Hart und weich</h2>
+<p>Manche Regeln enthalten eine Zahl. Die Zahl ist fast nie das Allgemeingültige daran, sie ist eine Frage der Handschrift. Solche Regeln trennen deshalb zwei Dinge:</p>
+<ul>
+<li><strong>Hart</strong> ist die Invariante: dass es überhaupt genau einen Wert gibt, dass er als Token steht, und in welchem Korridor er liegen darf.</li>
+<li><strong>Weich</strong> ist die Zahl im Korridor. Dafür nennt die Regel einen <strong>Vorgabewert</strong>, der gilt, solange das Projekt nichts anderes festlegt.</li>
+</ul>
+<p>So bleibt die Sammlung ohne Marken-Richtlinie benutzbar: ein Agent hat immer etwas Konkretes zur Hand, und eine Marke kann es überschreiben, ohne die Regel zu brechen. Im Frontmatter stehen dafür <code>korridor</code> und <code>default</code>.</p>
+<h2>Die drei Geltungsbereiche</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th><code>scope</code></th>
+<th>Bedeutung</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>universal</code></td>
+<td>Gilt in jedem Projekt, unabhängig von Marke und Technik</td>
+</tr>
+<tr>
+<td><code>stack</code></td>
+<td>Gilt innerhalb einer Technik (Web, React Native), aber projektübergreifend</td>
+</tr>
+<tr>
+<td><code>project</code></td>
+<td>Bleibt im Repo. Steht nicht hier</td>
+</tr>
+</tbody></table></div>
+<p>Dazu sagt <code>applies-to</code>, für welche Techniken eine Regel gedacht ist. Damit lässt sich die Sammlung später gefiltert exportieren: ein Agent bekommt genau die Regeln, die zu seinem Projekt passen, statt aller.</p>
+<hr>
+<h2>Layout</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Regel</th>
+<th>Scope</th>
+<th>Kern</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="/docs/rules/layout-die-karte-hat-kein-padding">Die Karte hat kein Padding</a></td>
+<td>universal</td>
+<td>Padding im Abschnitt, nicht in der Karte. Nur so darf ein Bild randlos laufen</td>
+</tr>
+<tr>
+<td><a href="/docs/rules/layout-der-divider-ist-die-unterkante-einer-section">Der Divider ist die Unterkante einer Section</a></td>
+<td>universal</td>
+<td>Die Linie ist keine Komponente, sondern eine Kante. Der letzte Abschnitt hat keine</td>
+</tr>
+<tr>
+<td><a href="/docs/rules/layout-naehe-gruppiert-nicht-die-linie">Nähe gruppiert, nicht die Linie</a></td>
+<td>universal</td>
+<td>Abstand gruppiert. Die Linie kommt erst, wenn der Abstand nicht mehr trägt</td>
+</tr>
+<tr>
+<td><a href="/docs/rules/layout-weniger-kanten-ruhigere-ansicht">Weniger Kanten, ruhigere Ansicht</a></td>
+<td>universal</td>
+<td>Ausrichtungskanten zählen und zusammenlegen. Nicht linksbündig mit zentriert mischen</td>
+</tr>
+<tr>
+<td><a href="/docs/rules/layout-jede-ansicht-bricht-bei-320-pixeln-um">Jede Ansicht bricht bei 320 Pixeln um</a></td>
+<td>universal</td>
+<td>WCAG Reflow: umbrechen ohne waagerechtes Scrollen. Betrifft vor allem Zoom, nicht Telefone</td>
+</tr>
+</tbody></table></div>
+<h2>Fluss</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Regel</th>
+<th>Scope</th>
+<th>Kern</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="/docs/rules/fluss-ein-pop-up-unterbricht-es-fuehrt-nicht">Ein Pop-up unterbricht, es führt nicht</a></td>
+<td>universal</td>
+<td>Mehr als eine Eingabe oder mehr als ein Hinweis: dann ein eigener Screen</td>
+</tr>
+<tr>
+<td><a href="/docs/rules/fluss-leer-ist-ein-zustand-keine-luecke">Leer ist ein Zustand, keine Lücke</a></td>
+<td>universal</td>
+<td>Drei Sorten leer, drei Antworten. Eine unbeschriebene Fläche ist keine</td>
+</tr>
+<tr>
+<td><a href="/docs/rules/fluss-der-platz-ist-da-bevor-die-daten-kommen">Der Platz ist da, bevor die Daten kommen</a></td>
+<td>universal</td>
+<td>Nichts springt. Unter 200ms gar kein Ladehinweis</td>
+</tr>
+<tr>
+<td><a href="/docs/rules/fluss-ein-fehler-steht-dort-wo-er-entstanden-ist">Ein Fehler steht dort, wo er entstanden ist</a></td>
+<td>universal</td>
+<td>Am Feld, nicht im Pop-up. Sagt was zu tun ist. Eingaben bleiben</td>
+</tr>
+</tbody></table></div>
+<h2>Form</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Regel</th>
+<th>Scope</th>
+<th>Kern</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="/docs/rules/form-konzentrische-radien">Konzentrische Radien</a></td>
+<td>universal</td>
+<td><code>r_innen = r_außen − Abstand</code></td>
+</tr>
+<tr>
+<td><a href="/docs/rules/form-senkrechtes-padding-wird-optisch-ausgeglichen">Senkrechtes Padding wird optisch ausgeglichen</a></td>
+<td>universal</td>
+<td>14 senkrecht gegen 16 waagerecht, damit es gleich aussieht</td>
+</tr>
+</tbody></table></div>
+<h2>Fläche</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Regel</th>
+<th>Scope</th>
+<th>Kern</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="/docs/rules/flaeche-die-ebene-folgt-der-rolle-nicht-der-schachtelung">Die Ebene folgt der Rolle, nicht der Schachtelung</a></td>
+<td>universal</td>
+<td>Geschlossene Menge, Ebene folgt der Rolle. Vorgabe drei</td>
+</tr>
+<tr>
+<td><a href="/docs/rules/flaeche-eine-linie-trennt-sie-schmueckt-nicht">Eine Linie trennt, sie schmückt nicht</a></td>
+<td>universal</td>
+<td>Erst Abstand, dann Fläche, dann Linie. Und wenn Linie, dann die leise</td>
+</tr>
+</tbody></table></div>
+<h2>Bedienung</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Regel</th>
+<th>Scope</th>
+<th>Kern</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="/docs/rules/bedienung-verhalten-und-aussehen-bleiben-getrennt">Verhalten und Aussehen bleiben getrennt</a></td>
+<td>universal</td>
+<td>Fünf Verhaltensarten, Aussehen austauschbar. Das Wörterbuch sagt, welche Kombination wofür</td>
+</tr>
+<tr>
+<td><a href="/docs/rules/bedienung-verhalten-und-aussehen-werden-nicht-in-der-ansicht-nachgebaut">Verhalten und Aussehen werden nicht in der Ansicht nachgebaut</a></td>
+<td>universal</td>
+<td>Die Ansicht benutzt vorhandene Elemente. Sie definiert Verhalten und Aussehen nicht neu</td>
+</tr>
+<tr>
+<td><a href="/docs/rules/bedienung-klickbares-braucht-eine-flaeche">Klickbares braucht eine Fläche</a></td>
+<td>universal</td>
+<td>Kein nackter Textlink. Dezent geht über Farbe, nicht über kleinere Fläche</td>
+</tr>
+<tr>
+<td><a href="/docs/rules/bedienung-die-hoehe-gehoert-der-zeile-nicht-dem-element">Die Höhe gehört der Zeile, nicht dem Element</a></td>
+<td>universal</td>
+<td>Alles in einer Zeile gleich hoch. Der Kontext sagt welche Höhe, nicht das Bauteil</td>
+</tr>
+<tr>
+<td><a href="/docs/rules/bedienung-kurze-zustaende-verschieben-dauerhafte-wechseln-die-palette">Kurze Zustände verschieben, dauerhafte wechseln die Palette</a></td>
+<td>universal</td>
+<td>Hover verschiebt, „an&quot; wechselt. Gedrückt geht nie zurück</td>
+</tr>
+<tr>
+<td><a href="/docs/rules/bedienung-ein-dauerhafter-zustand-braucht-ein-zweites-zeichen">Ein dauerhafter Zustand braucht ein zweites Zeichen</a></td>
+<td>universal</td>
+<td>Farbe allein ist für farbenblinde Nutzer unsichtbar</td>
+</tr>
+<tr>
+<td><a href="/docs/rules/bedienung-fokus-ist-immer-sichtbar">Fokus ist immer sichtbar</a></td>
+<td>universal</td>
+<td>Nie ersatzlos entfernt, überall gleich gebaut, verschiebt kein Layout</td>
+</tr>
+<tr>
+<td><a href="/docs/rules/bedienung-uebergaenge-haben-genau-einen-wert">Übergänge haben genau einen Wert</a></td>
+<td>universal</td>
+<td>Eine Dauer im ganzen Projekt, Korridor 100-200ms, Vorgabe 150. Reduzierte Bewegung: sofort</td>
+</tr>
+</tbody></table></div>
+<h2>Zustand</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Regel</th>
+<th>Scope</th>
+<th>Kern</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="/docs/rules/zustand-dieselbe-zahl-bedeutet-ueberall-dasselbe">Dieselbe Zahl bedeutet überall dasselbe</a></td>
+<td>universal</td>
+<td>Eine Übersetzung fürs ganze Produkt. Fehlt der Wert, bleibt es grau</td>
+</tr>
+<tr>
+<td><a href="/docs/rules/zustand-rot-ist-nicht-ein-rot">Rot ist nicht ein Rot</a></td>
+<td>universal</td>
+<td>Ein Wert kann nicht Text und Fläche zugleich sein. Der Untergrund entscheidet</td>
+</tr>
+</tbody></table></div>
+<h2>Typografie</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Regel</th>
+<th>Scope</th>
+<th>Kern</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="/docs/rules/typografie-betone-mit-einem-mittel-nicht-mit-zweien">Betone mit einem Mittel, nicht mit zweien</a></td>
+<td>universal</td>
+<td>Größe oder Gewicht, nie beides. Die große Zahl läuft normal</td>
+</tr>
+<tr>
+<td><a href="/docs/rules/typografie-zahlenspalten-stehen-rechtsbuendig">Zahlenspalten stehen rechtsbündig</a></td>
+<td>universal</td>
+<td>Größenordnung wird an der Länge lesbar</td>
+</tr>
+<tr>
+<td><a href="/docs/rules/typografie-icons-sind-auf-die-schrift-abgestimmt">Icons sind auf die Schrift abgestimmt</a></td>
+<td>universal</td>
+<td>Wie ein Schriftzeichen behandeln. Abstand optisch je Icon, nicht ein fester gap</td>
+</tr>
+</tbody></table></div>
+<h2>Farbe und Tokens</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Regel</th>
+<th>Scope</th>
+<th>Kern</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="/docs/rules/farbe-werte-kommen-aus-tokens-nie-aus-der-hand">Werte kommen aus Tokens, nie aus der Hand</a></td>
+<td>universal</td>
+<td>Kein Hex, keine Pixelzahl in der Ansicht. Dazu: was Material ist</td>
+</tr>
+<tr>
+<td><a href="/docs/rules/farbe-hell-und-dunkel-sind-zwei-entwuerfe-keine-umkehrung">Hell und Dunkel sind zwei Entwürfe, keine Umkehrung</a></td>
+<td>universal</td>
+<td>Beide Erscheinungen einzeln festgelegt und einzeln geprüft. Der Nutzer entscheidet</td>
+</tr>
+</tbody></table></div>
+<h2>Stack</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Regel</th>
+<th>Scope</th>
+<th>Kern</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="/docs/rules/stack-utility-klassen-statt-inline-styles">Utility-Klassen statt Inline-Styles</a></td>
+<td>stack</td>
+<td>Inline-Style ist der Ausstieg aus dem System</td>
+</tr>
+<tr>
+<td><a href="/docs/rules/stack-abstand-ueber-gap-nicht-ueber-margins-am-kind">Abstand über gap, nicht über Margins am Kind</a></td>
+<td>stack</td>
+<td>Der Abstand gehört dem Container</td>
+</tr>
+<tr>
+<td><a href="/docs/rules/stack-keine-deckkraft-modifier-auf-semantischen-farben">Keine Deckkraft-Modifier auf semantischen Farben</a></td>
+<td>stack</td>
+<td>Kein <code>bg-primary/10</code>. Benannte Stufen, <code>brightness-110</code> für Hover</td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2>Daneben, keine Regel</h2>
+<p><a href="/docs/rules/philosophie-body-role-und-skin">Body, Role und Skin</a> ist die persönliche Haltung: Cellular Design, die Wörter Body, Role und Skin, die Abgrenzung zu Atomic Design. Sie ist keine Regel dieser Sammlung. Die Notizen hier gelten auch ohne sie.</p>
+<h2>Was bewusst NICHT hier steht</h2>
+<p>Diese Dinge bleiben im jeweiligen Projekt, weil sie eine Marke oder ein bestimmtes Produkt beschreiben:</p>
+<ul>
+<li><strong>Stilrichtung und Stimmung</strong> — die Formsprache, das Lichtverhalten, die Liste der Stile, die man vermeiden will. Das ist die Handschrift eines Produkts, keine Regel für alle</li>
+<li><strong>Marke und Schreibweise</strong> — Produktname, Schreibweise, Wortmarke</li>
+<li><strong>Konkrete Werte</strong> — Farbwerte, Schriftfamilien, Breakpoint-Zahlen, Pfade zu Token-Dateien</li>
+<li><strong>Fachliche Schwellen</strong> — wo die Grenze zwischen gut, mittel und schlecht liegt. Die Regel „Schwellen kommen aus einer Quelle&quot; ist allgemeingültig, die Zahlen sind es nicht</li>
+<li><strong>Sprache der Oberfläche</strong> — welche Sprache, geduzt oder gesiezt</li>
+<li><strong>Altlasten und Migration</strong> — offene Fundstellen, Umbaupläne, Zwischenstände</li>
+</ul>
+<p>Wichtig ist die Richtung: eine Regel darf ihren Grund nennen und ein typisches Muster beschreiben, aber sie nennt kein Projekt, keine Person, keine Datei und keinen Zählstand. Was nur in einem Projekt wahr ist, gehört nicht in die Sammlung.</p>
+
+
+    <nav class="legal-links">
+      <a href="/">Home</a>
+      <a href="/docs/mcp">MCP Server</a>
+      <a href="/docs/rules">Design Rules</a>
+      <a href="/impressum.html">Impressum</a>
+      <a href="/datenschutz.html">Datenschutz</a>
+    </nav>
+  </main>
+</body>
+</html>

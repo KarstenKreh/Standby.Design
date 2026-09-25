@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ein Pop-up unterbricht, es führt nicht — Design Rules — standby.design</title>
+  <meta name="description" content="Ein Pop-up gehört dem System, nicht dem Nutzer. Es ist für einen Hinweis da, der jetzt eine Entscheidung braucht. Alles, was der Nutzer selbst tun will, ist ein Screen." />
+  <link rel="canonical" href="https://standby.design/docs/rules/fluss-ein-pop-up-unterbricht-es-fuehrt-nicht" />
+  <link rel="alternate" type="text/markdown" href="https://standby.design/docs/rules.md" title="Design Rules (Markdown)" />
+
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Ein Pop-up unterbricht, es führt nicht — Design Rules — standby.design" />
+  <meta property="og:description" content="Ein Pop-up gehört dem System, nicht dem Nutzer. Es ist für einen Hinweis da, der jetzt eine Entscheidung braucht. Alles, was der Nutzer selbst tun will, ist ein Screen." />
+  <meta property="og:url" content="https://standby.design/docs/rules/fluss-ein-pop-up-unterbricht-es-fuehrt-nicht" />
+  <meta property="og:site_name" content="standby.design" />
+  <meta property="og:image" content="https://standby.design/og-image?tool=github" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://standby.design/og-image?tool=github" />
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23111'/%3E%3Ccircle cx='16' cy='16' r='6' fill='none' stroke='%234a7aaa' stroke-width='2'/%3E%3C/svg%3E">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@1,2&f[]=jet-brains-mono@1,2&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --font-heading: 'Satoshi', sans-serif;
+      --font-body: 'Satoshi', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --text-h3: clamp(1.9344rem, 0.2719vw + 1.8707rem, 2.197rem);
+      --text-h5: clamp(1.246rem, 0.0559vw + 1.2329rem, 1.3rem);
+      --text-body-s: 1rem;
+      --text-caption: 0.7692rem;
+      --leading-h3: 1.2;
+      --leading-h5: 1.3;
+      --leading-body-s: 1.5;
+      --tracking-h3: -0.01em;
+      --tracking-body-s: 0.01em;
+      --background: oklch(0.145 0 0);
+      --foreground: oklch(0.985 0 0);
+      --card: oklch(0.205 0 0);
+      --muted-foreground: oklch(0.708 0 0);
+      --border: oklch(1 0 0 / 10%);
+      --emphasis: oklch(0.78 0.1 230);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: var(--font-body);
+      font-size: var(--text-body-s);
+      line-height: var(--leading-body-s);
+      letter-spacing: var(--tracking-body-s);
+      background: var(--background);
+      color: var(--foreground);
+      padding: 2rem 1.5rem 3rem;
+    }
+    main { max-width: 720px; margin: 0 auto; }
+    .back {
+      display: inline-block;
+      padding: 0.5rem 0.75rem;
+      margin: 0 0 2rem -0.75rem;
+      border-radius: 8px;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      transition: color 0.2s, background 0.2s;
+    }
+    .back:hover { color: var(--foreground); background: var(--card); }
+    .eyebrow {
+      font-size: var(--text-caption);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted-foreground);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-heading);
+      font-size: var(--text-h3);
+      font-weight: 700;
+      line-height: var(--leading-h3);
+      letter-spacing: var(--tracking-h3);
+      margin-bottom: 0.4em;
+    }
+    h2 {
+      font-family: var(--font-heading);
+      font-size: var(--text-h5);
+      font-weight: 700;
+      line-height: var(--leading-h5);
+      margin-top: 2.25em;
+      margin-bottom: 0.5em;
+    }
+    h3 {
+      font-family: var(--font-heading);
+      font-size: var(--text-body-s);
+      font-weight: 700;
+      margin-top: 1.5em;
+      margin-bottom: 0.4em;
+    }
+    p, li { color: var(--muted-foreground); margin-bottom: 0.75em; }
+    strong { color: var(--foreground); font-weight: 500; }
+    ul, ol { padding-left: 1.25rem; margin-bottom: 0.75em; }
+    a { color: var(--emphasis); }
+    code { font-family: var(--font-mono); font-size: 0.9em; }
+    pre {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      line-height: 1.5;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.9rem 1rem;
+      margin-bottom: 1rem;
+      overflow-x: auto;
+      white-space: pre;
+    }
+    pre code { font-size: inherit; color: var(--foreground); }
+    hr { border: 0; border-top: 1px solid var(--border); margin: 2rem 0; }
+    .lead { font-size: 1.125rem; }
+    .table-wrap { overflow-x: auto; margin-bottom: 1rem; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td {
+      text-align: left;
+      vertical-align: top;
+      padding: 0.6rem 0.75rem 0.6rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    th { color: var(--foreground); font-weight: 500; }
+    td { color: var(--muted-foreground); }
+    td code { color: var(--foreground); }
+    blockquote {
+      border-left: 2px solid var(--border);
+      padding-left: 1rem;
+      margin-bottom: 0.9rem;
+    }
+    blockquote p { margin-bottom: 0; }
+    .callout {
+      background: var(--card);
+      border-radius: 8px;
+      padding: 0.9rem 1rem;
+      margin-bottom: 1.25rem;
+    }
+    .callout p:last-child, .callout ul:last-child { margin-bottom: 0; }
+    .callout-title {
+      font-size: var(--text-caption);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted-foreground);
+      margin-bottom: 0.35rem;
+    }
+    .callout-tip p:not(.callout-title) { color: var(--foreground); font-size: 1.125rem; }
+    .callout-tip .callout-title { color: var(--emphasis); }
+    .rule-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1.5rem;
+      margin: 0.25rem 0 1.75rem;
+      font-size: 0.875rem;
+    }
+    .rule-meta dt { color: var(--muted-foreground); }
+    .rule-meta dd { color: var(--foreground); }
+    .agent-hint { font-size: 0.875rem; }
+    .legal-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 3.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+    .legal-links a {
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      transition: color 0.2s, background 0.2s;
+    }
+    .legal-links a:hover { color: var(--foreground); background: var(--card); }
+  </style>
+  <script defer src="https://umami.standby.design/script.js" data-website-id="255e8c46-9a39-4cc8-ba66-5cb4fc53b91e"></script>
+</head>
+<body>
+  <main>
+    <a class="back" href="/docs/rules">&larr; Design Rules</a>
+
+    <p class="eyebrow">Fluss</p>
+    <h1>Ein Pop-up unterbricht, es führt nicht</h1>
+    <dl class="rule-meta"><div><dt>Geltung</dt><dd>universal · web, react-native</dd></div></dl>
+
+<aside class="callout callout-tip"><p class="callout-title">Regel</p><p>Benutze ein Pop-up nur, um den Nutzer auf genau eine Sache aufmerksam zu machen, die jetzt eine Entscheidung braucht. Sobald mehr als eine Eingabe nötig ist oder es um mehr als einen konkreten Hinweis geht, wird daraus ein eigener Screen. Ein Pop-up ist nie eine Eingabemaske.</p>
+</aside>
+<h2>Warum</h2>
+<h3>Ein Pop-up gehört dem System, nicht dem Nutzer</h3>
+<p>Das ist der Kern, und alles Weitere folgt daraus. Ein Pop-up ist eine Unterbrechung, und unterbrechen darf nur, wer etwas zu sagen hat, das nicht warten kann. Es ist das Werkzeug, mit dem die Anwendung den Nutzer anspricht.</p>
+<p>Ein Formular ist das Gegenteil. Da spricht nicht die Anwendung, da arbeitet der Nutzer. Es ist keine Unterbrechung, sondern das, weswegen er gekommen ist.</p>
+<p>Ein Formular in einem Pop-up hat deshalb nicht die falsche Größe, sondern die falsche Richtung. Es benutzt das Werkzeug für das Anhalten, um jemanden weitergehen zu lassen. „Verlassen ohne zu speichern?&quot; ist richtig herum: die Anwendung sagt etwas, der Nutzer antwortet, es ist vorbei. „Kontakt anlegen&quot; ist verkehrt herum.</p>
+<h3>Ein Pop-up verspricht Kürze und bricht das Versprechen</h3>
+<p>Wer alles andere wegnimmt, geht einen Handel ein: das hier ist gleich vorbei. Ein Formular hält die Anwendung stattdessen minutenlang fest.</p>
+<p>Der Preis dafür ist konkreter, als er klingt. Was der Nutzer beim Ausfüllen braucht, liegt fast immer hinter dem Pop-up: die Liste, aus der er kommt, der Wert in der Tabelle daneben, der Name, den er gerade nachsehen wollte. <strong>Er sieht es. Er kann es nicht anfassen.</strong> Das Pop-up zeigt ihm den Zusammenhang und verbietet ihn gleichzeitig. Bei einem Hinweis stört das nicht, bei einer Aufgabe ist es genau das Falsche.</p>
+<h3>Das Pop-up erzeugt seine eigene Nachfrage</h3>
+<p>Der beste Beweis, dass ein Formular dort nicht hingehört, liefert das Muster selbst. Ein Formular im Pop-up braucht eine Warnung beim Schließen, denn die Eingaben verschwinden mit dem Fenster. Also legt man ein zweites Pop-up darüber: „Änderungen verwerfen?&quot;</p>
+<p>Das Muster braucht sich selbst, um den Schaden zu heilen, den es selbst anrichtet. Bei einem Screen stellt sich die Frage gar nicht erst so scharf, weil er einen Ort hat, an den man zurückkommt.</p>
+<h3>Tiefe hat keine Anzeige</h3>
+<p>Jede andere Form von Navigation zeigt dem Nutzer, wo er ist: ein Pfad, ein Zurück, ein aktiver Reiter. Für gestapelte Fenster gibt es das nicht. Nirgends auf dem Bildschirm steht, dass man drei Ebenen tief steckt.</p>
+<p>Deshalb hat Deine Frage keine gute Antwort: <strong>ich bin in Fenster 3 und muss zurück nach Fenster 1.</strong> Was passiert mit Fenster 2? Was mit dem, was in Fenster 3 schon eingegeben wurde? Was macht der Zurück-Knopf des Geräts? Das Problem ist nicht, dass sich das schwer bauen lässt. Das Problem ist, dass es dem Nutzer nicht gezeigt werden kann, weil es keine Darstellung für Tiefe gibt.</p>
+<h3>Ein Screen hat eine Adresse, ein Pop-up nicht</h3>
+<p>Alles, woran jemand länger als einen Moment arbeitet, muss adressierbar sein: verlinkbar, nach einem Absturz wiederherstellbar, im Verlauf auffindbar, an einen Kollegen schickbar. Ein Formular im Pop-up kann nichts davon. Es existiert nur, solange niemand danebentippt.</p>
+<h3>Verschachtelte Pop-ups sind eine Sackgasse für die Tastatur</h3>
+<p>Ein Pop-up muss den Fokus einsperren, sonst tabbt man hinter das Fenster. Liegt eines im anderen, liegen zwei Fallen ineinander. Wer nicht mit der Maus arbeitet, findet aus so einer Verschachtelung schwer wieder heraus. Für ein einzelnes „Ja oder Nein&quot; ist die Falle harmlos, für ein Formular ist sie es nicht.</p>
+<h2>Der Test</h2>
+<p>Zwei Fragen, in dieser Reihenfolge:</p>
+<ol>
+<li><strong>Braucht es mehr als eine Eingabe?</strong> Dann ist es ein Screen.</li>
+<li><strong>Geht es um mehr als einen konkreten Hinweis?</strong> Dann ist es ein Screen.</li>
+</ol>
+<p>Bleibt beides „nein&quot;, darf es ein Pop-up sein. Der Test ist die praktische Fassung der Richtungsfrage von oben: eine einzelne Antwort gibt der Nutzer der Anwendung, ab der zweiten arbeitet er. Er ist bewusst scharf, weil die Grauzone genau der Ort ist, an dem die Fenster anfangen sich zu stapeln.</p>
+<h2>Was ein Pop-up darf</h2>
+<ul>
+<li>Vor einem Verlust warnen und die Entscheidung einholen: verlassen ohne zu speichern, löschen, überschreiben</li>
+<li>Ein Ergebnis melden, das der Nutzer nicht übersehen darf und dessen Folge er bestätigen muss</li>
+<li>Genau einen Wert abfragen, wenn er allein steht und der Vorgang danach zu Ende ist</li>
+</ul>
+<p>In allen drei Fällen redet die Anwendung, und der Nutzer antwortet mit einem Wort.</p>
+<h2>Woran Du den Verstoß erkennst</h2>
+<ul>
+<li>Im Pop-up stehen mehrere Eingabefelder oder ein „Speichern&quot; für mehrere Werte.</li>
+<li>Aus einem Pop-up heraus öffnet sich ein zweites.</li>
+<li>Es gibt eine Warnung „Änderungen verwerfen?&quot; beim Schließen eines Pop-ups.</li>
+<li>Das Pop-up hat Reiter, Schritte oder einen eigenen Scrollbereich.</li>
+<li>Der Zurück-Knopf des Geräts schließt etwas anderes als das, was der Nutzer erwartet.</li>
+<li>Der Zustand lässt sich nicht verlinken und kommt nach einem Neuladen nicht wieder.</li>
+<li>Das Pop-up hat eine Überschrift, die eigentlich ein Seitentitel ist.</li>
+</ul>
+<h2>Richtig / falsch</h2>
+<pre><code>        RICHTIG                             FALSCH
+
+  ┌───────────────────────┐           ┌───────────────────────┐
+  │ Kontakt bearbeiten    │           │ Kontakte              │
+  │                       │           │  ┌──────────────────┐ │
+  │ Name   [__________]   │           │  │ Bearbeiten       │ │
+  │ Mail   [__________]   │           │  │ Name [________]  │ │
+  │ Rolle  [__________]   │           │  │  ┌─────────────┐ │ │
+  │                       │           │  │  │ Rolle wählen│ │ │
+  │        [ Speichern ]  │           │  │  │  ┌────────┐ │ │ │
+  └───────────────────────┘           │  │  │  │ Sicher?│ │ │ │
+   eigener Screen, hat eine           │  │  │  └────────┘ │ │ │
+   Adresse, Zurück ist klar           │  │  └─────────────┘ │ │
+                                      │  └──────────────────┘ │
+  ┌───────────────────────┐           └───────────────────────┘
+  │ Ohne Speichern raus?  │            Fenster 3 zurück nach 1:
+  │  [Abbrechen] [Raus]   │            keine gute Antwort
+  └───────────────────────┘
+   ein Hinweis, eine Entscheidung
+</code></pre>
+<h2>Grenzen</h2>
+<p>Nicht jedes Ding, das über dem Inhalt liegt, ist ein Pop-up im Sinne dieser Regel. Ausgenommen sind Elemente, die zu einem Bedienelement gehören und mit ihm verschwinden:</p>
+<ul>
+<li>Tooltip und Hinweis am Element</li>
+<li>Aufklappmenü und Auswahlliste</li>
+<li>Datums- und Zeitauswahl an einem Feld</li>
+<li>Kurzmeldung, die von selbst geht und nichts blockiert</li>
+</ul>
+<p>Sie unterbrechen nicht, sie erweitern das Element darunter. Der Unterschied ist nicht die Technik, sondern die Richtung: sie tun, was der Nutzer gerade will, statt ihn anzuhalten.</p>
+<p>Ein Panel, das von der Seite oder von unten einfährt, ist kein Schlupfloch. Steht ein Formular darin, gilt die Regel genauso: es hat keine Adresse und stapelt genauso.</p>
+<h2>Verwandt</h2>
+<ul>
+<li><a href="/docs/rules/bedienung-fokus-ist-immer-sichtbar">Fokus ist immer sichtbar</a></li>
+<li><a href="/docs/rules/layout-jede-ansicht-bricht-bei-320-pixeln-um">Jede Ansicht bricht bei 320 Pixeln um</a></li>
+<li><a href="/docs/rules/bedienung-klickbares-braucht-eine-flaeche">Klickbares braucht eine Fläche</a></li>
+</ul>
+
+
+    <nav class="legal-links">
+      <a href="/">Home</a>
+      <a href="/docs/mcp">MCP Server</a>
+      <a href="/docs/rules">Design Rules</a>
+      <a href="/impressum.html">Impressum</a>
+      <a href="/datenschutz.html">Datenschutz</a>
+    </nav>
+  </main>
+</body>
+</html>
