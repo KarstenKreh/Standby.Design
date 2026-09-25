@@ -90,7 +90,7 @@ Dazu sagt `applies-to`, für welche Techniken eine Regel gedacht ist. Damit läs
 | [[Bedienung - Verhalten und Aussehen werden nicht in der Ansicht nachgebaut]] | universal | Die Ansicht benutzt vorhandene Elemente. Sie definiert Verhalten und Aussehen nicht neu |
 | [[Bedienung - Klickbares braucht eine Fläche]] | universal | Kein nackter Textlink. Dezent geht über Farbe, nicht über kleinere Fläche |
 | [[Bedienung - Die Höhe gehört der Zeile, nicht dem Element]] | universal | Alles in einer Zeile gleich hoch. Der Kontext sagt welche Höhe, nicht das Bauteil |
-| [[Bedienung - Kurze Zustände verschieben, dauerhafte wechseln die Palette]] | universal | Hover verschiebt, „an" wechselt. Gedrückt geht nie zurück |
+| [[Bedienung - Kurze Zustände verschieben, dauerhafte wechseln die Palette]] | universal | Hover eine Stufe heller, Gedrückt eine dunkler, in beiden Modi gleich. „An" wechselt die Palette |
 | [[Bedienung - Ein dauerhafter Zustand braucht ein zweites Zeichen]] | universal | Farbe allein ist für farbenblinde Nutzer unsichtbar |
 | [[Bedienung - Fokus ist immer sichtbar]] | universal | Nie ersatzlos entfernt, überall gleich gebaut, verschiebt kein Layout |
 | [[Bedienung - Übergänge haben genau einen Wert]] | universal | Eine Dauer im ganzen Projekt, Korridor 100-200ms, Vorgabe 150. Reduzierte Bewegung: sofort |
@@ -123,7 +123,7 @@ Dazu sagt `applies-to`, für welche Techniken eine Regel gedacht ist. Damit läs
 |---|---|---|
 | [[Stack - Utility-Klassen statt Inline-Styles]] | stack | Inline-Style ist der Ausstieg aus dem System |
 | [[Stack - Abstand über gap, nicht über Margins am Kind]] | stack | Der Abstand gehört dem Container |
-| [[Stack - Keine Deckkraft-Modifier auf semantischen Farben]] | stack | Kein `bg-primary/10`. Benannte Stufen, `brightness-110` für Hover |
+| [[Stack - Keine Deckkraft-Modifier auf semantischen Farben]] | stack | Kein `bg-primary/10`. Benannte Stufen, Hover heller, Gedrückt dunkler |
 
 ---
 

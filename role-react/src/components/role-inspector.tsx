@@ -8,9 +8,8 @@ interface CardProps {
   motionMs: number;
 }
 
-function intensityNote(theme: RoleTheme, ladder: Ladder): string {
-  if (ladder.reversed) return theme.isDark ? 'darker — scale end, flipped' : 'lighter — scale end, flipped';
-  return theme.isDark ? 'lighter' : 'darker';
+function hoverNote(ladder: Ladder): string {
+  return ladder.reversed ? 'darker — scale end, flipped' : 'lighter, toward the pointer';
 }
 
 function RoleCard({ name, desc, specimen, rows, active, control }: {
@@ -104,8 +103,8 @@ export function PressableCard({ theme, motionMs }: CardProps) {
       }
       rows={[
         { id: 'rest', state: 'rest', rule: 'skin defaults', token: theme.brand.rest },
-        { id: 'hover', state: 'hover', rule: `one rung (100 step numbers) more intensity — away from the surface (${intensityNote(theme, theme.brand)}), cursor pointer`, token: theme.brand.hover },
-        { id: 'pressed', state: 'pressed', rule: 'two rungs, same direction — never back toward rest; depth is the shape module’s job', token: theme.brand.pressed },
+        { id: 'hover', state: 'hover', rule: `one rung (100 step numbers), ${hoverNote(theme.brand)} — same in light and dark mode, cursor pointer`, token: theme.brand.hover },
+        { id: 'pressed', state: 'pressed', rule: 'one rung darker than rest — the element sinks in; the shape module adds the physical part', token: theme.brand.pressed },
         { id: 'focus', state: 'focus-visible', rule: 'ring from the shape module, keyboard only', tokenText: `ring ${theme.ringWidth}px ${theme.ringStyle}` },
         { id: 'disabled', state: 'disabled', rule: "forbidden — an element acts, or explains why it can't", tokenText: '∅', forbidden: true },
       ]}
@@ -168,7 +167,7 @@ export function ToggleableCard({ theme, motionMs }: CardProps) {
       rows={[
         { id: 'off', state: 'off', rule: 'neutral palette', token: theme.track.rest },
         { id: 'on', state: 'on', rule: 'palette switch → brand', token: theme.brand.rest },
-        { id: 'hover', state: 'hover', rule: `one rung more intensity, inside whichever palette is active (${intensityNote(theme, on ? theme.brand : theme.track)})`, token: on ? theme.brand.hover : theme.track.hover },
+        { id: 'hover', state: 'hover', rule: `one rung, ${hoverNote(on ? theme.brand : theme.track)}, inside whichever palette is active`, token: on ? theme.brand.hover : theme.track.hover },
         { id: 'focus', state: 'focus-visible', rule: 'ring from the shape module', tokenText: `ring ${theme.ringWidth}px ${theme.ringStyle}` },
       ]}
     />
@@ -233,7 +232,7 @@ export function EditableCard({ theme, motionMs }: CardProps) {
       }
       rows={[
         { id: 'rest', state: 'rest', rule: 'surface background, neutral border', token: theme.field.rest.rest },
-        { id: 'hover', state: 'hover', rule: `border one rung more intensity (${intensityNote(theme, theme.field.rest)})`, token: theme.field.rest.hover },
+        { id: 'hover', state: 'hover', rule: 'border one rung stronger contrast — a border is an edge, not a surface that lifts', token: theme.field.rest.hover },
         { id: 'focus', state: 'focus', rule: 'ring always visible, border → brand', token: theme.field.focusBorder },
         { id: 'invalid', state: 'invalid', rule: 'palette switch → error on border and ring', token: theme.field.invalid },
         { id: 'readonly', state: 'readonly', rule: 'full contrast, no ring, no edit cursor — not disabled', tokenText: '—' },
@@ -308,8 +307,8 @@ export function NavigableCard({ theme, motionMs }: CardProps) {
       }
       rows={[
         { id: 'rest', state: 'rest', rule: 'transparent — the row inherits the surface it sits on', token: theme.navRow.rest },
-        { id: 'hover', state: 'hover', rule: `one rung more intensity, inside whichever palette is active (${intensityNote(theme, activeLadder)})`, token: activeLadder.hover },
-        { id: 'pressed', state: 'pressed', rule: 'two rungs, same direction — same rule as every other pressable thing', token: activeLadder.pressed },
+        { id: 'hover', state: 'hover', rule: `one rung, ${hoverNote(activeLadder)}, inside whichever palette is active`, token: activeLadder.hover },
+        { id: 'pressed', state: 'pressed', rule: 'one rung darker than rest — same rule as every other pressable thing', token: activeLadder.pressed },
         { id: 'current', state: 'current', rule: 'aria-current → palette switch, plus a marker bar: colour is never the only signal', token: theme.navCurrent.rest },
         { id: 'focus', state: 'focus-visible', rule: 'ring from the shape module', tokenText: `ring ${theme.ringWidth}px ${theme.ringStyle}` },
       ]}

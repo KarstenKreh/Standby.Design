@@ -110,6 +110,12 @@ console.log('\n=== css export (first 800 chars) ===\n' + res.content[0].text.sli
 res = await client.callTool({ name: 'list_fonts', arguments: {} });
 console.log('\n=== fonts (first 300 chars) ===\n' + res.content[0].text.slice(0, 300));
 
+res = await client.callTool({ name: 'export_design_system', arguments: { url, format: 'css' } });
+for (const token of ['--primary-hover', '--primary-pressed', '--destructive-hover', '--destructive-pressed']) {
+  if (!res.content[0].text.includes(token)) throw new Error(`css export is missing the state token ${token}`);
+}
+console.log('\n=== css export carries hover and pressed tokens OK ===');
+
 res = await client.callTool({ name: 'get_design_rules', arguments: {} });
 if (res.isError || !res.content[0].text.includes('form-konzentrische-radien')) {
   throw new Error('get_design_rules summary does not list the rule slugs:\n' + res.content[0].text.slice(0, 400));

@@ -1128,7 +1128,7 @@ Bedienung · https://standby.design/docs/rules/bedienung-kurze-zustaende-verschi
 **Geltung:** universal · web, react-native
 
 > **Regel**
-> Kurzzeitige Zustände — Hover, Gedrückt — verschieben sich **innerhalb** derselben Palette und immer in dieselbe Richtung. Dauerhafte Zustände — an, aktuell, ungültig — **wechseln** die Palette.
+> Kurzzeitige Zustände — Hover, Gedrückt — verschieben sich **innerhalb** derselben Palette: Hover eine Stufe **heller**, Gedrückt eine Stufe **dunkler**, in heller und dunkler Erscheinung gleich. Dauerhafte Zustände — an, aktuell, ungültig — **wechseln** die Palette.
 
 ### Warum
 
@@ -1136,7 +1136,13 @@ Der Nutzer muss zwei Fragen gleichzeitig beantworten können: „berühre ich da
 
 Verschieben und Wechseln sind zwei verschiedene Bewegungen im Farbraum. Solange kurze Zustände nur verschieben und dauerhafte wechseln, bleiben die beiden Fragen getrennt, ohne dass der Nutzer es lernen muss.
 
-Die zweite Hälfte der Regel verhindert einen häufigen Fehler. Gedrückt wird oft heller gesetzt, weil Hover schon dunkler war und man „noch mehr Unterschied" wollte. Damit dreht sich die Richtung um, und der Nutzer sieht ausgerechnet beim Drücken wieder die Farbe des Ruhezustands. Gedrückt geht immer weiter in dieselbe Richtung wie Hover, nur ein Stück weiter.
+### Warum Hover heller wird
+
+Hover sagt: „Ich reagiere auf Dich, drück mich." Das Element kommt dem Zeiger ein Stück entgegen, und was näher am Licht ist, wird heller. Gedrückt ist das Gegenteil: das Element sinkt ein und wird dunkler.
+
+Im Dark Mode kehrt sich das nicht um. Das Licht kommt in beiden Erscheinungen von vorn, deshalb sind auch dort höhere Ebenen heller als tiefere. Wer die Richtung mit dem Modus umdreht, lässt denselben Knopf im Hellen einsinken und im Dunkeln herauskommen.
+
+Weil Hover und Gedrückt in entgegengesetzte Richtungen gehen, liegen sie zwei Schritte auseinander. Der Nutzer verwechselt sie nie, und keiner von beiden landet wieder auf der Farbe des Ruhezustands.
 
 ### Die Schritte sind gleichmäßig
 
@@ -1150,7 +1156,8 @@ Ein durchscheinender Schleier ist auf dunklem Grund ein großer Schritt und auf 
 
 ### Woran Du den Verstoß erkennst
 
-- Gedrückt liegt farblich zwischen Ruhezustand und Hover.
+- Hover ist dunkler als der Ruhezustand, oder Gedrückt ist heller.
+- Die Richtung dreht sich mit dem Modus um: im Hellen wird Hover dunkler, im Dunkeln heller.
 - Hover benutzt dieselbe Farbe wie der Zustand „ausgewählt".
 - Ein Zustandswechsel wird mit einem durchscheinenden Schleier gebaut.
 - Die Schritte sind unterschiedlich groß, weil sie pro Baustein von Hand gewählt wurden.
@@ -1160,14 +1167,18 @@ Ein durchscheinender Schleier ist auf dunklem Grund ein großer Schritt und auf 
 ```
         RICHTIG                             FALSCH
 
-Ruhe      ██                       Ruhe      ██
-Hover     ██   ein Schritt         Hover     ██
-Gedrückt  ██   noch einer,         Gedrückt  ██  ← zurück Richtung Ruhe
-               gleiche Richtung
-An        ▓▓   andere Palette      An        ██  ← gleich wie Hover
+Hover     ░░   ein Schritt heller  Hover     ▓▓  ← dunkler als Ruhe
+Ruhe      ▒▒                       Ruhe      ▒▒
+Gedrückt  ▓▓   ein Schritt dunkler Gedrückt  ░░  ← heller als Ruhe
+
+An        ██   andere Palette      An        ░░  ← gleich wie Hover
 ```
 
 ### Grenzen
+
+Am Ende der Skala ist kein Platz mehr. Ein fast weißes Element kann nicht heller werden: dort geht Hover eine Stufe dunkler und Gedrückt zwei. Ein fast schwarzes kann nicht dunkler werden: dort geht Gedrückt zwei Stufen heller. Das ist die einzige Umkehr.
+
+Ein Rahmen ist keine Fläche, die sich hebt. Beim Eingabefeld wird der Rand beim Hover kräftiger, damit er sich deutlicher von der Umgebung abhebt. Die Regel oben gilt für Flächen.
 
 Ein Eingabefeld im Fehlerzustand wechselt die Palette, obwohl der Fehler vorübergehend ist. Das ist gewollt: „ungültig" ist ein dauerhafter Zustand des Feldes, solange die Eingabe nicht stimmt, und keine Rückmeldung auf eine Berührung.
 
@@ -1830,7 +1841,7 @@ Stack · https://standby.design/docs/rules/stack-keine-deckkraft-modifier-auf-se
 **Geltung:** stack · web, react-native
 
 > **Regel**
-> Schreibe nie `bg-primary/10`, `text-destructive/60` oder Ähnliches. Für Abstufungen gibt es benannte Stufen, für Hover eine Helligkeitsänderung (`brightness-110`).
+> Schreibe nie `bg-primary/10`, `text-destructive/60` oder Ähnliches. Für Abstufungen gibt es benannte Stufen, für Hover und Gedrückt benannte Zustandsstufen. Fehlen sie, nimm eine Helligkeitsänderung: heller beim Hover (`brightness-110`), dunkler beim Drücken (`brightness-95`).
 
 ### Warum
 
@@ -1838,7 +1849,7 @@ Eine semantische Farbe steht für eine Bedeutung. Ein Zehntel davon steht für g
 
 Es geht dabei nicht um Durchsichtigkeit an sich. Ein System darf mit Glas und Schleier arbeiten, wenn das seine Handschrift ist. Es geht um die beiläufige Variante: eine Deckkraft, die an einer einzelnen Stelle gesetzt wird, weil es dort gerade passte. Der Unterschied ist, ob jemand eine Materialentscheidung getroffen hat oder eine Korrektur im Vorbeigehen.
 
-Für den häufigsten Anlass — eine gedämpfte Variante für Chips und Badges — gibt es die gedämpften Stufen der Zustandsfarben. Für den zweithäufigsten — Hover — gibt es eine Helligkeitsänderung, die auf jedem Untergrund in dieselbe Richtung wirkt.
+Für den häufigsten Anlass — eine gedämpfte Variante für Chips und Badges — gibt es die gedämpften Stufen der Zustandsfarben. Für den zweithäufigsten — Hover und Gedrückt — gibt es benannte Zustandsstufen: eine Stufe heller für Hover, eine dunkler für Gedrückt, in beiden Erscheinungen gleich. Wo ein System sie nicht hat, tut es eine Helligkeitsänderung in dieselbe Richtung. Warum heller und nicht dunkler: Kurze Zustände verschieben, dauerhafte wechseln die Palette.
 
 ### Woran Du den Verstoß erkennst
 
@@ -1851,11 +1862,13 @@ Für den häufigsten Anlass — eine gedämpfte Variante für Chips und Badges �
 ```
 richtig    bg-muted · text-muted-foreground
            die gedämpfte Stufe plus die zugehörige Schriftfarbe
-           hover:brightness-110
+           hover:bg-primary-hover · active:bg-primary-pressed
+           ohne Zustandsstufen: hover:brightness-110 · active:brightness-95
 
 falsch     bg-primary/10
            text-destructive/60
            hover:bg-primary/90
+           hover:brightness-90   (Hover dunkler statt heller)
 ```
 
 ### Grenzen

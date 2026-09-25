@@ -164,6 +164,8 @@ exports[`generateSemantic > snapshot stability 1`] = `
   /* Primary */
   --primary: var(--color-brand-600);
   --primary-foreground: var(--color-brand-25);
+  --primary-hover: var(--color-brand-500);
+  --primary-pressed: var(--color-brand-700);
   --primary-subtle: var(--color-brand-100);
   --primary-subtle-foreground: var(--color-brand-950);
   --primary-emphasis: var(--color-brand-700);
@@ -179,6 +181,8 @@ exports[`generateSemantic > snapshot stability 1`] = `
   /* Destructive */
   --destructive: var(--color-error-600);
   --destructive-foreground: var(--color-error-surface-25);
+  --destructive-hover: var(--color-error-500);
+  --destructive-pressed: var(--color-error-700);
   --destructive-subtle: var(--color-error-100);
   --destructive-subtle-foreground: var(--color-error-950);
   --destructive-emphasis: var(--color-error-700);
@@ -216,6 +220,8 @@ exports[`generateSemantic > snapshot stability 1`] = `
   /* Primary */
   --primary: var(--color-brand-400);
   --primary-foreground: var(--color-brand-975);
+  --primary-hover: var(--color-brand-300);
+  --primary-pressed: var(--color-brand-500);
   --primary-subtle: var(--color-brand-850);
   --primary-subtle-foreground: var(--color-brand-50);
   --primary-emphasis: var(--color-brand-300);
@@ -231,6 +237,8 @@ exports[`generateSemantic > snapshot stability 1`] = `
   /* Destructive */
   --destructive: var(--color-error-400);
   --destructive-foreground: var(--color-error-surface-975);
+  --destructive-hover: var(--color-error-300);
+  --destructive-pressed: var(--color-error-500);
   --destructive-subtle: var(--color-error-850);
   --destructive-subtle-foreground: var(--color-error-50);
   --destructive-emphasis: var(--color-error-300);

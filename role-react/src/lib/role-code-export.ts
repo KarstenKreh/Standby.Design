@@ -27,32 +27,23 @@ export function generateRoleCss(themeName: string, ringStyle: RingStyle = 'soft'
 /* Requires the color export (primitive + semantic tokens) from standby.design/system */
 
 /* State tokens — momentary states shift WITHIN the active palette.
-   Intensity means away from the surface: darker in light mode, lighter in
-   dark mode. One rung is 100 step numbers (hover), two for pressed —
-   measured in step numbers, not list positions, because lightness is linear
-   in the step number. Pressed is always further than hover, never back
-   toward rest. Where a palette runs out, flip both to the other direction —
-   the constant is the perceived magnitude, never the sign. */
+   Hover comes toward the pointer: one rung lighter. Pressed sinks in: one
+   rung darker. The light does not change with the mode, so both directions
+   hold in light and dark mode alike. One rung is 100 step numbers, measured
+   in step numbers, not list positions. The steps come from the color export
+   (--primary-hover, --primary-pressed, …). */
 :root {
   --state-rest: var(--primary);
-  --state-hover: var(--color-brand-700);
-  --state-pressed: var(--color-brand-800);
+  --state-hover: var(--primary-hover);
+  --state-pressed: var(--primary-pressed);
   --state-motion: 150ms;
-}
-.dark {
-  --state-hover: var(--color-brand-300);
-  --state-pressed: var(--color-brand-200);
 }
 
 /* Persistent states switch the palette — variation is data, not a new rule. */
 [data-severity="error"] {
   --state-rest: var(--destructive);
-  --state-hover: var(--color-error-700);
-  --state-pressed: var(--color-error-800);
-}
-.dark [data-severity="error"] {
-  --state-hover: var(--color-error-300);
-  --state-pressed: var(--color-error-200);
+  --state-hover: var(--destructive-hover);
+  --state-pressed: var(--destructive-pressed);
 }
 
 /* ── ROLES ─────────────────────────────────────────────────────────────
@@ -102,7 +93,7 @@ ${ring.editable}
 /* Persistent states switch the palette — variation is data, not a new rule. */
 [data-toggleable][data-state="off"] {
   --state-rest: var(--muted);
-  --state-hover: var(--border);
+  --state-hover: var(--elevated);
   --state-pressed: var(--border);
 }
 [data-editable][data-invalid] {
@@ -145,8 +136,8 @@ ${ring.editable}
   padding: 0.45rem 0.75rem 0.45rem 1rem;
   color: var(--muted-foreground);
   --state-rest: transparent;
-  --state-hover: var(--muted);
-  --state-pressed: var(--accent);
+  --state-hover: var(--elevated);
+  --state-pressed: var(--muted);
   background-color: var(--state);
 }
 [data-skin="row"][aria-current] {
@@ -213,24 +204,24 @@ at all. Same role either way.
 1. Momentary states (hover, pressed) shift steps WITHIN the active palette.
    Persistent states (on, current, invalid) SWITCH the palette.
    The error button is not a special case — it is the severity axis.
-2. Interactive elements gain INTENSITY on hover: one rung away from the
-   surface they sit on. Light mode reads as darker, dark mode as lighter —
-   one rule, both modes. Intensity is a direction, not a lightness.
+2. Hover comes toward the pointer: one rung LIGHTER. Pressed sinks in: one
+   rung DARKER than rest. The light does not change with the mode, so the
+   directions hold in light and dark mode alike — what is closer to the
+   light is lighter, in both.
 3. A rung is 100 STEP NUMBERS, not the next entry in the list. Lightness is
    linear in the step number, so 300 → 200 and 600 → 700 are the same
    perceived move — while 25 → 50 is only a quarter of one. Measure in step
    numbers and snap to the nearest existing step; never count list positions.
-4. Pressed moves two rungs in the SAME direction. It is always further than
-   hover, never back toward rest.
-5. Colour carries intensity, shape carries depth. The physical metaphor of a
-   button sinking belongs to the shape module (neobrutalism translates and
-   collapses its echo, neomorph insets the shadow, glass dims) — never to
-   colour. Told in both places, the two eventually contradict each other.
-6. The direction reverses at the ends of the scale. Where the rungs collapse
-   onto rest or onto each other, hover and pressed both run the other way.
-   A near-white element cannot get whiter; it darkens, and that reads right.
+4. Hover and pressed run in OPPOSITE directions from rest, so the two states
+   are two rungs apart and never mistaken for each other.
+5. Colour and shape tell the same story. The shape module adds the physical
+   side of sinking (neobrutalism translates and collapses its echo, neomorph
+   insets the shadow, glass dims); colour agrees with it by getting darker.
+6. The direction reverses at the ends of the scale. A near-white element
+   cannot get lighter: hover takes one rung darker and pressed two. A
+   near-black element cannot get darker: pressed takes two rungs lighter.
 7. A pinned brand or error colour sits beside the ladder and has no steps.
-   Move its OKLCH lightness by one rung's worth (the 400 → 500 distance of
+   Move its OKLCH lightness up (hover) or down (pressed) by one rung's worth (the 400 → 500 distance of
    its palette), keeping hue and chroma, and clamp chroma back into gamut.
 8. The focus ring comes from the shape module and appears keyboard-only —
    except on editable, where the ring is always visible while focused.
@@ -250,7 +241,7 @@ at all. Same role either way.
 - Marking a state with font weight. Typography belongs to the type module;
   a role that reaches for bold is solving a problem on the wrong layer.
 - Hover feedback, pointer cursor, or tab focus on readable elements.
-- Pressed rendered weaker than hover, or back toward the rest value.
+- Hover darker than rest, or pressed lighter than rest (outside the scale ends).
 - Translucent overlays as state feedback (a white veil at 8%). The same veil
   is a big step on a dark colour and nearly nothing on a light one, so it
   breaks the one thing state feedback must hold constant: perceived magnitude.

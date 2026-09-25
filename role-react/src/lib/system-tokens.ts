@@ -1,8 +1,11 @@
 import { parseUnifiedHash, isUnifiedHash } from '@core/unified-hash';
 import { decodeState as decodeColorState, type DecodedState as ColorState } from '@core/url-state/color';
 import { decodeState as decodeShapeState, type ShapeUrlState as ShapeState, type RingStyle } from '@core/url-state/shape';
-import { generatePalette, computeAutoErrorHex, STEPS, L_WHITE, L_BLACK, type PaletteEntry, type Step } from '@core/palette';
-import { contrastRatio, hexToOklch, oklchToHex, maxChromaInGamut } from '@core/color-math';
+import { generatePalette, computeAutoErrorHex, type PaletteEntry, type Step } from '@core/palette';
+import { contrastRatio } from '@core/color-math';
+import { stateLadder, stepLadder, type Ladder, type StateToken } from '@core/state-ladder';
+
+export type { Ladder, StateToken };
 
 export interface Segments {
   c: string | null;
@@ -10,18 +13,6 @@ export interface Segments {
   s: string | null;
   y: string | null;
   p: string | null;
-}
-
-export interface StateToken {
-  hex: string;
-  label: string;
-}
-
-export interface Ladder {
-  rest: StateToken;
-  hover: StateToken;
-  pressed: StateToken;
-  reversed: boolean;
 }
 
 export interface RoleTheme {
@@ -49,72 +40,14 @@ export interface RoleTheme {
 
 const DEFAULT_BRAND = '#335A7F';
 
-const HOVER_RUNG_IN_STEP_NUMBERS = 100;
-const PRESSED_RUNG_IN_STEP_NUMBERS = 200;
-
-type Direction = -1 | 1;
-
 function entryHex(pal: PaletteEntry[], step: Step): string {
   return pal.find(e => e.step === step)?.hex ?? '#888888';
 }
 
-function snapToStep(target: number): Step {
-  return STEPS.reduce((best, s) => Math.abs(s - target) < Math.abs(best - target) ? s : best, STEPS[0]);
-}
-
-function rungsFrom(step: Step, dir: Direction): { hover: Step; pressed: Step } {
-  return {
-    hover: snapToStep(step + dir * HOVER_RUNG_IN_STEP_NUMBERS),
-    pressed: snapToStep(step + dir * PRESSED_RUNG_IN_STEP_NUMBERS),
-  };
-}
-
-function stepLadder(pal: PaletteEntry[], name: string, step: Step, isDark: boolean): Ladder {
-  const preferred: Direction = isDark ? -1 : 1;
-  let dir = preferred;
-  let rungs = rungsFrom(step, dir);
-  if (rungs.hover === step || rungs.pressed === rungs.hover) {
-    dir = -preferred as Direction;
-    rungs = rungsFrom(step, dir);
-  }
-  const token = (s: Step): StateToken => ({ hex: entryHex(pal, s), label: `${name} · ${s}` });
-  return {
-    rest: token(step),
-    hover: token(rungs.hover),
-    pressed: token(rungs.pressed),
-    reversed: dir !== preferred,
-  };
-}
-
-function rungDeltaInLightness(pal: PaletteEntry[]): number {
-  const a = pal.find(e => e.step === 400);
-  const b = pal.find(e => e.step === 500);
-  return a && b ? Math.abs(a.L - b.L) : 0.096;
-}
-
-function pinnedLadder(hex: string, pal: PaletteEntry[], isDark: boolean): Ladder {
-  const [L, C, H] = hexToOklch(hex);
-  const delta = rungDeltaInLightness(pal);
-  const preferred = isDark ? 1 : -1;
-  const room = preferred === 1 ? L_WHITE - L : L - L_BLACK;
-  const dir = room >= delta * 2 ? preferred : -preferred;
-
-  const at = (offset: number): StateToken => {
-    if (offset === 0) return { hex, label: 'pinned' };
-    const nextL = Math.min(L_WHITE, Math.max(L_BLACK, L + dir * delta * offset));
-    const nextC = Math.min(C, maxChromaInGamut(nextL, H));
-    const sign = dir > 0 ? '+' : '−';
-    return { hex: oklchToHex(nextL, nextC, H), label: `pinned · L ${sign}${(delta * offset).toFixed(2)}` };
-  };
-
-  return { rest: at(0), hover: at(1), pressed: at(2), reversed: dir !== preferred };
-}
-
-function ladderFor(
-  pal: PaletteEntry[], name: string, step: Step, isDark: boolean,
-  pinnedHex: string | null,
-): Ladder {
-  return pinnedHex ? pinnedLadder(pinnedHex, pal, isDark) : stepLadder(pal, name, step, isDark);
+function borderLadder(surface: PaletteEntry[], step: Step, isDark: boolean): Ladder {
+  const strongerStep: Step = isDark ? 500 : 400;
+  const token = (s: Step): StateToken => ({ hex: entryHex(surface, s), label: `surface · ${s}`, step: s });
+  return { rest: token(step), hover: token(strongerStep), pressed: token(strongerStep), reversed: false };
 }
 
 function pickFg(bgHex: string, a: string, b: string): string {
@@ -152,7 +85,7 @@ export function buildRoleTheme(segments: Segments, isDark = true): RoleTheme {
   const navCurrentStep: Step = isDark ? 800 : 100;
 
   const pinnedBrand = colorState?.brandPin ? brandHex : null;
-  const brandLadder = ladderFor(brand, 'brand', brandStep, isDark, pinnedBrand);
+  const brandLadder = stateLadder(brand, 'brand', brandStep, pinnedBrand);
   const errorRest = colorState?.errorPin ? errorHex : entryHex(error, errorStep);
 
   return {
@@ -174,14 +107,14 @@ export function buildRoleTheme(segments: Segments, isDark = true): RoleTheme {
       ...brandLadder,
       fg: pickFg(brandLadder.rest.hex, entryHex(surface, 975), entryHex(surface, 25)),
     },
-    track: stepLadder(surface, 'surface', trackStep, isDark),
-    navRow: stepLadder(surface, 'surface', navRowStep, isDark),
-    navCurrent: stepLadder(brand, 'brand', navCurrentStep, isDark),
+    track: stepLadder(surface, 'surface', trackStep),
+    navRow: stepLadder(surface, 'surface', navRowStep),
+    navCurrent: stepLadder(brand, 'brand', navCurrentStep),
     navMarker: brandLadder.rest,
     field: {
-      rest: stepLadder(surface, 'surface', fieldStep, isDark),
+      rest: borderLadder(surface, fieldStep, isDark),
       focusBorder: brandLadder.rest,
-      invalid: { hex: errorRest, label: colorState?.errorPin ? 'pinned error' : `error · ${errorStep}` },
+      invalid: { hex: errorRest, label: colorState?.errorPin ? 'pinned error' : `error · ${errorStep}`, step: colorState?.errorPin ? null : errorStep },
     },
   };
 }
