@@ -31,6 +31,7 @@ Docs and install guide: https://standby.design/docs/mcp
 | `get_design_system` | Decode any standby.design URL into a full overview |
 | `export_design_system` | Full code export: `css`, `tailwind`, `design-tokens` (DTCG), `llm-briefing`, `font-embed` |
 | `list_fonts` | Fontshare slugs for `generate_type_scale` |
+| `get_design_rules` | Universal design rules for building UI with the tokens (layout, states, shape, typography, color), as a summary or in full |
 
 Each `generate_*` tool accepts an optional `url` and only changes its own
 section, so calls chain: color → type → shape → … accumulate into one URL.

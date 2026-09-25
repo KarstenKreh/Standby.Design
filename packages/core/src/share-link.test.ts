@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { systemShareUrl, llmShareHeader, SHARE_BASE_URL } from './share-link';
+import { systemShareUrl, llmShareHeader, llmRulesFooter, DESIGN_RULES_URL, SHARE_BASE_URL } from './share-link';
 
 describe('systemShareUrl', () => {
   it('builds a /system URL from a fresh segment when no hash exists yet', () => {
@@ -21,5 +21,14 @@ describe('llmShareHeader', () => {
     const header = llmShareHeader('https://standby.design/system#c=X');
     expect(header.split('\n')[0]).toContain('https://standby.design/system#c=X');
     expect(header.endsWith('\n\n')).toBe(true);
+  });
+});
+
+describe('llmRulesFooter', () => {
+  it('links the rules page, the Markdown bundle and the MCP tool', () => {
+    const footer = llmRulesFooter();
+    expect(footer).toContain(DESIGN_RULES_URL);
+    expect(footer).toContain(`${DESIGN_RULES_URL}.md`);
+    expect(footer).toContain('get_design_rules');
   });
 });

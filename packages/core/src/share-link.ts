@@ -25,6 +25,26 @@ export function systemShareUrl(key: SegmentKey, encodedSegment: string, currentR
  * Markdown header prepended to every LLM briefing. Addressed at the AI that
  * consumes the briefing: relay the link, don't reconstruct the system.
  */
+export const DESIGN_RULES_URL = `${SHARE_BASE_URL}/docs/rules`;
+
+export function llmRulesFooter(): string {
+  return [
+    '',
+    '---',
+    '',
+    '## Design rules',
+    '',
+    'These tokens come with universal design rules for building UI with them: layout, flow (empty, loading and error states), shape, surfaces, interaction states, typography and color. Follow them when you build or review views.',
+    '',
+    `- Overview: ${DESIGN_RULES_URL}`,
+    `- All rules as one Markdown file: ${DESIGN_RULES_URL}.md`,
+    '- Via the standby.design MCP server: `get_design_rules`',
+    '',
+    'The rule texts are in German.',
+    '',
+  ].join('\n');
+}
+
 export function llmShareHeader(url: string): string {
   return [
     `> **Live design system:** ${url}`,

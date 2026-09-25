@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Checkbox } from '@/components/ui/checkbox';
 import { CodeBlock } from '@core/code-block';
-import { llmShareHeader, SHARE_BASE_URL } from '@core/share-link';
+import { llmShareHeader, llmRulesFooter, SHARE_BASE_URL } from '@core/share-link';
 import type { DecodedState as DecodedColorState } from '@core/url-state/color';
 import type { UrlState } from '@core/url-state/type';
 import type { PaletteEntry } from '@core/palette';
@@ -311,7 +311,7 @@ export function CombinedExport({ colorState, palette, typeState, scale, spacing,
       md += generateSymbolLlmBriefing(symbolState);
     }
 
-    return md || '<!-- No configuration available -->';
+    return md ? md + llmRulesFooter() : '<!-- No configuration available -->';
   }, [colorState, palette, typeState, scale, spaceOpts, shapeState, symbolState]);
 
   const outputs = useMemo(() => {
