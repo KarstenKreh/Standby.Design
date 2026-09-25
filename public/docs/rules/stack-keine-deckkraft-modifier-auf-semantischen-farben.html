@@ -183,12 +183,12 @@
     <h1>Keine Deckkraft-Modifier auf semantischen Farben</h1>
     <dl class="rule-meta"><div><dt>Geltung</dt><dd>stack · web, react-native</dd></div></dl>
 
-<aside class="callout callout-tip"><p class="callout-title">Regel</p><p>Schreibe nie <code>bg-primary/10</code>, <code>text-destructive/60</code> oder Ähnliches. Für Abstufungen gibt es benannte Stufen, für Hover eine Helligkeitsänderung (<code>brightness-110</code>).</p>
+<aside class="callout callout-tip"><p class="callout-title">Regel</p><p>Schreibe nie <code>bg-primary/10</code>, <code>text-destructive/60</code> oder Ähnliches. Für Abstufungen gibt es benannte Stufen, für Hover und Gedrückt benannte Zustandsstufen. Fehlen sie, nimm eine Helligkeitsänderung: heller beim Hover (<code>brightness-110</code>), dunkler beim Drücken (<code>brightness-95</code>).</p>
 </aside>
 <h2>Warum</h2>
 <p>Eine semantische Farbe steht für eine Bedeutung. Ein Zehntel davon steht für gar nichts — es ist eine neue Farbe ohne Namen, ohne Definition und ohne Eintrag im System. Sie lässt sich nicht wiederverwenden, weil niemand weiß, dass es sie gibt, und sie taucht beim nächsten Mal als <code>/12</code> wieder auf.</p>
 <p>Es geht dabei nicht um Durchsichtigkeit an sich. Ein System darf mit Glas und Schleier arbeiten, wenn das seine Handschrift ist. Es geht um die beiläufige Variante: eine Deckkraft, die an einer einzelnen Stelle gesetzt wird, weil es dort gerade passte. Der Unterschied ist, ob jemand eine Materialentscheidung getroffen hat oder eine Korrektur im Vorbeigehen.</p>
-<p>Für den häufigsten Anlass — eine gedämpfte Variante für Chips und Badges — gibt es die gedämpften Stufen der Zustandsfarben. Für den zweithäufigsten — Hover — gibt es eine Helligkeitsänderung, die auf jedem Untergrund in dieselbe Richtung wirkt.</p>
+<p>Für den häufigsten Anlass — eine gedämpfte Variante für Chips und Badges — gibt es die gedämpften Stufen der Zustandsfarben. Für den zweithäufigsten — Hover und Gedrückt — gibt es benannte Zustandsstufen: eine Stufe heller für Hover, eine dunkler für Gedrückt, in beiden Erscheinungen gleich. Wo ein System sie nicht hat, tut es eine Helligkeitsänderung in dieselbe Richtung. Warum heller und nicht dunkler: <a href="/docs/rules/bedienung-kurze-zustaende-verschieben-dauerhafte-wechseln-die-palette">Kurze Zustände verschieben, dauerhafte wechseln die Palette</a>.</p>
 <h2>Woran Du den Verstoß erkennst</h2>
 <ul>
 <li>Ein Schrägstrich hinter einer semantischen Farbklasse.</li>
@@ -198,11 +198,13 @@
 <h2>Richtig / falsch</h2>
 <pre><code>richtig    bg-muted · text-muted-foreground
            die gedämpfte Stufe plus die zugehörige Schriftfarbe
-           hover:brightness-110
+           hover:bg-primary-hover · active:bg-primary-pressed
+           ohne Zustandsstufen: hover:brightness-110 · active:brightness-95
 
 falsch     bg-primary/10
            text-destructive/60
            hover:bg-primary/90
+           hover:brightness-90   (Hover dunkler statt heller)
 </code></pre>
 <h2>Grenzen</h2>
 <p>Deckkraft auf einer <strong>Ebene</strong> ist etwas anderes als Deckkraft auf einer Farbe: ein ausgeblendetes Overlay, ein Bild beim Laden, ein Element im Übergang. Dort ist Deckkraft die richtige Eigenschaft, weil sie das ganze Element betrifft und nicht eine Farbe erfindet.</p>

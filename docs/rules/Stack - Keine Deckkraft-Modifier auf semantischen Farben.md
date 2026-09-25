@@ -17,7 +17,7 @@ tags:
 # Keine Deckkraft-Modifier auf semantischen Farben
 
 > [!TIP] Regel
-> Schreibe nie `bg-primary/10`, `text-destructive/60` oder Ähnliches. Für Abstufungen gibt es benannte Stufen, für Hover eine Helligkeitsänderung (`brightness-110`).
+> Schreibe nie `bg-primary/10`, `text-destructive/60` oder Ähnliches. Für Abstufungen gibt es benannte Stufen, für Hover und Gedrückt benannte Zustandsstufen. Fehlen sie, nimm eine Helligkeitsänderung: heller beim Hover (`brightness-110`), dunkler beim Drücken (`brightness-95`).
 
 ## Warum
 
@@ -25,7 +25,7 @@ Eine semantische Farbe steht für eine Bedeutung. Ein Zehntel davon steht für g
 
 Es geht dabei nicht um Durchsichtigkeit an sich. Ein System darf mit Glas und Schleier arbeiten, wenn das seine Handschrift ist. Es geht um die beiläufige Variante: eine Deckkraft, die an einer einzelnen Stelle gesetzt wird, weil es dort gerade passte. Der Unterschied ist, ob jemand eine Materialentscheidung getroffen hat oder eine Korrektur im Vorbeigehen.
 
-Für den häufigsten Anlass — eine gedämpfte Variante für Chips und Badges — gibt es die gedämpften Stufen der Zustandsfarben. Für den zweithäufigsten — Hover — gibt es eine Helligkeitsänderung, die auf jedem Untergrund in dieselbe Richtung wirkt.
+Für den häufigsten Anlass — eine gedämpfte Variante für Chips und Badges — gibt es die gedämpften Stufen der Zustandsfarben. Für den zweithäufigsten — Hover und Gedrückt — gibt es benannte Zustandsstufen: eine Stufe heller für Hover, eine dunkler für Gedrückt, in beiden Erscheinungen gleich. Wo ein System sie nicht hat, tut es eine Helligkeitsänderung in dieselbe Richtung. Warum heller und nicht dunkler: [[Bedienung - Kurze Zustände verschieben, dauerhafte wechseln die Palette]].
 
 ## Woran Du den Verstoß erkennst
 
@@ -38,11 +38,13 @@ Für den häufigsten Anlass — eine gedämpfte Variante für Chips und Badges �
 ```
 richtig    bg-muted · text-muted-foreground
            die gedämpfte Stufe plus die zugehörige Schriftfarbe
-           hover:brightness-110
+           hover:bg-primary-hover · active:bg-primary-pressed
+           ohne Zustandsstufen: hover:brightness-110 · active:brightness-95
 
 falsch     bg-primary/10
            text-destructive/60
            hover:bg-primary/90
+           hover:brightness-90   (Hover dunkler statt heller)
 ```
 
 ## Grenzen

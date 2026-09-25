@@ -2,6 +2,7 @@
 
 import { hexToOklch, contrastRatio, invertHex } from './color-math';
 import type { PaletteEntry } from './palette';
+import { stateLadder, type StateToken } from './state-ladder';
 import { encodeState as encodeColorState, type DecodedState as ColorSeedState, type FgContrastMode } from './url-state/color';
 
 /**
@@ -167,6 +168,15 @@ function fmtSec(palette: PaletteEntry[], prefix: string, mode: 'css' | 'hex'): s
 
 type Row = [string, string | null, string | number];
 
+function stateRow(name: string, token: StateToken, prefix: string): Row {
+  return token.step === null ? [name, '#direct', hexToCss(token.hex)] : [name, prefix, token.step];
+}
+
+function stateRows(name: string, pal: PaletteEntry[], prefix: string, step: 600 | 400, pinnedHex: string | null): Row[] {
+  const ladder = stateLadder(pal, prefix, step, pinnedHex);
+  return [stateRow(`${name}-hover`, ladder.hover, prefix), stateRow(`${name}-pressed`, ladder.pressed, prefix)];
+}
+
 function buildBlock(sel: string, rows: Row[]): string {
   let o = `${sel} {\n`;
   rows.forEach(([name, prefix, step]) => {
@@ -324,6 +334,7 @@ export function generateSemantic(
     ['popover', 'surface', 25], ['popover-foreground', 'surface', 975],
     [null as unknown as string, null, 'Primary'],
     primaryLight, primaryFgLight,
+    ...stateRows('primary', brandPal, 'brand', 600, bPin && bHex ? bHex : null),
     ...warnRows('primary-foreground', 'light'),
     ...brandContrastWarnLight,
     ['primary-subtle', 'brand', 100], ['primary-subtle-foreground', 'brand', 950],
@@ -336,6 +347,7 @@ export function generateSemantic(
     ['accent', 'brand', 100], ['accent-foreground', 'brand', fgStep(brandMap[100]?.hex, brandMap, 50, 950, fgMode)],
     [null as unknown as string, null, 'Destructive'],
     destLight, destFgLight,
+    ...stateRows('destructive', errPal, 'error', 600, ePin && eHex ? eHex : null),
     ...warnRows('destructive-foreground', 'light'),
     ['destructive-subtle', 'error', 100], ['destructive-subtle-foreground', 'error', 950],
     ['destructive-emphasis', 'error', 700],
@@ -361,6 +373,7 @@ export function generateSemantic(
     ['popover', 'surface', 825], ['popover-foreground', 'surface', 25],
     [null as unknown as string, null, 'Primary'],
     primaryDark, primaryFgDark,
+    ...stateRows('primary', brandPal, 'brand', 400, bPin && bHex ? (bInvHex || bHex) : null),
     ...warnRows('primary-foreground', 'dark'),
     ...brandContrastWarnDark,
     ['primary-subtle', 'brand', 850], ['primary-subtle-foreground', 'brand', 50],
@@ -373,6 +386,7 @@ export function generateSemantic(
     ['accent', 'brand', 850], ['accent-foreground', 'brand', fgStep(brandMap[850]?.hex, brandMap, 50, 950, fgMode)],
     [null as unknown as string, null, 'Destructive'],
     destDark, destFgDark,
+    ...stateRows('destructive', errPal, 'error', 400, ePin && eHex ? (eInvHex || eHex) : null),
     ...warnRows('destructive-foreground', 'dark'),
     ['destructive-subtle', 'error', 850], ['destructive-subtle-foreground', 'error', 50],
     ['destructive-emphasis', 'error', 300],
@@ -409,6 +423,7 @@ export function generateSemantic(
     const accentRoot = buildBlock(':root', [
       [null as unknown as string, null, `${entry.name} — light`],
       aLight, aFgL,
+      ...stateRows(n, entry.palette || [], n, 600, aPin ? aHex : null),
       ...warnRows(`${n}-foreground`, 'light'),
       [null as unknown as string, null, 'Background / Card / Elevated / Popover'],
       [`${n}-background`, `${n}-surface`, 50], [`${n}-background-foreground`, `${n}-surface`, 975],
@@ -429,6 +444,7 @@ export function generateSemantic(
     const accentDark = buildBlock('.dark', [
       [null as unknown as string, null, `${entry.name} — dark`],
       aDark, aFgD,
+      ...stateRows(n, entry.palette || [], n, 400, aPin ? (aInvHex || aHex) : null),
       ...warnRows(`${n}-foreground`, 'dark'),
       [null as unknown as string, null, 'Background / Card / Elevated / Popover'],
       [`${n}-background`, `${n}-surface`, 875], [`${n}-background-foreground`, `${n}-surface`, 25],
@@ -522,12 +538,16 @@ ${pinnedNote}${pinnedContrastWarning}${fillWarningBlock}
 | \`--elevated\` | surface-0 | surface-800 | Sits **on** a card: input fills, lists inside cards, selected rows |
 | \`--popover\` | surface-25 | surface-825 | Popover/dropdown |
 | \`--primary\` | brand-600 | brand-400 | Primary buttons, links |
+| \`--primary-hover\` | brand-500 | brand-300 | Primary fill on hover — one rung lighter: the element comes toward the pointer |
+| \`--primary-pressed\` | brand-700 | brand-500 | Primary fill while pressed — one rung darker: the element sinks in |
 | \`--primary-subtle\` | brand-100 | brand-850 | Tinted brand fills: callouts, selected items |
 | \`--primary-emphasis\` | brand-700 | brand-300 | Brand-colored text, links, icons on background |
 | \`--secondary\` | brand-200 | brand-800 | Secondary buttons |
 | \`--muted\` | surface-75 | surface-850 | Muted backgrounds |
-| \`--accent\` | brand-100 | brand-850 | Interaction highlights (hover, selected) |
+| \`--accent\` | brand-100 | brand-850 | Highlighted menu and list items (shadcn/ui ghost and menu hover) — never a persistent selected state |
 | \`--destructive\` | error-600 | error-400 | Error/delete actions |
+| \`--destructive-hover\` | error-500 | error-300 | Destructive fill on hover — one rung lighter |
+| \`--destructive-pressed\` | error-700 | error-500 | Destructive fill while pressed — one rung darker |
 | \`--destructive-subtle\` | error-100 | error-850 | Inline errors, alert backgrounds |
 | \`--destructive-emphasis\` | error-700 | error-300 | Error text and icons on background |
 | \`--destructive-border\` | error-surface-300 | error-surface-700 | Error borders |
@@ -556,7 +576,7 @@ ${accentPalettes.length > 0 ? `
 ### Accent Scopes
 
 Each accent color provides a full semantic scope:
-${accentPalettes.map(a => `- **${a.name}** (\`--${a.cssName}\`): \`-foreground\`, \`-background\`, \`-card\`, \`-elevated\`, \`-popover\`, \`-secondary\`, \`-muted\`, \`-accent\`, \`-subtle\`, \`-emphasis\`, \`-border\`, \`-border-muted\`, \`-input\`, \`-ring\` — each with light/dark variants.`).join('\n')}
+${accentPalettes.map(a => `- **${a.name}** (\`--${a.cssName}\`): \`-foreground\`, \`-hover\`, \`-pressed\`, \`-background\`, \`-card\`, \`-elevated\`, \`-popover\`, \`-secondary\`, \`-muted\`, \`-accent\`, \`-subtle\`, \`-emphasis\`, \`-border\`, \`-border-muted\`, \`-input\`, \`-ring\` — each with light/dark variants.`).join('\n')}
 ` : ''}
 ## How to Use
 
@@ -566,7 +586,8 @@ ${accentPalettes.map(a => `- **${a.name}** (\`--${a.cssName}\`): \`-foreground\`
 4. **Surface depth — three levels, never more**: \`--background\` (the page) → \`--card\` (sits on the page) → \`--elevated\` (sits on a card: input fills, lists inside cards, dropdowns, selected rows). Each level is exactly one step lighter than the one below it, in both light and dark mode. Depth does not stack: a field inside a list inside a card still uses \`--elevated\`, not a fourth tone. \`--muted\` runs the other way (recessed, one step darker than \`--card\`) and is not part of the ladder.
 5. **Borders**: Default to \`--border-muted\` for subtle separation (dividers, table rows). Use \`--border\` for visible borders (cards, panels). Form controls (\`input\`, \`select\`, \`textarea\`) always use \`--input\` — never \`--border\`.
 6. **Colored text**: For links, icons, and indicators placed directly on \`--background\` or \`--card\`, use \`--primary-emphasis\` / \`--destructive-emphasis\` / \`--{name}-emphasis\` — never the button colors (\`--primary\`, 600/400 steps), which may lack text contrast there.
-7. **Shadows and radii**: see standby.design/shape for hue-matched shadow tokens and border-radius scales.
+7. **Hover and pressed**: Filled controls use \`--primary-hover\` / \`--primary-pressed\`, \`--destructive-hover\` / \`--destructive-pressed\` and \`--{name}-hover\` / \`--{name}-pressed\`. Hover is one rung **lighter** (the element comes toward the pointer), pressed is one rung **darker** (it sinks in) — in light and dark mode alike, because the light does not change with the mode. Never build states from opacity (\`bg-primary/90\`) or a translucent veil. A persistent state (selected, current, on) switches the palette instead, e.g. to \`--primary-subtle\`.
+8. **Shadows and radii**: see standby.design/shape for hue-matched shadow tokens and border-radius scales.
 
 ## Primitive Scale Reference
 
