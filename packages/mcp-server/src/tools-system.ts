@@ -38,7 +38,7 @@ import type { UrlState as SymbolState } from '@core/url-state/symbol';
 import type { SpaceUrlState } from '@core/url-state/space';
 import { computeIconTokens, weightToStroke } from '@core/icon-tokens';
 import { getCatalog, fontsByCategory } from '@core/fontshare';
-import { llmShareHeader } from '@core/share-link';
+import { llmShareHeader, llmRulesFooter } from '@core/share-link';
 import {
   parseInput, systemUrl, toolUrl, textResult, errorResult,
   colorStateFrom, typeStateFrom, shapeStateFrom, symbolStateFrom, spaceStateFrom,
@@ -306,7 +306,7 @@ export function registerSystemTools(server: McpServer): void {
           if (has('shape')) parts.push(generateShapeLlmBriefing(shapeOptsFromState(shapeState, palette.surface)));
           if (has('symbol') && symbolState) parts.push(generateSymbolLlmBriefing(symbolState));
           output = parts.length
-            ? llmShareHeader(systemUrl(segs)) + parts.join('\n---\n\n')
+            ? llmShareHeader(systemUrl(segs)) + parts.join('\n---\n\n') + llmRulesFooter()
             : '<!-- No sections selected -->';
           break;
         }

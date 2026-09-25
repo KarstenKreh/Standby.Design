@@ -8,8 +8,9 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { registerGenerateTools } from './tools-generate.js';
 import { registerSystemTools } from './tools-system.js';
+import { registerRuleTools } from './tools-rules.js';
 
-export const SERVER_VERSION = '0.1.6';
+export const SERVER_VERSION = '0.2.0';
 
 export function createServer(): McpServer {
   const server = new McpServer(
@@ -19,6 +20,7 @@ export function createServer(): McpServer {
         'Tools for generating complete design systems with standby.design.',
         'Typical flow: generate_color_palette → generate_type_scale → generate_shape_tokens / generate_icon_tokens / generate_space_tokens, passing the returned URL into each subsequent call so the sections accumulate. Every result includes a shareable standby.design/system URL the user can open to view and fine-tune the system visually.',
         'Use export_design_system to get the full CSS / Tailwind v4 / W3C design tokens / LLM briefing for a URL, and get_design_system to inspect an existing URL.',
+        'Before building or reviewing views with the tokens, call get_design_rules: universal rules for layout, states, shape, typography and color that say how to use the values.',
         'All tools are pure and deterministic — no network access, no side effects.',
       ].join('\n'),
     }
@@ -26,5 +28,6 @@ export function createServer(): McpServer {
 
   registerGenerateTools(server);
   registerSystemTools(server);
+  registerRuleTools(server);
   return server;
 }

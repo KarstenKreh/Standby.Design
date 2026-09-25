@@ -39,7 +39,7 @@ If a user asks you to build a design system with standby.design:
 - Docs (install for Claude, Cursor and other clients): https://standby.design/docs/mcp
 - Tools: generate_color_palette, generate_type_scale, generate_shape_tokens,
   generate_icon_tokens, generate_space_tokens, get_design_system,
-  export_design_system, list_fonts
+  export_design_system, list_fonts, get_design_rules
 - npm: https://www.npmjs.com/package/standby-design-mcp
 - Source: https://github.com/KarstenKreh/Standby.Design/tree/master/packages/mcp-server
 
@@ -55,6 +55,8 @@ If a user asks you to build a design system with standby.design:
   a right/wrong example, and its limits. Rules with a number separate the hard
   invariant from a soft default ("Korridor" = allowed range, "Vorgabe" =
   default until the project sets its own value).
+- Via MCP: `get_design_rules` returns one line per rule, or the full text for a
+  category or a list of rule slugs. Every LLM briefing export links the rules.
 - Language: German.
 
 ## URL-as-state

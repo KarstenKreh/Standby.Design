@@ -11,6 +11,7 @@ const SITE = 'https://standby.design';
 const INDEX_URL = '/docs/rules';
 const HUB_FILE = '00 Hub - Design Rules.md';
 const DROPPED_HUB_SECTIONS = ['Nächste Schritte'];
+const MCP_DATA_PATH = path.join(DOCS_DIR, '..', 'packages', 'mcp-server', 'src', 'design-rules.json');
 const SITEMAP_PATH = path.join(DOCS_DIR, '..', 'public', 'sitemap.xml');
 
 const CALLOUT_LABELS = {
@@ -164,13 +165,50 @@ function renderHtmlBody(note, notesByName) {
     .replace(/<\/table>/g, '</table></div>');
 }
 
-function renderMarkdownBody(note, notesByName) {
+function renderMarkdownBody(note, notesByName, { demote = true } = {}) {
   return mapOutsideFences(note.body, (text) => {
     const linked = resolveWikilinks(text, notesByName, (label) => label);
-    return extractCallouts(linked, (_, title, inner) =>
+    const flattened = extractCallouts(linked, (_, title, inner) =>
       [`> **${title}**`, ...inner.split('\n').map((line) => (line ? `> ${line}` : '>'))].join('\n'),
     );
-  }).replace(/^(#{2,5})\s/gm, '#$1 ');
+    return demote ? flattened.replace(/^(#{2,5})\s/gm, '#$1 ') : flattened;
+  });
+}
+
+function extractRuleStatement(note) {
+  const match = note.body.match(/^>\s*\[!TIP\][^\n]*\n((?:>[^\n]*\n?)+)/m);
+  if (!match) return '';
+  return match[1]
+    .split('\n')
+    .map((line) => line.replace(/^>\s?/, '').trim())
+    .filter(Boolean)
+    .join(' ')
+    .replace(/\*\*/g, '');
+}
+
+function renderMcpData(notes, notesByName) {
+  const hub = notes.find((n) => n.isHub);
+  const hubPosition = (rule) => {
+    const index = hub.body.indexOf(`[[${rule.name}]]`);
+    return index === -1 ? Number.MAX_SAFE_INTEGER : index;
+  };
+  const rules = notes
+    .filter((n) => n.isRule)
+    .sort((x, y) => hubPosition(x) - hubPosition(y))
+    .map((rule) => ({
+      slug: rule.slug,
+      title: rule.title,
+      category: rule.category,
+      scope: rule.meta.scope || 'universal',
+      appliesTo: Array.isArray(rule.meta['applies-to']) ? rule.meta['applies-to'] : [],
+      korridor: rule.meta.korridor || null,
+      default: rule.meta.default || null,
+      description: rule.meta.description || '',
+      rule: extractRuleStatement(rule),
+      url: `${SITE}${rule.url}`,
+      body: renderMarkdownBody(rule, notesByName, { demote: false }).trim(),
+    }));
+  return `${JSON.stringify({ source: `${SITE}${INDEX_URL}`, markdown: `${SITE}/docs/rules.md`, language: 'de', rules }, null, 2)}\n`;
 }
 
 function metaRows(note) {
@@ -465,8 +503,9 @@ function build() {
   }
 
   fs.writeFileSync(path.join(PUBLIC_DOCS_DIR, 'rules.md'), renderAgentMarkdown(notes, notesByName));
+  fs.writeFileSync(MCP_DATA_PATH, renderMcpData(notes, notesByName));
   updateSitemap(notes);
-  console.log(`Built ${notes.length} pages into public/docs (rules.html, rules/*.html, rules.md)`);
+  console.log(`Built ${notes.length} pages into public/docs (rules.html, rules/*.html, rules.md) and the MCP rule data`);
 }
 
 build();

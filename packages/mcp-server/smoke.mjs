@@ -110,6 +110,30 @@ console.log('\n=== css export (first 800 chars) ===\n' + res.content[0].text.sli
 res = await client.callTool({ name: 'list_fonts', arguments: {} });
 console.log('\n=== fonts (first 300 chars) ===\n' + res.content[0].text.slice(0, 300));
 
+res = await client.callTool({ name: 'get_design_rules', arguments: {} });
+if (res.isError || !res.content[0].text.includes('form-konzentrische-radien')) {
+  throw new Error('get_design_rules summary does not list the rule slugs:\n' + res.content[0].text.slice(0, 400));
+}
+console.log(`\n=== design rules summary: ${res.content[0].text.length} chars OK ===`);
+
+res = await client.callTool({ name: 'get_design_rules', arguments: { rules: ['form-konzentrische-radien'] } });
+if (res.isError || !res.content[0].text.includes('## Warum')) {
+  throw new Error('get_design_rules full text is missing the rule body:\n' + res.content[0].text.slice(0, 400));
+}
+console.log('=== design rule full text OK ===');
+
+res = await client.callTool({ name: 'get_design_rules', arguments: { category: 'Flaeche', detail: 'full' } });
+if (res.isError || !res.content[0].text.includes('# Eine Linie trennt')) {
+  throw new Error('get_design_rules category filter failed:\n' + res.content[0].text.slice(0, 400));
+}
+console.log('=== design rules category filter OK ===');
+
+res = await client.callTool({ name: 'export_design_system', arguments: { url, format: 'llm-briefing' } });
+if (!res.content[0].text.includes('get_design_rules')) {
+  throw new Error('llm-briefing export does not point to the design rules');
+}
+console.log('=== llm-briefing links the design rules OK ===');
+
 // Error paths
 res = await client.callTool({ name: 'generate_color_palette', arguments: { brandHex: 'nope' } });
 console.log('\n=== invalid hex →', res.isError ? 'isError OK' : 'MISSING isError', '===\n' + res.content[0].text);
