@@ -1,0 +1,11 @@
+{
+  "name": "standby-design-docs",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build-rules.mjs"
+  },
+  "devDependencies": {
+    "marked": "^18.0.14"
+  }
+}

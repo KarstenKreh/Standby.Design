@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Die Höhe gehört der Zeile, nicht dem Element — Design Rules — standby.design</title>
+  <meta name="description" content="Alles in einer Zeile hat dieselbe Höhe. Welche das ist, sagt der Kontext der Zeile und nicht die Art des Elements." />
+  <link rel="canonical" href="https://standby.design/docs/rules/bedienung-die-hoehe-gehoert-der-zeile-nicht-dem-element" />
+  <link rel="alternate" type="text/markdown" href="https://standby.design/docs/rules.md" title="Design Rules (Markdown)" />
+
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Die Höhe gehört der Zeile, nicht dem Element — Design Rules — standby.design" />
+  <meta property="og:description" content="Alles in einer Zeile hat dieselbe Höhe. Welche das ist, sagt der Kontext der Zeile und nicht die Art des Elements." />
+  <meta property="og:url" content="https://standby.design/docs/rules/bedienung-die-hoehe-gehoert-der-zeile-nicht-dem-element" />
+  <meta property="og:site_name" content="standby.design" />
+  <meta property="og:image" content="https://standby.design/og-image?tool=github" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://standby.design/og-image?tool=github" />
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23111'/%3E%3Ccircle cx='16' cy='16' r='6' fill='none' stroke='%234a7aaa' stroke-width='2'/%3E%3C/svg%3E">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@1,2&f[]=jet-brains-mono@1,2&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --font-heading: 'Satoshi', sans-serif;
+      --font-body: 'Satoshi', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --text-h3: clamp(1.9344rem, 0.2719vw + 1.8707rem, 2.197rem);
+      --text-h5: clamp(1.246rem, 0.0559vw + 1.2329rem, 1.3rem);
+      --text-body-s: 1rem;
+      --text-caption: 0.7692rem;
+      --leading-h3: 1.2;
+      --leading-h5: 1.3;
+      --leading-body-s: 1.5;
+      --tracking-h3: -0.01em;
+      --tracking-body-s: 0.01em;
+      --background: oklch(0.145 0 0);
+      --foreground: oklch(0.985 0 0);
+      --card: oklch(0.205 0 0);
+      --muted-foreground: oklch(0.708 0 0);
+      --border: oklch(1 0 0 / 10%);
+      --emphasis: oklch(0.78 0.1 230);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: var(--font-body);
+      font-size: var(--text-body-s);
+      line-height: var(--leading-body-s);
+      letter-spacing: var(--tracking-body-s);
+      background: var(--background);
+      color: var(--foreground);
+      padding: 2rem 1.5rem 3rem;
+    }
+    main { max-width: 720px; margin: 0 auto; }
+    .back {
+      display: inline-block;
+      padding: 0.5rem 0.75rem;
+      margin: 0 0 2rem -0.75rem;
+      border-radius: 8px;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      transition: color 0.2s, background 0.2s;
+    }
+    .back:hover { color: var(--foreground); background: var(--card); }
+    .eyebrow {
+      font-size: var(--text-caption);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted-foreground);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-heading);
+      font-size: var(--text-h3);
+      font-weight: 700;
+      line-height: var(--leading-h3);
+      letter-spacing: var(--tracking-h3);
+      margin-bottom: 0.4em;
+    }
+    h2 {
+      font-family: var(--font-heading);
+      font-size: var(--text-h5);
+      font-weight: 700;
+      line-height: var(--leading-h5);
+      margin-top: 2.25em;
+      margin-bottom: 0.5em;
+    }
+    h3 {
+      font-family: var(--font-heading);
+      font-size: var(--text-body-s);
+      font-weight: 700;
+      margin-top: 1.5em;
+      margin-bottom: 0.4em;
+    }
+    p, li { color: var(--muted-foreground); margin-bottom: 0.75em; }
+    strong { color: var(--foreground); font-weight: 500; }
+    ul, ol { padding-left: 1.25rem; margin-bottom: 0.75em; }
+    a { color: var(--emphasis); }
+    code { font-family: var(--font-mono); font-size: 0.9em; }
+    pre {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      line-height: 1.5;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.9rem 1rem;
+      margin-bottom: 1rem;
+      overflow-x: auto;
+      white-space: pre;
+    }
+    pre code { font-size: inherit; color: var(--foreground); }
+    hr { border: 0; border-top: 1px solid var(--border); margin: 2rem 0; }
+    .lead { font-size: 1.125rem; }
+    .table-wrap { overflow-x: auto; margin-bottom: 1rem; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td {
+      text-align: left;
+      vertical-align: top;
+      padding: 0.6rem 0.75rem 0.6rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    th { color: var(--foreground); font-weight: 500; }
+    td { color: var(--muted-foreground); }
+    td code { color: var(--foreground); }
+    blockquote {
+      border-left: 2px solid var(--border);
+      padding-left: 1rem;
+      margin-bottom: 0.9rem;
+    }
+    blockquote p { margin-bottom: 0; }
+    .callout {
+      background: var(--card);
+      border-radius: 8px;
+      padding: 0.9rem 1rem;
+      margin-bottom: 1.25rem;
+    }
+    .callout p:last-child, .callout ul:last-child { margin-bottom: 0; }
+    .callout-title {
+      font-size: var(--text-caption);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted-foreground);
+      margin-bottom: 0.35rem;
+    }
+    .callout-tip p:not(.callout-title) { color: var(--foreground); font-size: 1.125rem; }
+    .callout-tip .callout-title { color: var(--emphasis); }
+    .rule-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1.5rem;
+      margin: 0.25rem 0 1.75rem;
+      font-size: 0.875rem;
+    }
+    .rule-meta dt { color: var(--muted-foreground); }
+    .rule-meta dd { color: var(--foreground); }
+    .agent-hint { font-size: 0.875rem; }
+    .legal-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 3.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+    .legal-links a {
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      transition: color 0.2s, background 0.2s;
+    }
+    .legal-links a:hover { color: var(--foreground); background: var(--card); }
+  </style>
+  <script defer src="https://umami.standby.design/script.js" data-website-id="255e8c46-9a39-4cc8-ba66-5cb4fc53b91e"></script>
+</head>
+<body>
+  <main>
+    <a class="back" href="/docs/rules">&larr; Design Rules</a>
+
+    <p class="eyebrow">Bedienung</p>
+    <h1>Die Höhe gehört der Zeile, nicht dem Element</h1>
+    <dl class="rule-meta"><div><dt>Geltung</dt><dd>universal · web, react-native</dd></div><div><dt>Vorgabe</dt><dd>2rem dicht, 2.5rem im Formular</dd></div></dl>
+
+<aside class="callout callout-tip"><p class="callout-title">Regel</p><p>Alle Bedienelemente in einer Zeile haben dieselbe Höhe. Welche Höhe gilt, sagt der Kontext der Zeile: dicht in einer Werkzeugleiste, großzügig in einem Formular. Die Höhen sind eine kleine, benannte, geschlossene Menge und stehen als Token.</p>
+</aside>
+<h2>Warum</h2>
+<h3>Ein Paar hat eine gemeinsame Kante</h3>
+<p>Ein Eingabefeld mit einem Button daneben ist ein Paar. Der Button gehört zu dem Feld, er tut etwas mit dem, was darin steht. Sind beide verschieden hoch, verliert die Zeile ihre Ober- und Unterkante, der Button hängt in der Luft, und die beiden lesen sich als zwei Dinge, die zufällig nebeneinander liegen.</p>
+<p>Das ist dieselbe Mechanik wie in <a href="/docs/rules/layout-naehe-gruppiert-nicht-die-linie">Nähe gruppiert, nicht die Linie</a>, nur auf der anderen Achse: Nähe gruppiert waagerecht, eine gemeinsame Kante gruppiert senkrecht. Beides wirkt, bevor jemand liest.</p>
+<h3>Warum es überhaupt mehr als eine Höhe gibt</h3>
+<p>Weil Dichte eine Eigenschaft des Kontexts ist. In einer Werkzeugleiste stehen viele Bedienelemente nebeneinander, jedes wird kurz berührt und wieder losgelassen. Dort gewinnt Kompaktheit, weil die Leiste sonst mehr Platz frisst als der Inhalt, für den sie da ist.</p>
+<p>In einem Formular tippt der Nutzer. Er hält sich dort auf, er trifft dort, er liest dort. Da gewinnen Ruhe und Trefferfläche.</p>
+<p>Das ist ein Unterschied zwischen zwei <strong>Situationen</strong>, nicht zwischen zwei Bauteilen. Ein Button ist in beiden derselbe Button.</p>
+<h3>Der Sonderschalter ist das Warnzeichen</h3>
+<p>Formuliert man die Regel am Element statt an der Zeile („Buttons sind klein, Felder sind groß&quot;), braucht sie sofort eine Ausnahme: einen Schalter, der einen Button für den Einsatz neben Feldern auf Feldhöhe hebt. Und den braucht man dauernd.</p>
+<p>Eine Regel, die ständig eine Ausnahme braucht, hat die falsche Frage gestellt. Die Frage ist nicht, welche Art von Element das ist, sondern in welcher Zeile es steht.</p>
+<h2>Hart und weich</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Alles in einer Zeile hat dieselbe Höhe</td>
+<td>hart</td>
+</tr>
+<tr>
+<td>Die Höhe folgt dem Kontext der Zeile, nicht der Art des Elements</td>
+<td>hart</td>
+</tr>
+<tr>
+<td>Die Höhen sind eine kleine, geschlossene, benannte Menge</td>
+<td>hart</td>
+</tr>
+<tr>
+<td>Jede Höhe steht als Token, nicht in der Ansicht</td>
+<td>hart</td>
+</tr>
+<tr>
+<td>Ein Icon-only-Element ist ein Quadrat auf der Höhe seiner Zeile</td>
+<td>hart</td>
+</tr>
+<tr>
+<td>Wie viele Höhen es gibt und wie hoch sie sind</td>
+<td>weich, Vorgabe zwei Stufen: dicht 2rem, Formular 2.5rem</td>
+</tr>
+</tbody></table></div>
+<p>Zwei Stufen reichen für die meisten Anwendungen. Wer eine dritte einführt, braucht dafür einen dritten Kontext, den er benennen kann — nicht eine Stelle, an der es gerade besser aussah.</p>
+<h2>Woran Du den Verstoß erkennst</h2>
+<ul>
+<li>In einer Filter- oder Formularzeile stehen Feld und Button verschieden hoch.</li>
+<li>Ein Element trägt seine Höhe oder sein senkrechtes Padding direkt in der Ansicht.</li>
+<li>Es gibt eine Höhe, die nur an einer einzigen Stelle vorkommt.</li>
+<li>Ein Icon-Element ist rechteckig statt quadratisch.</li>
+<li>Ein Element wird per Sonderschalter angehoben, obwohl seine Zeile schon sagt, welche Höhe gilt.</li>
+</ul>
+<h2>Richtig / falsch</h2>
+<pre><code>        RICHTIG                             FALSCH
+
+  ┌───────────────┐┌─────────┐       ┌───────────────┐
+  │               ││         │       │               │┌─────────┐
+  │ Suchbegriff   ││ Suchen  │       │ Suchbegriff   ││ Suchen  │
+  │               ││         │       │               │└─────────┘
+  └───────────────┘└─────────┘       └───────────────┘
+
+  eine Ober- und eine Unterkante      der Button hängt, die Zeile
+  für die ganze Zeile                 hat keine gemeinsame Kante
+</code></pre>
+<h2>Grenzen</h2>
+<p>Nach unten begrenzt die Trefferfläche aus <a href="/docs/rules/bedienung-klickbares-braucht-eine-flaeche">Klickbares braucht eine Fläche</a>. Auf Touch-Oberflächen ist die dichte Stufe zu klein für den Finger, sie bleibt dort Werkzeugleisten am Zeigegerät vorbehalten.</p>
+<p>Ein Element, das allein steht und in keiner Zeile sitzt, nimmt die Höhe seines Umfelds. Im Zweifel die großzügige, weil ein einzelner Knopf fast immer eine Aufgabe ist und keine Werkzeugleiste.</p>
+<p>Beschriftete Elemente wachsen nur in der Breite mit ihrem Inhalt. Die Höhe ändert sich nie durch den Text darin.</p>
+<h2>Verwandt</h2>
+<ul>
+<li><a href="/docs/rules/bedienung-klickbares-braucht-eine-flaeche">Klickbares braucht eine Fläche</a></li>
+<li><a href="/docs/rules/layout-naehe-gruppiert-nicht-die-linie">Nähe gruppiert, nicht die Linie</a></li>
+<li><a href="/docs/rules/form-senkrechtes-padding-wird-optisch-ausgeglichen">Senkrechtes Padding wird optisch ausgeglichen</a></li>
+</ul>
+
+
+    <nav class="legal-links">
+      <a href="/">Home</a>
+      <a href="/docs/mcp">MCP Server</a>
+      <a href="/docs/rules">Design Rules</a>
+      <a href="/impressum.html">Impressum</a>
+      <a href="/datenschutz.html">Datenschutz</a>
+    </nav>
+  </main>
+</body>
+</html>

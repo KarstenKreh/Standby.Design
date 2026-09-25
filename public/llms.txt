@@ -43,6 +43,20 @@ If a user asks you to build a design system with standby.design:
 - npm: https://www.npmjs.com/package/standby-design-mcp
 - Source: https://github.com/KarstenKreh/Standby.Design/tree/master/packages/mcp-server
 
+## Design rules
+
+- Overview: https://standby.design/docs/rules
+- All rules in one Markdown file: https://standby.design/docs/rules.md
+- What: about 30 universal rules for building UI with the tokens — layout, flow
+  (empty, loading, error), shape, surfaces, interaction states, typography,
+  color, and Tailwind/React Native stack rules. The generators deliver the
+  values; the rules say how to use them.
+- Each rule states the rule, why it holds, how to detect a violation in code,
+  a right/wrong example, and its limits. Rules with a number separate the hard
+  invariant from a soft default ("Korridor" = allowed range, "Vorgabe" =
+  default until the project sets its own value).
+- Language: German.
+
 ## URL-as-state
 
 All tools share one unified hash format:

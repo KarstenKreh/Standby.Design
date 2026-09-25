@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Body, Role und Skin — Design Rules — standby.design</title>
+  <meta name="description" content="Persönliche Haltung, keine Design-Regel. Cellular Design gegen Atomic Design. Ein Body differenziert sich über Role und Skin, statt als fertiges Atom kombiniert zu werden." />
+  <link rel="canonical" href="https://standby.design/docs/rules/philosophie-body-role-und-skin" />
+  <link rel="alternate" type="text/markdown" href="https://standby.design/docs/rules.md" title="Design Rules (Markdown)" />
+
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Body, Role und Skin — Design Rules — standby.design" />
+  <meta property="og:description" content="Persönliche Haltung, keine Design-Regel. Cellular Design gegen Atomic Design. Ein Body differenziert sich über Role und Skin, statt als fertiges Atom kombiniert zu werden." />
+  <meta property="og:url" content="https://standby.design/docs/rules/philosophie-body-role-und-skin" />
+  <meta property="og:site_name" content="standby.design" />
+  <meta property="og:image" content="https://standby.design/og-image?tool=github" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://standby.design/og-image?tool=github" />
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23111'/%3E%3Ccircle cx='16' cy='16' r='6' fill='none' stroke='%234a7aaa' stroke-width='2'/%3E%3C/svg%3E">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@1,2&f[]=jet-brains-mono@1,2&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --font-heading: 'Satoshi', sans-serif;
+      --font-body: 'Satoshi', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --text-h3: clamp(1.9344rem, 0.2719vw + 1.8707rem, 2.197rem);
+      --text-h5: clamp(1.246rem, 0.0559vw + 1.2329rem, 1.3rem);
+      --text-body-s: 1rem;
+      --text-caption: 0.7692rem;
+      --leading-h3: 1.2;
+      --leading-h5: 1.3;
+      --leading-body-s: 1.5;
+      --tracking-h3: -0.01em;
+      --tracking-body-s: 0.01em;
+      --background: oklch(0.145 0 0);
+      --foreground: oklch(0.985 0 0);
+      --card: oklch(0.205 0 0);
+      --muted-foreground: oklch(0.708 0 0);
+      --border: oklch(1 0 0 / 10%);
+      --emphasis: oklch(0.78 0.1 230);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: var(--font-body);
+      font-size: var(--text-body-s);
+      line-height: var(--leading-body-s);
+      letter-spacing: var(--tracking-body-s);
+      background: var(--background);
+      color: var(--foreground);
+      padding: 2rem 1.5rem 3rem;
+    }
+    main { max-width: 720px; margin: 0 auto; }
+    .back {
+      display: inline-block;
+      padding: 0.5rem 0.75rem;
+      margin: 0 0 2rem -0.75rem;
+      border-radius: 8px;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      transition: color 0.2s, background 0.2s;
+    }
+    .back:hover { color: var(--foreground); background: var(--card); }
+    .eyebrow {
+      font-size: var(--text-caption);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted-foreground);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-heading);
+      font-size: var(--text-h3);
+      font-weight: 700;
+      line-height: var(--leading-h3);
+      letter-spacing: var(--tracking-h3);
+      margin-bottom: 0.4em;
+    }
+    h2 {
+      font-family: var(--font-heading);
+      font-size: var(--text-h5);
+      font-weight: 700;
+      line-height: var(--leading-h5);
+      margin-top: 2.25em;
+      margin-bottom: 0.5em;
+    }
+    h3 {
+      font-family: var(--font-heading);
+      font-size: var(--text-body-s);
+      font-weight: 700;
+      margin-top: 1.5em;
+      margin-bottom: 0.4em;
+    }
+    p, li { color: var(--muted-foreground); margin-bottom: 0.75em; }
+    strong { color: var(--foreground); font-weight: 500; }
+    ul, ol { padding-left: 1.25rem; margin-bottom: 0.75em; }
+    a { color: var(--emphasis); }
+    code { font-family: var(--font-mono); font-size: 0.9em; }
+    pre {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      line-height: 1.5;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.9rem 1rem;
+      margin-bottom: 1rem;
+      overflow-x: auto;
+      white-space: pre;
+    }
+    pre code { font-size: inherit; color: var(--foreground); }
+    hr { border: 0; border-top: 1px solid var(--border); margin: 2rem 0; }
+    .lead { font-size: 1.125rem; }
+    .table-wrap { overflow-x: auto; margin-bottom: 1rem; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td {
+      text-align: left;
+      vertical-align: top;
+      padding: 0.6rem 0.75rem 0.6rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    th { color: var(--foreground); font-weight: 500; }
+    td { color: var(--muted-foreground); }
+    td code { color: var(--foreground); }
+    blockquote {
+      border-left: 2px solid var(--border);
+      padding-left: 1rem;
+      margin-bottom: 0.9rem;
+    }
+    blockquote p { margin-bottom: 0; }
+    .callout {
+      background: var(--card);
+      border-radius: 8px;
+      padding: 0.9rem 1rem;
+      margin-bottom: 1.25rem;
+    }
+    .callout p:last-child, .callout ul:last-child { margin-bottom: 0; }
+    .callout-title {
+      font-size: var(--text-caption);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted-foreground);
+      margin-bottom: 0.35rem;
+    }
+    .callout-tip p:not(.callout-title) { color: var(--foreground); font-size: 1.125rem; }
+    .callout-tip .callout-title { color: var(--emphasis); }
+    .rule-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1.5rem;
+      margin: 0.25rem 0 1.75rem;
+      font-size: 0.875rem;
+    }
+    .rule-meta dt { color: var(--muted-foreground); }
+    .rule-meta dd { color: var(--foreground); }
+    .agent-hint { font-size: 0.875rem; }
+    .legal-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 3.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+    .legal-links a {
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      transition: color 0.2s, background 0.2s;
+    }
+    .legal-links a:hover { color: var(--foreground); background: var(--card); }
+  </style>
+  <script defer src="https://umami.standby.design/script.js" data-website-id="255e8c46-9a39-4cc8-ba66-5cb4fc53b91e"></script>
+</head>
+<body>
+  <main>
+    <a class="back" href="/docs/rules">&larr; Design Rules</a>
+
+    <p class="eyebrow">Philosophie</p>
+    <h1>Body, Role und Skin</h1>
+
+<pre><code>        ╔═══════════════════════════════════════╗
+        ║ ┌───────────────────────────────────┐ ║
+        ║ │                                   │ ║
+        ║ │         ╭───────────────╮         │ ║
+        ║ │         │   Speichern   │         │ ║
+        ║ │         ╰───────────────╯         │ ║
+        ║ │                                   │ ║
+        ║ │     Ceci n&#39;est pas un bouton.     │ ║
+        ║ │                                   │ ║
+        ║ └───────────────────────────────────┘ ║
+        ╚═══════════════════════════════════════╝
+</code></pre>
+<aside class="callout callout-quote"><p class="callout-title">Ceci n'est pas un bouton</p><p>Magritte malt eine Pfeife und schreibt darunter: dies ist keine Pfeife. Er hat recht. Es ist das Bild einer Pfeife. Man kann sie nicht stopfen.</p>
+<p>Mit dem Button ist es genauso. Was wir Button nennen, ist kein Ding. Es ist das Bild eines Zustands: ein Body, der gerade drückbar ist und gerade so aussieht. Wir haben diesen einen Moment eingefroren, in eine Bibliothek gelegt und ihm einen Namen gegeben. Danach haben wir den Namen für die Sache gehalten.</p>
+<p>Der Verrat liegt nicht im Bild. Er liegt in der Verwechslung.</p>
+</aside>
+<p>Wörtlich genommen stimmt es sogar: die Pfeife im Bild kann man nicht rauchen, und die Master Component in Figma kann man nicht drücken. Beide sind Abbilder. Nur haben wir beim Button vergessen, dass es eines ist, und angefangen, die Bibliothek der Abbilder für das System zu halten.</p>
+<p>Was dabei verloren geht, ist genau das, was den Button zum Button macht: dass er etwas tut. Ein eingefrorener Zustand trägt seine Rolle und seine Bedeutung noch in sich, aber nur als Erinnerung, nicht als Fähigkeit. Er kann sich nicht mehr anders entscheiden.</p>
+<aside class="callout callout-summary"><p class="callout-title">Worum es geht</p><p>Atomic Design denkt in Chemie: Atome verbinden sich zu Molekülen. Cellular Design denkt in Biologie: eine Zelle differenziert sich. Der Unterschied liegt nicht in der Größe der Einheit, sondern darin, ob sie sich verändern kann. Diese Notiz ist die Haltung dahinter. Sie ist keine Regel der Sammlung und keine Voraussetzung für die Notizen daneben.</p>
+</aside>
+<hr>
+<h2>Warum nicht Atomic Design</h2>
+<p>Atomic Design leiht seine Metapher bei der Chemie: Atome, Moleküle, Organismen. Das klingt nach Wachstum, greift aber auf die unbelebteste Ebene der Wirklichkeit zurück, die es gibt. Ein Atom kann nichts werden. Es kann sich nur verbinden.</p>
+<p>Aus dieser einen Entscheidung folgt alles Weitere, und zwar zwingend. Wenn die kleinste Einheit sich nicht verändern kann, ist Kombination der einzige Vorgang, der zur Verfügung steht. Vielfalt entsteht dann nur über mehr Einheiten. Für jede Verbindung aus Verhalten, Aussehen und Zustand braucht es ein eigenes fertiges Ding, und irgendwann ist die Pflege der Bibliothek aufwändiger als die Arbeit, für die sie da ist. Das ist kein Fehler in der Anwendung. Das ist die Metapher, die korrekt arbeitet.</p>
+<p>Am Hover sieht man es am deutlichsten. Er steckt im Button, noch einmal im Chip und ein drittes Mal in der Tabellenzeile — nicht aus Nachlässigkeit, sondern weil ein Atom seine Eigenschaften bei sich trägt und nicht von außen bezieht. Ändert sich die Regel, ändert sie sich an drei Stellen, oder eben an zweien.</p>
+<p>Die Biologie kennt einen zweiten Vorgang, den die Chemie nicht hat: <strong>Differenzierung</strong>. Dieselbe Zelle wird zu Verschiedenem, je nach Kontext. Vielfalt entsteht ohne mehr Einheiten. Deshalb lautet der Gegenentwurf nicht „kleinere Teile&quot; oder „besser gepflegte Teile&quot;, sondern: eine andere Materie.</p>
+<p>Die Frage „haben wir für alles ein fertiges Teil?&quot; ist damit die falsche Frage. Die richtige lautet: <strong>Was ist die kleinste Anzahl an Regeln, mit der wir das meiste erschaffen können?</strong></p>
+<h2>Das Modell</h2>
+<p>Ein Body ist zunächst nichts. Er ist formbare, bedeutungsfreie Materie — im Web ein <code>div</code>, in React Native ein <code>View</code>. Er bekommt seine Bedeutung erst aus zwei Zuweisungen.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Schicht</th>
+<th>Was sie beiträgt</th>
+<th>Beispiel</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Body</strong> (der Körper)</td>
+<td>Die formbare Materie. Ohne Bedeutung, ohne Aussehen</td>
+<td>ein neutrales Element</td>
+</tr>
+<tr>
+<td><strong>Role</strong> (die Seele)</td>
+<td>Was der Body <strong>tut</strong>. Ein reines Verhaltenspaket, ohne jede Aussage über das Aussehen</td>
+<td><code>pressable</code>, <code>toggleable</code>, <code>editable</code>, <code>navigable</code>, <code>readable</code></td>
+</tr>
+<tr>
+<td><strong>Skin</strong> (die Haut)</td>
+<td>Wie der Body <strong>aussieht</strong>. Ein reines Stil-Rezept auf Token-Basis, ohne jeden Interaktions-Code</td>
+<td><code>press</code>, <code>chip</code>, <code>track</code>, <code>tab</code>, <code>field</code>, <code>row</code>, <code>text</code></td>
+</tr>
+</tbody></table></div>
+<p>Dazu kommen die zwei Schichten, die das Ganze tragen:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Schicht</th>
+<th>Was sie beiträgt</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Tokens</strong> (die DNA)</td>
+<td>Die Werte, aus denen der Skin gemacht ist. Zustände wie Hover sind Stufen derselben Palette</td>
+</tr>
+<tr>
+<td><strong>Grammatik</strong></td>
+<td>Welche Kombinationen einen Namen haben, welche verboten sind, und warum</td>
+</tr>
+</tbody></table></div>
+<h2>Was das praktisch ändert</h2>
+<p>Das Hover-Problem, aristotelisch gelöst: das Verhalten wird <strong>einmal</strong> definiert und auf beliebige Bodies angewendet.</p>
+<pre><code class="language-plaintext">Body + Skin (pill)   + Role (pressable)  =&gt;  klickbarer Pill-Button
+Body + Skin (chip)   + Role (pressable)  =&gt;  klickbarer Chip
+Body + Skin (row)    + Role (navigable)  =&gt;  Navigations-Zeile
+Body + Skin (chip)   + Role (readable)   =&gt;  Badge
+</code></pre>
+<p>Die letzten beiden Zeilen zeigen den Kern. Chip und Badge sehen gleich aus und verhalten sich verschieden. In Atomic Design sind das zwangsläufig zwei Atome mit doppeltem Stil, weil ein Atom sein Aussehen bei sich trägt. Als Bodies ist es derselbe Skin mit zwei Roles.</p>
+<p>Die Komplexität wandert aus dem einzelnen Ding in das System, wo sie wiederverwendbar bleibt. Aus Multiplikation wird Addition: nicht mehr Verhalten <strong>mal</strong> Skin <strong>mal</strong> Schwere als Einzelteile, sondern Verhalten <strong>plus</strong> Skins <strong>plus</strong> Schweregrade.</p>
+<h2>Zwei Prüfsteine</h2>
+<p><strong>Der Orthogonalitäts-Test.</strong> Etwas ist nur dann eine eigene Achse, wenn es sich mit allen anderen Achsen sinnvoll kombinieren lässt. Existiert es nur in einer einzigen Kombination, ist es kein Bauprinzip, sondern ein benannter Einzelfall — und bleibt einer.</p>
+<p><strong>Ausnahmen sind unentdeckte Achsen.</strong> Der abweichende Hover eines Fehler-Buttons ist keine Ausnahme von der Hover-Regel. Er ist die Schwere-Achse: die Regel zeigt auf den Hover-Wert der jeweils aktiven Palette, und die Abweichung wird zu Daten statt zu Code. Wer stattdessen ein <code>wenn</code> in die Regel schreibt, hat die Achse übersehen.</p>
+<p>Daraus die Faustregel: <strong>Verhalten hart abstrahieren, Aussehen nur als überschreibbarer Vorschlag.</strong> Und wenn eine Regel ein zweites „außer wenn&quot; braucht, ist das eine neue benannte Variante, kein weiteres <code>wenn</code>.</p>
+<h2>Warum das erst jetzt geht</h2>
+<p>Atomic Design war nicht falsch, es war eine Kompression für Menschen: eingefrorene, bewiesene Kombinationen, die niemand jedes Mal neu herleiten musste. Wer keine Regeln im Kopf behalten kann, braucht ein Regal mit fertigen Teilen. Eine KI braucht diese Abkürzung nicht. Sie kann eine Grammatik anwenden, also Regeln kombinieren, statt Vokabeln nachzuschlagen.</p>
+<p>Damit wird das Design-System von einer Teileliste zu einer Sprache. Was davon ohne diese Haltung für jedes Projekt gilt, steht in <a href="/docs/rules/bedienung-verhalten-und-aussehen-bleiben-getrennt">Verhalten und Aussehen bleiben getrennt</a> und in <a href="/docs/rules/bedienung-verhalten-und-aussehen-werden-nicht-in-der-ansicht-nachgebaut">Verhalten und Aussehen werden nicht in der Ansicht nachgebaut</a>.</p>
+<h2>Zur Wortwahl</h2>
+<p>Die Metapher ist die Zelle, das Paradigma heißt Cellular Design. Das einzelne Ding heißt trotzdem <strong>Body</strong> und nicht „Zelle&quot;, weil Zelle in Oberflächen schon vergeben ist: die Tabellenzelle. Auf Deutsch ist der Body der <strong>Körper</strong>, die Role die <strong>Seele</strong>, der Skin die <strong>Haut</strong>. Die englischen Wörter stehen hier, weil sie im Code dieser Haltung genauso heißen. Wo <code>body</code> mit dem <code>&lt;body&gt;</code>-Element kollidieren könnte, hilft die Langform <strong>cell body</strong>.</p>
+<p>Nicht verwendet werden „Atom&quot;, „Molekül&quot; und „Organismus&quot;, weil sie zu Atomic Design gehören. Ebenso „Baustein&quot; und „Komponente&quot;: nicht weil die Wörter schlecht wären, sondern weil sie dieselbe Welt beschreiben. Totes Material, das verbaut wird und danach bleibt, was es ist. Das Wort ist nur das Symptom, die Metapher darunter ist die Ursache. Diese Wortwahl gilt für Texte in dieser Haltung. Die Regeln daneben sprechen normal.</p>
+<h2>Verwandt</h2>
+<ul>
+<li><a href="/docs/rules/bedienung-verhalten-und-aussehen-bleiben-getrennt">Verhalten und Aussehen bleiben getrennt</a></li>
+<li><a href="/docs/rules/bedienung-verhalten-und-aussehen-werden-nicht-in-der-ansicht-nachgebaut">Verhalten und Aussehen werden nicht in der Ansicht nachgebaut</a></li>
+<li>From Atoms to Cells - An Aristotelian Revolution for UI Design</li>
+<li>Cellular Design - Umsetzungsplan Rollen, Skins und Grammatik</li>
+</ul>
+
+
+    <nav class="legal-links">
+      <a href="/">Home</a>
+      <a href="/docs/mcp">MCP Server</a>
+      <a href="/docs/rules">Design Rules</a>
+      <a href="/impressum.html">Impressum</a>
+      <a href="/datenschutz.html">Datenschutz</a>
+    </nav>
+  </main>
+</body>
+</html>

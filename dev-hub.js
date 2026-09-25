@@ -34,6 +34,7 @@ const MIME = {
   '.jpg': 'image/jpeg',
   '.ico': 'image/x-icon',
   '.woff2': 'font/woff2',
+  '.md': 'text/markdown; charset=utf-8',
 };
 
 http
@@ -58,7 +59,7 @@ http
     }
 
     const safe = path.normalize(urlPath).replace(/^(\.\.[\/\\])+/, '');
-    const docsMatch = safe.match(/^\/docs\/([a-z0-9-]+)\/?$/);
+    const docsMatch = safe.match(/^\/docs\/([a-z0-9-]+(?:\/[a-z0-9-]+)?)\/?$/);
     const publicPath = path.join(ROOT, 'public', safe);
     let filePath = path.join(ROOT, safe === '/' ? 'index.html' : safe);
     if (docsMatch) {

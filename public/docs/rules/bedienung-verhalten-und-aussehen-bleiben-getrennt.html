@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Verhalten und Aussehen bleiben getrennt — Design Rules — standby.design</title>
+  <meta name="description" content="Was ein Element tut und wie es aussieht, bleiben getrennt. Das Aussehen ist austauschbar, ohne dass sich das Verhalten ändert." />
+  <link rel="canonical" href="https://standby.design/docs/rules/bedienung-verhalten-und-aussehen-bleiben-getrennt" />
+  <link rel="alternate" type="text/markdown" href="https://standby.design/docs/rules.md" title="Design Rules (Markdown)" />
+
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Verhalten und Aussehen bleiben getrennt — Design Rules — standby.design" />
+  <meta property="og:description" content="Was ein Element tut und wie es aussieht, bleiben getrennt. Das Aussehen ist austauschbar, ohne dass sich das Verhalten ändert." />
+  <meta property="og:url" content="https://standby.design/docs/rules/bedienung-verhalten-und-aussehen-bleiben-getrennt" />
+  <meta property="og:site_name" content="standby.design" />
+  <meta property="og:image" content="https://standby.design/og-image?tool=github" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://standby.design/og-image?tool=github" />
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23111'/%3E%3Ccircle cx='16' cy='16' r='6' fill='none' stroke='%234a7aaa' stroke-width='2'/%3E%3C/svg%3E">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@1,2&f[]=jet-brains-mono@1,2&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --font-heading: 'Satoshi', sans-serif;
+      --font-body: 'Satoshi', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --text-h3: clamp(1.9344rem, 0.2719vw + 1.8707rem, 2.197rem);
+      --text-h5: clamp(1.246rem, 0.0559vw + 1.2329rem, 1.3rem);
+      --text-body-s: 1rem;
+      --text-caption: 0.7692rem;
+      --leading-h3: 1.2;
+      --leading-h5: 1.3;
+      --leading-body-s: 1.5;
+      --tracking-h3: -0.01em;
+      --tracking-body-s: 0.01em;
+      --background: oklch(0.145 0 0);
+      --foreground: oklch(0.985 0 0);
+      --card: oklch(0.205 0 0);
+      --muted-foreground: oklch(0.708 0 0);
+      --border: oklch(1 0 0 / 10%);
+      --emphasis: oklch(0.78 0.1 230);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: var(--font-body);
+      font-size: var(--text-body-s);
+      line-height: var(--leading-body-s);
+      letter-spacing: var(--tracking-body-s);
+      background: var(--background);
+      color: var(--foreground);
+      padding: 2rem 1.5rem 3rem;
+    }
+    main { max-width: 720px; margin: 0 auto; }
+    .back {
+      display: inline-block;
+      padding: 0.5rem 0.75rem;
+      margin: 0 0 2rem -0.75rem;
+      border-radius: 8px;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      transition: color 0.2s, background 0.2s;
+    }
+    .back:hover { color: var(--foreground); background: var(--card); }
+    .eyebrow {
+      font-size: var(--text-caption);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted-foreground);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-heading);
+      font-size: var(--text-h3);
+      font-weight: 700;
+      line-height: var(--leading-h3);
+      letter-spacing: var(--tracking-h3);
+      margin-bottom: 0.4em;
+    }
+    h2 {
+      font-family: var(--font-heading);
+      font-size: var(--text-h5);
+      font-weight: 700;
+      line-height: var(--leading-h5);
+      margin-top: 2.25em;
+      margin-bottom: 0.5em;
+    }
+    h3 {
+      font-family: var(--font-heading);
+      font-size: var(--text-body-s);
+      font-weight: 700;
+      margin-top: 1.5em;
+      margin-bottom: 0.4em;
+    }
+    p, li { color: var(--muted-foreground); margin-bottom: 0.75em; }
+    strong { color: var(--foreground); font-weight: 500; }
+    ul, ol { padding-left: 1.25rem; margin-bottom: 0.75em; }
+    a { color: var(--emphasis); }
+    code { font-family: var(--font-mono); font-size: 0.9em; }
+    pre {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      line-height: 1.5;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.9rem 1rem;
+      margin-bottom: 1rem;
+      overflow-x: auto;
+      white-space: pre;
+    }
+    pre code { font-size: inherit; color: var(--foreground); }
+    hr { border: 0; border-top: 1px solid var(--border); margin: 2rem 0; }
+    .lead { font-size: 1.125rem; }
+    .table-wrap { overflow-x: auto; margin-bottom: 1rem; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td {
+      text-align: left;
+      vertical-align: top;
+      padding: 0.6rem 0.75rem 0.6rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    th { color: var(--foreground); font-weight: 500; }
+    td { color: var(--muted-foreground); }
+    td code { color: var(--foreground); }
+    blockquote {
+      border-left: 2px solid var(--border);
+      padding-left: 1rem;
+      margin-bottom: 0.9rem;
+    }
+    blockquote p { margin-bottom: 0; }
+    .callout {
+      background: var(--card);
+      border-radius: 8px;
+      padding: 0.9rem 1rem;
+      margin-bottom: 1.25rem;
+    }
+    .callout p:last-child, .callout ul:last-child { margin-bottom: 0; }
+    .callout-title {
+      font-size: var(--text-caption);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted-foreground);
+      margin-bottom: 0.35rem;
+    }
+    .callout-tip p:not(.callout-title) { color: var(--foreground); font-size: 1.125rem; }
+    .callout-tip .callout-title { color: var(--emphasis); }
+    .rule-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1.5rem;
+      margin: 0.25rem 0 1.75rem;
+      font-size: 0.875rem;
+    }
+    .rule-meta dt { color: var(--muted-foreground); }
+    .rule-meta dd { color: var(--foreground); }
+    .agent-hint { font-size: 0.875rem; }
+    .legal-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 3.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+    .legal-links a {
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      transition: color 0.2s, background 0.2s;
+    }
+    .legal-links a:hover { color: var(--foreground); background: var(--card); }
+  </style>
+  <script defer src="https://umami.standby.design/script.js" data-website-id="255e8c46-9a39-4cc8-ba66-5cb4fc53b91e"></script>
+</head>
+<body>
+  <main>
+    <a class="back" href="/docs/rules">&larr; Design Rules</a>
+
+    <p class="eyebrow">Bedienung</p>
+    <h1>Verhalten und Aussehen bleiben getrennt</h1>
+    <dl class="rule-meta"><div><dt>Geltung</dt><dd>universal · web, react-native</dd></div></dl>
+
+<aside class="callout callout-tip"><p class="callout-title">Regel</p><p>Trenne bei jedem bedienbaren Element, was es tut, von dem, wie es aussieht. Es bekommt genau eine Verhaltensart: <code>pressable</code>, <code>toggleable</code>, <code>editable</code>, <code>navigable</code>, <code>readable</code>. Die Verhaltensart beschreibt nur das Verhalten. Wie das Element aussieht, ist austauschbar.</p>
+</aside>
+<h2>Warum</h2>
+<p>Ohne diese Trennung wird das Aussehen zum Verhalten. „Der Knopf ist blau&quot; wird zu „blau heißt anklickbar&quot;, und beim nächsten Umbau kippt mit der Farbe auch die Bedienlogik. Mit der Trennung kannst Du das Aussehen wechseln, ohne dass sich ändert, was das Element tut. Und Du kannst etwas Neues bauen, indem Du nur sein Verhalten benennst, statt sein Aussehen neu zu erfinden.</p>
+<p>Für einen Agenten ist die Tabelle der Verhaltensarten die Antwort auf die häufigste Frage überhaupt: was wird hier eingesetzt? Nicht „nimm einen Button&quot;, sondern „das ist ein dauerhafter Zustand, also <code>toggleable</code>, also Schalter oder Reiter&quot;.</p>
+<h2>Die fünf Verhaltensarten</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Verhalten</th>
+<th>Bedeutung</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>pressable</code></td>
+<td>Löst eine Aktion aus. Danach ist das Element unverändert</td>
+</tr>
+<tr>
+<td><code>toggleable</code></td>
+<td>Trägt einen dauerhaften Zustand: an oder aus, ausgewählt oder nicht</td>
+</tr>
+<tr>
+<td><code>editable</code></td>
+<td>Nimmt eine Eingabe des Nutzers entgegen</td>
+</tr>
+<tr>
+<td><code>navigable</code></td>
+<td>Bringt den Nutzer an eine andere Stelle</td>
+</tr>
+<tr>
+<td><code>readable</code></td>
+<td>Zeigt nur an, nimmt keine Bedienung entgegen</td>
+</tr>
+</tbody></table></div>
+<p>Die Verhaltensarten entsprechen dem, was ein blinder Nutzer heute schon erlebt: der Accessibility Tree kennt Verhalten, kein Aussehen. Sie sind damit keine Wette auf eine Abstraktion, sondern die Wahrheit der Plattform.</p>
+<h2>Das Wörterbuch</h2>
+<p>Bekannte Paare aus Verhalten und Aussehen, die einen Namen tragen. Der Name der Zeile ist die Abkürzung für das Paar. Die Namen in der Spalte Aussehen sind die Vorgabe. Ein Projekt darf sie anders nennen.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Verhalten</th>
+<th>Aussehen</th>
+<th>Eigenes Zeichen für „aktiv&quot;</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Button</td>
+<td>pressable</td>
+<td>press</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Icon-Button</td>
+<td>pressable</td>
+<td>press, nur Icon</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Chip</td>
+<td>pressable</td>
+<td>chip</td>
+<td>Punkt vorn</td>
+</tr>
+<tr>
+<td>Switch</td>
+<td>toggleable</td>
+<td>track</td>
+<td>Position des Knopfs</td>
+</tr>
+<tr>
+<td>Tab</td>
+<td>toggleable</td>
+<td>tab</td>
+<td>Strich darunter</td>
+</tr>
+<tr>
+<td>Eingabefeld</td>
+<td>editable</td>
+<td>field</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Navigations-Zeile</td>
+<td>navigable</td>
+<td>row</td>
+<td>Balken links</td>
+</tr>
+<tr>
+<td>Fließtext-Link</td>
+<td>navigable</td>
+<td>text</td>
+<td>verdickte Unterstreichung</td>
+</tr>
+<tr>
+<td>Badge</td>
+<td>readable</td>
+<td>chip</td>
+<td>—</td>
+</tr>
+</tbody></table></div>
+<p>Chip und Badge teilen sich das Aussehen und trennen sich im Verhalten: der Chip lässt sich drücken, das Badge nicht. Genau dafür ist die Trennung da.</p>
+<h2>Woran Du den Verstoß erkennst</h2>
+<ul>
+<li>Ein Badge reagiert auf Klick. Dann ist es kein Badge, sondern ein Chip.</li>
+<li>Ein Switch löst eine einmalige Aktion aus, statt einen Zustand zu halten. Dann ist es ein Button.</li>
+<li>Etwas wird über seine Farbe beschrieben („der graue Knopf&quot;) statt über sein Verhalten.</li>
+<li>Das Aussehen bringt Interaktions-Code mit, oder das Verhalten setzt Farben.</li>
+<li>Das Verhalten wird in einer einzelnen Ansicht nachgebaut statt benutzt.</li>
+</ul>
+<h2>Grenzen</h2>
+<p>Zusammengesetzte Gebilde — Dropdown, Datepicker, Dialog — bestehen aus mehreren Elementen und bekommen keine eigene Verhaltensart. Ihr Auslöser ist <code>pressable</code>, ihre Einträge sind <code>navigable</code> oder <code>toggleable</code>.</p>
+<p>Und nicht jede Kombination ergibt Sinn. Welche verboten sind, gehört in die Grammatik des Projekts, nicht in diese Notiz.</p>
+<h2>Verwandt</h2>
+<ul>
+<li><a href="/docs/rules/bedienung-verhalten-und-aussehen-werden-nicht-in-der-ansicht-nachgebaut">Verhalten und Aussehen werden nicht in der Ansicht nachgebaut</a></li>
+<li><a href="/docs/rules/bedienung-ein-dauerhafter-zustand-braucht-ein-zweites-zeichen">Ein dauerhafter Zustand braucht ein zweites Zeichen</a></li>
+<li><a href="/docs/rules/bedienung-kurze-zustaende-verschieben-dauerhafte-wechseln-die-palette">Kurze Zustände verschieben, dauerhafte wechseln die Palette</a></li>
+<li><a href="/docs/rules/bedienung-die-hoehe-gehoert-der-zeile-nicht-dem-element">Die Höhe gehört der Zeile, nicht dem Element</a></li>
+<li><a href="/docs/rules/bedienung-klickbares-braucht-eine-flaeche">Klickbares braucht eine Fläche</a></li>
+</ul>
+
+
+    <nav class="legal-links">
+      <a href="/">Home</a>
+      <a href="/docs/mcp">MCP Server</a>
+      <a href="/docs/rules">Design Rules</a>
+      <a href="/impressum.html">Impressum</a>
+      <a href="/datenschutz.html">Datenschutz</a>
+    </nav>
+  </main>
+</body>
+</html>

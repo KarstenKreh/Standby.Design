@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Verhalten und Aussehen werden nicht in der Ansicht nachgebaut — Design Rules — standby.design</title>
+  <meta name="description" content="Eine Ansicht setzt vorhandene Elemente zusammen. Sie definiert weder Verhalten noch Aussehen selbst." />
+  <link rel="canonical" href="https://standby.design/docs/rules/bedienung-verhalten-und-aussehen-werden-nicht-in-der-ansicht-nachgebaut" />
+  <link rel="alternate" type="text/markdown" href="https://standby.design/docs/rules.md" title="Design Rules (Markdown)" />
+
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Verhalten und Aussehen werden nicht in der Ansicht nachgebaut — Design Rules — standby.design" />
+  <meta property="og:description" content="Eine Ansicht setzt vorhandene Elemente zusammen. Sie definiert weder Verhalten noch Aussehen selbst." />
+  <meta property="og:url" content="https://standby.design/docs/rules/bedienung-verhalten-und-aussehen-werden-nicht-in-der-ansicht-nachgebaut" />
+  <meta property="og:site_name" content="standby.design" />
+  <meta property="og:image" content="https://standby.design/og-image?tool=github" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://standby.design/og-image?tool=github" />
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23111'/%3E%3Ccircle cx='16' cy='16' r='6' fill='none' stroke='%234a7aaa' stroke-width='2'/%3E%3C/svg%3E">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@1,2&f[]=jet-brains-mono@1,2&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --font-heading: 'Satoshi', sans-serif;
+      --font-body: 'Satoshi', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --text-h3: clamp(1.9344rem, 0.2719vw + 1.8707rem, 2.197rem);
+      --text-h5: clamp(1.246rem, 0.0559vw + 1.2329rem, 1.3rem);
+      --text-body-s: 1rem;
+      --text-caption: 0.7692rem;
+      --leading-h3: 1.2;
+      --leading-h5: 1.3;
+      --leading-body-s: 1.5;
+      --tracking-h3: -0.01em;
+      --tracking-body-s: 0.01em;
+      --background: oklch(0.145 0 0);
+      --foreground: oklch(0.985 0 0);
+      --card: oklch(0.205 0 0);
+      --muted-foreground: oklch(0.708 0 0);
+      --border: oklch(1 0 0 / 10%);
+      --emphasis: oklch(0.78 0.1 230);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: var(--font-body);
+      font-size: var(--text-body-s);
+      line-height: var(--leading-body-s);
+      letter-spacing: var(--tracking-body-s);
+      background: var(--background);
+      color: var(--foreground);
+      padding: 2rem 1.5rem 3rem;
+    }
+    main { max-width: 720px; margin: 0 auto; }
+    .back {
+      display: inline-block;
+      padding: 0.5rem 0.75rem;
+      margin: 0 0 2rem -0.75rem;
+      border-radius: 8px;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      transition: color 0.2s, background 0.2s;
+    }
+    .back:hover { color: var(--foreground); background: var(--card); }
+    .eyebrow {
+      font-size: var(--text-caption);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted-foreground);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-heading);
+      font-size: var(--text-h3);
+      font-weight: 700;
+      line-height: var(--leading-h3);
+      letter-spacing: var(--tracking-h3);
+      margin-bottom: 0.4em;
+    }
+    h2 {
+      font-family: var(--font-heading);
+      font-size: var(--text-h5);
+      font-weight: 700;
+      line-height: var(--leading-h5);
+      margin-top: 2.25em;
+      margin-bottom: 0.5em;
+    }
+    h3 {
+      font-family: var(--font-heading);
+      font-size: var(--text-body-s);
+      font-weight: 700;
+      margin-top: 1.5em;
+      margin-bottom: 0.4em;
+    }
+    p, li { color: var(--muted-foreground); margin-bottom: 0.75em; }
+    strong { color: var(--foreground); font-weight: 500; }
+    ul, ol { padding-left: 1.25rem; margin-bottom: 0.75em; }
+    a { color: var(--emphasis); }
+    code { font-family: var(--font-mono); font-size: 0.9em; }
+    pre {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      line-height: 1.5;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.9rem 1rem;
+      margin-bottom: 1rem;
+      overflow-x: auto;
+      white-space: pre;
+    }
+    pre code { font-size: inherit; color: var(--foreground); }
+    hr { border: 0; border-top: 1px solid var(--border); margin: 2rem 0; }
+    .lead { font-size: 1.125rem; }
+    .table-wrap { overflow-x: auto; margin-bottom: 1rem; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td {
+      text-align: left;
+      vertical-align: top;
+      padding: 0.6rem 0.75rem 0.6rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    th { color: var(--foreground); font-weight: 500; }
+    td { color: var(--muted-foreground); }
+    td code { color: var(--foreground); }
+    blockquote {
+      border-left: 2px solid var(--border);
+      padding-left: 1rem;
+      margin-bottom: 0.9rem;
+    }
+    blockquote p { margin-bottom: 0; }
+    .callout {
+      background: var(--card);
+      border-radius: 8px;
+      padding: 0.9rem 1rem;
+      margin-bottom: 1.25rem;
+    }
+    .callout p:last-child, .callout ul:last-child { margin-bottom: 0; }
+    .callout-title {
+      font-size: var(--text-caption);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted-foreground);
+      margin-bottom: 0.35rem;
+    }
+    .callout-tip p:not(.callout-title) { color: var(--foreground); font-size: 1.125rem; }
+    .callout-tip .callout-title { color: var(--emphasis); }
+    .rule-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1.5rem;
+      margin: 0.25rem 0 1.75rem;
+      font-size: 0.875rem;
+    }
+    .rule-meta dt { color: var(--muted-foreground); }
+    .rule-meta dd { color: var(--foreground); }
+    .agent-hint { font-size: 0.875rem; }
+    .legal-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 3.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+    .legal-links a {
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      transition: color 0.2s, background 0.2s;
+    }
+    .legal-links a:hover { color: var(--foreground); background: var(--card); }
+  </style>
+  <script defer src="https://umami.standby.design/script.js" data-website-id="255e8c46-9a39-4cc8-ba66-5cb4fc53b91e"></script>
+</head>
+<body>
+  <main>
+    <a class="back" href="/docs/rules">&larr; Design Rules</a>
+
+    <p class="eyebrow">Bedienung</p>
+    <h1>Verhalten und Aussehen werden nicht in der Ansicht nachgebaut</h1>
+    <dl class="rule-meta"><div><dt>Geltung</dt><dd>universal · web, react-native</dd></div></dl>
+
+<aside class="callout callout-tip"><p class="callout-title">Regel</p><p>Eine Ansicht setzt vorhandene Elemente zusammen. Sie definiert weder ihr Verhalten noch ihr Aussehen neu. Wer in einer Ansicht Hover, Fokus, Fläche, Radius oder Padding von Hand schreibt, hat etwas nachgebaut, das an einer gemeinsamen Stelle schon festgelegt ist.</p>
+</aside>
+<h2>Warum</h2>
+<p>Was in der Ansicht steht, bekommt die nächste Änderung nicht mit. Es ist nicht auffindbar, weil niemand weiß, dass es existiert, und es ist nicht zählbar, weil es keinen Namen hat.</p>
+<p>In einer gewachsenen Anwendung findet man dafür schnell mehrere hundert Stellen: die Karte gibt es gar nicht als benanntes Aussehen, sondern als Hunderte handgebauter Flächen mit uneinheitlichem Radius und Padding. Jede einzelne war zum Zeitpunkt ihrer Entstehung richtig. Zusammen ergeben sie kein System mehr, sondern mehrere hundert Meinungen darüber, wie eine Karte aussieht.</p>
+<p>Beim Verhalten ist es dasselbe, nur unsichtbarer. Schreibt eine Ansicht ihren eigenen Hover, hat sie das Drücken neu gebaut — mit eigener Dauer, eigener Stufe und eigener Richtung. Ändert sich die Regel im System, ändert sich diese Stelle nicht mit, und niemand merkt es, weil sie ja aussieht wie vorher.</p>
+<p>Der Nachbau passiert selten aus Absicht. Er passiert, weil das vorhandene Aussehen eine Kleinigkeit nicht kann. Genau dann ist der richtige Schritt, dieses Aussehen zu erweitern oder ein neues zu benennen — nicht, es in der Ansicht zu umgehen. Sonst gibt es die Kleinigkeit ab jetzt zweimal.</p>
+<h2>Woran Du den Verstoß erkennst</h2>
+<ul>
+<li>Ein <code>Pressable</code> oder ein <code>div</code> mit <code>onClick</code> trägt in der Ansicht Fläche, Radius und Padding.</li>
+<li>Hover-, Fokus- oder Aktiv-Zustände stehen in einer Ansicht statt beim gemeinsamen Verhalten.</li>
+<li>Das Aussehen enthält Interaktions-Code, oder das Verhalten setzt Farben.</li>
+<li>Zwei Ansichten zeigen dasselbe Ding mit verschiedenem Radius oder Padding.</li>
+<li>Etwas wird kopiert und dann an einer Stelle angepasst.</li>
+<li>Die Anzahl der handgebauten Stellen lässt sich nicht mehr überblicken.</li>
+</ul>
+<h2>Richtig / falsch</h2>
+<pre><code class="language-tsx">// richtig — die Ansicht benutzt das vorhandene Element
+&lt;Button onPress={onSubmit}&gt;Speichern&lt;/Button&gt;
+
+// falsch — die Ansicht baut Verhalten und Aussehen selbst
+&lt;Pressable
+  onPress={onSubmit}
+  className=&quot;rounded-md bg-blue-500 px-4 py-2 hover:bg-blue-600&quot;
+&gt;
+  &lt;Text className=&quot;text-white&quot;&gt;Speichern&lt;/Text&gt;
+&lt;/Pressable&gt;
+</code></pre>
+<p>Ein häufiger Name wie Button ist in Ordnung. Er ist die Abkürzung für ein bekanntes Paar aus Verhalten und Aussehen, siehe <a href="/docs/rules/bedienung-verhalten-und-aussehen-bleiben-getrennt">Verhalten und Aussehen bleiben getrennt</a>.</p>
+<h2>Grenzen</h2>
+<p>Eine Anordnung, die es genau einmal gibt — eine bestimmte Kachel, ein bestimmtes Kopfelement —, gehört in den Bereichsordner ihres Themas. Das ist kein Verstoß: sie setzt vorhandene Elemente zusammen. Sie legt kein neues Verhalten und kein neues Aussehen fest.</p>
+<h2>Verwandt</h2>
+<ul>
+<li><a href="/docs/rules/bedienung-verhalten-und-aussehen-bleiben-getrennt">Verhalten und Aussehen bleiben getrennt</a></li>
+<li><a href="/docs/rules/stack-utility-klassen-statt-inline-styles">Utility-Klassen statt Inline-Styles</a></li>
+<li><a href="/docs/rules/farbe-werte-kommen-aus-tokens-nie-aus-der-hand">Werte kommen aus Tokens, nie aus der Hand</a></li>
+</ul>
+
+
+    <nav class="legal-links">
+      <a href="/">Home</a>
+      <a href="/docs/mcp">MCP Server</a>
+      <a href="/docs/rules">Design Rules</a>
+      <a href="/impressum.html">Impressum</a>
+      <a href="/datenschutz.html">Datenschutz</a>
+    </nav>
+  </main>
+</body>
+</html>

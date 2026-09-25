@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ein Fehler steht dort, wo er entstanden ist — Design Rules — standby.design</title>
+  <meta name="description" content="Eine Meldung erscheint an der Stelle, die sie betrifft, sagt was zu tun ist, und die Eingaben des Nutzers bleiben erhalten." />
+  <link rel="canonical" href="https://standby.design/docs/rules/fluss-ein-fehler-steht-dort-wo-er-entstanden-ist" />
+  <link rel="alternate" type="text/markdown" href="https://standby.design/docs/rules.md" title="Design Rules (Markdown)" />
+
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Ein Fehler steht dort, wo er entstanden ist — Design Rules — standby.design" />
+  <meta property="og:description" content="Eine Meldung erscheint an der Stelle, die sie betrifft, sagt was zu tun ist, und die Eingaben des Nutzers bleiben erhalten." />
+  <meta property="og:url" content="https://standby.design/docs/rules/fluss-ein-fehler-steht-dort-wo-er-entstanden-ist" />
+  <meta property="og:site_name" content="standby.design" />
+  <meta property="og:image" content="https://standby.design/og-image?tool=github" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://standby.design/og-image?tool=github" />
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23111'/%3E%3Ccircle cx='16' cy='16' r='6' fill='none' stroke='%234a7aaa' stroke-width='2'/%3E%3C/svg%3E">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@1,2&f[]=jet-brains-mono@1,2&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --font-heading: 'Satoshi', sans-serif;
+      --font-body: 'Satoshi', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --text-h3: clamp(1.9344rem, 0.2719vw + 1.8707rem, 2.197rem);
+      --text-h5: clamp(1.246rem, 0.0559vw + 1.2329rem, 1.3rem);
+      --text-body-s: 1rem;
+      --text-caption: 0.7692rem;
+      --leading-h3: 1.2;
+      --leading-h5: 1.3;
+      --leading-body-s: 1.5;
+      --tracking-h3: -0.01em;
+      --tracking-body-s: 0.01em;
+      --background: oklch(0.145 0 0);
+      --foreground: oklch(0.985 0 0);
+      --card: oklch(0.205 0 0);
+      --muted-foreground: oklch(0.708 0 0);
+      --border: oklch(1 0 0 / 10%);
+      --emphasis: oklch(0.78 0.1 230);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: var(--font-body);
+      font-size: var(--text-body-s);
+      line-height: var(--leading-body-s);
+      letter-spacing: var(--tracking-body-s);
+      background: var(--background);
+      color: var(--foreground);
+      padding: 2rem 1.5rem 3rem;
+    }
+    main { max-width: 720px; margin: 0 auto; }
+    .back {
+      display: inline-block;
+      padding: 0.5rem 0.75rem;
+      margin: 0 0 2rem -0.75rem;
+      border-radius: 8px;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      transition: color 0.2s, background 0.2s;
+    }
+    .back:hover { color: var(--foreground); background: var(--card); }
+    .eyebrow {
+      font-size: var(--text-caption);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted-foreground);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-heading);
+      font-size: var(--text-h3);
+      font-weight: 700;
+      line-height: var(--leading-h3);
+      letter-spacing: var(--tracking-h3);
+      margin-bottom: 0.4em;
+    }
+    h2 {
+      font-family: var(--font-heading);
+      font-size: var(--text-h5);
+      font-weight: 700;
+      line-height: var(--leading-h5);
+      margin-top: 2.25em;
+      margin-bottom: 0.5em;
+    }
+    h3 {
+      font-family: var(--font-heading);
+      font-size: var(--text-body-s);
+      font-weight: 700;
+      margin-top: 1.5em;
+      margin-bottom: 0.4em;
+    }
+    p, li { color: var(--muted-foreground); margin-bottom: 0.75em; }
+    strong { color: var(--foreground); font-weight: 500; }
+    ul, ol { padding-left: 1.25rem; margin-bottom: 0.75em; }
+    a { color: var(--emphasis); }
+    code { font-family: var(--font-mono); font-size: 0.9em; }
+    pre {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      line-height: 1.5;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.9rem 1rem;
+      margin-bottom: 1rem;
+      overflow-x: auto;
+      white-space: pre;
+    }
+    pre code { font-size: inherit; color: var(--foreground); }
+    hr { border: 0; border-top: 1px solid var(--border); margin: 2rem 0; }
+    .lead { font-size: 1.125rem; }
+    .table-wrap { overflow-x: auto; margin-bottom: 1rem; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td {
+      text-align: left;
+      vertical-align: top;
+      padding: 0.6rem 0.75rem 0.6rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    th { color: var(--foreground); font-weight: 500; }
+    td { color: var(--muted-foreground); }
+    td code { color: var(--foreground); }
+    blockquote {
+      border-left: 2px solid var(--border);
+      padding-left: 1rem;
+      margin-bottom: 0.9rem;
+    }
+    blockquote p { margin-bottom: 0; }
+    .callout {
+      background: var(--card);
+      border-radius: 8px;
+      padding: 0.9rem 1rem;
+      margin-bottom: 1.25rem;
+    }
+    .callout p:last-child, .callout ul:last-child { margin-bottom: 0; }
+    .callout-title {
+      font-size: var(--text-caption);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted-foreground);
+      margin-bottom: 0.35rem;
+    }
+    .callout-tip p:not(.callout-title) { color: var(--foreground); font-size: 1.125rem; }
+    .callout-tip .callout-title { color: var(--emphasis); }
+    .rule-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1.5rem;
+      margin: 0.25rem 0 1.75rem;
+      font-size: 0.875rem;
+    }
+    .rule-meta dt { color: var(--muted-foreground); }
+    .rule-meta dd { color: var(--foreground); }
+    .agent-hint { font-size: 0.875rem; }
+    .legal-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 3.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+    .legal-links a {
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      transition: color 0.2s, background 0.2s;
+    }
+    .legal-links a:hover { color: var(--foreground); background: var(--card); }
+  </style>
+  <script defer src="https://umami.standby.design/script.js" data-website-id="255e8c46-9a39-4cc8-ba66-5cb4fc53b91e"></script>
+</head>
+<body>
+  <main>
+    <a class="back" href="/docs/rules">&larr; Design Rules</a>
+
+    <p class="eyebrow">Fluss</p>
+    <h1>Ein Fehler steht dort, wo er entstanden ist</h1>
+    <dl class="rule-meta"><div><dt>Geltung</dt><dd>universal · web, react-native</dd></div></dl>
+
+<aside class="callout callout-tip"><p class="callout-title">Regel</p><p>Zeige einen Fehler an der Stelle, die er betrifft — beim Feld das Feld, beim Bereich der Bereich. Sag, was zu tun ist, nicht was kaputt gegangen ist. Und lass die Eingaben des Nutzers stehen.</p>
+</aside>
+<h2>Warum</h2>
+<p>Ein Fehler ist eine Anweisung, keine Meldung. Der Nutzer will nicht wissen, was das System nicht konnte, sondern was er jetzt macht. „Ungültiges Format&quot; sagt ihm nichts. „Bitte im Format TT.MM.JJJJ eingeben&quot; sagt ihm alles.</p>
+<p>Deshalb muss er auch dort stehen, wo gehandelt wird. Steht der Fehler weit weg von dem Feld, das er betrifft, muss der Nutzer die Verbindung selbst herstellen — bei drei Fehlern in einem Formular ist das eine Suchaufgabe.</p>
+<p>Und das Wichtigste, das am häufigsten verletzt wird: <strong>die Eingaben bleiben.</strong> Ein Fehler, der das Formular leert, bestraft den Nutzer für einen Tippfehler. Nach dem zweiten Mal macht er nicht weiter.</p>
+<h2>Wo eine Meldung hingehört</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Was passiert ist</th>
+<th>Wo es steht</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Eine Eingabe stimmt nicht</td>
+<td>am Feld, direkt darunter, mit dem Feld markiert</td>
+</tr>
+<tr>
+<td>Ein Bereich konnte nicht laden</td>
+<td>im Bereich, an der Stelle des Inhalts, mit „nochmal versuchen&quot;</td>
+</tr>
+<tr>
+<td>Eine Aktion ist gelungen, das Ergebnis sieht man nicht</td>
+<td>Kurzmeldung, die von selbst geht</td>
+</tr>
+<tr>
+<td>Etwas ist außerhalb des Blicks passiert</td>
+<td>Kurzmeldung</td>
+</tr>
+<tr>
+<td>Der Nutzer ist im Begriff, etwas zu verlieren</td>
+<td>Pop-up, siehe <a href="/docs/rules/fluss-ein-pop-up-unterbricht-es-fuehrt-nicht">Ein Pop-up unterbricht, es führt nicht</a></td>
+</tr>
+</tbody></table></div>
+<p>Kein Pop-up für Eingabefehler. Das Pop-up nimmt genau das Formular weg, in dem der Nutzer den Fehler beheben soll.</p>
+<h2>Kurzmeldungen</h2>
+<p>Eine Kurzmeldung (Toast) ist ein gutes Werkzeug, wenn sie das Richtige tut: bestätigen, dass etwas passiert ist, dessen Ergebnis man gerade nicht sieht. Gespeichert, verschickt, in den Papierkorb gelegt.</p>
+<p>Dafür gelten drei Bedingungen:</p>
+<ul>
+<li>Sie blockiert nichts und verlangt nichts. Wer sie übersieht, verliert nichts.</li>
+<li>Sie ist nie der einzige Ort einer wichtigen Information. Was der Nutzer später noch braucht, gehört an eine bleibende Stelle.</li>
+<li>Sie erscheint nicht für einen Fehler, den man an einem Feld beheben kann. Der gehört ans Feld.</li>
+</ul>
+<p>Ist eine Handlung rückgängig zu machen, gehört das Angebot dazu in die Kurzmeldung („Gelöscht — rückgängig&quot;). Das ist ihr stärkster Einsatz, weil sie damit eine Bestätigung vorher überflüssig macht.</p>
+<h2>Was in einer Meldung steht</h2>
+<ul>
+<li>Was der Nutzer tun kann, in seiner Sprache.</li>
+<li>Kein Fehlercode, kein technischer Wortlaut, keine Meldung aus dem System durchgereicht.</li>
+<li>Keine Schuldzuweisung, weder an ihn noch an das System.</li>
+<li>Bei einem Fehler, der nicht in seiner Hand liegt: was gerade gilt und wann er es erneut versuchen kann.</li>
+</ul>
+<h2>Woran Du den Verstoß erkennst</h2>
+<ul>
+<li>Ein Eingabefehler erscheint als Pop-up.</li>
+<li>Alle Fehler eines Formulars stehen gesammelt oben statt bei den Feldern.</li>
+<li>Das Formular ist nach einem Fehler leer.</li>
+<li>Eine technische Meldung steht ungefiltert in der Oberfläche.</li>
+<li>Eine Kurzmeldung trägt eine Information, die der Nutzer später wieder braucht.</li>
+<li>Es gibt eine Bestätigungsfrage für etwas, das man auch rückgängig machen könnte.</li>
+</ul>
+<h2>Grenzen</h2>
+<p>Fehler, die die ganze Anwendung betreffen — keine Verbindung, abgelaufene Anmeldung —, gehören an eine Stelle, die über allem liegt. Sie betreffen kein einzelnes Feld, und der Nutzer muss sie sehen, bevor er weitertippt.</p>
+<h2>Verwandt</h2>
+<ul>
+<li><a href="/docs/rules/fluss-ein-pop-up-unterbricht-es-fuehrt-nicht">Ein Pop-up unterbricht, es führt nicht</a></li>
+<li><a href="/docs/rules/fluss-leer-ist-ein-zustand-keine-luecke">Leer ist ein Zustand, keine Lücke</a></li>
+<li><a href="/docs/rules/zustand-rot-ist-nicht-ein-rot">Rot ist nicht ein Rot</a></li>
+</ul>
+
+
+    <nav class="legal-links">
+      <a href="/">Home</a>
+      <a href="/docs/mcp">MCP Server</a>
+      <a href="/docs/rules">Design Rules</a>
+      <a href="/impressum.html">Impressum</a>
+      <a href="/datenschutz.html">Datenschutz</a>
+    </nav>
+  </main>
+</body>
+</html>
