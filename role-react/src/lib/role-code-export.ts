@@ -24,7 +24,8 @@ export function generateRoleCss(themeName: string, ringStyle: RingStyle = 'soft'
   const header = themeName ? `/* ${themeName} — Role State Rules */` : `/* Role State Rules */`;
   const ring = FOCUS_RING_RULES[ringStyle];
   return `${header}
-/* Requires the color export (primitive + semantic tokens) from standby.design/system */
+/* Requires the color export (primitive + semantic tokens) from standby.design/system
+   and the motion export from standby.design/motion (falls back to 150ms ease) */
 
 /* State tokens — momentary states shift WITHIN the active palette.
    Hover comes toward the pointer: one rung lighter. Pressed sinks in: one
@@ -36,7 +37,7 @@ export function generateRoleCss(themeName: string, ringStyle: RingStyle = 'soft'
   --state-rest: var(--primary);
   --state-hover: var(--primary-hover);
   --state-pressed: var(--primary-pressed);
-  --state-motion: 150ms;
+  --state-motion: var(--motion-fade, 150ms ease);
 }
 
 /* Persistent states switch the palette — variation is data, not a new rule. */
@@ -56,9 +57,9 @@ export function generateRoleCss(themeName: string, ringStyle: RingStyle = 'soft'
 [data-navigable] {
   cursor: pointer;
   --state: var(--state-rest);
-  transition: background-color var(--state-motion) ease,
-              color var(--state-motion) ease,
-              border-color var(--state-motion) ease;
+  transition: background-color var(--state-motion),
+              color var(--state-motion),
+              border-color var(--state-motion);
 }
 [data-pressable]:hover,
 [data-toggleable]:hover,
@@ -79,7 +80,7 @@ ${ring.pressable}
   --state-rest: var(--input);
   --state-hover: var(--input-hover);
   --state: var(--state-rest);
-  transition: border-color var(--state-motion) ease, outline-color var(--state-motion) ease;
+  transition: border-color var(--state-motion), outline-color var(--state-motion);
 }
 [data-editable]:hover { --state: var(--state-hover); }
 [data-editable]:focus {
@@ -155,10 +156,6 @@ ${ring.editable}
   width: 3px;
   border-radius: 999px;
   background-color: var(--primary);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  :root { --state-motion: 0ms; }
 }`;
 }
 
@@ -230,7 +227,10 @@ at all. Same role either way.
    the nav row shows its marker bar, the tab its indicator. Colour alone is
    invisible to colour-blind users (WCAG 1.4.1), and typography is the type
    module's business, so a role must never reach for bold to mark a state.
-10. Transitions run 150ms; prefers-reduced-motion makes them instant.
+10. State changes fade with motion.fade from the motion module: an effect
+   spring that never overshoots. A moving part, such as a switch thumb, uses
+   motion.move. With prefers-reduced-motion the fades stay and moving parts
+   crossfade between their two positions instead of travelling.
 
 ## Forbidden
 

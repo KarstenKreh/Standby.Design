@@ -4,6 +4,7 @@ import { buildUnifiedHash } from '@core/unified-hash';
 import { readSegments, buildRoleTheme } from '@/lib/system-tokens';
 import { PressableCard, ToggleableCard, EditableCard, NavigableCard, ReadableCard } from '@/components/role-inspector';
 import { CodeExport } from '@/components/code-export';
+import { buildRoleMotion } from '@/lib/role-motion';
 
 function App() {
   const [segments] = useState(() => readSegments(window.location.hash.slice(1)));
@@ -11,7 +12,7 @@ function App() {
   const [copied, setCopied] = useState(false);
 
   const theme = useMemo(() => buildRoleTheme(segments), [segments]);
-  const motionMs = reducedMotion ? 0 : 150;
+  const motion = useMemo(() => buildRoleMotion(segments.m, reducedMotion), [segments.m, reducedMotion]);
 
   const getCurrentHash = useCallback(() => buildUnifiedHash({
     c: segments.c ?? undefined,
@@ -31,7 +32,7 @@ function App() {
     });
   }, [getCurrentHash]);
 
-  const cardProps = { theme, motionMs };
+  const cardProps = { theme, motion };
 
   return (
     <AppShell activeTool="role" buildHash={getCurrentHash}>
@@ -54,7 +55,10 @@ function App() {
         {theme.themeName ? <> Themed from <span className="text-foreground font-medium">{theme.themeName}</span>.</> : null}
       </p>
 
-      <div className="flex justify-end mb-4">
+      <div className="flex items-center justify-end gap-3 mb-4">
+        <span className="text-caption text-muted-foreground">
+          Colors fade with <span className="font-mono text-foreground">motion.fade</span>, the switch moves with <span className="font-mono text-foreground">motion.move</span> from <a href={`/motion/#${getCurrentHash()}`} className="underline underline-offset-2 hover:text-foreground">Motion</a>.
+        </span>
         <button
           onClick={() => setReducedMotion(v => !v)}
           aria-pressed={reducedMotion}
