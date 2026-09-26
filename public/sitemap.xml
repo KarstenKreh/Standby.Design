@@ -172,4 +172,12 @@
     <loc>https://standby.design/docs/rules/zustand-rot-ist-nicht-ein-rot</loc>
     <priority>0.6</priority>
   </url>
+  <url>
+    <loc>https://standby.design/docs/research</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://standby.design/docs/research/bewegung-wahrnehmung</loc>
+    <priority>0.6</priority>
+  </url>
 </urlset>

@@ -60,6 +60,14 @@ If a user asks you to build a design system with standby.design:
   category or a list of rule slugs. Every LLM briefing export links the rules.
 - Language: German.
 
+## Research
+
+- Overview: https://standby.design/docs/research
+- All pages in one Markdown file: https://standby.design/docs/research.md
+- What: the reasoning behind the tools. The rules say what to do, research says why. Each page sorts findings by strength of evidence (well replicated, weakly supported, folklore or industry convention), states what the tool does with it, and lists the key sources.
+- Pages: perception of motion (why the Motion tool's Energy axis, calm to lively, rests on research on speed and arousal, while the Material axis, firm to elastic, is a design convention).
+- Language: German. Not available via MCP yet.
+
 ## URL-as-state
 
 All tools share one unified hash format:

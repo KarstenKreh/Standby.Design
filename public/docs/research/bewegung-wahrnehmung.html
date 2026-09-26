@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wahrnehmung von Bewegung — Research — standby.design</title>
+  <meta name="description" content="Lassen sich die Achsen des Motion-Tools auf Forschung stützen? Energie ja, Material nur als Konvention." />
+  <link rel="canonical" href="https://standby.design/docs/research/bewegung-wahrnehmung" />
+  <link rel="alternate" type="text/markdown" href="https://standby.design/docs/research.md" title="Research (Markdown)" />
+
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Wahrnehmung von Bewegung — Research — standby.design" />
+  <meta property="og:description" content="Lassen sich die Achsen des Motion-Tools auf Forschung stützen? Energie ja, Material nur als Konvention." />
+  <meta property="og:url" content="https://standby.design/docs/research/bewegung-wahrnehmung" />
+  <meta property="og:site_name" content="standby.design" />
+  <meta property="og:image" content="https://standby.design/og-image?tool=github" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://standby.design/og-image?tool=github" />
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23111'/%3E%3Ccircle cx='16' cy='16' r='6' fill='none' stroke='%234a7aaa' stroke-width='2'/%3E%3C/svg%3E">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@1,2&f[]=jet-brains-mono@1,2&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --font-heading: 'Satoshi', sans-serif;
+      --font-body: 'Satoshi', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --text-h3: clamp(1.9344rem, 0.2719vw + 1.8707rem, 2.197rem);
+      --text-h5: clamp(1.246rem, 0.0559vw + 1.2329rem, 1.3rem);
+      --text-body-s: 1rem;
+      --text-caption: 0.7692rem;
+      --leading-h3: 1.2;
+      --leading-h5: 1.3;
+      --leading-body-s: 1.5;
+      --tracking-h3: -0.01em;
+      --tracking-body-s: 0.01em;
+      --background: oklch(0.145 0 0);
+      --foreground: oklch(0.985 0 0);
+      --card: oklch(0.205 0 0);
+      --muted-foreground: oklch(0.708 0 0);
+      --border: oklch(1 0 0 / 10%);
+      --emphasis: oklch(0.78 0.1 230);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: var(--font-body);
+      font-size: var(--text-body-s);
+      line-height: var(--leading-body-s);
+      letter-spacing: var(--tracking-body-s);
+      background: var(--background);
+      color: var(--foreground);
+      padding: 2rem 1.5rem 3rem;
+    }
+    main { max-width: 720px; margin: 0 auto; }
+    .back {
+      display: inline-block;
+      padding: 0.5rem 0.75rem;
+      margin: 0 0 2rem -0.75rem;
+      border-radius: 8px;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      transition: color 0.2s, background 0.2s;
+    }
+    .back:hover { color: var(--foreground); background: var(--card); }
+    .eyebrow {
+      font-size: var(--text-caption);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted-foreground);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-heading);
+      font-size: var(--text-h3);
+      font-weight: 700;
+      line-height: var(--leading-h3);
+      letter-spacing: var(--tracking-h3);
+      margin-bottom: 0.4em;
+    }
+    h2 {
+      font-family: var(--font-heading);
+      font-size: var(--text-h5);
+      font-weight: 700;
+      line-height: var(--leading-h5);
+      margin-top: 2.25em;
+      margin-bottom: 0.5em;
+    }
+    h3 {
+      font-family: var(--font-heading);
+      font-size: var(--text-body-s);
+      font-weight: 700;
+      margin-top: 1.5em;
+      margin-bottom: 0.4em;
+    }
+    p, li { color: var(--muted-foreground); margin-bottom: 0.75em; }
+    strong { color: var(--foreground); font-weight: 500; }
+    ul, ol { padding-left: 1.25rem; margin-bottom: 0.75em; }
+    a { color: var(--emphasis); overflow-wrap: anywhere; }
+    code { font-family: var(--font-mono); font-size: 0.9em; }
+    pre {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      line-height: 1.5;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.9rem 1rem;
+      margin-bottom: 1rem;
+      overflow-x: auto;
+      white-space: pre;
+    }
+    pre code { font-size: inherit; color: var(--foreground); }
+    hr { border: 0; border-top: 1px solid var(--border); margin: 2rem 0; }
+    .lead { font-size: 1.125rem; }
+    .table-wrap { overflow-x: auto; margin-bottom: 1rem; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td {
+      text-align: left;
+      vertical-align: top;
+      padding: 0.6rem 0.75rem 0.6rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    th { color: var(--foreground); font-weight: 500; }
+    td { color: var(--muted-foreground); }
+    td code { color: var(--foreground); }
+    blockquote {
+      border-left: 2px solid var(--border);
+      padding-left: 1rem;
+      margin-bottom: 0.9rem;
+    }
+    blockquote p { margin-bottom: 0; }
+    .callout {
+      background: var(--card);
+      border-radius: 8px;
+      padding: 0.9rem 1rem;
+      margin-bottom: 1.25rem;
+    }
+    .callout p:last-child, .callout ul:last-child { margin-bottom: 0; }
+    .callout-title {
+      font-size: var(--text-caption);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted-foreground);
+      margin-bottom: 0.35rem;
+    }
+    .callout-tip p:not(.callout-title) { color: var(--foreground); font-size: 1.125rem; }
+    .callout-tip .callout-title { color: var(--emphasis); }
+    .rule-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1.5rem;
+      margin: 0.25rem 0 1.75rem;
+      font-size: 0.875rem;
+    }
+    .rule-meta dt { color: var(--muted-foreground); }
+    .rule-meta dd { color: var(--foreground); }
+    .agent-hint { font-size: 0.875rem; }
+    .legal-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 3.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+    .legal-links a {
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      transition: color 0.2s, background 0.2s;
+    }
+    .legal-links a:hover { color: var(--foreground); background: var(--card); }
+  </style>
+  <script defer src="https://umami.standby.design/script.js" data-website-id="255e8c46-9a39-4cc8-ba66-5cb4fc53b91e"></script>
+</head>
+<body>
+  <main>
+    <a class="back" href="/docs/research">&larr; Research</a>
+
+    <p class="eyebrow">Bewegung</p>
+    <h1>Wahrnehmung von Bewegung</h1>
+    <dl class="rule-meta"><div><dt>Werkzeug</dt><dd>Motion</dd></div><div><dt>Stand</dt><dd>26.09.2026</dd></div></dl>
+
+<p><strong>Frage:</strong> Lassen sich die zwei Achsen des Motion-Tools und die Zuordnung zu Marken-Charakteren auf replizierte Forschung stützen? Die Achse <strong>Energie: ruhig ↔ lebhaft</strong> steuert das Tempo der Feder (response). Die Achse <strong>Material: fest ↔ elastisch</strong> steuert das Nachschwingen (damping).</p>
+<aside class="callout callout-summary"><p class="callout-title">Kurzfassung</p><p>Die Achse <strong>Energie</strong> ist gut belegt: Tempo bildet Erregung ab. Die Achse <strong>Material</strong> ist als Gefühl kaum belegt. Nachschwingen wird eher als Material gelesen (weich, elastisch), daher der Name.</p>
+</aside>
+<h2>Gut belegt</h2>
+<ul>
+<li><strong>Tempo bildet Erregung (Arousal) ab: schnell wirkt energisch, langsam wirkt ruhig.</strong> Das ist der robusteste Befund im Feld, unabhängig in vielen Bereichen:<ul>
+<li>Armbewegungen als Lichtpunkte (Pollick 2001): Aktivierung hängt an der Geschwindigkeit, Valenz an der Koordination der Gelenke.</li>
+<li>Gang (Roether 2009).</li>
+<li>Musik und Sprache, Meta-Analyse über 145 Studien (Juslin &amp; Laukka 2003).</li>
+<li>Musik und Bewegung, auch über Kulturen hinweg (Sievers 2013, PNAS).</li>
+<li>Abstrakte Formen (Visch &amp; Goudbeek 2009, N=33; Bartram &amp; Nakatani 2010).</li>
+<li>Roboter (Saerbeck &amp; Bartneck 2010, N=18: Beschleunigung sagt Erregung vorher).</li>
+<li>Formwandelnde Displays (Strohmeier 2016, CHI).</li>
+</ul>
+</li>
+<li><strong>Valenz (angenehm ↔ unangenehm) hängt nicht an einer einzelnen Größe.</strong> Sie entsteht aus Wechselwirkungen, z. B. Beschleunigung × Krümmung (Saerbeck) oder Rhythmus und Zackigkeit (Sievers). Eine Regel „Nachschwingen = Freundlichkeit“ gibt die Forschung nicht her.</li>
+<li><strong>Slow-in/Slow-out hilft beim Verfolgen von Objekten</strong> (Dragicevic 2011, N=12, Einzelbefund). Das passt zur Motorik-Forschung: Natürliche Bewegungen haben ein glockenförmiges Geschwindigkeitsprofil (Flash &amp; Hogan 1985).</li>
+<li><strong>Zeitschwellen:</strong> Unter etwa 100 ms wirkt eine Reaktion sofort (Miller 1968; Card, Moran &amp; Newell 1983; Card et al. 1991). Beim Ziehen auf Touch-Geräten werden deutlich kleinere Verzögerungen wahrgenommen als beim Tippen (Jota et al. 2013; Deber et al. 2015; Einzelwerte nicht im Volltext geprüft). Diese Werte betreffen die Reaktionszeit auf eine Eingabe, nicht die Dauer einer Animation.</li>
+<li><strong>Langsamkeit wirkt luxuriös</strong> (Jung &amp; Dubois 2023, JMR, 12 Experimente, N=27.227, fünf vorregistriert). Das ist die stärkste Brücke zur Markenwahrnehmung. Getestet wurde Zeitlupe in Werbevideos, nicht UI-Animation.</li>
+</ul>
+<h2>Plausibel, aber schwach belegt</h2>
+<ul>
+<li><strong>Konkrete UI-Dauern (200 bis 500 ms):</strong> keine replizierte Studie. Einzelstudien: Huhtala 2010 (früher Beginn wirkt schneller), Ge et al. 2024 (Verzögerung nach dem Klick und Ladezeit bestimmen die Flüssigkeit stärker als die Animationsdauer), Ding &amp; Kyung 2025 (JCR: Bei Wartezeit-Animationen wirkt mittlere Geschwindigkeit am kürzesten).</li>
+<li><strong>Anticipation und Follow-through:</strong> Robotik-Studien zeigen bessere Lesbarkeit (Takayama 2011). Linear gegen Slow-in/Slow-out ergab beim Roboter keinen Unterschied im Godspeed-Fragebogen (Schulz 2019). Merz et al. 2016 ist nur eine Pilotstudie.</li>
+<li><strong>Overshoot und Bounce:</strong> Menschen lesen aus einem springenden Ball ab, wie elastisch er ist (Warren 1987). Bounce wird als Material wahrgenommen. Eine Studie, die die Dämpfung gezielt verändert und Adjektive wie „verspielt“ misst, wurde nicht gefunden.</li>
+<li><strong>Studien von 2026</strong> (Displays; IJHCI mit PAD-Emotionsmodell) verbinden Übergangsarten mit Emotionen. Sie sind nur per Abstract geprüft und Einzelstudien.</li>
+</ul>
+<h2>Folklore oder Branchen-Richtlinie</h2>
+<ul>
+<li>„Verspielt = bouncy“, „Sport = snappy“, „Premium = sanft gedämpft“ sind Designer-Setzungen. Nur „Premium = langsam“ hat eine indirekte Stütze (Jung &amp; Dubois).</li>
+<li>Dauer-Tabellen aus Material, Apple HIG und Blogs haben keine Primärquelle.</li>
+<li>„Dauer wächst mit der Distanz“ ist eine Richtlinie in Anlehnung an Fitts&#39; Gesetz. Fitts misst Zielbewegungen, nicht Animationsdauern. Technisch gilt: Eine lineare Feder braucht bei gleicher Steifigkeit gleich lange, egal wie weit sie läuft.</li>
+</ul>
+<h2>Folgerung für Standby Design</h2>
+<ul>
+<li>Achse 1 heißt <strong>„Energie: ruhig ↔ lebhaft“</strong> (Tempo der Feder). Sie nennt die Forschung zu Tempo und Erregung offen als Grundlage.</li>
+<li>Achse 2 heißt <strong>„Material: fest ↔ elastisch“</strong> (Nachschwingen). Sie ist ausdrücklich als Design-Konvention gekennzeichnet.</li>
+<li>Presets sind Positionen auf beiden Achsen mit Beispielmarken, keine Charakter-Etiketten, z. B. „Ruhig · fest (oft bei Premium-Marken)“ oder „Lebhaft · elastisch“.</li>
+<li>Der Hinweis in der App lautet sinngemäß: Energie folgt gut belegter Forschung, Menschen lesen Tempo als Erregung. Material und die Beispielmarken sind Design-Konventionen. Die Werte sind Startpunkte, kein Beweis.</li>
+<li>Harte Grenze: Rückmeldung auf eine Eingabe unter 100 ms. Obergrenzen für Dauern gelten nur als Richtlinie.</li>
+</ul>
+<h2>Quellen</h2>
+<p>Die wichtigsten Quellen. Weitere Einzelstudien sind im Text mit Autor und Jahr genannt.</p>
+<ul>
+<li>Pollick, Paterson, Bruderlin &amp; Sanford 2001, Cognition 82:B51–B61, <a href="https://pubmed.ncbi.nlm.nih.gov/11716834/">https://pubmed.ncbi.nlm.nih.gov/11716834/</a></li>
+<li>Juslin &amp; Laukka 2003, Psych. Bull. 129:770–814</li>
+<li>Sievers et al. 2013, PNAS, <a href="https://doi.org/10.1073/pnas.1209023110">https://doi.org/10.1073/pnas.1209023110</a></li>
+<li>Saerbeck &amp; Bartneck 2010, HRI, <a href="https://www.bartneck.de/publications/2010/perceptionAffectElicitedRobotMotion/saerbeckBartneckHRI2010.pdf">https://www.bartneck.de/publications/2010/perceptionAffectElicitedRobotMotion/saerbeckBartneckHRI2010.pdf</a></li>
+<li>Dragicevic et al. 2011, CHI, <a href="https://inria.hal.science/inria-00556177">https://inria.hal.science/inria-00556177</a></li>
+<li>Ge et al. 2024, IJHCS 186, <a href="https://doi.org/10.1016/j.ijhcs.2024.103257">https://doi.org/10.1016/j.ijhcs.2024.103257</a></li>
+<li>Jung &amp; Dubois 2023, J. Marketing Research, <a href="https://journals.sagepub.com/doi/abs/10.1177/00222437221146728">https://journals.sagepub.com/doi/abs/10.1177/00222437221146728</a></li>
+<li>Warren, Kim &amp; Husney 1987, Perception, <a href="https://doi.org/10.1068/p160309">https://doi.org/10.1068/p160309</a></li>
+<li>Flash &amp; Hogan 1985, J. Neurosci. 5:1688–1703</li>
+<li>Miller 1968, AFIPS FJCC, <a href="https://dl.acm.org/doi/10.1145/1476589.1476628">https://dl.acm.org/doi/10.1145/1476589.1476628</a></li>
+<li>Card, Robertson &amp; Mackinlay 1991, CHI</li>
+</ul>
+
+
+    <nav class="legal-links">
+      <a href="/">Home</a>
+      <a href="/docs/mcp">MCP Server</a>
+      <a href="/docs/rules">Design Rules</a>
+      <a href="/docs/research">Research</a>
+      <a href="/impressum.html">Impressum</a>
+      <a href="/datenschutz.html">Datenschutz</a>
+    </nav>
+  </main>
+</body>
+</html>
