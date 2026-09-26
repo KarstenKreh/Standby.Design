@@ -37,7 +37,7 @@ Generate design systems: OKLCH color palettes, fluid type scales, spacing, shape
 
 ## Short description
 
-Let your AI agent build a real design system instead of guessing one. Generates OKLCH color palettes, fluid type scales, spacing, shape and icon tokens, and exports them as CSS, Tailwind v4 or W3C design tokens. Free, no auth, every result links to a live preview on standby.design.
+Let your AI agent build a real design system instead of guessing one. Generates OKLCH color palettes, fluid type scales, spacing, shape, icon and motion tokens, and exports them as CSS, Tailwind v4 or W3C design tokens. Free, no auth, every result links to a live preview on standby.design.
 
 ## Long description
 
@@ -48,13 +48,14 @@ standby.design gives AI agents the same generators that power the standby.design
 - Space: spacing scale, breakpoints, container widths, prose measure and aspect ratios.
 - Shape: radii, shadows, borders and focus rings in four styles (paper, glass, neomorph, neobrutalism).
 - Icons: an icon set recommendation plus sizing tokens.
+- Motion: spring-based motion tokens from two character axes (energy, material), with semantic tokens and a reduced-motion rule.
 - Export: CSS custom properties, Tailwind v4 theme, W3C design tokens (DTCG) or an LLM briefing.
 
 Every tool returns a share link that holds the full configuration. Tools chain through that link, and opening it in the browser shows the complete system with a live preview where every value can be fine-tuned. All tools are read-only and stateless; nothing is stored or logged.
 
 ## Tools
 
-generate_color_palette, generate_type_scale, generate_space_tokens, generate_shape_tokens, generate_icon_tokens, get_design_system, export_design_system, list_fonts
+generate_color_palette, generate_type_scale, generate_space_tokens, generate_shape_tokens, generate_icon_tokens, generate_motion_tokens, get_design_system, export_design_system, list_fonts, get_design_rules
 
 ## Example prompts
 

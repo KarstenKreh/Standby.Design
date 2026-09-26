@@ -503,7 +503,7 @@ Presets are positions on both axes (four corners at 15/85 plus Balanced at 50/50
 - **Primitives:** `spatial.fast/default/slow` (may overshoot) and `effect.fast/default/slow` (damping 1, never overshoot). Steps sit a factor of 1.5 apart on `response`; effects run 1.5× faster than spatial springs of the same step.
 - **Semantic:** press, move, expand, enter, exit, fade; patterns navigate.forward/back (x), sheet.open/close (y), container.
 - **Export:** CSS `linear()` sampled to the settle time with a fitted `cubic-bezier` fallback under `@supports not`, reduced motion sets spatial durations to 0 ms. SwiftUI (`response`/`dampingFraction`), Compose (`dampingRatio`/`stiffness`), Motion JS (`stiffness`/`damping`/`mass`), W3C design tokens with the bezier fit plus spring values in `$extensions` and a `reduced` group.
-- Not yet wired into System, LLM briefing or the MCP server.
+- **System and MCP:** the System page shows a Motion section (live enter/exit demo, springs, semantic tokens, edit link) and always includes motion in its combined export (CSS, Tailwind, Design Tokens tab, LLM briefing), with Balanced as default when the link has no `m=`. The MCP server has `generate_motion_tokens` (preset plus energy/material 0–100) and a `motion` section in `get_design_system` and `export_design_system`.
 
 ---
 

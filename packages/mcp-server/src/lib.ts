@@ -10,6 +10,7 @@ import { decodeState as decodeTypeState, type UrlState as TypeState } from '@cor
 import { decodeState as decodeShapeState, type ShapeUrlState as ShapeState } from '@core/url-state/shape';
 import { decodeState as decodeSymbolState, type UrlState as SymbolState } from '@core/url-state/symbol';
 import { decodeState as decodeSpaceState, DEFAULT_SPACE_URL_STATE, type SpaceUrlState } from '@core/url-state/space';
+import { decodeState as decodeMotionState, DEFAULT_MOTION_URL_STATE, type MotionUrlState } from '@core/url-state/motion';
 import {
   generatePalette, computeAutoErrorHex, computeAutoAccentHex,
   SUCCESS_HUE, WARNING_HUE, INFO_HUE,
@@ -70,7 +71,9 @@ export function systemUrl(segs: Segments): string {
   return `${BASE_URL}/system/${query}#${hash}`;
 }
 
-export function toolUrl(tool: 'color' | 'type' | 'shape' | 'symbol' | 'space', segs: Segments): string {
+export type ToolName = 'color' | 'type' | 'shape' | 'symbol' | 'space' | 'motion';
+
+export function toolUrl(tool: ToolName, segs: Segments): string {
   return `${BASE_URL}/${tool}#${buildHash(segs)}`;
 }
 
@@ -148,7 +151,7 @@ export const DEFAULT_SYMBOL_STATE: SymbolState = {
   selectedSet: null,
 };
 
-export { DEFAULT_SPACE_URL_STATE };
+export { DEFAULT_SPACE_URL_STATE, DEFAULT_MOTION_URL_STATE };
 
 /* ── Segment decoding with defaults ── */
 
@@ -172,6 +175,11 @@ export function symbolStateFrom(segs: Segments): SymbolState | null {
 export function spaceStateFrom(segs: Segments): SpaceUrlState {
   const decoded = segs.p ? decodeSpaceState(segs.p) : null;
   return { ...DEFAULT_SPACE_URL_STATE, ...(decoded ?? {}) };
+}
+
+export function motionStateFrom(segs: Segments): MotionUrlState {
+  const decoded = segs.m ? decodeMotionState(segs.m) : null;
+  return { ...DEFAULT_MOTION_URL_STATE, ...(decoded ?? {}) };
 }
 
 /* ── Computation (mirrored from system-react/src/App.tsx) ── */

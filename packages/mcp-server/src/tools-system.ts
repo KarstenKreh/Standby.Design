@@ -33,6 +33,13 @@ import {
   generateSpaceLlmBriefing,
   type SpaceExportOptions,
 } from '@core/space-code-export';
+import {
+  generateMotionCss,
+  generateMotionDesignTokens,
+  generateMotionLlmBriefing,
+  type MotionExportOptions,
+} from '@core/motion-code-export';
+import { computeMotionPrimitives } from '@core/motion';
 import type { UrlState as TypeState } from '@core/url-state/type';
 import type { UrlState as SymbolState } from '@core/url-state/symbol';
 import type { SpaceUrlState } from '@core/url-state/space';
@@ -41,14 +48,14 @@ import { getCatalog, fontsByCategory } from '@core/fontshare';
 import { llmShareHeader, llmRulesFooter } from '@core/share-link';
 import {
   parseInput, systemUrl, toolUrl, textResult, errorResult,
-  colorStateFrom, typeStateFrom, shapeStateFrom, symbolStateFrom, spaceStateFrom,
+  colorStateFrom, typeStateFrom, shapeStateFrom, symbolStateFrom, spaceStateFrom, motionStateFrom,
   DEFAULT_SYMBOL_STATE,
   buildPalette, buildScale, buildSpacing,
 } from './lib.js';
-import { colorSummary, typeSummary, shapeSummary, symbolSummary, spaceSummary, resolveIconSet } from './summaries.js';
+import { colorSummary, typeSummary, shapeSummary, symbolSummary, spaceSummary, motionSummary, resolveIconSet } from './summaries.js';
 
-type Section = 'color' | 'type' | 'space' | 'shape' | 'symbol';
-const ALL_SECTIONS: Section[] = ['color', 'type', 'space', 'shape', 'symbol'];
+type Section = 'color' | 'type' | 'space' | 'shape' | 'symbol' | 'motion';
+const ALL_SECTIONS: Section[] = ['color', 'type', 'space', 'shape', 'symbol', 'motion'];
 
 type ExportFormat = 'css' | 'tailwind' | 'design-tokens' | 'llm-briefing' | 'font-embed';
 
@@ -130,7 +137,7 @@ export function registerSystemTools(server: McpServer): void {
     'get_design_system',
     {
       title: 'Inspect design system',
-      description: 'Decode a standby.design URL (or raw hash) and return an overview of the full design system: color palette, type scale, spacing & layout, shape tokens, and icons — plus per-tool edit links. Always give the standby.design/system URL to the user — the link is the deliverable.',
+      description: 'Decode a standby.design URL (or raw hash) and return an overview of the full design system: color palette, type scale, spacing & layout, shape tokens, motion springs, and icons — plus per-tool edit links. Always give the standby.design/system URL to the user — the link is the deliverable.',
       inputSchema: {
         url: z.string().describe('A standby.design URL or raw unified hash (e.g. from a previous generate_* call or copied from the browser).'),
       },
@@ -138,8 +145,8 @@ export function registerSystemTools(server: McpServer): void {
     },
     async (args) => {
       const segs = parseInput(args.url);
-      if (!segs.c && !segs.t && !segs.s && !segs.y && !segs.p) {
-        return errorResult('No design-system configuration found in that URL/hash. Expected a unified hash like #c=...&t=...&s=...&y=...&p=...');
+      if (!segs.c && !segs.t && !segs.s && !segs.y && !segs.p && !segs.m) {
+        return errorResult('No design-system configuration found in that URL/hash. Expected a unified hash like #c=...&t=...&s=...&y=...&p=...&m=...');
       }
 
       const colorState = colorStateFrom(segs);
@@ -147,11 +154,12 @@ export function registerSystemTools(server: McpServer): void {
       const shapeState = shapeStateFrom(segs);
       const symbolState = symbolStateFrom(segs);
       const spaceState = spaceStateFrom(segs);
+      const motionState = motionStateFrom(segs);
 
       const parts: string[] = [
         `Design system: ${systemUrl(segs)}`,
         '',
-        `Configured sections: ${(['c', 't', 's', 'y', 'p'] as const).filter(k => segs[k]).map(k => ({ c: 'color', t: 'type', s: 'shape', y: 'symbol', p: 'space' }[k])).join(', ')} (missing sections shown with defaults)`,
+        `Configured sections: ${(['c', 't', 's', 'y', 'p', 'm'] as const).filter(k => segs[k]).map(k => ({ c: 'color', t: 'type', s: 'shape', y: 'symbol', p: 'space', m: 'motion' }[k])).join(', ')} (missing sections shown with defaults)`,
         '',
         colorSummary(colorState, buildPalette(colorState)),
         `Edit: ${toolUrl('color', segs)}`,
@@ -165,6 +173,9 @@ export function registerSystemTools(server: McpServer): void {
         shapeSummary(shapeState),
         `Edit: ${toolUrl('shape', segs)}`,
         '',
+        motionSummary(motionState, computeMotionPrimitives(motionState)),
+        `Edit: ${toolUrl('motion', segs)}`,
+        '',
         symbolState ? symbolSummary(symbolState) : '## Icons — not configured (use generate_icon_tokens)',
         symbolState ? `Edit: ${toolUrl('symbol', segs)}` : '',
       ];
@@ -176,11 +187,11 @@ export function registerSystemTools(server: McpServer): void {
     'export_design_system',
     {
       title: 'Export design system code',
-      description: 'Generate the full token code for a design system URL in one format: "css" (CSS custom properties incl. semantic shadcn/ui-compatible tokens), "tailwind" (Tailwind v4 @theme), "design-tokens" (W3C DTCG JSON — typography & spacing), "llm-briefing" (Markdown brief for AI code generation), or "font-embed" (Fontshare <link> snippet). Optionally restrict to specific sections. Always give the returned standby.design/system URL to the user alongside the code — the link is the deliverable.',
+      description: 'Generate the full token code for a design system URL in one format: "css" (CSS custom properties incl. semantic shadcn/ui-compatible tokens), "tailwind" (Tailwind v4 @theme), "design-tokens" (W3C DTCG JSON — typography, spacing & motion), "llm-briefing" (Markdown brief for AI code generation), or "font-embed" (Fontshare <link> snippet). Optionally restrict to specific sections. Always give the returned standby.design/system URL to the user alongside the code — the link is the deliverable.',
       inputSchema: {
         url: z.string().describe('A standby.design URL or raw unified hash.'),
         format: z.enum(['css', 'tailwind', 'design-tokens', 'llm-briefing', 'font-embed']).describe('Output format.'),
-        sections: z.array(z.enum(['color', 'type', 'space', 'shape', 'symbol'])).optional().describe('Which sections to include. Only honoured by "css", "tailwind" and "llm-briefing". By default color, type, space and shape are always included — with their defaults when the URL does not configure them — and symbol only when the URL configures it. Ignored by "design-tokens" (typography and spacing only) and "font-embed".'),
+        sections: z.array(z.enum(['color', 'type', 'space', 'shape', 'symbol', 'motion'])).optional().describe('Which sections to include. Honoured by "css", "tailwind", "llm-briefing" and "design-tokens" (which only knows type, space and motion). By default color, type, space, shape and motion are always included — with their defaults when the URL does not configure them — and symbol only when the URL configures it. Ignored by "font-embed".'),
       },
       annotations: { readOnlyHint: true, openWorldHint: false },
     },
@@ -193,6 +204,7 @@ export function registerSystemTools(server: McpServer): void {
       const shapeState = shapeStateFrom(segs);
       const symbolState = symbolStateFrom(segs) ?? (sections.includes('symbol') ? { ...DEFAULT_SYMBOL_STATE } : null);
       const spaceState = spaceStateFrom(segs);
+      const motionState = motionStateFrom(segs);
 
       const palette = buildPalette(colorState);
       const scale = buildScale(typeState);
@@ -208,6 +220,11 @@ export function registerSystemTools(server: McpServer): void {
         aspectRatios: spaceState.aspectRatios,
         includeReciprocals: spaceState.aspectIncludeReciprocals,
         ratioLabel: getSpaceRatioLabel(spaceState),
+      };
+
+      const motionOpts: MotionExportOptions = {
+        character: motionState,
+        primitives: computeMotionPrimitives(motionState),
       };
 
       const typeOpts = {
@@ -251,6 +268,7 @@ export function registerSystemTools(server: McpServer): void {
             has('space') ? generateSpaceCss(spaceOpts) : '',
             has('shape') ? generateShapeCss(shapeOptsFromState(shapeState, palette.surface)) : '',
             has('symbol') && symbolState ? generateSymbolCss(symbolState) : '',
+            has('motion') ? generateMotionCss(motionOpts) : '',
           ].filter(Boolean).join('\n') || '/* No sections selected */';
           break;
         case 'tailwind':
@@ -261,10 +279,11 @@ export function registerSystemTools(server: McpServer): void {
             has('space') ? generateSpaceTailwind(spaceOpts) : '',
             has('shape') ? generateShapeTailwind(shapeOptsFromState(shapeState, palette.surface)) : '',
             has('symbol') && symbolState ? generateSymbolTailwind(symbolState) : '',
+            has('motion') ? generateMotionCss(motionOpts) : '',
           ].filter(Boolean).join('\n') || '/* No sections selected */';
           break;
         case 'design-tokens': {
-          const tokens = JSON.parse(generateDesignTokens({
+          const { font, typography, spacing: spacingTokens } = JSON.parse(generateDesignTokens({
             levels: scale,
             spacingTokens: spacing,
             headingFont: typeState.headingFont,
@@ -272,9 +291,12 @@ export function registerSystemTools(server: McpServer): void {
             monoFont: typeState.monoFont,
             headingWeight: typeState.headingWeight,
           }));
+          const { motion } = JSON.parse(generateMotionDesignTokens(motionOpts));
           output = JSON.stringify({
-            $description: `Design system: ${systemUrl(segs)} — typography and spacing only. Use format "css" or "tailwind" for color and shape tokens.`,
-            ...tokens,
+            $description: `Design system: ${systemUrl(segs)} — typography, spacing and motion only. Use format "css" or "tailwind" for color and shape tokens.`,
+            ...(has('type') ? { font, typography } : {}),
+            ...(has('space') ? { spacing: spacingTokens } : {}),
+            ...(has('motion') ? { motion } : {}),
           }, null, 2);
           break;
         }
@@ -305,6 +327,7 @@ export function registerSystemTools(server: McpServer): void {
           if (has('space')) parts.push(generateSpaceLlmBriefing(spaceOpts));
           if (has('shape')) parts.push(generateShapeLlmBriefing(shapeOptsFromState(shapeState, palette.surface)));
           if (has('symbol') && symbolState) parts.push(generateSymbolLlmBriefing(symbolState));
+          if (has('motion')) parts.push(generateMotionLlmBriefing(motionOpts));
           output = parts.length
             ? llmShareHeader(systemUrl(segs)) + parts.join('\n---\n\n') + llmRulesFooter()
             : '<!-- No sections selected -->';

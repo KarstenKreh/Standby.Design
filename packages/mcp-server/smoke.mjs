@@ -1,5 +1,5 @@
 // End-to-end smoke test: spawns the built server over stdio and exercises
-// the full chained workflow (color → type → shape → icons → space → export).
+// the full chained workflow (color → type → shape → icons → space → motion → export).
 // Run: node smoke.mjs
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
@@ -38,6 +38,12 @@ url = urlOf(res);
 
 res = await client.callTool({ name: 'generate_space_tokens', arguments: { url, mode: 'geometric', ratio: 1.25 } });
 url = urlOf(res);
+
+res = await client.callTool({ name: 'generate_motion_tokens', arguments: { url, preset: 'lively-firm', material: 30 } });
+console.log('\n=== motion ===\n' + res.content[0].text);
+url = urlOf(res);
+if (!url.includes('m=85,30')) throw new Error('generate_motion_tokens: preset energy plus material override not encoded as m=85,30: ' + url);
+if (!url.includes('p=')) throw new Error('generate_motion_tokens dropped the other segments: ' + url);
 console.log('\n=== final URL ===\n' + url);
 
 res = await client.callTool({ name: 'get_design_system', arguments: { url } });
@@ -73,7 +79,22 @@ try {
 if (!String(dtcg.$description || '').includes('Design system: ')) {
   throw new Error('design-tokens export lost its share link — expected it in $description');
 }
+if (!dtcg.motion?.spatial?.fast?.$value?.duration || !dtcg.typography || !dtcg.spacing) {
+  throw new Error('design-tokens export must carry typography, spacing and motion');
+}
 console.log('\n=== export design-tokens parses as JSON OK ===');
+
+for (const [format, marker] of [['css', '--motion-spatial-fast-duration'], ['tailwind', '--motion-enter-spatial'], ['llm-briefing', '# Motion — Energy 85 · Material 30']]) {
+  res = await client.callTool({ name: 'export_design_system', arguments: { url, format } });
+  if (!res.content[0].text.includes(marker)) throw new Error(`export ${format} is missing the motion section (${marker})`);
+}
+console.log('=== css, tailwind and llm-briefing carry motion OK ===');
+
+res = await client.callTool({ name: 'get_design_system', arguments: { url: 'https://standby.design/motion#m=15,85' } });
+if (res.isError || !res.content[0].text.includes('## Motion — Energy 15 · Material 85 (Calm · elastic)')) {
+  throw new Error('get_design_system does not read a motion-only URL:\n' + res.content[0].text.slice(0, 400));
+}
+console.log('=== motion-only URL is a valid design system OK ===');
 
 const schema = (await client.listTools()).tools;
 
