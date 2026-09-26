@@ -4,7 +4,7 @@ Source: https://standby.design/docs/research
 
 Warum die Werkzeuge tun, was sie tun. Jede Seite trennt, was die Forschung belegt, was nur plausibel ist und was Konvention bleibt.
 
-The reasoning behind the standby.design tools. The design rules at https://standby.design/docs/rules say what to do; these pages say why. Every page sorts its findings by strength of evidence: Gut belegt (well replicated), Plausibel, aber schwach belegt (single or pilot studies), Folklore oder Branchen-Richtlinie (convention without a primary source), Folgerung (what the tool does with it), Quellen (full source list).
+The reasoning behind the standby.design tools. The design rules at https://standby.design/docs/rules say what to do; these pages say why. Every page sorts its findings by strength of evidence: Gut belegt (well replicated), Plausibel, aber schwach belegt (single or pilot studies), Folklore oder Branchen-Richtlinie (convention without a primary source), Folgerung (what the tool does with it), Quellen (key sources).
 
 ## Wahrnehmung von Bewegung
 
@@ -55,34 +55,16 @@ Bewegung · https://standby.design/docs/research/bewegung-wahrnehmung
 
 ### Quellen
 
-- Heider & Simmel 1944, Am. J. Psychol. 57:243–259
-- Michotte 1946/1963, The Perception of Causality
-- Tremoulet & Feldman 2000, Perception 29:943–951, https://doi.org/10.1068/p3101
+Die wichtigsten Quellen. Weitere Einzelstudien sind im Text mit Autor und Jahr genannt.
+
 - Pollick, Paterson, Bruderlin & Sanford 2001, Cognition 82:B51–B61, https://pubmed.ncbi.nlm.nih.gov/11716834/
-- Roether et al. 2009, J. Vision 9(6):15
 - Juslin & Laukka 2003, Psych. Bull. 129:770–814
 - Sievers et al. 2013, PNAS, https://doi.org/10.1073/pnas.1209023110
-- Visch & Goudbeek 2009, ACII, https://ieeexplore.ieee.org/document/5349548/
-- Bartram & Nakatani 2010, PSIVT, https://ieeexplore.ieee.org/document/5673747/
 - Saerbeck & Bartneck 2010, HRI, https://www.bartneck.de/publications/2010/perceptionAffectElicitedRobotMotion/saerbeckBartneckHRI2010.pdf
-- Strohmeier et al. 2016, CHI, https://dl.acm.org/doi/10.1145/2858036.2858537
-- Takayama, Dooley & Ju 2011, HRI, https://dl.acm.org/doi/10.1145/1957656.1957674
-- Schulz et al. 2019, RO-MAN, https://arxiv.org/abs/2003.11443
 - Dragicevic et al. 2011, CHI, https://inria.hal.science/inria-00556177
-- Merz, Tuch & Opwis 2016, CHI EA, https://doi.org/10.1145/2851581.2892489
-- Huhtala et al. 2010, CHI, https://doi.org/10.1145/1753326.1753527
-- Harrison, Yeo & Hudson 2010, CHI, https://dl.acm.org/doi/10.1145/1753326.1753556
 - Ge et al. 2024, IJHCS 186, https://doi.org/10.1016/j.ijhcs.2024.103257
-- Ding & Kyung 2025, J. Consumer Research, https://doi.org/10.1093/jcr/ucaf037
 - Jung & Dubois 2023, J. Marketing Research, https://journals.sagepub.com/doi/abs/10.1177/00222437221146728
 - Warren, Kim & Husney 1987, Perception, https://doi.org/10.1068/p160309
 - Flash & Hogan 1985, J. Neurosci. 5:1688–1703
 - Miller 1968, AFIPS FJCC, https://dl.acm.org/doi/10.1145/1476589.1476628
-- Card, Moran & Newell 1983, The Psychology of Human-Computer Interaction
 - Card, Robertson & Mackinlay 1991, CHI
-- Jota et al. 2013, CHI, https://www.tactuallabs.com/papers/howFastIsFastEnoughCHI13.pdf
-- Deber et al. 2015, CHI, https://www.tactuallabs.com/papers/howMuchFasterIsFastEnoughCHI15.pdf
-- Chevalier et al. 2016, AVI, https://dl.acm.org/doi/10.1145/2909132.2909255
-- Russell 1980, JPSP 39:1161–1178
-- Displays 2026, https://www.sciencedirect.com/science/article/pii/S0141938226000995 (nur Abstract)
-- IJHCI 2026, https://doi.org/10.1080/10447318.2026.2630289 (nur Abstract)

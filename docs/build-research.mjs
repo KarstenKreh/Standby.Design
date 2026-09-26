@@ -46,7 +46,7 @@ function renderAgentMarkdown(notes, notesByName) {
     '',
     hub.meta.description || '',
     '',
-    'The reasoning behind the standby.design tools. The design rules at https://standby.design/docs/rules say what to do; these pages say why. Every page sorts its findings by strength of evidence: Gut belegt (well replicated), Plausibel, aber schwach belegt (single or pilot studies), Folklore oder Branchen-Richtlinie (convention without a primary source), Folgerung (what the tool does with it), Quellen (full source list).',
+    'The reasoning behind the standby.design tools. The design rules at https://standby.design/docs/rules say what to do; these pages say why. Every page sorts its findings by strength of evidence: Gut belegt (well replicated), Plausibel, aber schwach belegt (single or pilot studies), Folklore oder Branchen-Richtlinie (convention without a primary source), Folgerung (what the tool does with it), Quellen (key sources).',
     '',
   ].join('\n');
   const sections = pagesInHubOrder(notes).map((page) => {

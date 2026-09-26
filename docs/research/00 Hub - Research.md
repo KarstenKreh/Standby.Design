@@ -21,7 +21,7 @@ Jede Seite beginnt mit der Frage und einer Kurzfassung. Danach sortiert sie die 
 - **Plausibel, aber schwach belegt**: Einzelstudien, Pilotstudien, nur per Abstract geprüft
 - **Folklore oder Branchen-Richtlinie**: verbreitete Setzungen ohne Primärquelle
 - **Folgerung**: was das Werkzeug daraus macht
-- **Quellen**: vollständig, am Ende der Seite
+- **Quellen**: die wichtigsten, am Ende der Seite
 
 ## Seiten
 
