@@ -20,6 +20,7 @@ import {
   generateMotionCss,
   generateMotionDesignTokens,
   generateMotionJs,
+  generateMotionLlmBriefing,
   generateMotionSwiftUI,
 } from './motion-code-export';
 import { decodeState, encodeState, DEFAULT_MOTION_URL_STATE } from './url-state/motion';
@@ -183,6 +184,13 @@ describe('motion exports', () => {
     expect(generateMotionSwiftUI(opts)).toContain('static let spatialFast = Animation.spring(response:');
     expect(generateMotionCompose(opts)).toContain('fun <T> effectDefault(): SpringSpec<T> = spring(dampingRatio = 1f');
     expect(generateMotionJs(opts)).toContain('"navigate.forward": { ...spatial.slow, opacity: effect.fast }');
+  });
+
+  it('LLM briefing lists every primitive and semantic token plus the reduced-motion rule', () => {
+    const md = generateMotionLlmBriefing(opts);
+    for (const p of opts.primitives) expect(md).toContain(`motion.${p.name}`);
+    for (const s of SEMANTIC_MOTION) expect(md).toContain(`motion.${s.name}`);
+    expect(md).toContain('crossfade');
   });
 
   it('design tokens are valid JSON with aliases and a reduced group', () => {

@@ -248,3 +248,38 @@ function setPath(target: Record<string, unknown>, path: string, value: unknown) 
   }
   node[keys[keys.length - 1]] = value;
 }
+
+export function generateMotionLlmBriefing(opts: MotionExportOptions): string {
+  const { primitives, character } = opts;
+  const pct = (v: number) => `${(v * 100).toFixed(1)} %`;
+  let md = `# Motion — ${motionLabel(character)}\n\n`;
+  md += `Motion is defined by springs, not by durations. Each spring has a response (tempo in seconds) and a damping ratio (1 = no overshoot). Durations and easing curves below are derived from the springs.\n\n`;
+  md += `Energy ${Math.round(character.energy * 100)}/100 (calm → lively) sets the tempo. Material ${Math.round(character.material * 100)}/100 (firm → elastic) sets how much spatial motion overshoots.\n\n`;
+
+  md += `## Primitive springs\n\n`;
+  md += `| Token | Response | Damping | Stiffness | Settles after | Overshoot |\n`;
+  md += `|-------|----------|---------|-----------|---------------|-----------|\n`;
+  for (const p of primitives) {
+    md += `| motion.${p.name} | ${fixed(p.response, 3)} s | ${fixed(p.damping, 3)} | ${fixed(stiffnessOf(p), 1)} | ${p.settleMs} ms | ${pct(p.overshoot)} |\n`;
+  }
+  md += `\nSpatial springs move things (position, size, rotation) and may overshoot. Effect springs change opacity or color and never overshoot, because a value above 100 % opacity does not exist.\n`;
+
+  md += `\n## Semantic tokens\n\n`;
+  md += `| Token | Uses | When |\n`;
+  md += `|-------|------|------|\n`;
+  for (const s of SEMANTIC_MOTION) {
+    const parts = [s.spatial && `spatial.${s.spatial}`, s.effect && `effect.${s.effect}`].filter(Boolean).join(' + ');
+    md += `| motion.${s.name} | ${parts} | ${s.description} |\n`;
+  }
+
+  md += `\n## Rules\n\n`;
+  md += `1. Always pick a semantic token (motion.enter, motion.press, …), never a raw duration or easing.\n`;
+  md += `2. Animate position, size and rotation with the spatial part, opacity and color with the effect part. Never give opacity a spring that overshoots.\n`;
+  md += `3. Exits are faster than entrances: motion.exit uses effect.fast only.\n`;
+  md += `4. Prefer real springs where the platform has them (SwiftUI, Compose, Motion for JS). They keep their velocity when a gesture interrupts them. CSS transitions restart from zero velocity.\n`;
+  md += `5. In CSS use the --motion-* custom properties: \`transition: transform var(--motion-move)\`. For two-part tokens: \`transition: transform var(--motion-enter-spatial), opacity var(--motion-enter-effect)\`.\n`;
+  md += `6. Reduced motion (prefers-reduced-motion or the platform setting): no paths. Effects stay. Tokens without an effect part (press, move, expand) crossfade the old and new state with the effect spring of the same speed (motion.reduced.*).\n`;
+  md += `7. Feedback on input (press) must start within 100 ms.\n`;
+  md += `\nEnergy follows well-replicated research (speed is perceived as arousal). Material and the brand examples are design conventions.\n`;
+  return md;
+}
