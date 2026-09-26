@@ -90,6 +90,13 @@ storage — the URL is the document.
 - Features: Harmonic and geometric (√φ) spacing modes, Tailwind-compatible breakpoints, container max-widths, aspect ratio tokens including golden and silver
 - Use case: Designers and developers building consistent spatial systems independent of typography
 
+### Motion Token Generator
+- URL: https://standby.design/motion
+- Purpose: Turn a brand's character (energy: calm to lively, material: firm to elastic) into spring-based motion tokens
+- Output formats: CSS Custom Properties (linear() springs with cubic-bezier fallback), SwiftUI, Jetpack Compose, Motion (JS), Design Tokens (JSON)
+- Features: Six primitive springs (spatial and effect, fast/default/slow), semantic tokens (press, move, expand, enter, exit, fade, navigate, sheet, container), reduced-motion variant with effects only
+- Use case: Designers and developers who want motion that matches the brand and stays interruptible
+
 ### Shape Token Generator
 - URL: https://standby.design/shape
 - Purpose: Generate shape tokens — radii, shadows, borders, focus rings — in four visual styles

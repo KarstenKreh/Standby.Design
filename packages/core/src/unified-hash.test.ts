@@ -54,27 +54,27 @@ describe('isUnifiedHash', () => {
 describe('parseUnifiedHash', () => {
   it('parses all five segments', () => {
     const result = parseUnifiedHash('c=colordata&t=typedata&s=shapedata&y=symboldata&p=spacedata');
-    expect(result).toEqual({ c: 'colordata', t: 'typedata', s: 'shapedata', y: 'symboldata', p: 'spacedata' });
+    expect(result).toEqual({ c: 'colordata', t: 'typedata', s: 'shapedata', y: 'symboldata', p: 'spacedata', m: null });
   });
 
   it('parses with leading #', () => {
     const result = parseUnifiedHash('#c=colordata&t=typedata');
-    expect(result).toEqual({ c: 'colordata', t: 'typedata', s: null, y: null, p: null });
+    expect(result).toEqual({ c: 'colordata', t: 'typedata', s: null, y: null, p: null, m: null });
   });
 
   it('returns null for missing segments', () => {
     const result = parseUnifiedHash('c=only-color');
-    expect(result).toEqual({ c: 'only-color', t: null, s: null, y: null, p: null });
+    expect(result).toEqual({ c: 'only-color', t: null, s: null, y: null, p: null, m: null });
   });
 
   it('returns all null for legacy hash', () => {
     const result = parseUnifiedHash('335A7F,335A7F,1');
-    expect(result).toEqual({ c: null, t: null, s: null, y: null, p: null });
+    expect(result).toEqual({ c: null, t: null, s: null, y: null, p: null, m: null });
   });
 
   it('returns null value for empty segment (c= without value)', () => {
     const result = parseUnifiedHash('c=&t=data');
-    expect(result).toEqual({ c: null, t: 'data', s: null, y: null, p: null });
+    expect(result).toEqual({ c: null, t: 'data', s: null, y: null, p: null, m: null });
   });
 
   it('handles segments with special characters (commas, colons)', () => {
@@ -164,7 +164,7 @@ describe('setMySegment', () => {
 
 describe('round-trips', () => {
   it('build → parse returns same values', () => {
-    const segments = { c: 'color-hash', t: 'type-hash', s: 'shape-hash', y: null, p: null };
+    const segments = { c: 'color-hash', t: 'type-hash', s: 'shape-hash', y: null, p: null, m: null };
     const built = buildUnifiedHash({ c: 'color-hash', t: 'type-hash', s: 'shape-hash' });
     const parsed = parseUnifiedHash(built);
     expect(parsed).toEqual(segments);
@@ -184,6 +184,18 @@ describe('round-trips', () => {
     expect(getMySegment(updated, 'c')).toBe('new');
     expect(getMySegment(updated, 't')).toBe('type');
     expect(getMySegment(updated, 'p')).toBe('space');
+  });
+
+  it('round-trips the motion segment next to the others', () => {
+    const built = buildUnifiedHash({ c: 'color', p: 'harmonic,1000,1272,100,1|bp=sm:640&fvw=375,1920', m: '85,15' });
+    const parsed = parseUnifiedHash(built);
+    expect(parsed.m).toBe('85,15');
+    expect(parsed.p).toBe('harmonic,1000,1272,100,1|bp=sm:640&fvw=375,1920');
+    expect(getMySegment(setMySegment(built, 'c', 'new'), 'm')).toBe('85,15');
+  });
+
+  it('detects a hash with only a motion segment as unified', () => {
+    expect(getMySegment('m=50,50', 'm')).toBe('50,50');
   });
 });
 

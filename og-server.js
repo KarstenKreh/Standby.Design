@@ -21,6 +21,7 @@ const SHAPE_INDEX = path.join(STATIC_ROOT, 'shape', 'index.html');
 const SYMBOL_INDEX = path.join(STATIC_ROOT, 'symbol', 'index.html');
 const SPACE_INDEX = path.join(STATIC_ROOT, 'space', 'index.html');
 const ROLE_INDEX = path.join(STATIC_ROOT, 'role', 'index.html');
+const MOTION_INDEX = path.join(STATIC_ROOT, 'motion', 'index.html');
 const QA_INDEX = path.join(STATIC_ROOT, 'qa', 'index.html');
 const ROOT_INDEX = path.join(STATIC_ROOT, 'index.html');
 
@@ -89,6 +90,13 @@ try {
   console.error('Could not read role index.html:', e.message);
 }
 
+let motionHtmlTemplate = '';
+try {
+  motionHtmlTemplate = fs.readFileSync(MOTION_INDEX, 'utf-8');
+} catch (e) {
+  console.error('Could not read motion index.html:', e.message);
+}
+
 let qaHtmlTemplate = '';
 try {
   qaHtmlTemplate = fs.readFileSync(QA_INDEX, 'utf-8');
@@ -129,6 +137,10 @@ const OG_TOOLS = {
   role: {
     label: 'ROLE', accent: '#b0605c', title: ['Interaction', 'Roles'],
     icon: '<path d="M14 4.1 12 6"/><path d="m5.1 8-2.9-.8"/><path d="m6 12-1.9 2"/><path d="M7.2 2.2 8 5.1"/><path d="M9.037 9.69a.498.498 0 0 1 .653-.653l11 4.5a.5.5 0 0 1-.074.949l-4.349 1.041a1 1 0 0 0-.74.739l-1.04 4.35a.5.5 0 0 1-.95.074z"/>',
+  },
+  motion: {
+    label: 'MOTION', accent: '#4284c5', title: ['Motion Token', 'Generator'],
+    icon: '<path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.5.5 0 0 1-.96 0L9.24 3.18a.5.5 0 0 0-.96 0l-2.35 8.36A2 2 0 0 1 4 13H2"/>',
   },
   system: {
     label: 'SYSTEM', accent: '#42926b', title: ['Design System'],
@@ -272,7 +284,7 @@ const server = http.createServer((req, res) => {
   // Dynamic OG image endpoints:
   //   /{tool}/og-image?c=HEX → 1200x630 PNG (tool icon, brand or default accent)
   //   /og-image?tool=github  → 1280x640 repo social-preview banner
-  const ogMatch = pathname.match(/^\/(color|type|shape|symbol|space|role|system)\/og-image$/);
+  const ogMatch = pathname.match(/^\/(color|type|shape|symbol|space|role|motion|system)\/og-image$/);
   if (ogMatch || pathname === '/og-image') {
     let svgString = null;
     let width = 1200, height = 630;
@@ -350,13 +362,14 @@ const server = http.createServer((req, res) => {
     symbol: { template: symbolHtmlTemplate, label: 'Icon Style Recommender',     desc: 'icon style recommendation' },
     space:  { template: spaceHtmlTemplate,  label: 'Spacing & Layout Generator', desc: 'spacing and layout token set' },
     role:   { template: roleHtmlTemplate,   label: 'Interaction Roles',          desc: 'interaction role rules' },
+    motion: { template: motionHtmlTemplate, label: 'Motion Token Generator',     desc: 'motion token set' },
     system: { template: systemHtmlTemplate, label: 'Design System',              desc: 'design system' },
     qa:     { template: qaHtmlTemplate,     label: 'QA Gallery',                 desc: 'internal QA gallery' },
   };
 
   // SPA fallback for all tools — inject OG tags when ?t= or ?c= present
   // /qa is a hidden internal gallery (noindex in its own HTML, Disallow in robots.txt)
-  const toolMatch = pathname.match(/^\/(color|type|shape|symbol|space|role|system|qa)(\/|$)/);
+  const toolMatch = pathname.match(/^\/(color|type|shape|symbol|space|role|motion|system|qa)(\/|$)/);
   if (toolMatch && !path.extname(pathname)) {
     const tool = toolMatch[1];
     const meta = TOOL_META[tool];

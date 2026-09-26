@@ -13,6 +13,7 @@ export interface Segments {
   s: string | null;
   y: string | null;
   p: string | null;
+  m: string | null;
 }
 
 export interface RoleTheme {
@@ -57,7 +58,7 @@ function pickFg(bgHex: string, a: string, b: string): string {
 export function readSegments(rawHash: string): Segments {
   const raw = rawHash.replace(/^#/, '');
   const isLegacyColorOnlyHash = raw !== '' && !isUnifiedHash(raw);
-  if (isLegacyColorOnlyHash) return { c: raw, t: null, s: null, y: null, p: null };
+  if (isLegacyColorOnlyHash) return { c: raw, t: null, s: null, y: null, p: null, m: null };
   return parseUnifiedHash(raw);
 }
 

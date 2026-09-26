@@ -3,7 +3,7 @@ import { useSymbolStore } from '@/store/symbol-store';
 import { encodeState, decodeState } from '@/lib/url-state';
 import { isUnifiedHash, getMySegment, buildUnifiedHash } from '@core/unified-hash';
 
-interface OtherSegments { c?: string; t?: string; s?: string; p?: string }
+interface OtherSegments { c?: string; t?: string; s?: string; p?: string; m?: string }
 
 /**
  * Two-way sync between symbol store and URL hash.
@@ -26,6 +26,7 @@ export function useUrlState(): OtherSegments {
       captured.t = getMySegment(raw, 't') || undefined;
       captured.s = getMySegment(raw, 's') || undefined;
       captured.p = getMySegment(raw, 'p') || undefined;
+      captured.m = getMySegment(raw, 'm') || undefined;
       const symbolRaw = getMySegment(raw, 'y');
       if (symbolRaw) {
         const decoded = decodeState(symbolRaw);
@@ -49,7 +50,7 @@ export function useUrlState(): OtherSegments {
     const currentStore = useSymbolStore.getState();
     const encoded = encodeState(currentStore);
     history.replaceState(null, '', '#' + buildUnifiedHash({
-      c: captured.c, t: captured.t, s: captured.s, y: encoded, p: captured.p,
+      c: captured.c, t: captured.t, s: captured.s, y: encoded, p: captured.p, m: captured.m,
     }));
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -60,7 +61,7 @@ export function useUrlState(): OtherSegments {
     if (skipNextWrite.current) { skipNextWrite.current = false; return; }
     const encoded = encodeState(store);
     history.replaceState(null, '', '#' + buildUnifiedHash({
-      c: othersRef.current.c, t: othersRef.current.t, s: othersRef.current.s, y: encoded, p: othersRef.current.p,
+      c: othersRef.current.c, t: othersRef.current.t, s: othersRef.current.s, y: encoded, p: othersRef.current.p, m: othersRef.current.m,
     }));
   }, [
     store.preferredStyle, store.preferredWeight, store.preferredCorners,

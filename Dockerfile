@@ -61,6 +61,15 @@ COPY packages/core/ /app/packages/core/
 COPY shared.css /app/shared.css
 RUN npm run build
 
+FROM node:20-alpine AS build-motion
+WORKDIR /app/motion-react
+COPY motion-react/package.json motion-react/package-lock.json ./
+RUN npm ci
+COPY motion-react/ ./
+COPY packages/core/ /app/packages/core/
+COPY shared.css /app/shared.css
+RUN npm run build
+
 FROM node:20-alpine AS build-qa
 WORKDIR /app/qa-gallery
 COPY qa-gallery/package.json qa-gallery/package-lock.json ./
@@ -91,6 +100,7 @@ COPY --from=build-shape /app/shape-react/dist /app/public/shape/
 COPY --from=build-symbol /app/symbol-react/dist /app/public/symbol/
 COPY --from=build-space /app/space-react/dist /app/public/space/
 COPY --from=build-role /app/role-react/dist /app/public/role/
+COPY --from=build-motion /app/motion-react/dist /app/public/motion/
 COPY --from=build-qa /app/qa-gallery/dist /app/public/qa/
 COPY og-server.js /app/og-server.js
 EXPOSE 80

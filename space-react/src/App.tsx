@@ -32,6 +32,7 @@ function App() {
       s: otherSegments.s || undefined,
       y: otherSegments.y || undefined,
       p: spaceEncoded,
+      m: otherSegments.m || undefined,
     });
   }, [store, otherSegments]);
 

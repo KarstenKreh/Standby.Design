@@ -2,10 +2,11 @@ import { useState, type CSSProperties, type ReactNode, type KeyboardEvent, type 
 import type { RoleTheme, Ladder } from '@/lib/system-tokens';
 import { TraceTable, type TraceRow } from '@/components/trace-table';
 import { focusRingCss } from '@core/ring';
+import type { RoleMotion } from '@/lib/role-motion';
 
 interface CardProps {
   theme: RoleTheme;
-  motionMs: number;
+  motion: RoleMotion;
 }
 
 function hoverNote(ladder: Ladder): string {
@@ -58,7 +59,7 @@ function ringDecoration(
   };
 }
 
-export function PressableCard({ theme, motionMs }: CardProps) {
+export function PressableCard({ theme, motion }: CardProps) {
   const [hover, setHover] = useState(false);
   const [pressed, setPressed] = useState(false);
   const [focusVis, setFocusVis] = useState(false);
@@ -86,7 +87,7 @@ export function PressableCard({ theme, motionMs }: CardProps) {
             borderRadius: 999,
             padding: '0.6rem 1.4rem',
             fontSize: 'var(--text-body-s)',
-            transition: `background ${motionMs}ms ease`,
+            transition: `background ${motion.fade}`,
             ...ringDecoration(theme, focusVis),
           }}
           onMouseEnter={() => setHover(true)}
@@ -112,7 +113,7 @@ export function PressableCard({ theme, motionMs }: CardProps) {
   );
 }
 
-export function ToggleableCard({ theme, motionMs }: CardProps) {
+export function ToggleableCard({ theme, motion }: CardProps) {
   const [on, setOn] = useState(false);
   const [hover, setHover] = useState(false);
   const [focusVis, setFocusVis] = useState(false);
@@ -141,7 +142,7 @@ export function ToggleableCard({ theme, motionMs }: CardProps) {
             background: bg,
             border: '1px solid transparent',
             borderRadius: 999,
-            transition: `background ${motionMs}ms ease`,
+            transition: `background ${motion.fade}`,
             ...ringDecoration(theme, focusVis),
           }}
           onClick={() => setOn(v => !v)}
@@ -150,18 +151,36 @@ export function ToggleableCard({ theme, motionMs }: CardProps) {
           onFocus={(e) => setFocusVis(isFocusVisible(e))}
           onBlur={() => setFocusVis(false)}
         >
-          <span
-            className="absolute rounded-full"
-            style={{
-              top: 3,
-              left: 3,
-              width: 20,
-              height: 20,
-              background: theme.fg,
-              transform: on ? 'translateX(20px)' : 'none',
-              transition: `transform ${motionMs}ms ease`,
-            }}
-          />
+          {motion.reduced ? (
+            [false, true].map((side) => (
+              <span
+                key={String(side)}
+                className="absolute rounded-full"
+                style={{
+                  top: 3,
+                  left: side ? 23 : 3,
+                  width: 20,
+                  height: 20,
+                  background: theme.fg,
+                  opacity: side === on ? 1 : 0,
+                  transition: `opacity ${motion.fade}`,
+                }}
+              />
+            ))
+          ) : (
+            <span
+              className="absolute rounded-full"
+              style={{
+                top: 3,
+                left: 3,
+                width: 20,
+                height: 20,
+                background: theme.fg,
+                transform: on ? 'translateX(20px)' : 'none',
+                transition: `transform ${motion.move}`,
+              }}
+            />
+          )}
         </button>
       }
       rows={[
@@ -174,7 +193,7 @@ export function ToggleableCard({ theme, motionMs }: CardProps) {
   );
 }
 
-export function EditableCard({ theme, motionMs }: CardProps) {
+export function EditableCard({ theme, motion }: CardProps) {
   const [hover, setHover] = useState(false);
   const [focused, setFocused] = useState(false);
   const [invalid, setInvalid] = useState(false);
@@ -221,7 +240,7 @@ export function EditableCard({ theme, motionMs }: CardProps) {
             borderRadius: Math.min(theme.radius, 10),
             padding: '0.55rem 0.9rem',
             fontSize: 'var(--text-body-s)',
-            transition: `border-color ${motionMs}ms ease`,
+            transition: `border-color ${motion.fade}`,
             ...ringDecoration(theme, focused, { color: ringColor, offset: 1 }),
           }}
           onMouseEnter={() => setHover(true)}
@@ -243,7 +262,7 @@ export function EditableCard({ theme, motionMs }: CardProps) {
 
 const NAV_ITEMS = ['Overview', 'Documentation', 'Changelog'];
 
-export function NavigableCard({ theme, motionMs }: CardProps) {
+export function NavigableCard({ theme, motion }: CardProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [target, setTarget] = useState<number | null>(null);
   const [pressed, setPressed] = useState(false);
@@ -289,7 +308,7 @@ export function NavigableCard({ theme, motionMs }: CardProps) {
                 border: '1px solid transparent',
                 borderRadius: Math.min(theme.radius, 10),
                 padding: '0.45rem 0.75rem 0.45rem 1rem',
-                transition: `background ${motionMs}ms ease, color ${motionMs}ms ease`,
+                transition: `background ${motion.fade}, color ${motion.fade}`,
                 ...ringDecoration(theme, focusVis === i),
               }}
             >

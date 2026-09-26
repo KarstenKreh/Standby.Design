@@ -34,7 +34,7 @@ function App() {
 
   const getCurrentHash = useCallback(() => {
     const colorEncoded = encodeState(store);
-    return buildUnifiedHash({ c: colorEncoded, t: otherSegments.t, s: otherSegments.s, y: otherSegments.y, p: otherSegments.p });
+    return buildUnifiedHash({ c: colorEncoded, t: otherSegments.t, s: otherSegments.s, y: otherSegments.y, p: otherSegments.p, m: otherSegments.m });
   }, [store, otherSegments]);
 
   const handleShare = useCallback(() => {
