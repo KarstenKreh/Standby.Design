@@ -9,6 +9,8 @@ import { decodeState as decodeTypeState } from '@core/url-state/type';
 import { decodeState as decodeShapeState, type ShapeUrlState as ShapeState } from '@core/url-state/shape';
 import { decodeState as decodeSymbolState, type UrlState as SymbolState } from '@core/url-state/symbol';
 import { decodeState as decodeSpaceState, DEFAULT_SPACE_URL_STATE, type SpaceUrlState } from '@core/url-state/space';
+import { decodeState as decodeMotionState, DEFAULT_MOTION_URL_STATE, type MotionUrlState } from '@core/url-state/motion';
+import { computeMotionPrimitives, type MotionPrimitive } from '@core/motion';
 import { generatePalette, computeAutoErrorHex, computeAutoAccentHex, resolveAccentHues, type PaletteEntry } from '@core/palette';
 import { hexToOklch } from '@core/color-math';
 import { customScale, traditionalScale, resolveMobileRatio, DEFAULT_TRADITIONAL_MOBILE, type ComputedLevel } from '@core/scale';
@@ -22,6 +24,7 @@ import { CombinedExport } from '@/components/combined-export';
 import { AppPreview } from '@/components/app-preview';
 import { SymbolSummary } from '@/components/symbol-summary';
 import { SpaceSummary } from '@/components/space-summary';
+import { MotionSummary } from '@/components/motion-summary';
 import { useFontLoader } from '@/hooks/use-font-loader';
 import { SquarePen } from 'lucide-react';
 
@@ -101,6 +104,7 @@ function App() {
   const [shapeState, setShapeState] = useState<Partial<ShapeState> | null>(null);
   const [symbolState, setSymbolState] = useState<SymbolState | null>(null);
   const [spaceState, setSpaceState] = useState<SpaceUrlState>(DEFAULT_SPACE_URL_STATE);
+  const [motionState, setMotionState] = useState<MotionUrlState>(DEFAULT_MOTION_URL_STATE);
   const [colorSegment, setColorSegment] = useState<string | null>(null);
   const [typeSegment, setTypeSegment] = useState<string | null>(null);
   const [shapeSegment, setShapeSegment] = useState<string | null>(null);
@@ -118,7 +122,8 @@ function App() {
     const ss = getMySegment(raw, 's');
     const ys = getMySegment(raw, 'y');
     const ps = getMySegment(raw, 'p');
-    setMotionSegment(getMySegment(raw, 'm'));
+    const ms = getMySegment(raw, 'm');
+    setMotionSegment(ms);
     setColorSegment(cs);
     setTypeSegment(ts);
     setShapeSegment(ss);
@@ -136,6 +141,10 @@ function App() {
     if (ps) {
       const decoded = decodeSpaceState(ps);
       if (decoded) setSpaceState({ ...DEFAULT_SPACE_URL_STATE, ...decoded });
+    }
+    if (ms) {
+      const decoded = decodeMotionState(ms);
+      if (decoded) setMotionState({ ...DEFAULT_MOTION_URL_STATE, ...decoded });
     }
 
     // Fill in defaults for any missing segments
@@ -226,6 +235,8 @@ function App() {
     });
   }, [spaceState]);
 
+  const motionPrimitives = useMemo<MotionPrimitive[]>(() => computeMotionPrimitives(motionState), [motionState]);
+
   const handleNameChange = useCallback((name: string) => {
     setThemeName(name);
     if (colorState) {
@@ -282,7 +293,7 @@ function App() {
             </Button>
           </div>
         <p className="text-muted-foreground mb-6" style={{ fontSize: 'var(--text-body-s)' }}>
-          Combined view of your design system &mdash; color palette, typography, spacing, and shadows in one export.
+          Combined view of your design system &mdash; color palette, typography, spacing, shadows, and motion in one export.
         </p>
 
         {!hasColor && !hasType && (
@@ -382,6 +393,20 @@ function App() {
           <SpaceSummary spacing={spacing} spaceState={spaceState} />
         </div>
 
+        <div className="bg-card border border-border rounded-lg p-4 mb-6">
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="font-semibold" style={{ fontSize: 'var(--text-body-l, 1.125rem)' }}>Motion</h2>
+            <a
+              href={`/motion#${getCurrentHash()}`}
+              className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors pr-1"
+            >
+              <SquarePen size={14} />
+              Edit
+            </a>
+          </div>
+          <MotionSummary character={motionState} primitives={motionPrimitives} />
+        </div>
+
         {/* Symbol Summary */}
         {symbolState && (
           <div className="bg-card border border-border rounded-lg p-4 mb-6">
@@ -411,6 +436,8 @@ function App() {
               shapeState={shapeState}
               symbolState={symbolState}
               spaceState={spaceState}
+              motionState={motionState}
+              motionPrimitives={motionPrimitives}
             />
           </div>
         )}

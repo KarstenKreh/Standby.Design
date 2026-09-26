@@ -45,6 +45,15 @@ import type { UrlState as SymbolState } from '@core/url-state/symbol';
 import { computeIconTokens, weightToStroke } from '@core/icon-tokens';
 import { ICON_SETS, getSetById } from '@core/icon-sets';
 import { recommendSets } from '@core/recommend';
+import type { MotionUrlState } from '@core/url-state/motion';
+import type { MotionPrimitive } from '@core/motion';
+import {
+  generateMotionCss,
+  generateMotionDesignTokens,
+  generateMotionLlmBriefing,
+  type MotionExportOptions,
+} from '@core/motion-code-export';
+import { generateDesignTokens } from '@/lib/design-token-export';
 
 interface PaletteResult {
   brand: PaletteEntry[];
@@ -68,6 +77,8 @@ interface CombinedExportProps {
   shapeState: Partial<ShapeState> | null;
   symbolState: SymbolState | null;
   spaceState: SpaceUrlState;
+  motionState: MotionUrlState;
+  motionPrimitives: MotionPrimitive[];
 }
 
 function getSpaceRatioLabel(s: SpaceUrlState): string {
@@ -142,7 +153,7 @@ function generateSymbolLlmBriefing(sym: SymbolState): string {
   ].join('\n');
 }
 
-export function CombinedExport({ colorState, palette, typeState, scale, spacing, shapeState, symbolState, spaceState }: CombinedExportProps) {
+export function CombinedExport({ colorState, palette, typeState, scale, spacing, shapeState, symbolState, spaceState, motionState, motionPrimitives }: CombinedExportProps) {
   const [activeTab, setActiveTab] = useState('css');
 
   // Copy All state
@@ -244,6 +255,27 @@ export function CombinedExport({ colorState, palette, typeState, scale, spacing,
   const spaceCss = useMemo(() => (spaceOpts ? generateSpaceCss(spaceOpts) : ''), [spaceOpts]);
   const spaceTailwind = useMemo(() => (spaceOpts ? generateSpaceTailwind(spaceOpts) : ''), [spaceOpts]);
 
+  const motionOpts: MotionExportOptions = useMemo(
+    () => ({ character: motionState, primitives: motionPrimitives }),
+    [motionState, motionPrimitives],
+  );
+  const motionCss = useMemo(() => generateMotionCss(motionOpts), [motionOpts]);
+
+  const designTokens = useMemo(() => {
+    const motionTokens = JSON.parse(generateMotionDesignTokens(motionOpts));
+    const typeAndSpaceTokens = typeState && scale && spacing
+      ? JSON.parse(generateDesignTokens({
+        levels: scale,
+        spacingTokens: spacing,
+        headingFont: typeState.headingFont,
+        bodyFont: typeState.bodyFont,
+        monoFont: typeState.monoFont,
+        headingWeight: typeState.headingWeight,
+      }))
+      : {};
+    return JSON.stringify({ ...typeAndSpaceTokens, ...motionTokens }, null, 2) + '\n';
+  }, [motionOpts, typeState, scale, spacing]);
+
   const fontEmbed = useMemo(() => {
     if (!typeState) return '';
     return generateFontEmbed(typeState.headingFont, typeState.bodyFont, typeState.monoFont);
@@ -311,15 +343,18 @@ export function CombinedExport({ colorState, palette, typeState, scale, spacing,
       md += generateSymbolLlmBriefing(symbolState);
     }
 
+    if (md) md += '\n---\n\n';
+    md += generateMotionLlmBriefing(motionOpts);
+
     return md ? md + llmRulesFooter() : '<!-- No configuration available -->';
-  }, [colorState, palette, typeState, scale, spaceOpts, shapeState, symbolState]);
+  }, [colorState, palette, typeState, scale, spaceOpts, shapeState, symbolState, motionOpts]);
 
   const outputs = useMemo(() => {
-    const css = [colorCss, typeCss, spaceCss, shapeCss, symbolCss].filter(Boolean).join('\n') || '/* No configuration available */';
-    const tailwind = [colorCss, typeTailwind, spaceTailwind, shapeTailwind, symbolTailwind].filter(Boolean).join('\n') || '/* No configuration available */';
+    const css = [colorCss, typeCss, spaceCss, shapeCss, symbolCss, motionCss].filter(Boolean).join('\n') || '/* No configuration available */';
+    const tailwind = [colorCss, typeTailwind, spaceTailwind, shapeTailwind, symbolTailwind, motionCss].filter(Boolean).join('\n') || '/* No configuration available */';
     const embed = fontEmbed || '<!-- No fonts selected -->';
-    return { css, tailwind, embed, llm: llmBriefing };
-  }, [colorCss, typeCss, spaceCss, typeTailwind, spaceTailwind, shapeCss, shapeTailwind, symbolCss, symbolTailwind, fontEmbed, llmBriefing]);
+    return { css, tailwind, embed, tokens: designTokens, llm: llmBriefing };
+  }, [colorCss, typeCss, spaceCss, typeTailwind, spaceTailwind, shapeCss, shapeTailwind, symbolCss, symbolTailwind, motionCss, fontEmbed, designTokens, llmBriefing]);
 
   const handleCopyAll = useCallback(() => {
     const parts: string[] = [];
@@ -397,6 +432,9 @@ export function CombinedExport({ colorState, palette, typeState, scale, spacing,
           <TabsTrigger value="embed" className="text-caption">
             Font Embed
           </TabsTrigger>
+          <TabsTrigger value="tokens" className="text-caption">
+            Design Tokens
+          </TabsTrigger>
           <TabsTrigger value="llm" className="text-caption">
             LLM Briefing
           </TabsTrigger>
@@ -410,6 +448,9 @@ export function CombinedExport({ colorState, palette, typeState, scale, spacing,
         </TabsContent>
         <TabsContent value="embed">
           <CodeBlock code={outputs.embed} mode="html" />
+        </TabsContent>
+        <TabsContent value="tokens">
+          <CodeBlock code={outputs.tokens} mode="json" />
         </TabsContent>
         <TabsContent value="llm">
           <CodeBlock code={outputs.llm} mode="markdown" />

@@ -1,5 +1,5 @@
 /**
- * Generate tools — one per standby.design tool (color, type, shape, symbol, space).
+ * Generate tools — one per standby.design tool (color, type, shape, symbol, space, motion).
  *
  * Each tool reads the corresponding segment from an optional existing URL,
  * applies only the provided parameters on top, re-encodes its segment while
@@ -14,23 +14,25 @@ import { encodeState as encodeTypeState } from '@core/url-state/type';
 import { encodeState as encodeShapeState } from '@core/url-state/shape';
 import { encodeState as encodeSymbolState } from '@core/url-state/symbol';
 import { encodeState as encodeSpaceState } from '@core/url-state/space';
+import { encodeState as encodeMotionState } from '@core/url-state/motion';
+import { MOTION_PRESETS, computeMotionPrimitives } from '@core/motion';
 import { SUCCESS_HUE, WARNING_HUE, INFO_HUE } from '@core/palette';
 import { TYPE_LEVELS, resolveMobileRatio, type TypeLevel } from '@core/scale';
 import { ICON_SETS } from '@core/icon-sets';
 import {
   parseInput, systemUrl, toolUrl, normalizeHex, textResult, errorResult,
-  colorStateFrom, typeStateFrom, shapeStateFrom, symbolStateFrom, spaceStateFrom,
+  colorStateFrom, typeStateFrom, shapeStateFrom, symbolStateFrom, spaceStateFrom, motionStateFrom,
   DEFAULT_SYMBOL_STATE,
   buildPalette, buildScale, buildSpacing,
-  type Segments,
+  type Segments, type ToolName,
 } from './lib.js';
-import { colorSummary, typeSummary, shapeSummary, symbolSummary, spaceSummary } from './summaries.js';
+import { colorSummary, typeSummary, shapeSummary, symbolSummary, spaceSummary, motionSummary } from './summaries.js';
 
 const URL_PARAM = z.string().optional().describe(
-  'Existing standby.design URL (or raw hash) to modify. Only this tool\'s section is changed; color/type/shape/icon/spacing settings from other tools are preserved. Omit to start fresh from defaults.'
+  'Existing standby.design URL (or raw hash) to modify. Only this tool\'s section is changed; color/type/shape/icon/spacing/motion settings from other tools are preserved. Omit to start fresh from defaults.'
 );
 
-function header(segs: Segments, editTool: 'color' | 'type' | 'shape' | 'symbol' | 'space'): string {
+function header(segs: Segments, editTool: ToolName): string {
   return [
     `Design system: ${systemUrl(segs)}`,
     `Fine-tune in UI: ${toolUrl(editTool, segs)}`,
@@ -399,6 +401,36 @@ export function registerGenerateTools(server: McpServer): void {
       const next: Segments = { ...segs, p: encodeSpaceState(state) };
       const spacing = buildSpacing(state);
       return textResult(`${header(next, 'space')}\n\n${spaceSummary(state, spacing)}`);
+    }
+  );
+
+  server.registerTool(
+    'generate_motion_tokens',
+    {
+      title: 'Generate motion tokens',
+      description: `Generate spring-based motion tokens from two brand-character axes: energy (calm → lively, sets the tempo) and material (firm → elastic, sets how much spatial motion overshoots). Returns 6 primitive springs (spatial/effect × fast/default/slow), 11 semantic tokens (press, move, expand, enter, exit, fade, navigate.*, sheet.*, container) and the reduced-motion rule. Start from a preset, then fine-tune with energy/material. Returns a shareable standby.design/system URL and a summary. Always give that URL to the user — the link is the deliverable. Use export_design_system for CSS, design tokens or the LLM briefing; SwiftUI, Compose and Motion (JS) code is exported in the UI at standby.design/motion.`,
+      inputSchema: {
+        url: URL_PARAM,
+        preset: z.enum(MOTION_PRESETS.map(p => p.id) as [string, ...string[]]).optional().describe(`Starting character. ${MOTION_PRESETS.map(p => `"${p.id}" (energy ${Math.round(p.energy * 100)}, material ${Math.round(p.material * 100)}; ${p.seenIn})`).join(', ')}. energy/material override the preset.`),
+        energy: z.number().min(0).max(100).optional().describe('0 = calm (slow, deliberate) … 100 = lively (quick, snappy). Default 50.'),
+        material: z.number().min(0).max(100).optional().describe('0 = firm (no overshoot) … 100 = elastic (visible bounce on spatial motion). Default 50.'),
+      },
+      annotations: READ_ONLY,
+    },
+    async (args) => {
+      const segs = parseInput(args.url);
+      const state = motionStateFrom(segs);
+
+      const preset = args.preset ? MOTION_PRESETS.find(p => p.id === args.preset) : undefined;
+      if (preset) {
+        state.energy = preset.energy;
+        state.material = preset.material;
+      }
+      if (args.energy !== undefined) state.energy = Math.round(args.energy) / 100;
+      if (args.material !== undefined) state.material = Math.round(args.material) / 100;
+
+      const next: Segments = { ...segs, m: encodeMotionState(state) };
+      return textResult(`${header(next, 'motion')}\n\n${motionSummary(state, computeMotionPrimitives(state))}`);
     }
   );
 }

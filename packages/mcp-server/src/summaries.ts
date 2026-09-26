@@ -10,6 +10,8 @@ import type { UrlState as SymbolState } from '@core/url-state/symbol';
 import type { SpaceUrlState } from '@core/url-state/space';
 import type { ComputedLevel } from '@core/scale';
 import type { SpacingToken } from '@core/spacing';
+import { SEMANTIC_MOTION, semanticRefs, type MotionCharacter, type MotionPrimitive } from '@core/motion';
+import { motionLabel } from '@core/motion-code-export';
 import { computeIconTokens, weightToStroke } from '@core/icon-tokens';
 import { ICON_SETS, getSetById, type IconSetDefinition } from '@core/icon-sets';
 import { recommendSets } from '@core/recommend';
@@ -120,5 +122,20 @@ export function symbolSummary(state: SymbolState): string {
   lines.push(`${set.description} · install: npm install ${set.npmPackage}`);
   lines.push(`Style ${set.style} · weight ${set.strokeWeight} · corners ${set.cornerStyle}`);
   lines.push(`Sizes (base ${state.iconBaseSize}rem, scale ×${state.iconScale}${state.snapTo4px ? ', 4px snap' : ''}): ${tokens.sizes.map(s => `${s.name}:${s.px}px`).join(' ')} · stroke ${tokens.strokeWidth}px`);
+  return lines.join('\n');
+}
+
+export function motionSummary(character: MotionCharacter, primitives: MotionPrimitive[]): string {
+  const lines: string[] = [];
+  lines.push(`## Motion — ${motionLabel(character)}`);
+  lines.push('Springs are the source of truth: response (tempo in s) + damping ratio (1 = no overshoot). Spatial springs move things, effect springs change opacity/color and never overshoot.');
+  lines.push('');
+  lines.push('Primitive | Response | Damping | At rest | Overshoot');
+  for (const p of primitives) {
+    lines.push(`motion.${p.name} | ${p.response.toFixed(3)}s | ${p.damping.toFixed(2)} | ${p.settleMs}ms | ${(p.overshoot * 100).toFixed(1)}%`);
+  }
+  lines.push('');
+  lines.push(`Semantic: ${SEMANTIC_MOTION.map(s => `${s.name} (${semanticRefs(s)})`).join(' · ')}`);
+  lines.push('Reduced motion: paths jump, effects stay; press, move and expand crossfade instead.');
   return lines.join('\n');
 }

@@ -28,6 +28,7 @@ Docs and install guide: https://standby.design/docs/mcp
 | `generate_shape_tokens` | Radii, shadows, borders, focus rings — styles: paper / glass / neomorph / neobrutalism |
 | `generate_icon_tokens` | Icon set recommendation/selection + sizing tokens (xs–2xl, stroke) |
 | `generate_space_tokens` | Spacing tokens, breakpoints, containers, prose measure, aspect ratios |
+| `generate_motion_tokens` | Spring-based motion tokens from energy (calm → lively) and material (firm → elastic): 6 primitive springs, 11 semantic tokens, reduced-motion rule |
 | `get_design_system` | Decode any standby.design URL into a full overview |
 | `export_design_system` | Full code export: `css`, `tailwind`, `design-tokens` (DTCG), `llm-briefing`, `font-embed` |
 | `list_fonts` | Fontshare slugs for `generate_type_scale` |
