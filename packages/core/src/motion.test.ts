@@ -10,6 +10,7 @@ import {
   findPrimitive,
   fitCubicBezier,
   presetFor,
+  reducedMotionFor,
   responseForEnergy,
   reversedProgress,
   springProgress,
@@ -95,6 +96,18 @@ describe('semantic motion', () => {
   });
 });
 
+describe('reducedMotionFor', () => {
+  it('turns spatial-only tokens into a crossfade of the same speed', () => {
+    const move = SEMANTIC_MOTION.find((s) => s.name === 'move')!;
+    expect(reducedMotionFor(move)).toEqual({ strategy: 'crossfade', effect: 'default' });
+  });
+
+  it('keeps the effect part of tokens that have one', () => {
+    const nav = SEMANTIC_MOTION.find((s) => s.name === 'navigate.forward')!;
+    expect(reducedMotionFor(nav)).toEqual({ strategy: 'effect-only', effect: 'fast' });
+  });
+});
+
 describe('presets', () => {
   it('has four corners and a balanced middle', () => {
     expect(MOTION_PRESETS).toHaveLength(5);
@@ -162,6 +175,8 @@ describe('motion exports', () => {
     expect(css).toContain('@supports not (transition-timing-function: linear(0, 1))');
     expect(css).toMatch(/@media \(prefers-reduced-motion: reduce\)[\s\S]*--motion-spatial-slow-duration: 0ms/);
     expect(css).not.toMatch(/prefers-reduced-motion[\s\S]*--motion-effect-fast-duration: 0ms/);
+    expect(css).toContain('--motion-move-reduced: var(--motion-effect-default);');
+    expect(css).not.toContain('--motion-enter-reduced');
   });
 
   it('SwiftUI, Compose and Motion use the same springs', () => {
@@ -175,7 +190,8 @@ describe('motion exports', () => {
     expect(doc.motion.press.$value).toBe('{motion.spatial.fast}');
     expect(doc.motion.navigate.forward.spatial.$value).toBe('{motion.spatial.slow}');
     expect(doc.motion.reduced.enter.$value).toBe('{motion.effect.default}');
-    expect(doc.motion.reduced.press.$value.duration.value).toBe(0);
+    expect(doc.motion.reduced.press.$value).toBe('{motion.effect.fast}');
+    expect(doc.motion.reduced.expand.$value).toBe('{motion.effect.slow}');
     expect(doc.motion.spatial.fast.$value.timingFunction).toHaveLength(4);
   });
 });

@@ -23,6 +23,7 @@ export interface PreviewModel {
   direction: 1 | -1;
   spatial?: Track;
   effect?: Track;
+  crossfade?: Track;
   spatialReduced: boolean;
 }
 
@@ -60,21 +61,29 @@ export function buildPreviewModel(
 ): PreviewModel {
   const { semantic, kind, speed } = previewTarget(name);
   if (semantic) {
+    const crossfadeSpeed = reduceMotion && semantic.spatial && !semantic.effect ? semantic.spatial : null;
     return {
       demo: demoFor(semantic),
       direction: semantic.direction ?? 1,
       spatial: semantic.spatial ? track(findPrimitive(primitives, 'spatial', semantic.spatial), turnMs, reduceMotion) : undefined,
       effect: semantic.effect ? track(findPrimitive(primitives, 'effect', semantic.effect), turnMs, false) : undefined,
+      crossfade: crossfadeSpeed ? track(findPrimitive(primitives, 'effect', crossfadeSpeed), turnMs, false) : undefined,
       spatialReduced: reduceMotion && !!semantic.spatial,
     };
   }
   const p = findPrimitive(primitives, kind!, speed!);
   if (kind === 'spatial') {
-    return { demo: 'move', direction: 1, spatial: track(p, turnMs, reduceMotion), spatialReduced: reduceMotion };
+    return {
+      demo: 'move',
+      direction: 1,
+      spatial: track(p, turnMs, reduceMotion),
+      crossfade: reduceMotion ? track(findPrimitive(primitives, 'effect', speed!), turnMs, false) : undefined,
+      spatialReduced: reduceMotion,
+    };
   }
   return { demo: 'effect', direction: 1, effect: track(p, turnMs, false), spatialReduced: false };
 }
 
 export function modelDuration(m: PreviewModel): number {
-  return Math.max(m.spatial?.settleMs ?? 0, m.effect?.settleMs ?? 0);
+  return Math.max(m.spatial?.settleMs ?? 0, m.effect?.settleMs ?? 0, m.crossfade?.settleMs ?? 0);
 }

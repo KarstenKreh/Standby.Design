@@ -44,7 +44,7 @@ export function CodeExport({ restoreUrl }: { restoreUrl: string }) {
         <TabsContent value="tokens"><CodeBlock code={code.tokens} mode="json" /></TabsContent>
       </Tabs>
       <p className="text-caption text-muted-foreground mt-3">
-        CSS uses linear() to draw the exact spring and falls back to a fitted cubic-bezier. Design Tokens carry the cubic-bezier fit for tools without springs, plus the spring values as an extension. Every format includes a reduced-motion variant: effects only, no paths.
+        CSS uses linear() to draw the exact spring and falls back to a fitted cubic-bezier. Design Tokens carry the cubic-bezier fit for tools without springs, plus the spring values as an extension. Every format includes a reduced-motion variant: no paths, effects stay, and press, move and expand become a crossfade.
       </p>
     </div>
   );

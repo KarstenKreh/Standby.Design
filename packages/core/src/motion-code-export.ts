@@ -5,6 +5,7 @@ import {
   findPrimitive,
   fitCubicBezier,
   presetFor,
+  reducedMotionFor,
   stiffnessOf,
   type MotionCharacter,
   type MotionPrimitive,
@@ -52,7 +53,7 @@ function semanticParts(s: SemanticMotion, primitives: MotionPrimitive[]) {
 
 export function generateMotionCss(opts: MotionExportOptions): string {
   const { primitives } = opts;
-  let css = `/*\n${headerLines(opts).map((l) => ` * ${l}`).join('\n')}\n *\n * Usage: transition: transform var(--motion-move);\n *        transition: transform var(--motion-enter-spatial), opacity var(--motion-enter-effect);\n */\n:root {\n`;
+  let css = `/*\n${headerLines(opts).map((l) => ` * ${l}`).join('\n')}\n *\n * Usage: transition: transform var(--motion-move);\n *        transition: transform var(--motion-enter-spatial), opacity var(--motion-enter-effect);\n *\n * Reduced motion: paths jump (0 ms), effects stay. press, move and expand\n * have no effect part, so crossfade old and new state with opacity var(--motion-<name>-reduced).\n */\n:root {\n`;
 
   for (const p of primitives) {
     const id = kebab(p.name);
@@ -71,6 +72,11 @@ export function generateMotionCss(opts: MotionExportOptions): string {
       const ref = s.spatial ? `spatial-${s.spatial}` : `effect-${s.effect}`;
       css += `  --motion-${id}: var(--motion-${ref});\n`;
     }
+  }
+  css += `\n`;
+  for (const s of SEMANTIC_MOTION) {
+    const r = reducedMotionFor(s);
+    if (r.strategy === 'crossfade') css += `  --motion-${kebab(s.name)}-reduced: var(--motion-effect-${r.effect});\n`;
   }
   css += `}\n`;
 
@@ -107,9 +113,15 @@ export function generateMotionSwiftUI(opts: MotionExportOptions): string {
       out += `    static let ${camel(s.name)} = Animation.${ref}\n`;
     }
   }
-  out += `}\n\n`;
+  out += `\n    enum Reduced {\n`;
+  for (const s of SEMANTIC_MOTION) {
+    const r = reducedMotionFor(s);
+    if (r.strategy === 'crossfade') out += `        static let ${camel(s.name)} = Animation.effect${pascal(r.effect)}\n`;
+  }
+  out += `    }\n}\n\n`;
   out += `// Reduce Motion: read @Environment(\\.accessibilityReduceMotion).\n`;
-  out += `// When it is on, skip spatial animations (move without animation) and keep the effect animations.\n`;
+  out += `// When it is on, spatial changes happen without animation and effects keep theirs.\n`;
+  out += `// press, move and expand crossfade instead: .transition(.opacity) with Motion.Reduced.\n`;
   return out;
 }
 
@@ -129,8 +141,14 @@ export function generateMotionCompose(opts: MotionExportOptions): string {
       out += `    fun <T> ${camel(s.name)}(): SpringSpec<T> = ${ref}()\n`;
     }
   }
+  out += `\n`;
+  for (const s of SEMANTIC_MOTION) {
+    const r = reducedMotionFor(s);
+    if (r.strategy === 'crossfade') out += `    fun <T> ${camel(s.name)}Reduced(): SpringSpec<T> = effect${pascal(r.effect)}()\n`;
+  }
   out += `}\n\n`;
-  out += `// Reduce motion: when the system animator scale is 0, skip spatial specs (snap) and keep the effect specs.\n`;
+  out += `// Reduce motion: when the system animator scale is 0, spatial specs snap and effect specs stay.\n`;
+  out += `// press, move and expand crossfade instead (Crossfade or fadeIn/fadeOut) with the *Reduced specs.\n`;
   return out;
 }
 
@@ -156,8 +174,16 @@ export function generateMotionJs(opts: MotionExportOptions): string {
     }
   }
   out += `};\n\n`;
+  out += `export const motionReduced = {\n`;
+  for (const s of SEMANTIC_MOTION) {
+    const r = reducedMotionFor(s);
+    const key = s.name.includes('.') ? `"${s.name}"` : s.name;
+    out += `  ${key}: effect.${r.effect},\n`;
+  }
+  out += `};\n\n`;
   out += `// Reduce motion: wrap the app in <MotionConfig reducedMotion="user">.\n`;
-  out += `// Motion then skips transform animations and keeps opacity, which matches these tokens.\n`;
+  out += `// Motion then skips transform animations and keeps opacity. For press, move and expand\n`;
+  out += `// crossfade old and new state (AnimatePresence) with motionReduced.\n`;
   return out;
 }
 
@@ -192,9 +218,11 @@ export function generateMotionDesignTokens(opts: MotionExportOptions): string {
     const full = parts.spatial && parts.effect
       ? { spatial: alias('spatial', s.spatial!), effect: alias('effect', s.effect!) }
       : parts.spatial ? alias('spatial', s.spatial!) : alias('effect', s.effect!);
-    const reducedToken = s.effect
-      ? alias('effect', s.effect)
-      : { $type: 'transition', $value: { duration: { value: 0, unit: 'ms' }, delay: { value: 0, unit: 'ms' }, timingFunction: [0, 0, 1, 1] } };
+    const r = reducedMotionFor(s);
+    const reducedToken = {
+      ...alias('effect', r.effect),
+      $description: r.strategy === 'crossfade' ? 'Crossfade old and new state instead of moving' : 'Effect only, the path jumps',
+    };
     setPath(semantic, s.name, { ...(full as object), $description: s.description });
     setPath(reduced, s.name, reducedToken);
   }
@@ -205,7 +233,7 @@ export function generateMotionDesignTokens(opts: MotionExportOptions): string {
       spatial,
       effect,
       ...semantic,
-      reduced: { $description: 'Reduced motion: effects only, no paths. Use when prefers-reduced-motion is set.', ...reduced },
+      reduced: { $description: 'Reduced motion: no paths. Effects stay, spatial-only tokens become a crossfade. Use when prefers-reduced-motion is set.', ...reduced },
     },
   };
   return JSON.stringify(doc, null, 2) + '\n';

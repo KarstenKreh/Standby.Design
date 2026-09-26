@@ -157,6 +157,18 @@ export function semanticRefs(s: SemanticMotion): string {
   return [s.spatial && `spatial.${s.spatial}`, s.effect && `effect.${s.effect}`].filter(Boolean).join(' + ');
 }
 
+export type ReducedStrategy = 'effect-only' | 'crossfade';
+
+export interface ReducedMotion {
+  strategy: ReducedStrategy;
+  effect: SpringSpeed;
+}
+
+export function reducedMotionFor(s: SemanticMotion): ReducedMotion {
+  if (s.effect) return { strategy: 'effect-only', effect: s.effect };
+  return { strategy: 'crossfade', effect: s.spatial! };
+}
+
 export function cssLinearEasing(s: Spring, durationMs: number, points = 48): string {
   const fn = springProgress(s);
   const values: string[] = [];
