@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "node build-rules.mjs"
+    "build": "node build-rules.mjs && node build-research.mjs"
   },
   "devDependencies": {
     "marked": "^18.0.14"

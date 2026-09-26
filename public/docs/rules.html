@@ -95,7 +95,7 @@
     p, li { color: var(--muted-foreground); margin-bottom: 0.75em; }
     strong { color: var(--foreground); font-weight: 500; }
     ul, ol { padding-left: 1.25rem; margin-bottom: 0.75em; }
-    a { color: var(--emphasis); }
+    a { color: var(--emphasis); overflow-wrap: anywhere; }
     code { font-family: var(--font-mono); font-size: 0.9em; }
     pre {
       font-family: var(--font-mono);
@@ -182,7 +182,7 @@
     <h1>Design Rules</h1>
     <p class="lead">Übersicht über das qualitative Regelwerk für Layout und Bedienung. Eine Notiz pro Regel, hier die Tabelle mit Geltungsbereich und Einzeiler.</p>
 
-    <p class="agent-hint">Für Agenten: alle Regeln in einer Datei als <a href="/docs/rules.md">Markdown</a>.</p>
+    <p class="agent-hint">Für Agenten: alle Regeln in einer Datei als <a href="/docs/rules.md">Markdown</a>. Die Begründungen hinter den Werkzeugen stehen unter <a href="/docs/research">Research</a>.</p>
 <aside class="callout callout-summary"><p class="callout-title">Was ist das?</p><p>Das qualitative Gegenstück zum Token-Generator. Der Generator liefert die messbaren Werte — Farben, Skalen, Radien, Schatten. Diese Sammlung liefert die Regeln, die man nicht exportieren kann: welches Verhalten wofür, wie eine Karte innen aufgebaut ist, wie Elemente gruppiert werden, wann Farbe etwas bedeuten darf. Zielgruppe sind Agenten, die Layouts bauen, und Menschen, die deren Ergebnis prüfen.</p>
 </aside>
 <hr>
@@ -491,6 +491,7 @@
       <a href="/">Home</a>
       <a href="/docs/mcp">MCP Server</a>
       <a href="/docs/rules">Design Rules</a>
+      <a href="/docs/research">Research</a>
       <a href="/impressum.html">Impressum</a>
       <a href="/datenschutz.html">Datenschutz</a>
     </nav>
