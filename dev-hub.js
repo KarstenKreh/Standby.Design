@@ -20,6 +20,7 @@ const TOOL_PORTS = {
   symbol: 5178,
   space: 5179,
   role: 5180,
+  motion: 5181,
   system: 5175,
   qa: 5180,
 };

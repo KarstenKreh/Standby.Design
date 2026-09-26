@@ -19,6 +19,7 @@ function App() {
     s: segments.s ?? undefined,
     y: segments.y ?? undefined,
     p: segments.p ?? undefined,
+    m: segments.m ?? undefined,
   }), [segments]);
 
   const handleShare = useCallback(() => {

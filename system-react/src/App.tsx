@@ -106,6 +106,7 @@ function App() {
   const [shapeSegment, setShapeSegment] = useState<string | null>(null);
   const [symbolSegment, setSymbolSegment] = useState<string | null>(null);
   const [spaceSegment, setSpaceSegment] = useState<string | null>(null);
+  const [motionSegment, setMotionSegment] = useState<string | null>(null);
   const [themeName, setThemeName] = useState('');
 
   useFontLoader(typeState?.headingFont, typeState?.bodyFont, typeState?.monoFont);
@@ -117,6 +118,7 @@ function App() {
     const ss = getMySegment(raw, 's');
     const ys = getMySegment(raw, 'y');
     const ps = getMySegment(raw, 'p');
+    setMotionSegment(getMySegment(raw, 'm'));
     setColorSegment(cs);
     setTypeSegment(ts);
     setShapeSegment(ss);
@@ -232,14 +234,14 @@ function App() {
       const newColorSegment = encodeColorState(updated);
       setColorSegment(newColorSegment);
       history.replaceState(null, '', '#' + buildUnifiedHash({
-        c: newColorSegment, t: typeSegment || undefined, s: shapeSegment || undefined, y: symbolSegment || undefined, p: spaceSegment || undefined,
+        c: newColorSegment, t: typeSegment || undefined, s: shapeSegment || undefined, y: symbolSegment || undefined, p: spaceSegment || undefined, m: motionSegment || undefined,
       }));
     }
-  }, [colorState, typeSegment, shapeSegment, symbolSegment, spaceSegment]);
+  }, [colorState, typeSegment, shapeSegment, symbolSegment, spaceSegment, motionSegment]);
 
   const getCurrentHash = useCallback(() => {
-    return buildUnifiedHash({ c: colorSegment || undefined, t: typeSegment || undefined, s: shapeSegment || undefined, y: symbolSegment || undefined, p: spaceSegment || undefined });
-  }, [colorSegment, typeSegment, shapeSegment, symbolSegment, spaceSegment]);
+    return buildUnifiedHash({ c: colorSegment || undefined, t: typeSegment || undefined, s: shapeSegment || undefined, y: symbolSegment || undefined, p: spaceSegment || undefined, m: motionSegment || undefined });
+  }, [colorSegment, typeSegment, shapeSegment, symbolSegment, spaceSegment, motionSegment]);
 
   const handleShare = useCallback(() => {
     const hash = getCurrentHash();

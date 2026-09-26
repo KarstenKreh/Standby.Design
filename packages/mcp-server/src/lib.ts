@@ -31,11 +31,12 @@ export interface Segments {
   s: string | null;
   y: string | null;
   p: string | null;
+  m: string | null;
 }
 
 /** Accepts a full standby.design URL or a raw (unified) hash, returns segments. */
 export function parseInput(input?: string): Segments {
-  if (!input) return { c: null, t: null, s: null, y: null, p: null };
+  if (!input) return { c: null, t: null, s: null, y: null, p: null, m: null };
   let hash = input.trim();
   if (/^https?:\/\//i.test(hash)) {
     const idx = hash.indexOf('#');
@@ -52,6 +53,7 @@ export function buildHash(segs: Segments): string {
     s: segs.s ?? undefined,
     y: segs.y ?? undefined,
     p: segs.p ?? undefined,
+    m: segs.m ?? undefined,
   });
 }
 

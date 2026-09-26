@@ -1,13 +1,13 @@
 /**
  * Unified hash format for cross-tool state sharing.
  *
- * Format: c=<color-hash>&t=<type-hash>&s=<shape-hash>&y=<symbol-hash>&p=<space-hash>
+ * Format: c=<color-hash>&t=<type-hash>&s=<shape-hash>&y=<symbol-hash>&p=<space-hash>&m=<motion-hash>
  *
  * Each tool reads/writes only its own segment and preserves the rest.
  * Legacy hashes (without c=, t=, s=, y=, or p= prefix) are detected by the caller.
  */
 
-export type SegmentKey = 'c' | 't' | 's' | 'y' | 'p';
+export type SegmentKey = 'c' | 't' | 's' | 'y' | 'p' | 'm';
 
 interface UnifiedSegments {
   c: string | null;
@@ -15,9 +15,10 @@ interface UnifiedSegments {
   s: string | null;
   y: string | null;
   p: string | null;
+  m: string | null;
 }
 
-const SEGMENT_KEYS: readonly string[] = ['c', 't', 's', 'y', 'p'];
+const SEGMENT_KEYS: readonly string[] = ['c', 't', 's', 'y', 'p', 'm'];
 
 function isSegmentKey(key: string): key is SegmentKey {
   return SEGMENT_KEYS.includes(key);
@@ -26,13 +27,13 @@ function isSegmentKey(key: string): key is SegmentKey {
 /** Check whether a raw hash string uses the unified format. */
 export function isUnifiedHash(raw: string): boolean {
   const str = raw.replace(/^#/, '');
-  return /(?:^|&)[ctsyp]=/.test(str);
+  return /(?:^|&)[ctsypm]=/.test(str);
 }
 
 /** Parse unified hash into segments. Returns null values for missing keys. */
 export function parseUnifiedHash(raw: string): UnifiedSegments {
   const str = raw.replace(/^#/, '');
-  const result: UnifiedSegments = { c: null, t: null, s: null, y: null, p: null };
+  const result: UnifiedSegments = { c: null, t: null, s: null, y: null, p: null, m: null };
   if (!isUnifiedHash(str)) return result;
 
   let currentKey: SegmentKey | null = null;
@@ -50,13 +51,14 @@ export function parseUnifiedHash(raw: string): UnifiedSegments {
 }
 
 /** Build a unified hash string (without leading #). */
-export function buildUnifiedHash(segments: { c?: string | null; t?: string | null; s?: string | null; y?: string | null; p?: string | null }): string {
+export function buildUnifiedHash(segments: { c?: string | null; t?: string | null; s?: string | null; y?: string | null; p?: string | null; m?: string | null }): string {
   const parts: string[] = [];
   if (segments.c) parts.push('c=' + segments.c);
   if (segments.t) parts.push('t=' + segments.t);
   if (segments.s) parts.push('s=' + segments.s);
   if (segments.y) parts.push('y=' + segments.y);
   if (segments.p) parts.push('p=' + segments.p);
+  if (segments.m) parts.push('m=' + segments.m);
   return parts.join('&');
 }
 

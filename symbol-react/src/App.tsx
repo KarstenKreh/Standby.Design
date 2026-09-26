@@ -24,6 +24,7 @@ function App() {
       s: otherSegments.s || undefined,
       y: symbolEncoded,
       p: otherSegments.p || undefined,
+      m: otherSegments.m || undefined,
     });
   }, [store, otherSegments]);
 

@@ -12,6 +12,7 @@ standby.design/              Hub landing page (static HTML)
 ├── /type                     Fluid Type Scale Generator (React SPA)
 ├── /shape                    Shape Token Generator (React SPA)
 ├── /symbol                   Icon Style Recommender (React SPA)
+├── /motion                   Motion Token Generator (React SPA)
 ├── /system                   Design System Viewer (React SPA)
 ├── /api/fonts                Fontshare catalog proxy (CORS workaround)
 ├── /color/og-image?c=HEX    Dynamic OG image endpoint (SVG → PNG via sharp)
@@ -26,6 +27,7 @@ standby.design/              Hub landing page (static HTML)
 | **Type** | `type-react/` | `/type` | Fluid type scales with `clamp()`, three scale modes, Fontshare font preview, spacing derivation |
 | **Shape** | `shape-react/` | `/shape` | Shape tokens with style selector (Paper/Glass/Neomorph/Neobrutalism): shadows, borders, radii, liquid glass, focus rings |
 | **Symbol** | `symbol-react/` | `/symbol` | Icon style recommender: curated sets (Material/Lucide/Phosphor) with style variants, sizing tokens |
+| **Motion** | `motion-react/` | `/motion` | Spring-based motion tokens from two character axes (energy, material): six primitive springs, semantic tokens, CSS/SwiftUI/Compose/Motion/design-token export |
 | **System** | `system-react/` | `/system` | Combined design system viewer: merges color + type + shape + symbol into a single export |
 | **Hub** | `index.html` | `/` | Landing page linking to all tools |
 | **Legacy** | `color/` | — | Original vanilla JS color tool (superseded, kept for reference only — never edit) |
@@ -44,7 +46,7 @@ All four React apps share identical dependencies:
 ### Shared Patterns
 
 - **State**: Zustand stores with `setFullState()` for bulk updates from URL decode (Color + Type). System app is read-only (no store).
-- **Unified URL persistence**: All tools share a unified hash format: `#c=<color-hash>&t=<type-hash>&s=<shape-hash>&y=<symbol-hash>`. Each tool reads/writes only its own segment, preserves the rest. Legacy hashes are auto-detected for backward compatibility. See `packages/core/src/unified-hash.ts`.
+- **Unified URL persistence**: All tools share a unified hash format: `#c=<color-hash>&t=<type-hash>&s=<shape-hash>&y=<symbol-hash>&p=<space-hash>&m=<motion-hash>`. Each tool reads/writes only its own segment, preserves the rest. Legacy hashes are auto-detected for backward compatibility. See `packages/core/src/unified-hash.ts`.
 - **Cross-tool navigation**: Color → Type → System flow via links that carry the full hash. Each link encodes the current tool's state and passes through the other segments.
 - **Export**: CSS custom properties, Tailwind v4 `@theme`, design tokens JSON, LLM Briefing (Markdown). System app provides a merged export combining color + type + shape tokens. All code blocks use shared syntax highlighting (`@core/syntax-highlight`) and a shared `CodeBlock` component (`@core/code-block`). "Copy All" dropdown bundles multiple export sections (format choice + checkboxes).
 - **UI**: shadcn/ui-style components in `components/ui/` (Button, Tabs, Slider, etc.)
@@ -478,6 +480,30 @@ Example: `a,a,a,125,1272,1,material-outlined`
 | Tailwind v4 | Same tokens in `@theme { }` block |
 | Design Tokens (DTCG) | W3C standard JSON format |
 | LLM Briefing | Markdown with set recommendation, sizing tokens, install command |
+
+---
+
+## Motion App — Motion Token Generator
+
+### Core Concept
+
+The source of truth is always a spring (`response` in seconds, `damping` as ratio). Durations and curves are derived output formats, never inputs. Logic lives in `packages/core/src/motion.ts`, exports in `packages/core/src/motion-code-export.ts`, hash state in `packages/core/src/url-state/motion.ts` (segment `m=energy,material` as percentages).
+
+### Two Axes
+
+| Axis | Range | Controls | Basis |
+|------|-------|----------|-------|
+| **Energy** | calm ↔ lively | `response` of every spring, 0.6 s → 0.25 s (log interpolation) | Speed is perceived as arousal (well replicated) |
+| **Material** | firm ↔ elastic | `damping` of spatial springs, 1.0 → 0.6 | Design convention, labeled as such in the app |
+
+Presets are positions on both axes (four corners at 15/85 plus Balanced at 50/50), with "often seen in" brand categories, not personality labels. Research notes: branch `lab/motion-lab`, `motion-lab/research-motion-perception.md`.
+
+### Tokens
+
+- **Primitives:** `spatial.fast/default/slow` (may overshoot) and `effect.fast/default/slow` (damping 1, never overshoot). Steps sit a factor of 1.5 apart on `response`; effects run 1.5× faster than spatial springs of the same step.
+- **Semantic:** press, move, expand, enter, exit, fade; patterns navigate.forward/back (x), sheet.open/close (y), container.
+- **Export:** CSS `linear()` sampled to the settle time with a fitted `cubic-bezier` fallback under `@supports not`, reduced motion sets spatial durations to 0 ms. SwiftUI (`response`/`dampingFraction`), Compose (`dampingRatio`/`stiffness`), Motion JS (`stiffness`/`damping`/`mass`), W3C design tokens with the bezier fit plus spring values in `$extensions` and a `reduced` group.
+- Not yet wired into System, LLM briefing or the MCP server.
 
 ---
 

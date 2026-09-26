@@ -3,7 +3,7 @@ import { useTypeStore } from '@/store/type-store';
 import { encodeState, decodeState } from '@/lib/url-state';
 import { isUnifiedHash, getMySegment, buildUnifiedHash } from '@core/unified-hash';
 
-interface OtherSegments { c?: string; s?: string; y?: string; p?: string }
+interface OtherSegments { c?: string; s?: string; y?: string; p?: string; m?: string }
 
 /** Encode the type store into its URL hash segment (also used by CodeExport's share link). */
 export const encodeTypeStore = (s: ReturnType<typeof useTypeStore.getState>) => encodeState({
@@ -48,6 +48,7 @@ export function useUrlState() {
       s: unified ? (getMySegment(raw, 's') || undefined) : undefined,
       y: unified ? (getMySegment(raw, 'y') || undefined) : undefined,
       p: unified ? (getMySegment(raw, 'p') || undefined) : undefined,
+      m: unified ? (getMySegment(raw, 'm') || undefined) : undefined,
     };
     othersRef.current = captured;
     setOthers(captured);
@@ -89,7 +90,7 @@ export function useUrlState() {
     const currentStore = useTypeStore.getState();
     const encoded = encodeStore(currentStore);
     history.replaceState(null, '', '#' + buildUnifiedHash({
-      c: captured.c, t: encoded, s: captured.s, y: captured.y, p: captured.p,
+      c: captured.c, t: encoded, s: captured.s, y: captured.y, p: captured.p, m: captured.m,
     }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -99,7 +100,7 @@ export function useUrlState() {
     if (skipNextWrite.current) { skipNextWrite.current = false; return; }
     const encoded = encodeStore(store);
     history.replaceState(null, '', '#' + buildUnifiedHash({
-      c: othersRef.current.c, t: encoded, s: othersRef.current.s, y: othersRef.current.y, p: othersRef.current.p,
+      c: othersRef.current.c, t: encoded, s: othersRef.current.s, y: othersRef.current.y, p: othersRef.current.p, m: othersRef.current.m,
     }));
   }, [
     store.scaleMode, store.baseSize, store.mobileBaseSize, store.customRatio,
