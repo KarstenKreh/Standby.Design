@@ -1,5 +1,5 @@
 import { useMotionStore } from '@/store/motion-store';
-import { Slider } from '@/components/ui/slider';
+import { SliderWithInput } from '@/components/ui/slider-with-input';
 import { CharacterMap } from '@/components/character-map';
 
 function Axis({ label, left, right, hint, value, onChange }: {
@@ -12,17 +12,14 @@ function Axis({ label, left, right, hint, value, onChange }: {
 }) {
   return (
     <div className="space-y-2">
-      <div className="flex items-baseline justify-between">
-        <span className="text-body-s font-medium">{label}</span>
-        <span className="text-caption font-mono text-muted-foreground">{Math.round(value * 100)}</span>
-      </div>
-      <Slider
+      <SliderWithInput
+        label={label}
+        value={Math.round(value * 100)}
         min={0}
         max={100}
         step={1}
-        value={[Math.round(value * 100)]}
-        onValueChange={(v) => onChange((Array.isArray(v) ? v[0] : (v as number)) / 100)}
-        aria-label={label}
+        onChange={(v) => onChange(Math.round(v) / 100)}
+        inputWidthClass="w-[4rem]"
       />
       <div className="flex justify-between text-caption text-muted-foreground">
         <span>{left}</span>

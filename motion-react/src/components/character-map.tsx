@@ -3,6 +3,7 @@ import { MOTION_PRESETS, presetFor } from '@core/motion';
 import { useMotionStore } from '@/store/motion-store';
 import { SPATIAL_COLOR } from '@/components/motion-graph';
 
+const SNAP_RADIUS_PX = 14;
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
 const toPercent = (v: number) => `${v * 100}%`;
 
@@ -17,9 +18,13 @@ export function CharacterMap() {
   const moveTo = useCallback((clientX: number, clientY: number) => {
     const rect = areaRef.current?.getBoundingClientRect();
     if (!rect) return;
-    setCharacter({
-      material: Math.round(clamp01((clientX - rect.left) / rect.width) * 100) / 100,
-      energy: Math.round(clamp01((clientY - rect.top) / rect.height) * 100) / 100,
+    const material = clamp01((clientX - rect.left) / rect.width);
+    const energy = clamp01((clientY - rect.top) / rect.height);
+    const snapped = MOTION_PRESETS.find((p) =>
+      Math.hypot((p.material - material) * rect.width, (p.energy - energy) * rect.height) <= SNAP_RADIUS_PX);
+    setCharacter(snapped ?? {
+      material: Math.round(material * 100) / 100,
+      energy: Math.round(energy * 100) / 100,
     });
   }, [setCharacter]);
 
@@ -102,7 +107,7 @@ export function CharacterMap() {
       <p className="text-caption mt-2 min-h-5">
         {active ? <><span className="font-medium">{active.label}</span><span className="text-muted-foreground"> · often: {active.seenIn}</span></> : <span className="text-muted-foreground">Custom position</span>}
       </p>
-      <p className="text-caption text-muted-foreground mt-1">Drag the point or click a preset. Arrow keys move in steps of 1, with Shift in steps of 10.</p>
+      <p className="text-caption text-muted-foreground mt-1">Drag the point or click a preset. Near a preset the point snaps into place. Arrow keys move in steps of 1, with Shift in steps of 10.</p>
     </div>
   );
 }
