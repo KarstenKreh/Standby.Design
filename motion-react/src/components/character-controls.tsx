@@ -1,7 +1,6 @@
-import { MOTION_PRESETS, presetFor } from '@core/motion';
 import { useMotionStore } from '@/store/motion-store';
 import { Slider } from '@/components/ui/slider';
-import { cn } from '@/lib/utils';
+import { CharacterMap } from '@/components/character-map';
 
 function Axis({ label, left, right, hint, value, onChange }: {
   label: string;
@@ -39,31 +38,10 @@ export function CharacterControls() {
   const material = useMotionStore((s) => s.material);
   const setEnergy = useMotionStore((s) => s.setEnergy);
   const setMaterial = useMotionStore((s) => s.setMaterial);
-  const setCharacter = useMotionStore((s) => s.setCharacter);
-  const active = presetFor({ energy, material });
 
   return (
     <div className="space-y-6">
-      <div>
-        <span className="text-caption text-muted-foreground block mb-1.5">Presets</span>
-        <div className="grid grid-cols-2 gap-1.5">
-          {MOTION_PRESETS.map((p) => (
-            <button
-              key={p.id}
-              type="button"
-              onClick={() => setCharacter(p)}
-              className={cn(
-                'text-left rounded-md border px-3 py-2 transition-colors cursor-pointer',
-                p.id === 'balanced' && 'col-span-2',
-                active?.id === p.id ? 'border-primary bg-primary/10' : 'border-border hover:bg-muted',
-              )}
-            >
-              <span className="block text-body-s font-medium">{p.label}</span>
-              <span className="block text-caption text-muted-foreground">often: {p.seenIn}</span>
-            </button>
-          ))}
-        </div>
-      </div>
+      <CharacterMap />
 
       <Axis
         label="Energy"
