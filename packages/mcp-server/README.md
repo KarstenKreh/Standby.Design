@@ -12,8 +12,8 @@ exportable as **CSS custom properties** or **Tailwind v4 themes** — shadcn/ui
 compatible. Typography and spacing are additionally available as
 **W3C design tokens (DTCG)**.
 
-All computation is shared with the standby.design web apps (`packages/core` +
-`system-react/src/lib`), so results are identical to what the UI produces.
+All computation is shared with the standby.design web apps (`packages/core`),
+so results are identical to what the UI produces.
 Every tool returns a shareable `standby.design/system` URL — open it in the
 browser to view and fine-tune the system visually; the URL *is* the state.
 
@@ -42,7 +42,7 @@ section, so calls chain: color → type → shape → … accumulate into one UR
 ```bash
 cd packages/mcp-server
 npm install
-npm run build        # bundles @core + system-react/src/lib into dist/index.js
+npm run build        # bundles @core into dist/index.js
 npm run smoke        # end-to-end protocol test against the built server
 ```
 

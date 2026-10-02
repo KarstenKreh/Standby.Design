@@ -3,6 +3,7 @@ import { buildThemePalettes, accentCssName } from './theme-palettes';
 import { DEFAULT_COLOR_STATE, MAX_ACCENTS, decodeState, encodeState, type DecodedState } from './url-state/color';
 import { computeAutoAccentHex, resolveAccentHues } from './palette';
 import { hexToOklch } from './color-math';
+import { colorSemanticExport } from './color-code-export';
 
 function state(overrides: Partial<DecodedState> = {}): DecodedState {
   return { ...DEFAULT_COLOR_STATE, ...overrides };
@@ -46,6 +47,16 @@ describe('buildThemePalettes', () => {
   it('derives css names from accent names', () => {
     expect(accentCssName('Brand Gold!')).toBe('brand-gold');
     expect(accentCssName('***')).toBe('accent');
+  });
+});
+
+describe('destructive tokens', () => {
+  it('are exported for every theme, also without any accent', () => {
+    const s = state({ extraAccents: [] });
+    const css = colorSemanticExport(s, buildThemePalettes(s));
+    for (const token of ['--destructive:', '--destructive-foreground:', '--destructive-hover:', '--destructive-pressed:', '--destructive-subtle:', '--destructive-emphasis:', '--destructive-border:']) {
+      expect(css.split(token).length - 1).toBe(2);
+    }
   });
 });
 

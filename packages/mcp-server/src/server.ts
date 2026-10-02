@@ -1,8 +1,8 @@
 /**
  * Shared server factory for both transports (stdio + Streamable HTTP).
  *
- * All computation is shared with the standby.design web apps via packages/core
- * and system-react/src/lib; results are deterministic and URL-addressable.
+ * All computation is shared with the standby.design web apps via packages/core;
+ * results are deterministic and URL-addressable.
  */
 
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
