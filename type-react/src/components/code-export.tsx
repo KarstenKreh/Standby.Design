@@ -10,22 +10,20 @@ import { useTypeStore } from '@/store/type-store';
 import {
   generateCssExport,
   generateTailwindV4Export,
+  generateTypeDesignTokens,
   generateFontEmbed,
   generateLlmBriefing,
-} from '@/lib/code-export';
-import { generateDesignTokens } from '@/lib/design-token-export';
-import { encodeTypeStore } from '@/hooks/use-url-state';
-import { systemShareUrl, llmShareHeader } from '@core/share-link';
+  typeOptsFromState,
+} from '@core/type-code-export';
+import { hashSync } from '@/lib/hash-sync';
+import { useCurrentHash } from '@core/use-hash';
+import { systemUrlForHash, toolBriefing, withShareLink } from '@core/share-link';
 import { CodeBlock } from '@core/code-block';
-
-const SCALE_LABELS: Record<string, string> = {
-  traditional: 'Traditional',
-  custom: 'Custom Ratio',
-};
 
 export function CodeExport() {
   const levels = useComputedScale();
   const store = useTypeStore();
+  const hash = useCurrentHash(hashSync);
   const [tab, setTab] = useState('css');
 
   // Copy All state
@@ -34,45 +32,17 @@ export function CodeExport() {
   const [copyEmbed, setCopyEmbed] = useState(true);
   const [copyLlm, setCopyLlm] = useState(true);
 
-  const isGolden = store.scaleMode === 'custom' && store.customRatio === 1.272;
-  const scaleLabel = isGolden
-    ? '√φ Golden Ratio (area-based) — standby.design/type'
-    : store.scaleMode === 'traditional'
-      ? `${SCALE_LABELS.traditional} — standby.design/type`
-      : `${SCALE_LABELS[store.scaleMode] ?? store.scaleMode} (${store.customRatio}) — standby.design/type`;
+  const opts = useMemo(() => typeOptsFromState(store, levels), [store, levels]);
 
-  const opts = useMemo(
-    () => ({
-      levels,
-      headingFont: store.headingFont,
-      bodyFont: store.bodyFont,
-      monoFont: store.monoFont,
-      headingWeight: store.headingWeight,
-      scaleLabel,
-    }),
-    [levels, store.headingFont, store.bodyFont, store.monoFont, store.headingWeight, scaleLabel],
-  );
-
-  const cssCode = useMemo(() => generateCssExport(opts), [opts]);
-  const twCode = useMemo(() => generateTailwindV4Export(opts), [opts]);
-  const dtCode = useMemo(
-    () => generateDesignTokens({
-      levels,
-      headingFont: store.headingFont,
-      bodyFont: store.bodyFont,
-      monoFont: store.monoFont,
-      headingWeight: store.headingWeight,
-    }),
-    [levels, store.headingFont, store.bodyFont, store.monoFont, store.headingWeight],
-  );
+  const shareUrl = systemUrlForHash(hash);
+  const cssCode = useMemo(() => withShareLink('css', shareUrl, generateCssExport(opts)), [opts, shareUrl]);
+  const twCode = useMemo(() => withShareLink('tailwind', shareUrl, generateTailwindV4Export(opts)), [opts, shareUrl]);
+  const dtCode = useMemo(() => withShareLink('design-tokens', shareUrl, generateTypeDesignTokens(opts)), [opts, shareUrl]);
   const embedCode = useMemo(
-    () => generateFontEmbed(store.headingFont, store.bodyFont, store.monoFont),
-    [store.headingFont, store.bodyFont, store.monoFont],
+    () => withShareLink('font-embed', shareUrl, generateFontEmbed(store.headingFont, store.bodyFont, store.monoFont)),
+    [store.headingFont, store.bodyFont, store.monoFont, shareUrl],
   );
-  const llmCode = useMemo(
-    () => llmShareHeader(systemShareUrl('t', encodeTypeStore(store), window.location.hash)) + generateLlmBriefing(opts),
-    [opts, store],
-  );
+  const llmCode = useMemo(() => toolBriefing(hash, generateLlmBriefing(opts)), [opts, hash]);
 
   const handleCopyAll = useCallback(() => {
     const parts: string[] = [];

@@ -4,6 +4,9 @@ import { hexToOklch, contrastRatio, invertHex } from './color-math';
 import type { PaletteEntry } from './palette';
 import { stateLadder, type StateToken } from './state-ladder';
 import { encodeState as encodeColorState, type DecodedState as ColorSeedState, type FgContrastMode } from './url-state/color';
+import type { AccentPalette, ThemePalettes } from './theme-palettes';
+
+export type { AccentPalette };
 
 /**
  * Seed documentation header for code exports: records every input that went
@@ -30,16 +33,6 @@ export function generateSeedComment(
     ` */`,
   ];
   return lines.join('\n') + '\n\n';
-}
-
-export interface AccentPalette {
-  name: string;
-  hex: string;
-  cssName: string;
-  palette: PaletteEntry[];
-  slatedPalette: PaletteEntry[];
-  pin: boolean;
-  invert: boolean;
 }
 
 interface PaletteMap { [step: number]: PaletteEntry }
@@ -81,6 +74,11 @@ function fillFgPick(bgHex: string, pMap: PaletteMap, fgMode: FgContrastMode): Fg
 
   const winner = rated.find(c => c.cr >= AA_CONTRAST) || rated[0];
   return { step: winner.step, cr: winner.cr, passes: winner.cr >= AA_CONTRAST };
+}
+
+export function fillForegroundHex(bgHex: string, palette: PaletteEntry[], fgMode: FgContrastMode): string {
+  const pMap = palMap(palette);
+  return pMap[fillFgPick(bgHex, pMap, fgMode).step].hex;
 }
 
 function fillFgRow(name: string, bgHex: string | undefined, pMap: PaletteMap, pfx: string, fgMode: FgContrastMode): Row {
@@ -611,4 +609,51 @@ Chroma variants:
 - **Foreground contrast**: ${fgLabel}
 - **Surface chroma**: ${pct}%
 `;
+}
+
+function pinnedBrandHex(state: ColorSeedState): string | null {
+  return state.brandPin ? state.brandHex : null;
+}
+
+function pinnedErrorHex(state: ColorSeedState, pal: ThemePalettes): string | null {
+  return state.errorPin ? pal.effectiveErrorHex : null;
+}
+
+export function colorFillWarnings(state: ColorSeedState, pal: ThemePalettes): FillContrastWarning[] {
+  return collectFillContrastWarnings(
+    pal.accentPalettes, pal.brand, pal.error, pal.errorSurface,
+    state.brandPin, pinnedBrandHex(state), state.brandInvert,
+    state.errorPin, pinnedErrorHex(state, pal), state.errorInvert,
+    state.fgContrastMode,
+  );
+}
+
+export function colorPrimitivesExport(state: ColorSeedState, pal: ThemePalettes, format: 'oklch' | 'hex' = 'oklch'): string {
+  const customBgHex = pal.effectiveBgHex.toLowerCase() !== state.brandHex.toLowerCase() ? pal.effectiveBgHex : null;
+  const generate = format === 'oklch' ? generatePrimitivesOklch : generatePrimitivesHex;
+  return generateSeedComment(state, pal.effectiveBgHex, pal.effectiveErrorHex) + generate(
+    pal.brand, pal.surface, pal.error, pal.errorSurface, pal.neutralExtended,
+    pal.accentPalettes, state.chromaScale, customBgHex, state.themeName,
+  );
+}
+
+export function colorSemanticExport(state: ColorSeedState, pal: ThemePalettes): string {
+  return generateSemantic(
+    pal.accentPalettes, pal.brand, pal.error, pal.errorSurface, pal.surface,
+    state.brandPin, pinnedBrandHex(state), state.brandInvert,
+    state.errorPin, pinnedErrorHex(state, pal), state.errorInvert,
+    state.fgContrastMode, state.themeName,
+  );
+}
+
+export function colorCssExport(state: ColorSeedState, pal: ThemePalettes): string {
+  return colorPrimitivesExport(state, pal, 'oklch') + '\n' + colorSemanticExport(state, pal);
+}
+
+export function colorLlmBriefing(state: ColorSeedState, pal: ThemePalettes): string {
+  return generateLlmBriefing(
+    state.brandHex, pal.effectiveBgHex, pal.effectiveErrorHex, pal.accentPalettes,
+    state.chromaScale, state.currentMode, state.brandPin, state.errorPin,
+    state.themeName, state.fgContrastMode, colorFillWarnings(state, pal),
+  );
 }

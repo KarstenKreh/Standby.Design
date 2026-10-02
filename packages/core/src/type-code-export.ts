@@ -2,16 +2,82 @@
  * Code export generators for the type scale.
  */
 
-import type { ComputedLevel } from '@core/scale';
-import { fontFamily, buildFontshareEmbed } from '@core/fontshare';
+import { customScale, traditionalScale, resolveMobileRatio, DEFAULT_TRADITIONAL, DEFAULT_TRADITIONAL_MOBILE, type ComputedLevel } from './scale';
+import { applyTypography } from './typography';
+import { fontFamily, buildFontshareEmbed } from './fontshare';
+import type { UrlState as TypeState } from './url-state/type';
 
-interface ExportOptions {
+export interface TypeExportOptions {
   levels: ComputedLevel[];
   headingFont: string;
   bodyFont: string;
   monoFont: string;
   headingWeight: number;
   scaleLabel: string;
+}
+
+type ExportOptions = TypeExportOptions;
+
+export function computeTypeScale(state: TypeState): ComputedLevel[] {
+  const levels = state.scaleMode === 'traditional'
+    ? traditionalScale(state.traditionalAssignments ?? DEFAULT_TRADITIONAL, state.traditionalMobileAssignments ?? DEFAULT_TRADITIONAL_MOBILE)
+    : customScale(
+      state.baseSize,
+      state.customRatio,
+      resolveMobileRatio(state.mobileRatioMode, state.customRatio, state.autoShrink, state.mobileRatio),
+      state.mobileBaseSize,
+    );
+  return applyTypography(levels, state.lineHeightOverrides, state.letterSpacingOverrides);
+}
+
+export function typeScaleLabel(state: Pick<TypeState, 'scaleMode' | 'customRatio'>): string {
+  const scale = state.scaleMode === 'traditional'
+    ? 'Traditional'
+    : Math.abs(state.customRatio - 1.272) < 0.001
+      ? '√φ Golden Ratio (area-based)'
+      : `Custom Ratio (${state.customRatio})`;
+  return `${scale} — standby.design/type`;
+}
+
+export function typeOptsFromState(state: TypeState, levels: ComputedLevel[] = computeTypeScale(state)): TypeExportOptions {
+  return {
+    levels,
+    headingFont: state.headingFont,
+    bodyFont: state.bodyFont,
+    monoFont: state.monoFont,
+    headingWeight: state.headingWeight,
+    scaleLabel: typeScaleLabel(state),
+  };
+}
+
+export function typeDesignTokens(opts: TypeExportOptions): Record<string, unknown> {
+  const headingFF = fontFamily(opts.headingFont);
+  const bodyFF = fontFamily(opts.bodyFont);
+  const typography: Record<string, unknown> = {};
+  for (const l of opts.levels) {
+    typography[l.level] = {
+      $type: 'typography',
+      $value: {
+        fontFamily: l.isHeading ? headingFF : bodyFF,
+        fontSize: l.clampValue,
+        fontWeight: l.isHeading ? opts.headingWeight : 400,
+        lineHeight: l.lineHeight,
+        letterSpacing: `${l.letterSpacing}em`,
+      },
+    };
+  }
+  return {
+    font: {
+      heading: { $type: 'fontFamily', $value: headingFF },
+      body: { $type: 'fontFamily', $value: bodyFF },
+      mono: { $type: 'fontFamily', $value: fontFamily(opts.monoFont) },
+    },
+    typography,
+  };
+}
+
+export function generateTypeDesignTokens(opts: TypeExportOptions): string {
+  return JSON.stringify(typeDesignTokens(opts), null, 2);
 }
 
 /** CSS Custom Properties */

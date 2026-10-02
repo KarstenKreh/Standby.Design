@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Checkbox } from '@/components/ui/checkbox';
 import { CodeBlock } from '@core/code-block';
-import { llmRulesFooter, llmShareHeader } from '@core/share-link';
+import { toolBriefing } from '@core/share-link';
 import {
   generateMotionCompose,
   generateMotionCss,
@@ -27,7 +27,7 @@ const PLATFORMS: { id: Platform; label: string }[] = [
   { id: 'js', label: 'Motion' },
 ];
 
-export function CodeExport({ restoreUrl }: { restoreUrl: string }) {
+export function CodeExport({ restoreUrl, hash }: { restoreUrl: string; hash: string }) {
   const energy = useMotionStore((s) => s.energy);
   const material = useMotionStore((s) => s.material);
   const primitives = useMotionPrimitives();
@@ -43,8 +43,8 @@ export function CodeExport({ restoreUrl }: { restoreUrl: string }) {
     compose: generateMotionCompose(opts),
     js: generateMotionJs(opts),
     tokens: generateMotionDesignTokens(opts),
-    llm: llmShareHeader(restoreUrl) + generateMotionLlmBriefing(opts) + llmRulesFooter(),
-  }), [opts, restoreUrl]);
+    llm: toolBriefing(hash, generateMotionLlmBriefing(opts)),
+  }), [opts, hash]);
 
   const handleCopyAll = useCallback(() => {
     const parts = [code[copyPlatform]];

@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { generateCssExport, generateTailwindV4Export, generateLlmBriefing } from './code-export';
-import { customScale } from '@core/scale';
+import { generateCssExport, generateTailwindV4Export, generateLlmBriefing } from './type-code-export';
+import { customScale } from './scale';
 
 function makeOpts() {
   const levels = customScale(1.0, 1.272);

@@ -9,7 +9,7 @@
 
 import { z } from 'zod';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import { encodeState as encodeColorState, type Accent } from '@core/url-state/color';
+import { encodeState as encodeColorState, MAX_ACCENTS, type Accent } from '@core/url-state/color';
 import { encodeState as encodeTypeState } from '@core/url-state/type';
 import { encodeState as encodeShapeState } from '@core/url-state/shape';
 import { encodeState as encodeSymbolState } from '@core/url-state/symbol';
@@ -17,13 +17,15 @@ import { encodeState as encodeSpaceState } from '@core/url-state/space';
 import { encodeState as encodeMotionState } from '@core/url-state/motion';
 import { MOTION_PRESETS, computeMotionPrimitives } from '@core/motion';
 import { SUCCESS_HUE, WARNING_HUE, INFO_HUE } from '@core/palette';
+import { buildThemePalettes } from '@core/theme-palettes';
+import { computeTypeScale } from '@core/type-code-export';
+import { spacingTokensFor } from '@core/space-code-export';
 import { TYPE_LEVELS, resolveMobileRatio, type TypeLevel } from '@core/scale';
 import { ICON_SETS } from '@core/icon-sets';
 import {
   parseInput, systemUrl, toolUrl, normalizeHex, textResult, errorResult,
   colorStateFrom, typeStateFrom, shapeStateFrom, symbolStateFrom, spaceStateFrom, motionStateFrom,
-  DEFAULT_SYMBOL_STATE,
-  buildPalette, buildScale, buildSpacing,
+  DEFAULT_SYMBOL_STATE, MCP_COLOR_START,
   type Segments, type ToolName,
 } from './lib.js';
 import { colorSummary, typeSummary, shapeSummary, symbolSummary, spaceSummary, motionSummary } from './summaries.js';
@@ -74,13 +76,14 @@ export function registerGenerateTools(server: McpServer): void {
           autoHue: z.number().min(0).max(360).optional().describe('OKLCH hue for auto-derived accents.'),
           pin: z.boolean().optional(),
           invert: z.boolean().optional(),
-        })).max(3).optional().describe('Up to 3 additional named accent colors. Replaces the existing accent list when provided; pass [] to remove all accents. Default: Success/Warning/Info, auto-derived.'),
+        })).max(MAX_ACCENTS).optional().describe(`Up to ${MAX_ACCENTS} additional named accent colors. Replaces the existing accent list when provided; pass [] to remove all accents. Default: Success/Warning/Info, auto-derived.`),
       },
       annotations: READ_ONLY,
     },
     async (args) => {
       const segs = parseInput(args.url);
-      const state = { ...colorStateFrom(segs), extraAccents: [...colorStateFrom(segs).extraAccents] };
+      const start = segs.c ? colorStateFrom(segs) : MCP_COLOR_START;
+      const state = { ...start, extraAccents: [...start.extraAccents] };
 
       if (args.brandHex !== undefined) {
         const hex = normalizeHex(args.brandHex);
@@ -136,7 +139,7 @@ export function registerGenerateTools(server: McpServer): void {
       }
 
       const next: Segments = { ...segs, c: encodeColorState(state) };
-      const palette = buildPalette(state);
+      const palette = buildThemePalettes(state);
       return textResult(`${header(next, 'color')}\n\n${colorSummary(state, palette)}`);
     }
   );
@@ -216,7 +219,7 @@ export function registerGenerateTools(server: McpServer): void {
       }
 
       const next: Segments = { ...segs, t: encodeTypeState(state) };
-      const scale = buildScale(state);
+      const scale = computeTypeScale(state);
       return textResult(`${header(next, 'type')}\n\n${typeSummary(state, scale)}`);
     }
   );
@@ -246,7 +249,7 @@ export function registerGenerateTools(server: McpServer): void {
         borderColorHex: z.string().optional().describe('Custom border color as hex, or "auto" (default).'),
         glassDepth: z.number().min(-2).max(5).optional().describe('Glass displacement intensity (default 0.2).'),
         glassBlur: z.number().min(0).max(20).optional().describe('Glass backdrop blur (default 1.0).'),
-        glassDispersion: z.number().min(0).max(2).optional().describe('Chromatic aberration intensity (default 0.4).'),
+        glassDispersion: z.number().min(0).max(2).optional().describe('Chromatic aberration intensity (default 0.5).'),
         ringWidth: z.number().int().min(0).max(8).optional().describe('Focus ring width in px (default 2).'),
         ringOffset: z.number().int().min(0).max(8).optional().describe('Focus ring offset in px (default 2).'),
         ringStyle: z.enum(['soft', 'solid']).optional().describe('Focus ring shape: "soft" (default) is a translucent halo at the edge plus a full-color border, "solid" is a hard outline set off by ringOffset.'),
@@ -399,7 +402,7 @@ export function registerGenerateTools(server: McpServer): void {
       if (args.includeReciprocals !== undefined) state.aspectIncludeReciprocals = args.includeReciprocals;
 
       const next: Segments = { ...segs, p: encodeSpaceState(state) };
-      const spacing = buildSpacing(state);
+      const spacing = spacingTokensFor(state);
       return textResult(`${header(next, 'space')}\n\n${spaceSummary(state, spacing)}`);
     }
   );

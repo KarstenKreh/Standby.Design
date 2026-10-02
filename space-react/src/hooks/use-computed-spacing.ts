@@ -1,16 +1,16 @@
 import { useMemo } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import { useSpaceStore } from '@/store/space-store';
-import { computeSpacingTokens, type SpacingToken } from '@core/spacing';
+import { spacingTokensFor } from '@core/space-code-export';
+import type { SpacingToken } from '@core/spacing';
 
 export function useComputedSpacing(): SpacingToken[] {
-  const mode = useSpaceStore((s) => s.spacingMode);
-  const baseRem = useSpaceStore((s) => s.spacingBaseRem);
-  const ratio = useSpaceStore((s) => s.spacingRatio);
-  const multiplier = useSpaceStore((s) => s.spacingMultiplier);
-  const snap = useSpaceStore((s) => s.spacingSnap);
-
-  return useMemo(
-    () => computeSpacingTokens({ mode, baseRem, ratio, multiplier, snap }),
-    [mode, baseRem, ratio, multiplier, snap],
-  );
+  const scale = useSpaceStore(useShallow((s) => ({
+    spacingMode: s.spacingMode,
+    spacingBaseRem: s.spacingBaseRem,
+    spacingRatio: s.spacingRatio,
+    spacingMultiplier: s.spacingMultiplier,
+    spacingSnap: s.spacingSnap,
+  })));
+  return useMemo(() => spacingTokensFor({ ...useSpaceStore.getState(), ...scale }), [scale]);
 }

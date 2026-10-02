@@ -3,6 +3,7 @@ import { Sun, Moon } from 'lucide-react';
 import { useShapeStore } from '@/store/shape-store';
 import { generateShadows, generateNeumorphicInset, type ShadowConfig } from '@core/shadows';
 import { deriveSurface } from '@core/surface';
+import { sharedColor, sharedPalettes } from '@/lib/hash-sync';
 import { LiquidGlass } from '@core/liquid-glass';
 import { BrutalistEcho as CoreBrutalistEcho, deriveBorderFromBg } from '@core/brutalist-echo';
 import { focusRingCss, mergeBoxShadow } from '@core/ring';
@@ -13,10 +14,7 @@ import { focusRingCss, mergeBoxShadow } from '@core/ring';
 
 function PreviewPanel({ isDark }: { isDark: boolean }) {
   const store = useShapeStore();
-  // When error isn't pinned, pass undefined → deriveSurface auto-derives error hue from brand
-  // (mirrors Color app's errorAutoMatch behavior, so Shape and Color agree on fresh state).
-  const effectiveErrorHex = store.errorPin ? store.errorHex : undefined;
-  const colors = useMemo(() => deriveSurface(store.surfaceHex, isDark, store.paletteMode, store.chromaScale, store.brandPin, store.shapeStyle, effectiveErrorHex, store.errorPin, store.errorInvert), [store.surfaceHex, isDark, store.paletteMode, store.chromaScale, store.brandPin, store.shapeStyle, effectiveErrorHex, store.errorPin, store.errorInvert]);
+  const colors = useMemo(() => deriveSurface(sharedColor, sharedPalettes, isDark, store.shapeStyle), [isDark, store.shapeStyle]);
   const isGlass = store.shapeStyle === 'glass';
   const isNeomorph = store.shapeStyle === 'neomorph';
   const isNeobrutalism = store.shapeStyle === 'neobrutalism';

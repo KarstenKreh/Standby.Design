@@ -12,6 +12,7 @@ import { usePalette } from '@/hooks/use-palette';
 import { contrastRatio, invertHex } from '@core/color-math';
 import type { PaletteMode } from '@core/palette';
 import type { FgContrastMode } from '@/store/theme-store';
+import { MAX_ACCENTS } from '@core/url-state/color';
 
 const MODE_OPTIONS = [
   { value: 'balanced', label: 'Balanced Midpoint' },
@@ -357,7 +358,7 @@ export function SeedColors() {
             variant="outline"
             size="icon"
             onClick={addAccent}
-            disabled={extraAccents.length >= 10}
+            disabled={extraAccents.length >= MAX_ACCENTS}
             aria-label="Add color"
             className="size-7"
           >

@@ -1,20 +1,12 @@
-import { parseUnifiedHash, isUnifiedHash } from '@core/unified-hash';
-import { decodeState as decodeColorState, type DecodedState as ColorState } from '@core/url-state/color';
-import { decodeState as decodeShapeState, type ShapeUrlState as ShapeState, type RingStyle } from '@core/url-state/shape';
-import { generatePalette, computeAutoErrorHex, type PaletteEntry, type Step } from '@core/palette';
+import type { Segments } from '@core/unified-hash';
+import { decodeState as decodeColorState, DEFAULT_COLOR_STATE } from '@core/url-state/color';
+import { decodeShapeOrDefault, type RingStyle } from '@core/url-state/shape';
+import { buildThemePalettes } from '@core/theme-palettes';
+import type { PaletteEntry, Step } from '@core/palette';
 import { contrastRatio } from '@core/color-math';
 import { stateLadder, stepLadder, type Ladder, type StateToken } from '@core/state-ladder';
 
 export type { Ladder, StateToken };
-
-export interface Segments {
-  c: string | null;
-  t: string | null;
-  s: string | null;
-  y: string | null;
-  p: string | null;
-  m: string | null;
-}
 
 export interface RoleTheme {
   themeName: string;
@@ -39,8 +31,6 @@ export interface RoleTheme {
   field: { rest: Ladder; focusBorder: StateToken; invalid: StateToken };
 }
 
-const DEFAULT_BRAND = '#335A7F';
-
 function entryHex(pal: PaletteEntry[], step: Step): string {
   return pal.find(e => e.step === step)?.hex ?? '#888888';
 }
@@ -55,28 +45,12 @@ function pickFg(bgHex: string, a: string, b: string): string {
   return contrastRatio(a, bgHex) >= contrastRatio(b, bgHex) ? a : b;
 }
 
-export function readSegments(rawHash: string): Segments {
-  const raw = rawHash.replace(/^#/, '');
-  const isLegacyColorOnlyHash = raw !== '' && !isUnifiedHash(raw);
-  if (isLegacyColorOnlyHash) return { c: raw, t: null, s: null, y: null, p: null, m: null };
-  return parseUnifiedHash(raw);
-}
-
 export function buildRoleTheme(segments: Segments, isDark = true): RoleTheme {
-  const colorState: ColorState | null = segments.c ? decodeColorState(segments.c) : null;
-  const shapeState: Partial<ShapeState> = (segments.s ? decodeShapeState(segments.s) : null) ?? {};
-
-  const brandHex = colorState?.brandHex ?? DEFAULT_BRAND;
-  const bgHex = colorState ? (colorState.bgAutoMatch ? colorState.brandHex : colorState.bgColorHex) : DEFAULT_BRAND;
-  const errorHex = colorState
-    ? (colorState.errorAutoMatch ? computeAutoErrorHex(colorState.brandHex) : colorState.errorColorHex)
-    : computeAutoErrorHex(DEFAULT_BRAND);
-  const chromaScale = colorState?.chromaScale ?? 0.25;
-  const mode = colorState?.currentMode ?? 'balanced';
-
-  const brand = generatePalette(brandHex, 1.0, mode);
-  const surface = generatePalette(bgHex, chromaScale, mode);
-  const error = generatePalette(errorHex, 1.0, mode);
+  const decodedColor = segments.c ? decodeColorState(segments.c) : null;
+  const color = decodedColor ?? DEFAULT_COLOR_STATE;
+  const shapeState = decodeShapeOrDefault(segments.s);
+  const { brand, surface, error, effectiveErrorHex: errorHex } = buildThemePalettes(color);
+  const brandHex = color.brandHex;
 
   const brandStep: Step = isDark ? 400 : 600;
   const errorStep: Step = isDark ? 400 : 600;
@@ -85,12 +59,12 @@ export function buildRoleTheme(segments: Segments, isDark = true): RoleTheme {
   const navRowStep: Step = isDark ? 825 : 25;
   const navCurrentStep: Step = isDark ? 800 : 100;
 
-  const pinnedBrand = colorState?.brandPin ? brandHex : null;
+  const pinnedBrand = color.brandPin ? brandHex : null;
   const brandLadder = stateLadder(brand, 'brand', brandStep, pinnedBrand);
-  const errorRest = colorState?.errorPin ? errorHex : entryHex(error, errorStep);
+  const errorRest = color.errorPin ? errorHex : entryHex(error, errorStep);
 
   return {
-    themeName: colorState?.themeName ?? '',
+    themeName: decodedColor?.themeName ?? '',
     isDark,
     bg: entryHex(surface, isDark ? 875 : 50),
     card: entryHex(surface, isDark ? 825 : 25),
@@ -98,12 +72,12 @@ export function buildRoleTheme(segments: Segments, isDark = true): RoleTheme {
     fg: entryHex(surface, isDark ? 25 : 975),
     muted: entryHex(surface, isDark ? 300 : 700),
     border: entryHex(surface, isDark ? 700 : 300),
-    radius: shapeState.borderRadius ?? 8,
-    borderW: (shapeState.borderEnabled ?? true) ? (shapeState.borderWidth ?? 1) : 0,
-    ringWidth: shapeState.ringWidth ?? 2,
-    ringOffset: shapeState.ringOffset ?? 2,
+    radius: shapeState.borderRadius,
+    borderW: shapeState.borderEnabled ? shapeState.borderWidth : 0,
+    ringWidth: shapeState.ringWidth,
+    ringOffset: shapeState.ringOffset,
     ringColor: brandLadder.rest.hex,
-    ringStyle: shapeState.ringStyle ?? 'soft',
+    ringStyle: shapeState.ringStyle,
     brand: {
       ...brandLadder,
       fg: pickFg(brandLadder.rest.hex, entryHex(surface, 975), entryHex(surface, 25)),
@@ -115,7 +89,7 @@ export function buildRoleTheme(segments: Segments, isDark = true): RoleTheme {
     field: {
       rest: borderLadder(surface, fieldStep, isDark),
       focusBorder: brandLadder.rest,
-      invalid: { hex: errorRest, label: colorState?.errorPin ? 'pinned error' : `error · ${errorStep}`, step: colorState?.errorPin ? null : errorStep },
+      invalid: { hex: errorRest, label: color.errorPin ? 'pinned error' : `error · ${errorStep}`, step: color.errorPin ? null : errorStep },
     },
   };
 }

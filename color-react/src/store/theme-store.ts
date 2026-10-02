@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import type { PaletteMode } from '@core/palette';
 import { SUCCESS_HUE, WARNING_HUE, INFO_HUE } from '@core/palette';
-import type { Accent, FgContrastMode } from '@core/url-state/color';
+import { DEFAULT_COLOR_STATE, MAX_ACCENTS, type Accent, type FgContrastMode } from '@core/url-state/color';
 
 export type { Accent, FgContrastMode } from '@core/url-state/color';
 
@@ -44,20 +44,7 @@ interface ThemeState {
 }
 
 export const useThemeStore = create<ThemeState>((set) => ({
-  currentMode: 'balanced',
-  chromaScale: 0.25,
-  brandHex: '#335A7F',
-  bgColorHex: '#335A7F',
-  bgAutoMatch: true,
-  errorColorHex: '#CC3333',
-  errorAutoMatch: true,
-  extraAccents: [],
-  brandPin: true,
-  brandInvert: false,
-  errorPin: true,
-  errorInvert: false,
-  themeName: 'Standby.Design',
-  fgContrastMode: 'best',
+  ...DEFAULT_COLOR_STATE,
 
   setMode: (mode) => set({ currentMode: mode }),
   setChromaScale: (scale) => set({ chromaScale: scale }),
@@ -79,7 +66,7 @@ export const useThemeStore = create<ThemeState>((set) => ({
   setFgContrastMode: (mode) => set({ fgContrastMode: mode }),
   setThemeName: (name) => set({ themeName: name }),
   addAccent: () => set((s) => {
-    if (s.extraAccents.length >= 10) return s;
+    if (s.extraAccents.length >= MAX_ACCENTS) return s;
     const presets: Accent[] = [
       { name: 'Success', hex: '#33994D', pin: true, invert: false, autoMatch: true, autoHue: SUCCESS_HUE },
       { name: 'Warning', hex: '#998033', pin: true, invert: false, autoMatch: true, autoHue: WARNING_HUE },

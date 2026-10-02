@@ -3,9 +3,11 @@
  */
 
 import { generateShadows, type ShadowConfig, type ShadowType } from './shadows';
-import { generatePalette, type PaletteEntry, type Step } from './palette';
+import type { PaletteEntry, Step } from './palette';
 import { softRingSpread, SOFT_RING_ALPHA } from './ring';
-import type { ColorMode, SeparationMode, ShapeStyle, BrutalistVariant, RingStyle, ShapeUrlState } from './url-state/shape';
+import { buildThemePalettes } from './theme-palettes';
+import { DEFAULT_COLOR_STATE } from './url-state/color';
+import { DEFAULT_SHAPE_STATE, type ColorMode, type SeparationMode, type ShapeStyle, type BrutalistVariant, type RingStyle, type ShapeUrlState } from './url-state/shape';
 
 export interface ShapeSurfaceTones {
   background: string;
@@ -119,38 +121,9 @@ function shadowsFor(opts: ShapeExportOptions, isDark: boolean) {
   return generateShadows(backdrop, isDark, buildShadowConfig(opts));
 }
 
-const DEFAULT_SURFACE_HEX = '#335A7F';
-const DEFAULT_SURFACE_CHROMA = 0.25;
-
-const SHAPE_DEFAULTS: Omit<ShapeExportOptions, 'surfaces'> = {
-  shapeStyle: 'paper',
-  shadowEnabled: true,
-  shadowType: 'normal',
-  shadowStrength: 1.0,
-  shadowBlurScale: 1.0,
-  shadowScale: 1.272,
-  shadowColorMode: 'auto',
-  shadowCustomColor: '#000000',
-  shadowOffsetX: 2,
-  shadowOffsetY: 4,
-  brutalistVariant: 'outlined',
-  borderEnabled: true,
-  borderWidth: 1,
-  borderRadius: 8,
-  glassDepth: 0,
-  glassBlur: 0,
-  glassDispersion: 0,
-  ringWidth: 2,
-  ringOffset: 2,
-  ringStyle: 'soft',
-  ringColorMode: 'auto',
-  ringCustomColor: '#000000',
-  separationMode: 'shadow',
-};
-
 export function shapeOptsFromState(state: Partial<ShapeUrlState> | null, surfacePalette?: PaletteEntry[]): ShapeExportOptions {
-  const merged = { ...SHAPE_DEFAULTS, ...state };
-  const palette = surfacePalette ?? generatePalette(DEFAULT_SURFACE_HEX, DEFAULT_SURFACE_CHROMA);
+  const merged: ShapeUrlState = { ...DEFAULT_SHAPE_STATE, ...state };
+  const palette = surfacePalette ?? buildThemePalettes(DEFAULT_COLOR_STATE).surface;
   return { ...merged, surfaces: surfacesFromPalette(palette, merged.shapeStyle) };
 }
 

@@ -4,36 +4,27 @@ import { Toaster } from '@/components/ui/sonner';
 import { Button } from '@/components/ui/button';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { AppShell } from '@core/app-shell';
-import { buildUnifiedHash } from '@core/unified-hash';
-import { SHARE_BASE_URL } from '@core/share-link';
-import { encodeState } from '@core/url-state/motion';
-import { useMotionStore } from '@/store/motion-store';
-import { useUrlState } from '@/hooks/use-url-state';
+import { useCurrentHash } from '@core/use-hash';
+import { SHARE_BASE_URL, pageShareUrl } from '@core/share-link';
+import { hashSync } from '@/lib/hash-sync';
 import { CharacterControls } from '@/components/character-controls';
 import { MotionPreview } from '@/components/motion-preview';
 import { PrimitiveTable, SemanticTable } from '@/components/token-tables';
 import { CodeExport } from '@/components/code-export';
 
 function App() {
-  const energy = useMotionStore((s) => s.energy);
-  const material = useMotionStore((s) => s.material);
-  const otherSegments = useUrlState();
-
-  const getCurrentHash = useCallback(
-    () => buildUnifiedHash({ ...otherSegments, m: encodeState({ energy, material }) }),
-    [otherSegments, energy, material],
-  );
+  const hash = useCurrentHash(hashSync);
 
   const handleShare = useCallback(() => {
-    const url = window.location.origin + window.location.pathname + '#' + getCurrentHash();
+    const url = pageShareUrl(window.location.origin + window.location.pathname, hash);
     navigator.clipboard.writeText(url).then(() => toast('Share link copied!'));
-  }, [getCurrentHash]);
+  }, [hash]);
 
-  const restoreUrl = `${SHARE_BASE_URL}/motion#${getCurrentHash()}`;
+  const restoreUrl = `${SHARE_BASE_URL}/motion#${hash}`;
 
   return (
     <TooltipProvider>
-      <AppShell activeTool="motion" buildHash={getCurrentHash}>
+      <AppShell activeTool="motion" hash={hash}>
         <div className="flex items-center justify-between mb-2">
           <h1 className="font-semibold" style={{ fontSize: 'var(--text-h4)', lineHeight: 'var(--leading-h4)' }}>
             Motion
@@ -69,7 +60,7 @@ function App() {
         </div>
 
         <div className="bg-card border border-border rounded-lg p-4 mb-6">
-          <CodeExport restoreUrl={restoreUrl} />
+          <CodeExport restoreUrl={restoreUrl} hash={hash} />
         </div>
       </AppShell>
       <Toaster />

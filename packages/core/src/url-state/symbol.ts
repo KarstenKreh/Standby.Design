@@ -19,6 +19,16 @@ export interface UrlState {
   selectedSet: string | null;
 }
 
+export const DEFAULT_SYMBOL_STATE: UrlState = {
+  preferredStyle: 'auto',
+  preferredWeight: 'auto',
+  preferredCorners: 'auto',
+  iconBaseSize: 1.25,
+  iconScale: 1.272,
+  snapTo4px: true,
+  selectedSet: null,
+};
+
 const STYLE_MAP: Record<string, IconStyle> = { a: 'auto', o: 'outlined', f: 'filled', d: 'duotone' };
 const STYLE_REV: Record<IconStyle, string> = { auto: 'a', outlined: 'o', filled: 'f', duotone: 'd' };
 const WEIGHT_MAP: Record<string, IconWeight> = { a: 'auto', t: 'thin', r: 'regular', b: 'bold' };

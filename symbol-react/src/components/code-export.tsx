@@ -6,38 +6,31 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Checkbox } from '@/components/ui/checkbox';
 import { Copy } from 'lucide-react';
 import { useSymbolStore } from '@/store/symbol-store';
-import { generateCss, generateTailwind, generateDtcg, generateLlmBriefing } from '@/lib/code-export';
-import { encodeState } from '@/lib/url-state';
-import { systemShareUrl, llmShareHeader } from '@core/share-link';
-import { CodeBlock } from '@/components/code-block';
+import { hashSync } from '@/lib/hash-sync';
+import {
+  generateSymbolCss,
+  generateSymbolTailwind,
+  generateSymbolDesignTokens,
+  generateSymbolLlmBriefing,
+} from '@core/symbol-code-export';
+import { useCurrentHash } from '@core/use-hash';
+import { systemUrlForHash, toolBriefing, withShareLink } from '@core/share-link';
+import { CodeBlock } from '@core/code-block';
 
 export function CodeExport() {
   const store = useSymbolStore();
-  const {
-    iconBaseSize, iconScale, snapTo4px, selectedSet,
-    preferredStyle, preferredWeight, preferredCorners,
-  } = store;
+  const hash = useCurrentHash(hashSync);
   const [tab, setTab] = useState('css');
 
   const [copyFormat, setCopyFormat] = useState<'css' | 'tw4'>('css');
   const [copyDt, setCopyDt] = useState(true);
   const [copyLlm, setCopyLlm] = useState(true);
 
-  const input = useMemo(() => ({
-    iconBaseSize,
-    iconScale,
-    snapTo4px,
-    selectedSet,
-    prefs: { style: preferredStyle, mood: 50, weight: preferredWeight, corners: preferredCorners },
-  }), [iconBaseSize, iconScale, snapTo4px, selectedSet, preferredStyle, preferredWeight, preferredCorners]);
-
-  const cssCode = useMemo(() => generateCss(input), [input]);
-  const twCode = useMemo(() => generateTailwind(input), [input]);
-  const dtCode = useMemo(() => generateDtcg(input), [input]);
-  const llmCode = useMemo(
-    () => llmShareHeader(systemShareUrl('y', encodeState(store), window.location.hash)) + generateLlmBriefing(input),
-    [input, store],
-  );
+  const shareUrl = systemUrlForHash(hash);
+  const cssCode = useMemo(() => withShareLink('css', shareUrl, generateSymbolCss(store)), [store, shareUrl]);
+  const twCode = useMemo(() => withShareLink('tailwind', shareUrl, generateSymbolTailwind(store)), [store, shareUrl]);
+  const dtCode = useMemo(() => withShareLink('design-tokens', shareUrl, generateSymbolDesignTokens(store)), [store, shareUrl]);
+  const llmCode = useMemo(() => toolBriefing(hash, generateSymbolLlmBriefing(store)), [store, hash]);
 
   const handleCopyAll = useCallback(() => {
     const parts: string[] = [];

@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { cn } from '@/lib/utils';
 import { useSymbolStore } from '@/store/symbol-store';
+import { useActiveIconSet } from '@/hooks/use-active-icon-set';
 import { ICON_FAMILIES, getFamilyForVariant, type IconFamily } from '@core/icon-sets';
 import { SAMPLE_ICONS, type SampleIconName, type IconDef } from '@core/sample-icons';
 
@@ -66,10 +67,9 @@ function FamilyButton({ family, isActive, onClick, activeVariantId }: {
 }
 
 export function SetSelector() {
-  const selectedSet = useSymbolStore((s) => s.selectedSet);
   const setSelectedSet = useSymbolStore((s) => s.setSelectedSet);
 
-  const activeVariantId = selectedSet || ICON_FAMILIES[0].defaultVariant;
+  const activeVariantId = useActiveIconSet().set.id;
   const activeFamily = useMemo(
     () => getFamilyForVariant(activeVariantId) || ICON_FAMILIES[0],
     [activeVariantId],

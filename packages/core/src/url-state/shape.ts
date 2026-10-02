@@ -37,6 +37,38 @@ export interface ShapeUrlState {
   brutalistVariant: BrutalistVariant;
 }
 
+export const DEFAULT_SHAPE_STATE: ShapeUrlState = {
+  shapeStyle: 'paper',
+  shadowEnabled: true,
+  shadowType: 'normal',
+  shadowStrength: 1.0,
+  shadowBlurScale: 1.0,
+  shadowScale: 1.272,
+  shadowColorMode: 'auto',
+  shadowCustomColor: '#000000',
+  borderEnabled: true,
+  borderWidth: 1,
+  borderColorMode: 'auto',
+  borderCustomColor: '#000000',
+  borderRadius: 8,
+  glassDepth: 0.2,
+  glassBlur: 1.0,
+  glassDispersion: 0.5,
+  ringWidth: 2,
+  ringOffset: 2,
+  ringColorMode: 'auto',
+  ringCustomColor: '#000000',
+  ringStyle: 'soft',
+  separationMode: 'shadow',
+  shadowOffsetX: 2,
+  shadowOffsetY: 4,
+  brutalistVariant: 'outlined',
+};
+
+export function decodeShapeOrDefault(segment: string | null | undefined): ShapeUrlState {
+  return { ...DEFAULT_SHAPE_STATE, ...((segment ? decodeState(segment) : null) ?? {}) };
+}
+
 /**
  * Encode shape state into a compact comma-separated string.
  *

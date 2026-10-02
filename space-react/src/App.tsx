@@ -4,10 +4,10 @@ import { Button } from '@/components/ui/button';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { toast } from 'sonner';
 import { AppShell } from '@core/app-shell';
+import { useCurrentHash } from '@core/use-hash';
+import { pageShareUrl } from '@core/share-link';
 import { useSpaceStore } from '@/store/space-store';
-import { encodeState } from '@/lib/url-state';
-import { buildUnifiedHash } from '@core/unified-hash';
-import { useUrlState } from '@/hooks/use-url-state';
+import { hashSync } from '@/lib/hash-sync';
 import { SectionNav } from '@/components/section-nav';
 import { SpacingControls } from '@/components/spacing-controls';
 import { SpacingTable } from '@/components/spacing-table';
@@ -20,41 +20,17 @@ import { AspectPreview } from '@/components/aspect-preview';
 import { CodeExport } from '@/components/code-export';
 
 function App() {
-  const store = useSpaceStore();
-  const otherSegments = useUrlState();
   const activeSection = useSpaceStore((s) => s.activeSection);
-
-  const getCurrentHash = useCallback(() => {
-    const spaceEncoded = encodeState(store);
-    return buildUnifiedHash({
-      c: otherSegments.c || undefined,
-      t: otherSegments.t || undefined,
-      s: otherSegments.s || undefined,
-      y: otherSegments.y || undefined,
-      p: spaceEncoded,
-      m: otherSegments.m || undefined,
-    });
-  }, [store, otherSegments]);
+  const hash = useCurrentHash(hashSync);
 
   const handleShare = useCallback(() => {
-    const hash = getCurrentHash();
-    const params = new URLSearchParams();
-    const cs = otherSegments.c;
-    if (cs) {
-      const parts = cs.split(',');
-      const hex = parts[0];
-      const name = parts[10] ? decodeURIComponent(parts[10]) : '';
-      if (name) params.set('t', name);
-      if (/^[0-9a-fA-F]{6}$/.test(hex)) params.set('c', hex);
-    }
-    const query = params.toString() ? `?${params.toString()}` : '';
-    const url = window.location.origin + window.location.pathname + query + '#' + hash;
+    const url = pageShareUrl(window.location.origin + window.location.pathname, hash);
     navigator.clipboard.writeText(url).then(() => toast('Share link copied!'));
-  }, [getCurrentHash, otherSegments]);
+  }, [hash]);
 
   return (
     <TooltipProvider>
-      <AppShell activeTool="space" buildHash={getCurrentHash}>
+      <AppShell activeTool="space" hash={hash}>
         <div className="flex items-center justify-between mb-2">
           <h1 className="font-semibold" style={{ fontSize: 'var(--text-h4)', lineHeight: 'var(--leading-h4)' }}>
             Space

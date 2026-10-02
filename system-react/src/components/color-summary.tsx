@@ -1,17 +1,7 @@
 import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import type { PaletteEntry } from '@core/palette';
-import type { AccentPalette } from '@/lib/color-code-export';
-
-interface PaletteResult {
-  brand: PaletteEntry[];
-  surface: PaletteEntry[];
-  error: PaletteEntry[];
-  neutral: PaletteEntry[];
-  accentPalettes: AccentPalette[];
-  brandSwatchOverride: { hex: string; L: number } | null;
-  errorSwatchOverride: { hex: string; L: number } | null;
-}
+import type { ThemePalettes as PaletteResult } from '@core/theme-palettes';
 
 /* ─── helpers ─── */
 

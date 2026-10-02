@@ -1,9 +1,8 @@
 import { useMemo } from 'react';
 import type { UrlState as SymbolState } from '@core/url-state/symbol';
-import { ICON_SETS, getSetById } from '@core/icon-sets';
 import { SAMPLE_ICONS, type SampleIconName, type IconDef } from '@core/sample-icons';
 import { computeIconTokens, weightToStroke } from '@core/icon-tokens';
-import { recommendSets } from '@core/recommend';
+import { resolveIconSet } from '@core/symbol-code-export';
 
 /** Subset of icons to show in the compact preview */
 const PREVIEW_ICONS: SampleIconName[] = ['home', 'search', 'settings', 'heart', 'mail', 'star'];
@@ -29,18 +28,7 @@ function SampleIcon({ def, size, viewBox }: { def: IconDef; size: number; viewBo
 }
 
 export function SymbolSummary({ symbolState }: { symbolState: SymbolState }) {
-  const set = useMemo(() => {
-    if (symbolState.selectedSet) {
-      return getSetById(symbolState.selectedSet) || ICON_SETS[0];
-    }
-    const r = recommendSets({
-      style: symbolState.preferredStyle,
-      mood: 50,
-      weight: symbolState.preferredWeight,
-      corners: symbolState.preferredCorners,
-    });
-    return r[0]?.set || ICON_SETS[0];
-  }, [symbolState]);
+  const set = useMemo(() => resolveIconSet(symbolState).set, [symbolState]);
 
   const tokens = useMemo(
     () => computeIconTokens(symbolState.iconBaseSize, symbolState.iconScale, weightToStroke(set.strokeWeight), symbolState.snapTo4px),

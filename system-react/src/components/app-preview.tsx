@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ChevronLeft, ChevronRight, Phone, MoreHorizontal, Plus, ArrowUp, Search, SquarePen, MessageCircle, Users, Settings, CheckCheck, Bell, Moon, Shield, HelpCircle, LogOut, Camera, Trash2, ListFilter } from 'lucide-react';
 import type { PaletteEntry } from '@core/palette';
-import type { AccentPalette } from '@/lib/color-code-export';
+import type { ThemePalettes, AccentPalette } from '@core/theme-palettes';
 import type { ComputedLevel } from '@core/scale';
 import type { SpacingToken } from '@core/spacing';
 import type { ShapeUrlState as ShapeState } from '@core/url-state/shape';
@@ -13,19 +13,9 @@ import { LiquidGlass } from '@core/liquid-glass';
 import { BrutalistEcho, deriveBorderFromBg, type BrutalistLevel } from '@core/brutalist-echo';
 import type { FgContrastMode } from '@core/url-state/color';
 
-interface PaletteResult {
-  brand: PaletteEntry[];
-  surface: PaletteEntry[];
-  error: PaletteEntry[];
-  errorSurface: PaletteEntry[];
-  neutral: PaletteEntry[];
-  accentPalettes: AccentPalette[];
-  effectiveBgHex: string;
-  brandSwatchOverride: { hex: string; L: number } | null;
-  brandInvert: boolean;
-  errorSwatchOverride: { hex: string; L: number } | null;
-  errorInvert: boolean;
-}
+export type PreviewPalette = ThemePalettes & { brandInvert: boolean; errorInvert: boolean };
+
+type PaletteResult = PreviewPalette;
 
 interface AppPreviewProps {
   palette: PaletteResult | null;

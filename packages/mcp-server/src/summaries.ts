@@ -8,16 +8,16 @@ import type { UrlState as TypeState } from '@core/url-state/type';
 import type { ShapeUrlState as ShapeState } from '@core/url-state/shape';
 import type { UrlState as SymbolState } from '@core/url-state/symbol';
 import type { SpaceUrlState } from '@core/url-state/space';
-import type { ComputedLevel } from '@core/scale';
+import { resolveMobileRatio, type ComputedLevel } from '@core/scale';
 import type { SpacingToken } from '@core/spacing';
 import { SEMANTIC_MOTION, semanticRefs, type MotionCharacter, type MotionPrimitive } from '@core/motion';
 import { motionLabel } from '@core/motion-code-export';
 import { computeIconTokens, weightToStroke } from '@core/icon-tokens';
-import { ICON_SETS, getSetById, type IconSetDefinition } from '@core/icon-sets';
-import { recommendSets } from '@core/recommend';
 import { fontFamily } from '@core/fontshare';
 import { invertHex } from '@core/color-math';
-import { type PaletteResult, stepHex } from './lib.js';
+import { stepHex } from './lib.js';
+import type { ThemePalettes as PaletteResult } from '@core/theme-palettes';
+import { resolveIconSet } from '@core/symbol-code-export';
 
 function pinnedPair(pin: boolean, invert: boolean, hex: string): string | null {
   if (!pin) return null;
@@ -48,7 +48,7 @@ export function typeSummary(state: TypeState, scale: ComputedLevel[]): string {
   const lines: string[] = [];
   const modeLabel = state.scaleMode === 'traditional'
     ? 'traditional scale'
-    : `custom ratio ${state.customRatio} (mobile ${state.mobileRatio})`;
+    : `custom ratio ${state.customRatio} (mobile ${resolveMobileRatio(state.mobileRatioMode, state.customRatio, state.autoShrink, state.mobileRatio)})`;
   lines.push(`## Typography — ${modeLabel} · base ${state.baseSize}rem`);
   lines.push(`Fonts: heading ${fontFamily(state.headingFont)} (${state.headingFont}, weight ${state.headingWeight}) · body ${fontFamily(state.bodyFont)} (${state.bodyFont}) · mono ${fontFamily(state.monoFont)} (${state.monoFont})`);
   lines.push('');
@@ -98,20 +98,6 @@ export function shapeSummary(state: ShapeState): string {
   lines.push(`Focus ring: ${state.ringWidth}px width, ${ringShape} (color ${state.ringColorMode === 'custom' ? state.ringCustomColor : 'auto'})`);
   lines.push(`Separation mode: ${state.separationMode}`);
   return lines.join('\n');
-}
-
-export function resolveIconSet(state: SymbolState): { set: IconSetDefinition; selected: boolean } {
-  if (state.selectedSet) {
-    const set = getSetById(state.selectedSet);
-    if (set) return { set, selected: true };
-  }
-  const recommended = recommendSets({
-    style: state.preferredStyle,
-    mood: 50,
-    weight: state.preferredWeight,
-    corners: state.preferredCorners,
-  });
-  return { set: recommended[0]?.set || ICON_SETS[0], selected: false };
 }
 
 export function symbolSummary(state: SymbolState): string {

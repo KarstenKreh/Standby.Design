@@ -11,8 +11,7 @@
     "resolveJsonModule": true,
     "baseUrl": ".",
     "paths": {
-      "@core/*": ["../core/src/*"],
-      "@syslib/*": ["../../system-react/src/lib/*"]
+      "@core/*": ["../core/src/*"]
     }
   },
   "include": ["src"]
