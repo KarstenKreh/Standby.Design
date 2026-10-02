@@ -1,20 +1,18 @@
 import type { ReactNode } from 'react';
 
-type Tool = 'home' | 'system' | 'color' | 'type' | 'shape' | 'symbol' | 'space' | 'role' | 'motion';
+export type Tool = 'home' | 'system' | 'color' | 'type' | 'shape' | 'symbol' | 'space' | 'role' | 'motion';
 
 interface ToolNavProps {
   activeTool: Tool;
-  buildHash: () => string;
+  hash: string;
 }
 
 const DEV_PORTS: Record<string, number> = { color: 5177, type: 5174, system: 5175, shape: 5176, symbol: 5178, space: 5179, role: 5180, motion: 5181 };
 
-function toolUrl(key: Tool): string {
+export function toolUrl(key: Tool, hash = ''): string {
   if (key === 'home') return '/';
-  if (import.meta.env.DEV) {
-    return `http://localhost:${DEV_PORTS[key]}/${key}/`;
-  }
-  return `/${key}/`;
+  const base = import.meta.env.DEV ? `http://localhost:${DEV_PORTS[key]}/${key}/` : `/${key}/`;
+  return hash ? `${base}#${hash}` : base;
 }
 
 /** Inline Lucide icons so @core doesn't pull lucide-react into rollup resolution */
@@ -139,17 +137,19 @@ const tools: { key: Tool; label: string; icon: IconComponent }[] = [
   { key: 'type', label: 'Type', icon: TypeIcon },
 ];
 
-function NavLink({ tool, activeTool, buildHash, className }: {
+const systemTool = { key: 'system' as const, label: 'System', icon: LayersIcon };
+
+function NavLink({ tool, activeTool, hash, className }: {
   tool: { key: Tool; label: string; icon: IconComponent };
   activeTool: Tool;
-  buildHash: () => string;
+  hash: string;
   className?: string;
 }) {
   const isActive = tool.key === activeTool;
   const IconComp = tool.icon;
   return (
     <a
-      href={isActive ? undefined : `${toolUrl(tool.key)}#${buildHash()}`}
+      href={isActive ? undefined : toolUrl(tool.key, hash)}
       className={`flex flex-col items-center gap-0.5 py-2 px-1 rounded-lg text-[10px] font-medium transition-colors ${
         isActive
           ? 'bg-muted text-foreground'
@@ -163,54 +163,43 @@ function NavLink({ tool, activeTool, buildHash, className }: {
   );
 }
 
-/** Desktop: vertical sidebar. Mobile: fixed bottom bar. */
-export function ToolNav({ activeTool, buildHash }: ToolNavProps) {
+export function DesktopToolNav({ activeTool, hash }: ToolNavProps) {
   return (
-    <>
-      {/* Desktop sidebar */}
-      <nav className="hidden md:flex flex-col w-14 shrink-0 pt-1">
-        {/* Home */}
-        <a
-          href={toolUrl('home')}
-          className="flex flex-col items-center gap-0.5 py-2 px-1 rounded-lg text-[10px] font-medium text-muted-foreground hover:bg-muted/50 hover:text-foreground transition-colors mb-1"
-        >
-          <HomeIcon className="size-4" />
-          Home
-        </a>
+    <nav className="flex flex-col w-14 shrink-0 pt-1">
+      {/* Home */}
+      <a
+        href={toolUrl('home')}
+        className="flex flex-col items-center gap-0.5 py-2 px-1 rounded-lg text-[10px] font-medium text-muted-foreground hover:bg-muted/50 hover:text-foreground transition-colors mb-1"
+      >
+        <HomeIcon className="size-4" />
+        Home
+      </a>
 
-        {/* Divider */}
-        <div className="h-px bg-border mx-2 mb-1" />
+      {/* Divider */}
+      <div className="h-px bg-border mx-2 mb-1" />
 
-        {/* Tools */}
-        <div className="flex flex-col gap-1 flex-1">
-          {tools.map((tool) => (
-            <NavLink key={tool.key} tool={tool} activeTool={activeTool} buildHash={buildHash} />
-          ))}
-        </div>
-
-        {/* Divider */}
-        <div className="h-px bg-border mx-2 my-1" />
-
-        {/* System — bottom CTA */}
-        <NavLink
-          tool={{ key: 'system', label: 'System', icon: LayersIcon }}
-          activeTool={activeTool}
-          buildHash={buildHash}
-        />
-      </nav>
-
-      {/* Mobile bottom bar */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 flex justify-around items-center bg-background/95 backdrop-blur border-t border-border px-2 py-1 safe-bottom">
+      {/* Tools */}
+      <div className="flex flex-col gap-1 flex-1">
         {tools.map((tool) => (
-          <NavLink key={tool.key} tool={tool} activeTool={activeTool} buildHash={buildHash} className="flex-1 max-w-[72px]" />
+          <NavLink key={tool.key} tool={tool} activeTool={activeTool} hash={hash} />
         ))}
-        <NavLink
-          tool={{ key: 'system', label: 'System', icon: LayersIcon }}
-          activeTool={activeTool}
-          buildHash={buildHash}
-          className="flex-1 max-w-[72px]"
-        />
-      </nav>
-    </>
+      </div>
+
+      {/* Divider */}
+      <div className="h-px bg-border mx-2 my-1" />
+
+      {/* System — bottom CTA */}
+      <NavLink tool={systemTool} activeTool={activeTool} hash={hash} />
+    </nav>
+  );
+}
+
+export function MobileToolNav({ activeTool, hash }: ToolNavProps) {
+  return (
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 flex justify-around items-center bg-background/95 backdrop-blur border-t border-border px-2 py-1 safe-bottom">
+      {[...tools, systemTool].map((tool) => (
+        <NavLink key={tool.key} tool={tool} activeTool={activeTool} hash={hash} className="flex-1 max-w-[72px]" />
+      ))}
+    </nav>
   );
 }

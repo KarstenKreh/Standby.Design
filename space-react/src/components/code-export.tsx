@@ -7,64 +7,35 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Copy } from 'lucide-react';
 import { useSpaceStore } from '@/store/space-store';
 import { useComputedSpacing } from '@/hooks/use-computed-spacing';
+import { hashSync } from '@/lib/hash-sync';
 import {
-  generateCssExport,
-  generateTailwindV4Export,
-  generateLlmBriefing,
-} from '@/lib/code-export';
-import { generateDesignTokens } from '@/lib/design-token-export';
-import { encodeState } from '@/lib/url-state';
-import { systemShareUrl, llmShareHeader } from '@core/share-link';
+  generateSpaceCss,
+  generateSpaceTailwind,
+  generateSpaceDesignTokens,
+  generateSpaceLlmBriefing,
+  spaceOptsFromState,
+} from '@core/space-code-export';
+import { useCurrentHash } from '@core/use-hash';
+import { systemUrlForHash, toolBriefing, withShareLink } from '@core/share-link';
 import { CodeBlock } from '@core/code-block';
 
 export function CodeExport() {
   const store = useSpaceStore();
   const spacingTokens = useComputedSpacing();
+  const hash = useCurrentHash(hashSync);
   const [tab, setTab] = useState('css');
 
   const [copyFormat, setCopyFormat] = useState<'css' | 'tw4'>('css');
   const [copyDt, setCopyDt] = useState(true);
   const [copyLlm, setCopyLlm] = useState(true);
 
-  const ratioLabel = store.spacingMode === 'geometric' && Math.abs(store.spacingRatio - 1.272) < 0.001
-    ? '√φ Golden Ratio scale — standby.design/space'
-    : `${store.spacingMode === 'harmonic' ? 'Harmonic multiples' : `Geometric ×${store.spacingRatio.toFixed(3)}`} — standby.design/space`;
+  const opts = useMemo(() => spaceOptsFromState(store, spacingTokens), [store, spacingTokens]);
 
-  const opts = useMemo(
-    () => ({
-      spacingTokens,
-      breakpoints: store.breakpoints,
-      fluidMinVw: store.fluidMinVw,
-      fluidMaxVw: store.fluidMaxVw,
-      containers: store.containers,
-      proseMaxCh: store.proseMaxCh,
-      aspectRatios: store.aspectRatios,
-      includeReciprocals: store.aspectIncludeReciprocals,
-      ratioLabel,
-    }),
-    [
-      spacingTokens, store.breakpoints, store.fluidMinVw, store.fluidMaxVw,
-      store.containers, store.proseMaxCh,
-      store.aspectRatios, store.aspectIncludeReciprocals, ratioLabel,
-    ],
-  );
-
-  const cssCode = useMemo(() => generateCssExport(opts), [opts]);
-  const twCode = useMemo(() => generateTailwindV4Export(opts), [opts]);
-  const dtCode = useMemo(() => generateDesignTokens({
-    spacingTokens,
-    breakpoints: store.breakpoints,
-    fluidMinVw: store.fluidMinVw,
-    fluidMaxVw: store.fluidMaxVw,
-    containers: store.containers,
-    proseMaxCh: store.proseMaxCh,
-    aspectRatios: store.aspectRatios,
-    includeReciprocals: store.aspectIncludeReciprocals,
-  }), [spacingTokens, store.breakpoints, store.fluidMinVw, store.fluidMaxVw, store.containers, store.proseMaxCh, store.aspectRatios, store.aspectIncludeReciprocals]);
-  const llmCode = useMemo(
-    () => llmShareHeader(systemShareUrl('p', encodeState(store), window.location.hash)) + generateLlmBriefing(opts),
-    [opts, store],
-  );
+  const shareUrl = systemUrlForHash(hash);
+  const cssCode = useMemo(() => withShareLink('css', shareUrl, generateSpaceCss(opts)), [opts, shareUrl]);
+  const twCode = useMemo(() => withShareLink('tailwind', shareUrl, generateSpaceTailwind(opts)), [opts, shareUrl]);
+  const dtCode = useMemo(() => withShareLink('design-tokens', shareUrl, generateSpaceDesignTokens(opts)), [opts, shareUrl]);
+  const llmCode = useMemo(() => toolBriefing(hash, generateSpaceLlmBriefing(opts)), [opts, hash]);
 
   const handleCopyAll = useCallback(() => {
     const parts: string[] = [];

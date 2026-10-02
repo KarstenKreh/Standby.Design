@@ -6,20 +6,21 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Checkbox } from '@/components/ui/checkbox';
 import { Copy } from 'lucide-react';
 import { useShapeStore } from '@/store/shape-store';
+import { hashSync, sharedPalettes } from '@/lib/hash-sync';
 import {
-  generateCssExport,
-  generateTailwindV4Export,
-  generateDesignTokensExport,
-  generateLlmBriefing,
-  previewSurfaces,
-  type ShapeExportOptions,
-} from '@/lib/code-export';
-import { encodeState } from '@/lib/url-state';
-import { systemShareUrl, llmShareHeader } from '@core/share-link';
+  generateShapeCss,
+  generateShapeTailwind,
+  generateShapeDesignTokens,
+  generateShapeLlmBriefing,
+  shapeOptsFromState,
+} from '@core/shape-code-export';
+import { useCurrentHash } from '@core/use-hash';
+import { systemUrlForHash, toolBriefing, withShareLink } from '@core/share-link';
 import { CodeBlock } from '@core/code-block';
 
 export function CodeExport() {
   const store = useShapeStore();
+  const hash = useCurrentHash(hashSync);
   const [tab, setTab] = useState('css');
 
   // Copy All state
@@ -27,52 +28,13 @@ export function CodeExport() {
   const [copyDt, setCopyDt] = useState(true);
   const [copyLlm, setCopyLlm] = useState(true);
 
-  const opts: ShapeExportOptions = useMemo(
-    () => ({
-      shapeStyle: store.shapeStyle,
-      shadowEnabled: store.shadowEnabled,
-      shadowType: store.shadowType,
-      shadowStrength: store.shadowStrength,
-      shadowBlurScale: store.shadowBlurScale,
-      shadowScale: store.shadowScale,
-      shadowColorMode: store.shadowColorMode,
-      shadowCustomColor: store.shadowCustomColor,
-      shadowOffsetX: store.shadowOffsetX,
-      shadowOffsetY: store.shadowOffsetY,
-      brutalistVariant: store.brutalistVariant,
-      borderEnabled: store.borderEnabled,
-      borderWidth: store.borderWidth,
-      borderRadius: store.borderRadius,
-      glassDepth: store.glassDepth,
-      glassBlur: store.glassBlur,
-      glassDispersion: store.glassDispersion,
-      ringWidth: store.ringWidth,
-      ringOffset: store.ringOffset,
-      ringStyle: store.ringStyle,
-      ringColorMode: store.ringColorMode,
-      ringCustomColor: store.ringCustomColor,
-      separationMode: store.separationMode,
-      surfaces: previewSurfaces(store.surfaceHex, store.paletteMode, store.chromaScale, store.shapeStyle),
-    }),
-    [
-      store.shapeStyle, store.shadowEnabled, store.shadowType, store.shadowStrength,
-      store.shadowBlurScale, store.shadowScale, store.shadowColorMode,
-      store.shadowCustomColor, store.shadowOffsetX, store.shadowOffsetY,
-      store.brutalistVariant, store.borderEnabled, store.borderWidth,
-      store.borderRadius, store.glassDepth,
-      store.glassBlur, store.glassDispersion, store.ringWidth, store.ringOffset, store.ringStyle,
-      store.ringColorMode, store.ringCustomColor,
-      store.separationMode, store.surfaceHex, store.paletteMode, store.chromaScale,
-    ],
-  );
+  const opts = useMemo(() => shapeOptsFromState(store, sharedPalettes.surface), [store]);
 
-  const cssCode = useMemo(() => generateCssExport(opts), [opts]);
-  const twCode = useMemo(() => generateTailwindV4Export(opts), [opts]);
-  const dtCode = useMemo(() => generateDesignTokensExport(opts), [opts]);
-  const llmCode = useMemo(
-    () => llmShareHeader(systemShareUrl('s', encodeState(store), window.location.hash)) + generateLlmBriefing(opts),
-    [opts, store],
-  );
+  const shareUrl = systemUrlForHash(hash);
+  const cssCode = useMemo(() => withShareLink('css', shareUrl, generateShapeCss(opts)), [opts, shareUrl]);
+  const twCode = useMemo(() => withShareLink('tailwind', shareUrl, generateShapeTailwind(opts)), [opts, shareUrl]);
+  const dtCode = useMemo(() => withShareLink('design-tokens', shareUrl, generateShapeDesignTokens(opts)), [opts, shareUrl]);
+  const llmCode = useMemo(() => toolBriefing(hash, generateShapeLlmBriefing(opts)), [opts, hash]);
 
   const handleCopyAll = useCallback(() => {
     const parts: string[] = [];

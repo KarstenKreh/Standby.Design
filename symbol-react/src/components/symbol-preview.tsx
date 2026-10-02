@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useSymbolStore } from '@/store/symbol-store';
-import { ICON_FAMILIES, getSetById } from '@core/icon-sets';
+import { useActiveIconSet } from '@/hooks/use-active-icon-set';
 import { SAMPLE_ICONS, SAMPLE_ICON_NAMES, type SampleIconName, type IconDef } from '@core/sample-icons';
 import { computeIconTokens, weightToStroke } from '@core/icon-tokens';
 
@@ -27,13 +27,12 @@ function SampleIcon({ def, size, viewBox }: { def: IconDef; size: number; viewBo
 }
 
 export function SymbolPreview() {
-  const selectedSet = useSymbolStore((s) => s.selectedSet);
   const iconBaseSize = useSymbolStore((s) => s.iconBaseSize);
   const iconScale = useSymbolStore((s) => s.iconScale);
   const snapTo4px = useSymbolStore((s) => s.snapTo4px);
 
-  const activeId = selectedSet || ICON_FAMILIES[0].defaultVariant;
-  const set = getSetById(activeId) || { strokeWeight: 'regular' as const };
+  const { set } = useActiveIconSet();
+  const activeId = set.id;
   const iconData = SAMPLE_ICONS[activeId];
   const tokens = useMemo(
     () => computeIconTokens(iconBaseSize, iconScale, weightToStroke(set.strokeWeight), snapTo4px),

@@ -8,66 +8,23 @@ import { ScaleTable } from '@/components/scale-table';
 import { ScaleDiagram } from '@/components/scale-diagram';
 import { CodeExport } from '@/components/code-export';
 import { useFontLoader } from '@/hooks/use-font-loader';
-import { useUrlState } from '@/hooks/use-url-state';
-import { useTypeStore } from '@/store/type-store';
-import { encodeState } from '@/lib/url-state';
-import { buildUnifiedHash } from '@core/unified-hash';
+import { hashSync } from '@/lib/hash-sync';
+import { useCurrentHash } from '@core/use-hash';
+import { pageShareUrl } from '@core/share-link';
 import { AppShell } from '@core/app-shell';
 
 function App() {
-  const store = useTypeStore();
-
   useFontLoader();
-  const otherSegments = useUrlState();
-
-  const getTypeEncoded = useCallback(() => encodeState({
-    scaleMode: store.scaleMode,
-    baseSize: store.baseSize,
-    customRatio: store.customRatio,
-    mobileRatio: store.mobileRatio,
-    headingFont: store.headingFont,
-    bodyFont: store.bodyFont,
-    monoFont: store.monoFont,
-    headingWeight: store.headingWeight,
-    mobileBaseSize: store.mobileBaseSize,
-    mobileRatioMode: store.mobileRatioMode,
-    autoShrink: store.autoShrink,
-    lineHeightOverrides: store.lineHeightOverrides,
-    letterSpacingOverrides: store.letterSpacingOverrides,
-    traditionalAssignments:
-      store.scaleMode === 'traditional'
-        ? store.traditionalAssignments
-        : undefined,
-    traditionalMobileAssignments:
-      store.scaleMode === 'traditional'
-        ? store.traditionalMobileAssignments
-        : undefined,
-  }), [store]);
-
-  const getCurrentHash = useCallback(() => {
-    const typeEncoded = getTypeEncoded();
-    return buildUnifiedHash({ c: otherSegments.c, t: typeEncoded, s: otherSegments.s, y: otherSegments.y, p: otherSegments.p, m: otherSegments.m });
-  }, [getTypeEncoded, otherSegments]);
+  const hash = useCurrentHash(hashSync);
 
   const handleShare = useCallback(() => {
-    const hash = getCurrentHash();
-    const params = new URLSearchParams();
-    const cs = otherSegments.c;
-    if (cs) {
-      const parts = cs.split(',');
-      const hex = parts[0];
-      const name = parts[10] ? decodeURIComponent(parts[10]) : '';
-      if (name) params.set('t', name);
-      if (/^[0-9a-fA-F]{6}$/.test(hex)) params.set('c', hex);
-    }
-    const query = params.toString() ? `?${params.toString()}` : '';
-    const url = window.location.origin + window.location.pathname + query + '#' + hash;
+    const url = pageShareUrl(window.location.origin + window.location.pathname, hash);
     navigator.clipboard.writeText(url).then(() => toast('Share link copied!'));
-  }, [getCurrentHash, otherSegments]);
+  }, [hash]);
 
   return (
     <>
-      <AppShell activeTool="type" buildHash={getCurrentHash} overflowXHidden>
+      <AppShell activeTool="type" hash={hash} overflowXHidden>
         {/* Header */}
         <div className="flex items-center justify-between mb-2">
           <h1 className="font-semibold" style={{ fontSize: 'var(--text-h4)', lineHeight: 'var(--leading-h4)' }}>

@@ -4,7 +4,7 @@ import path from 'node:path';
 
 const root = path.dirname(fileURLToPath(import.meta.url));
 
-// Bundles @core (packages/core) and @syslib (system-react/src/lib) sources
+// Bundles @core (packages/core) sources
 // directly into dist so the server runs with only npm dependencies installed.
 // Two entries: index.js (stdio, for npx/local) and http.js (Streamable HTTP,
 // for mcp.standby.design).
@@ -18,7 +18,6 @@ await build({
   banner: { js: '#!/usr/bin/env node' },
   alias: {
     '@core': path.join(root, '../core/src'),
-    '@syslib': path.join(root, '../../system-react/src/lib'),
   },
   packages: 'external',
   define: { 'import.meta.env.DEV': 'false' },

@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import type { TypeLevel } from '@core/scale';
 import { DEFAULT_TRADITIONAL, DEFAULT_TRADITIONAL_MOBILE } from '@core/scale';
+import { DEFAULT_TYPE_STATE } from '@core/url-state/type';
 
 export type ScaleMode = 'golden' | 'traditional' | 'custom';
 export type MobileRatioMode = 'auto' | 'custom';
@@ -49,23 +50,9 @@ interface TypeState {
 }
 
 export const useTypeStore = create<TypeState>((set) => ({
-  scaleMode: 'custom',
-  baseSize: 1.0,
-  mobileBaseSize: 1.0,
-  customRatio: 1.272,
-  mobileRatioMode: 'auto',
-  mobileRatio: 1.2,
-  autoShrink: 25,
+  ...DEFAULT_TYPE_STATE,
   traditionalAssignments: { ...DEFAULT_TRADITIONAL },
   traditionalMobileAssignments: { ...DEFAULT_TRADITIONAL_MOBILE },
-
-  headingFont: 'satoshi',
-  headingWeight: 500,
-  bodyFont: 'satoshi',
-  monoFont: 'system-mono',
-
-  lineHeightOverrides: {},
-  letterSpacingOverrides: {},
 
   previewText: '',
   previewViewport: 1920,

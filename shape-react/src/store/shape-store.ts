@@ -1,6 +1,5 @@
 import { create } from 'zustand';
-import type { PaletteMode } from '@core/palette';
-import type { ShapeStyle, ShadowType, ColorMode, SeparationMode, BrutalistVariant, RingStyle } from '@core/url-state/shape';
+import { DEFAULT_SHAPE_STATE, type ShapeStyle, type ShadowType, type ColorMode, type SeparationMode, type BrutalistVariant, type RingStyle } from '@core/url-state/shape';
 
 export type { ShapeStyle, ShadowType, ColorMode, SeparationMode, BrutalistVariant, RingStyle } from '@core/url-state/shape';
 
@@ -48,15 +47,6 @@ export interface ShapeState {
   // Surface Separation
   separationMode: SeparationMode;
 
-  // Color parameters (read from color hash for preview accuracy)
-  surfaceHex: string;
-  paletteMode: PaletteMode;
-  chromaScale: number;
-  brandPin: boolean;
-  errorHex: string;
-  errorPin: boolean;
-  errorInvert: boolean;
-
   // Setters
   setShapeStyle: (v: ShapeStyle) => void;
   setShadowEnabled: (v: boolean) => void;
@@ -83,66 +73,11 @@ export interface ShapeState {
   setRingCustomColor: (v: string) => void;
   setRingStyle: (v: RingStyle) => void;
   setSeparationMode: (v: SeparationMode) => void;
-  setSurfaceHex: (v: string) => void;
-  setPaletteMode: (v: PaletteMode) => void;
-  setChromaScale: (v: number) => void;
-  setBrandPin: (v: boolean) => void;
-  setErrorHex: (v: string) => void;
-  setErrorPin: (v: boolean) => void;
-  setErrorInvert: (v: boolean) => void;
   setFullState: (state: Partial<ShapeState>) => void;
 }
 
 export const useShapeStore = create<ShapeState>((set) => ({
-  // Style
-  shapeStyle: 'paper',
-
-  // Shadows
-  shadowEnabled: true,
-  shadowType: 'normal',
-  shadowStrength: 1.0,
-  shadowBlurScale: 1.0,
-  shadowScale: 1.272,
-  shadowColorMode: 'auto',
-  shadowCustomColor: '#000000',
-
-  // Brutalist offsets
-  shadowOffsetX: 2,
-  shadowOffsetY: 4,
-  brutalistVariant: 'outlined' as BrutalistVariant,
-
-  // Borders
-  borderEnabled: true,
-  borderWidth: 1,
-  borderColorMode: 'auto',
-  borderCustomColor: '#000000',
-
-  // Border Radius
-  borderRadius: 8,
-
-  // Glass
-  glassDepth: 0.2,
-  glassBlur: 1.0,
-  glassDispersion: 0.5,
-
-  // Ring
-  ringWidth: 2,
-  ringOffset: 2,
-  ringColorMode: 'auto',
-  ringCustomColor: '#000000',
-  ringStyle: 'soft' as RingStyle,
-
-  // Separation
-  separationMode: 'shadow',
-
-  // Color parameters
-  surfaceHex: '#335A7F',
-  paletteMode: 'balanced' as PaletteMode,
-  chromaScale: 1.0,
-  brandPin: false,
-  errorHex: '#CC3333',
-  errorPin: false,
-  errorInvert: false,
+  ...DEFAULT_SHAPE_STATE,
 
   // Setters
   setShapeStyle: (v) => set((prev) => {
@@ -195,12 +130,5 @@ export const useShapeStore = create<ShapeState>((set) => ({
   setRingCustomColor: (v) => set({ ringCustomColor: v }),
   setRingStyle: (v) => set({ ringStyle: v }),
   setSeparationMode: (v) => set({ separationMode: v }),
-  setSurfaceHex: (v) => set({ surfaceHex: v }),
-  setPaletteMode: (v) => set({ paletteMode: v }),
-  setChromaScale: (v) => set({ chromaScale: v }),
-  setBrandPin: (v) => set({ brandPin: v }),
-  setErrorHex: (v) => set({ errorHex: v }),
-  setErrorPin: (v) => set({ errorPin: v }),
-  setErrorInvert: (v) => set({ errorInvert: v }),
   setFullState: (partial) => set(partial),
 }));

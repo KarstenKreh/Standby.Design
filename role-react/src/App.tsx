@@ -1,41 +1,36 @@
 import { useCallback, useMemo, useState } from 'react';
 import { AppShell } from '@core/app-shell';
-import { buildUnifiedHash } from '@core/unified-hash';
-import { readSegments, buildRoleTheme } from '@/lib/system-tokens';
+import { staticHash } from '@core/hash-sync';
+import { toolUrl } from '@core/tool-nav';
+import { pageShareUrl } from '@core/share-link';
+import { buildRoleTheme } from '@/lib/system-tokens';
 import { PressableCard, ToggleableCard, EditableCard, NavigableCard, ReadableCard } from '@/components/role-inspector';
 import { CodeExport } from '@/components/code-export';
 import { buildRoleMotion } from '@/lib/role-motion';
 
+const pageHash = staticHash();
+const { segments } = pageHash;
+const hash = pageHash.currentHash();
+
 function App() {
-  const [segments] = useState(() => readSegments(window.location.hash.slice(1)));
   const [reducedMotion, setReducedMotion] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  const theme = useMemo(() => buildRoleTheme(segments), [segments]);
-  const motion = useMemo(() => buildRoleMotion(segments.m, reducedMotion), [segments.m, reducedMotion]);
-
-  const getCurrentHash = useCallback(() => buildUnifiedHash({
-    c: segments.c ?? undefined,
-    t: segments.t ?? undefined,
-    s: segments.s ?? undefined,
-    y: segments.y ?? undefined,
-    p: segments.p ?? undefined,
-    m: segments.m ?? undefined,
-  }), [segments]);
+  const theme = useMemo(() => buildRoleTheme(segments), []);
+  const motion = useMemo(() => buildRoleMotion(segments.m, reducedMotion), [reducedMotion]);
 
   const handleShare = useCallback(() => {
-    const hash = getCurrentHash();
-    const url = window.location.origin + window.location.pathname + (hash ? '#' + hash : '');
+    const url = pageShareUrl(window.location.origin + window.location.pathname, hash);
     navigator.clipboard.writeText(url).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
     });
-  }, [getCurrentHash]);
+  }, []);
 
   const cardProps = { theme, motion };
 
   return (
-    <AppShell activeTool="role" buildHash={getCurrentHash}>
+    <AppShell activeTool="role" hash={hash}>
       <div className="flex items-center justify-between mb-2">
         <h1 className="font-semibold" style={{ fontSize: 'var(--text-h4)', lineHeight: 'var(--leading-h4)' }}>
           Role
@@ -57,7 +52,7 @@ function App() {
 
       <div className="flex items-center justify-end gap-3 mb-4">
         <span className="text-caption text-muted-foreground">
-          Colors fade with <span className="font-mono text-foreground">motion.fade</span>, the switch moves with <span className="font-mono text-foreground">motion.move</span> from <a href={`/motion/#${getCurrentHash()}`} className="underline underline-offset-2 hover:text-foreground">Motion</a>.
+          Colors fade with <span className="font-mono text-foreground">motion.fade</span>, the switch moves with <span className="font-mono text-foreground">motion.move</span> from <a href={toolUrl('motion', hash)} className="underline underline-offset-2 hover:text-foreground">Motion</a>.
         </span>
         <button
           onClick={() => setReducedMotion(v => !v)}

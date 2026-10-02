@@ -1,78 +1,23 @@
 import { useMemo } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import { useThemeStore } from '@/store/theme-store';
-import { generatePalette, computeAutoErrorHex, computeAutoAccentHex, resolveAccentHues, type PaletteEntry } from '@core/palette';
-import { hexToOklch } from '@core/color-math';
-
-import type { AccentPalette } from '@core/color-code-export';
+import { buildThemePalettes, type AccentPalette } from '@core/theme-palettes';
 
 export type { AccentPalette };
 
-export function accentCssName(name: string): string {
-  return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'accent';
-}
-
 export function usePalette() {
-  const {
-    brandHex, bgColorHex, bgAutoMatch, errorColorHex, errorAutoMatch,
-    chromaScale, currentMode, extraAccents, brandPin, errorPin,
-  } = useThemeStore();
+  const seeds = useThemeStore(useShallow((s) => ({
+    brandHex: s.brandHex,
+    bgColorHex: s.bgColorHex,
+    bgAutoMatch: s.bgAutoMatch,
+    errorColorHex: s.errorColorHex,
+    errorAutoMatch: s.errorAutoMatch,
+    chromaScale: s.chromaScale,
+    currentMode: s.currentMode,
+    extraAccents: s.extraAccents,
+    brandPin: s.brandPin,
+    errorPin: s.errorPin,
+  })));
 
-  return useMemo(() => {
-    const effectiveBgHex = bgAutoMatch ? brandHex : bgColorHex;
-    const effectiveErrorHex = errorAutoMatch ? computeAutoErrorHex(brandHex) : errorColorHex;
-
-    const brand = generatePalette(brandHex, 1.0, currentMode);
-    const surface = generatePalette(effectiveBgHex, chromaScale, currentMode);
-    const error = generatePalette(effectiveErrorHex, 1.0, currentMode);
-    const errorSurface = generatePalette(effectiveErrorHex, chromaScale, currentMode);
-    const neutral = generatePalette(effectiveBgHex, 0.0, currentMode);
-    const slated = generatePalette(effectiveBgHex, chromaScale, currentMode);
-
-    const brandHue = hexToOklch(brandHex)[2];
-    const spreadHues = resolveAccentHues(brandHue, extraAccents.map(a => a.name));
-
-    const accentPalettes: AccentPalette[] = extraAccents
-      .map((a, i) => ({ a, autoHue: spreadHues[i] ?? a.autoHue }))
-      .filter(({ a }) => a.autoMatch || /^#[0-9a-fA-F]{6}$/.test(a.hex))
-      .map(({ a, autoHue }) => {
-        const effectiveHex = a.autoMatch ? computeAutoAccentHex(brandHex, autoHue) : a.hex;
-        return {
-          name: a.name,
-          hex: effectiveHex,
-          cssName: accentCssName(a.name),
-          palette: generatePalette(effectiveHex, 1.0, currentMode),
-          slatedPalette: generatePalette(effectiveHex, chromaScale, currentMode),
-          pin: a.pin,
-          invert: a.invert,
-        };
-      });
-
-    const brandSwatchOverride = brandPin
-      ? { hex: brandHex, L: hexToOklch(brandHex)[0] }
-      : null;
-    const errorSwatchOverride = errorPin
-      ? { hex: effectiveErrorHex, L: hexToOklch(effectiveErrorHex)[0] }
-      : null;
-
-    const neutralExtended: PaletteEntry[] = [
-      { step: 0 as PaletteEntry['step'], L: 1, C: 0, H: 0, hex: '#FFFFFF', css: 'oklch(1 0 0)' },
-      ...neutral.filter(e => (e.step as number) !== 0),
-      { step: 1000 as PaletteEntry['step'], L: 0, C: 0, H: 0, hex: '#000000', css: 'oklch(0 0 0)' },
-    ];
-
-    return {
-      brand,
-      surface,
-      error,
-      errorSurface,
-      neutral,
-      neutralExtended,
-      slated,
-      accentPalettes,
-      brandSwatchOverride,
-      errorSwatchOverride,
-      effectiveBgHex,
-      effectiveErrorHex,
-    };
-  }, [brandHex, bgColorHex, bgAutoMatch, errorColorHex, errorAutoMatch, chromaScale, currentMode, extraAccents, brandPin, errorPin]);
+  return useMemo(() => buildThemePalettes({ ...useThemeStore.getState(), ...seeds }), [seeds]);
 }

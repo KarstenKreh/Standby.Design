@@ -8,66 +8,26 @@ import { Copy } from 'lucide-react';
 import { toast } from 'sonner';
 import { usePalette } from '@/hooks/use-palette';
 import { useThemeStore } from '@/store/theme-store';
-import { generatePrimitivesOklch, generatePrimitivesHex, generateSemantic, generateLlmBriefing, generateSeedComment, collectFillContrastWarnings } from '@/lib/code-export';
-import { encodeState } from '@/lib/url-state';
-import { systemShareUrl, llmShareHeader } from '@core/share-link';
+import { colorPrimitivesExport, colorSemanticExport, colorLlmBriefing } from '@core/color-code-export';
+import { systemUrlForHash, toolBriefing, withShareLink } from '@core/share-link';
+import { useCurrentHash } from '@core/use-hash';
 import { CodeBlock } from '@core/code-block';
+import { hashSync } from '@/lib/hash-sync';
 
 export function CodeExport() {
-  const {
-    brand, surface, error, errorSurface, neutralExtended, accentPalettes,
-    brandSwatchOverride, errorSwatchOverride, effectiveBgHex, effectiveErrorHex,
-  } = usePalette();
+  const palettes = usePalette();
   const store = useThemeStore();
-  const { chromaScale, brandHex, brandPin, brandInvert, errorPin, errorInvert, fgContrastMode, themeName, currentMode } = store;
+  const hash = useCurrentHash(hashSync);
+  const shareUrl = systemUrlForHash(hash);
 
-  // Copy dropdown state
   const [copyFormat, setCopyFormat] = useState<'oklch' | 'hex'>('oklch');
   const [copySemantic, setCopySemantic] = useState(true);
   const [copyLlm, setCopyLlm] = useState(true);
 
-  const customBgHex = effectiveBgHex.toLowerCase() !== brandHex.toLowerCase() ? effectiveBgHex : null;
-
-  const seedComment = useMemo(() =>
-    generateSeedComment(store, effectiveBgHex, effectiveErrorHex),
-    [store, effectiveBgHex, effectiveErrorHex]
-  );
-
-  const oklchCode = useMemo(() =>
-    seedComment + generatePrimitivesOklch(brand, surface, error, errorSurface, neutralExtended, accentPalettes, chromaScale, customBgHex, themeName),
-    [seedComment, brand, surface, error, errorSurface, neutralExtended, accentPalettes, chromaScale, customBgHex, themeName]
-  );
-
-  const hexCode = useMemo(() =>
-    seedComment + generatePrimitivesHex(brand, surface, error, errorSurface, neutralExtended, accentPalettes, chromaScale, customBgHex, themeName),
-    [seedComment, brand, surface, error, errorSurface, neutralExtended, accentPalettes, chromaScale, customBgHex, themeName]
-  );
-
-  const semanticCode = useMemo(() =>
-    generateSemantic(
-      accentPalettes, brand, error, errorSurface, surface,
-      brandPin, brandSwatchOverride?.hex ?? null, brandInvert,
-      errorPin, errorSwatchOverride?.hex ?? null, errorInvert,
-      fgContrastMode, themeName
-    ),
-    [accentPalettes, brand, error, errorSurface, surface, brandPin, brandSwatchOverride, brandInvert, errorPin, errorSwatchOverride, errorInvert, fgContrastMode, themeName]
-  );
-
-  const fillContrastWarnings = useMemo(() =>
-    collectFillContrastWarnings(
-      accentPalettes, brand, error, errorSurface,
-      brandPin, brandSwatchOverride?.hex ?? null, brandInvert,
-      errorPin, errorSwatchOverride?.hex ?? null, errorInvert,
-      fgContrastMode
-    ),
-    [accentPalettes, brand, error, errorSurface, brandPin, brandSwatchOverride, brandInvert, errorPin, errorSwatchOverride, errorInvert, fgContrastMode]
-  );
-
-  const llmCode = useMemo(() =>
-    llmShareHeader(systemShareUrl('c', encodeState(store), window.location.hash)) +
-    generateLlmBriefing(brandHex, effectiveBgHex, effectiveErrorHex, accentPalettes, chromaScale, currentMode, brandPin, errorPin, themeName, fgContrastMode, fillContrastWarnings),
-    [store, brandHex, effectiveBgHex, effectiveErrorHex, accentPalettes, chromaScale, currentMode, brandPin, errorPin, themeName, fgContrastMode, fillContrastWarnings]
-  );
+  const oklchCode = useMemo(() => withShareLink('css', shareUrl, colorPrimitivesExport(store, palettes, 'oklch')), [store, palettes, shareUrl]);
+  const hexCode = useMemo(() => withShareLink('css', shareUrl, colorPrimitivesExport(store, palettes, 'hex')), [store, palettes, shareUrl]);
+  const semanticCode = useMemo(() => withShareLink('css', shareUrl, colorSemanticExport(store, palettes)), [store, palettes, shareUrl]);
+  const llmCode = useMemo(() => toolBriefing(hash, colorLlmBriefing(store, palettes)), [store, palettes, hash]);
 
   const handleCopyAll = useCallback(() => {
     const parts: string[] = [];

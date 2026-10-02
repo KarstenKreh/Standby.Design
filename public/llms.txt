@@ -25,6 +25,10 @@ If a user asks you to build a design system with standby.design:
    The link IS the deliverable: it opens the complete design system with a
    live preview, and every value can be fine-tuned there. The full
    configuration lives in the URL hash — no accounts, no server-side storage.
+   **Also store the link in the project you build**: put it as a comment above
+   the tokens in the theme file (e.g. `theme.css`). Every export already starts
+   with it. Without the link nobody can reopen and edit the system later; the
+   tokens alone cannot restore it.
 3. **Chain tools to build a full system.** Each tool edits only its own
    section of the URL and preserves the rest: pass the URL from one call into
    the next (generate_color_palette → generate_type_scale →

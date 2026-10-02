@@ -9,19 +9,24 @@
 
 export type SegmentKey = 'c' | 't' | 's' | 'y' | 'p' | 'm';
 
-interface UnifiedSegments {
-  c: string | null;
-  t: string | null;
-  s: string | null;
-  y: string | null;
-  p: string | null;
-  m: string | null;
+export type Segments = Record<SegmentKey, string | null>;
+
+export const SEGMENT_KEYS: readonly SegmentKey[] = ['c', 't', 's', 'y', 'p', 'm'];
+
+type UnifiedSegments = Segments;
+
+export function emptySegments(): Segments {
+  return { c: null, t: null, s: null, y: null, p: null, m: null };
 }
 
-const SEGMENT_KEYS: readonly string[] = ['c', 't', 's', 'y', 'p', 'm'];
+export function readSegments(raw: string): Segments {
+  const str = raw.replace(/^#/, '');
+  if (str !== '' && !isUnifiedHash(str)) return { ...emptySegments(), c: str };
+  return parseUnifiedHash(str);
+}
 
 function isSegmentKey(key: string): key is SegmentKey {
-  return SEGMENT_KEYS.includes(key);
+  return (SEGMENT_KEYS as readonly string[]).includes(key);
 }
 
 /** Check whether a raw hash string uses the unified format. */
@@ -33,7 +38,7 @@ export function isUnifiedHash(raw: string): boolean {
 /** Parse unified hash into segments. Returns null values for missing keys. */
 export function parseUnifiedHash(raw: string): UnifiedSegments {
   const str = raw.replace(/^#/, '');
-  const result: UnifiedSegments = { c: null, t: null, s: null, y: null, p: null, m: null };
+  const result: UnifiedSegments = emptySegments();
   if (!isUnifiedHash(str)) return result;
 
   let currentKey: SegmentKey | null = null;
@@ -51,15 +56,8 @@ export function parseUnifiedHash(raw: string): UnifiedSegments {
 }
 
 /** Build a unified hash string (without leading #). */
-export function buildUnifiedHash(segments: { c?: string | null; t?: string | null; s?: string | null; y?: string | null; p?: string | null; m?: string | null }): string {
-  const parts: string[] = [];
-  if (segments.c) parts.push('c=' + segments.c);
-  if (segments.t) parts.push('t=' + segments.t);
-  if (segments.s) parts.push('s=' + segments.s);
-  if (segments.y) parts.push('y=' + segments.y);
-  if (segments.p) parts.push('p=' + segments.p);
-  if (segments.m) parts.push('m=' + segments.m);
-  return parts.join('&');
+export function buildUnifiedHash(segments: Partial<Record<SegmentKey, string | null | undefined>>): string {
+  return SEGMENT_KEYS.filter(key => segments[key]).map(key => `${key}=${segments[key]}`).join('&');
 }
 
 /** Extract a single segment from a unified hash. Returns null if missing or legacy. */

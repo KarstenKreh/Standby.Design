@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { Toaster } from '@/components/ui/sonner';
 import { Button } from '@/components/ui/button';
 import { TooltipProvider } from '@/components/ui/tooltip';
@@ -9,45 +9,26 @@ import { SurfacePreview } from '@/components/surface-preview';
 import { CodeExport } from '@/components/code-export';
 import { usePalette } from '@/hooks/use-palette';
 import { useThemeCss } from '@/hooks/use-theme-css';
-import { useUrlState } from '@/hooks/use-url-state';
 import { useThemeStore } from '@/store/theme-store';
-import { encodeState } from '@/lib/url-state';
-import { buildUnifiedHash } from '@core/unified-hash';
 import { useFavicon } from '@/hooks/use-favicon';
+import { hashSync, sharedShape, sharedShapeTokens } from '@/lib/hash-sync';
+import { useCurrentHash } from '@core/use-hash';
+import { pageShareUrl } from '@core/share-link';
 import { AppShell } from '@core/app-shell';
 
 function App() {
   const palette = usePalette();
-  const { themeName, setThemeName, brandHex } = useThemeStore();
-  const store = useThemeStore();
+  const themeName = useThemeStore((s) => s.themeName);
+  const brandHex = useThemeStore((s) => s.brandHex);
+  const hash = useCurrentHash(hashSync);
 
-  useThemeCss(palette.brand, palette.slated, palette.neutral);
-  const otherSegments = useUrlState();
+  useThemeCss(palette.brand, palette.surface, palette.neutral);
   useFavicon(brandHex);
 
-  // Derive shapeTokens (border + radius) from the decoded shape state for preview.
-  const shapeTokens = useMemo(() => ({
-    borderEnabled: otherSegments.shape?.borderEnabled ?? true,
-    borderWidth: otherSegments.shape?.borderWidth ?? 1,
-    borderRadius: otherSegments.shape?.borderRadius ?? 8,
-  }), [otherSegments.shape]);
-
-  const getCurrentHash = useCallback(() => {
-    const colorEncoded = encodeState(store);
-    return buildUnifiedHash({ c: colorEncoded, t: otherSegments.t, s: otherSegments.s, y: otherSegments.y, p: otherSegments.p, m: otherSegments.m });
-  }, [store, otherSegments]);
-
   const handleShare = useCallback(() => {
-    const name = store.themeName?.trim();
-    const color = store.brandHex.replace('#', '');
-    const params = new URLSearchParams();
-    if (name) params.set('t', name);
-    params.set('c', color);
-    const query = params.toString() ? `?${params.toString()}` : '';
-    const hash = getCurrentHash();
-    const url = window.location.origin + window.location.pathname + query + '#' + hash;
+    const url = pageShareUrl(window.location.origin + window.location.pathname, hash);
     navigator.clipboard.writeText(url).then(() => toast('Share link copied!'));
-  }, [store, getCurrentHash]);
+  }, [hash]);
 
   useEffect(() => {
     document.title = themeName ? `${themeName} — Color Palette Generator` : 'Color Palette Generator';
@@ -55,7 +36,7 @@ function App() {
 
   return (
     <TooltipProvider>
-      <AppShell activeTool="color" buildHash={getCurrentHash}>
+      <AppShell activeTool="color" hash={hash}>
         {/* Header */}
         <div className="flex items-center justify-between mb-2">
           <h1 className="font-semibold" style={{ fontSize: 'var(--text-h4)', lineHeight: 'var(--leading-h4)' }}>
@@ -76,7 +57,7 @@ function App() {
           </div>
           <div>
             <h3 className="text-body-s font-semibold mb-3">Theme Preview</h3>
-            <SurfacePreview shapeTokens={shapeTokens} shape={otherSegments.shape} />
+            <SurfacePreview shapeTokens={sharedShapeTokens} shape={sharedShape} />
           </div>
         </div>
 

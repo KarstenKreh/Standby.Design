@@ -2,9 +2,10 @@ import { usePalette } from '@/hooks/use-palette';
 import { useThemeStore } from '@/store/theme-store';
 import { PaletteTable } from '@/components/palette-table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import type { PaletteEntry } from '@core/palette';
 
 export function PrimitiveTabs() {
-  const { brand, surface, error, errorSurface, neutralExtended, slated, accentPalettes } =
+  const { brand, surface, error, errorSurface, neutralExtended, accentPalettes } =
     usePalette();
   const chromaScale = useThemeStore((s) => s.chromaScale);
   const chromaPct = Math.round(chromaScale * 100);
@@ -36,7 +37,7 @@ export function PrimitiveTabs() {
           actionDesc="Full chroma — buttons, switches, checkboxes, interactive elements"
           surfaceDesc={`Surfaces \u00B7 containers — ${chromaPct}% chroma`}
           actionPalette={brand}
-          surfacePalette={slated}
+          surfacePalette={surface}
         />
       </TabsContent>
 
@@ -79,8 +80,8 @@ interface PaletteSubTabsProps {
   actionLabel: string;
   actionDesc: string;
   surfaceDesc: string;
-  actionPalette: import('@/lib/palette').PaletteEntry[];
-  surfacePalette: import('@/lib/palette').PaletteEntry[];
+  actionPalette: PaletteEntry[];
+  surfacePalette: PaletteEntry[];
 }
 
 function PaletteSubTabs({

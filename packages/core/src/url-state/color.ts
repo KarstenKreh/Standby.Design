@@ -31,6 +31,31 @@ export interface DecodedState {
   extraAccents: Accent[];
 }
 
+export const MAX_ACCENTS = 10;
+
+export const DEFAULT_THEME_NAME = 'Standby.Design';
+
+export const DEFAULT_COLOR_STATE: DecodedState = {
+  brandHex: '#335A7F',
+  bgColorHex: '#335A7F',
+  bgAutoMatch: true,
+  errorColorHex: '#CC3333',
+  errorAutoMatch: true,
+  chromaScale: 0.25,
+  currentMode: 'balanced',
+  brandPin: true,
+  brandInvert: false,
+  errorPin: true,
+  errorInvert: false,
+  fgContrastMode: 'best',
+  themeName: DEFAULT_THEME_NAME,
+  extraAccents: [],
+};
+
+export function decodeColorOrDefault(segment: string | null | undefined): DecodedState {
+  return (segment ? decodeState(segment) : null) ?? DEFAULT_COLOR_STATE;
+}
+
 export function encodeState(s: DecodedState): string {
   const brand = s.brandHex.replace('#', '');
   const bg = s.bgColorHex.replace('#', '');
@@ -66,7 +91,7 @@ export function decodeState(hash: string): DecodedState | null {
     errorPin: p[8] === '1',
     errorInvert: false,
     fgContrastMode: 'best',
-    themeName: 'Standby.Design',
+    themeName: DEFAULT_THEME_NAME,
     extraAccents: [],
   };
 
@@ -82,13 +107,13 @@ export function decodeState(hash: string): DecodedState | null {
     }
   }
 
-  result.themeName = p.length > 10 && p[10] ? decodeURIComponent(p[10]) : 'Standby.Design';
+  result.themeName = p.length > 10 && p[10] ? decodeURIComponent(p[10]) : DEFAULT_THEME_NAME;
 
   // v2 fields: brandInvert (pos 11), errorInvert (pos 12) — default false for old URLs
   result.brandInvert = p.length > 11 && p[11] === '1';
   result.errorInvert = p.length > 12 && p[12] === '1';
 
-  for (let i = 1; i < segments.length; i++) {
+  for (let i = 1; i < segments.length && result.extraAccents.length < MAX_ACCENTS; i++) {
     const firstColon = segments[i].indexOf(':');
     if (firstColon === -1) continue;
     const rawName = segments[i].substring(0, firstColon);

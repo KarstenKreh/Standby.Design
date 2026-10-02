@@ -1,12 +1,10 @@
 # Remote MCP server for mcp.standby.design (Streamable HTTP).
 # Build context is the repo root — the bundle pulls sources from
-# packages/core and system-react/src/lib via esbuild aliases.
+# packages/core via an esbuild alias.
 
 FROM node:20-alpine AS build
 WORKDIR /app
 COPY packages/core/ packages/core/
-COPY system-react/src/lib/ system-react/src/lib/
-COPY system-react/tsconfig.json system-react/tsconfig.app.json system-react/
 COPY packages/mcp-server/package.json packages/mcp-server/package-lock.json packages/mcp-server/
 WORKDIR /app/packages/mcp-server
 RUN npm ci

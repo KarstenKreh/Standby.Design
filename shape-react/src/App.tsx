@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import { Toaster } from '@/components/ui/sonner';
 import { Button } from '@/components/ui/button';
 import { TooltipProvider } from '@/components/ui/tooltip';
@@ -7,87 +7,21 @@ import { ShapeControls } from '@/components/shape-controls';
 import { ShapePreview } from '@/components/shape-preview';
 import { CodeExport } from '@/components/code-export';
 import { AppShell } from '@core/app-shell';
-import { useShapeStore } from '@/store/shape-store';
-import { encodeState } from '@/lib/url-state';
-import { buildUnifiedHash, getMySegment } from '@core/unified-hash';
-import { useUrlState } from '@/hooks/use-url-state';
-import { computeAutoErrorHex } from '@core/palette';
+import { useCurrentHash } from '@core/use-hash';
+import { pageShareUrl } from '@core/share-link';
+import { hashSync } from '@/lib/hash-sync';
 
 function App() {
-  const store = useShapeStore();
-
-  // Read color and type segments from URL, sync shape state
-  const otherSegments = useUrlState();
-
-  const getCurrentHash = useCallback(() => {
-    const shapeEncoded = encodeState(store);
-    return buildUnifiedHash({
-      c: otherSegments.c || undefined,
-      t: otherSegments.t || undefined,
-      s: shapeEncoded,
-      y: otherSegments.y || undefined,
-      p: otherSegments.p || undefined,
-      m: otherSegments.m || undefined,
-    });
-  }, [store, otherSegments]);
+  const hash = useCurrentHash(hashSync);
 
   const handleShare = useCallback(() => {
-    const hash = getCurrentHash();
-    const params = new URLSearchParams();
-    const cs = otherSegments.c;
-    if (cs) {
-      const parts = cs.split(',');
-      const hex = parts[0];
-      const name = parts[10] ? decodeURIComponent(parts[10]) : '';
-      if (name) params.set('t', name);
-      if (/^[0-9a-fA-F]{6}$/.test(hex)) params.set('c', hex);
-    }
-    const query = params.toString() ? `?${params.toString()}` : '';
-    const url = window.location.origin + window.location.pathname + query + '#' + hash;
+    const url = pageShareUrl(window.location.origin + window.location.pathname, hash);
     navigator.clipboard.writeText(url).then(() => toast('Share link copied!'));
-  }, [getCurrentHash, otherSegments]);
-
-  // Read brand color, palette mode, and chroma from color hash on mount
-  useEffect(() => {
-    const raw = window.location.hash.slice(1);
-    const colorSegment = getMySegment(raw, 'c');
-    if (colorSegment) {
-      const parts = colorSegment.split(',');
-      const brandHex = parts[0];
-      if (/^[0-9a-fA-F]{6}$/.test(brandHex)) {
-        store.setSurfaceHex('#' + brandHex);
-      }
-      const chromaPct = parseInt(parts[5]);
-      if (!isNaN(chromaPct)) {
-        store.setChromaScale(chromaPct / 100);
-      }
-      const mode = parts[6];
-      if (mode === 'balanced' || mode === 'exact') {
-        store.setPaletteMode(mode);
-      }
-      if (parts[7] === '1' || parts[7] === '0') {
-        store.setBrandPin(parts[7] === '1');
-      }
-      // parts[3] = errorColorHex, parts[4] = errorAutoMatch, parts[8] = errorPin, parts[12] = errorInvert
-      const errorHexRaw = parts[3];
-      const errorAutoMatch = parts[4] !== '0';
-      const effectiveErrorHex = errorAutoMatch
-        ? computeAutoErrorHex('#' + brandHex)
-        : (/^[0-9a-fA-F]{6}$/.test(errorHexRaw) ? '#' + errorHexRaw : '#CC3333');
-      store.setErrorHex(effectiveErrorHex);
-      if (parts[8] === '1' || parts[8] === '0') {
-        store.setErrorPin(parts[8] === '1');
-      }
-      if (parts[12] === '1' || parts[12] === '0') {
-        store.setErrorInvert(parts[12] === '1');
-      }
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [hash]);
 
   return (
     <TooltipProvider>
-      <AppShell activeTool="shape" buildHash={getCurrentHash}>
+      <AppShell activeTool="shape" hash={hash}>
         {/* Header */}
         <div className="flex items-center justify-between mb-2">
           <h1 className="font-semibold" style={{ fontSize: 'var(--text-h4)', lineHeight: 'var(--leading-h4)' }}>

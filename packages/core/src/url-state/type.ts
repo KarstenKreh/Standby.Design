@@ -40,6 +40,26 @@ export interface UrlState {
   traditionalMobileAssignments?: Record<TypeLevel, number>;
 }
 
+export const DEFAULT_TYPE_STATE: UrlState = {
+  scaleMode: 'custom',
+  baseSize: 1.0,
+  customRatio: 1.272,
+  mobileRatio: 1.2,
+  headingFont: 'satoshi',
+  bodyFont: 'satoshi',
+  monoFont: 'system-mono',
+  headingWeight: 500,
+  mobileBaseSize: 1.0,
+  mobileRatioMode: 'auto',
+  autoShrink: 25,
+  lineHeightOverrides: {},
+  letterSpacingOverrides: {},
+};
+
+export function decodeTypeOrDefault(segment: string | null | undefined): UrlState {
+  return (segment ? decodeState(segment) : null) ?? DEFAULT_TYPE_STATE;
+}
+
 /* ── Encode ── */
 
 function encodeOverrides(overrides: Partial<Record<TypeLevel, number>>): string {

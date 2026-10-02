@@ -58,12 +58,14 @@ file is the how-to-not-get-stuck.
   `docs/research/*.md`, then run `npm run build` in `docs/` and commit the
   output in `public/docs/` (see `docs/README.md`).
 
-- The color export generator lives once in
-  `packages/core/src/color-code-export.ts`;
-  `color-react/src/lib/code-export.ts` and
-  `system-react/src/lib/color-code-export.ts` only re-export it. The MCP
-  server bundles it via the `@syslib` alias — rebuild it
+- Every export generator lives once in `packages/core/src/*-code-export.ts`.
+  The System page and the MCP server compose them through
+  `packages/core/src/system-export.ts` and resolve a hash with
+  `resolveDesignSystem` (`design-system.ts`). Defaults per tool sit next to
+  the codec in `packages/core/src/url-state/*.ts`. Rebuild the MCP server
   (`packages/mcp-server: npm run build`) after generator changes.
+- Each tool app syncs its store with the URL hash in `src/lib/hash-sync.ts`
+  (`startHashSync` from `@core/hash-sync`), before the first render.
 - `color-react` has snapshot tests covering export output: review the diff
   first, then update with `npx vitest run -u`.
 - The apps build with `vite build` only (no type checking). Run

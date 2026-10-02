@@ -45,7 +45,10 @@ All four React apps share identical dependencies:
 
 ### Shared Patterns
 
-- **State**: Zustand stores with `setFullState()` for bulk updates from URL decode (Color + Type). System app is read-only (no store).
+- **State**: Zustand stores. Defaults live next to each codec in `packages/core/src/url-state/*.ts` (`DEFAULT_COLOR_STATE`, `DEFAULT_TYPE_STATE`, `DEFAULT_SHAPE_STATE`, `DEFAULT_SYMBOL_STATE`, `DEFAULT_SPACE_URL_STATE`, `DEFAULT_MOTION_URL_STATE`); stores, System and MCP all start from them. System and Role are read-only (no store).
+- **Hash sync**: each tool calls `startHashSync()` (`@core/hash-sync`) in `src/lib/hash-sync.ts` before the first render. It hydrates the store from its segment, rewrites the segment on every store change and keeps the other segments. `useCurrentHash()` feeds the tool nav and share links. Editing the hash by hand reloads the page.
+- **One resolution for every consumer**: `resolveDesignSystem(segments)` (`@core/design-system`) decodes all segments with defaults and computes palettes (`buildThemePalettes`), type scale, spacing and motion. `generateSystemExport()` (`@core/system-export`) builds the combined CSS / Tailwind / DTCG / briefing / font embed for the System page and the MCP server. Tools that read another tool's segment (Shape and Role read color, Color reads shape) decode it with the same core codecs.
+- **Share link in every export**: `withShareLink()` (`@core/share-link`) puts the `/system#…` link into each format (CSS comment, DTCG `$description`, briefing header, HTML comment). Every briefing ends with the design-rules footer.
 - **Unified URL persistence**: All tools share a unified hash format: `#c=<color-hash>&t=<type-hash>&s=<shape-hash>&y=<symbol-hash>&p=<space-hash>&m=<motion-hash>`. Each tool reads/writes only its own segment, preserves the rest. Legacy hashes are auto-detected for backward compatibility. See `packages/core/src/unified-hash.ts`.
 - **Cross-tool navigation**: Color → Type → System flow via links that carry the full hash. Each link encodes the current tool's state and passes through the other segments.
 - **Export**: CSS custom properties, Tailwind v4 `@theme`, design tokens JSON, LLM Briefing (Markdown). System app provides a merged export combining color + type + shape tokens. All code blocks use shared syntax highlighting (`@core/syntax-highlight`) and a shared `CodeBlock` component (`@core/code-block`). "Copy All" dropdown bundles multiple export sections (format choice + checkboxes).
@@ -358,10 +361,8 @@ The `shapeStyle` field (`'paper' | 'glass' | 'neomorph' | 'neobrutalism'`) is th
 | `ringColorMode` | `'auto' \| 'custom'` | `'auto'` | Ring color source |
 | `ringCustomColor` | string | `'#000000'` | Ring color when custom |
 | `separationMode` | `'shadow' \| 'border' \| 'contrast' \| 'gap' \| 'mixed'` | `'shadow'` | How surfaces separate from the background |
-| `surfaceHex` | string | `'#335A7F'` | Brand color (read from color hash) |
-| `paletteMode` | `'balanced' \| 'exact'` | `'balanced'` | Palette generation mode (from color hash) |
-| `chromaScale` | number | 1.0 | Surface chroma scale (from color hash) |
-| `brandPin` | boolean | false | Use exact brand hex for primary (from color hash) |
+
+Color is not part of the Shape store. `src/lib/hash-sync.ts` decodes the color segment once (`sharedColor`, `sharedPalettes`).
 
 ### Focus Ring (`packages/core/src/ring.ts`)
 
@@ -386,21 +387,7 @@ Self-contained component — an SVG `feDisplacementMap` filter plus native `back
 
 ### Preview — Palette Integration
 
-The preview uses `@core/palette` (shared with Color app) for accurate colors. On mount, the Shape app reads from the color URL hash segment:
-
-| Hash Position | Field | Usage |
-|---------------|-------|-------|
-| 0 | `brandHex` | `surfaceHex` — input for palette generation |
-| 5 | `chromaScale` | Surface palette saturation |
-| 6 | `paletteMode` | `balanced` or `exact` — palette algorithm |
-| 7 | `brandPin` | If true, primary = exact input hex |
-
-Colors are derived via `deriveSurface()`:
-- **Brand palette**: `generatePalette(hex, 1.0, mode)` — full chroma
-- **Surface palette**: `generatePalette(hex, chromaScale * 0.15, mode)` — neutral
-- **Error palette**: `generatePalette(computeAutoErrorHex(hex), 1.0, mode)`
-
-Semantic mapping matches the Color app exactly: `primary` = brand-600/400, `secondary` = brand-200/800, `destructive` = error-600/400. Foreground picked via `pickFgFromPalette()` comparing `contrastRatio('#FFFFFF', bg)` vs `contrastRatio('#1A1A1A', bg)`, then returning the palette step (brand-50 or brand-975).
+The preview decodes the full color segment and builds the same palettes as Color, System and MCP (`buildThemePalettes`), including a custom surface color, chroma, pins and inverts. `deriveSurface(color, palettes, isDark, style)` maps them like the semantic color export: `background` = surface-50/875, `card` = surface-25/825, `primary` = brand-600/400 or the pinned (dark: inverted) brand, `destructive` = error-600/400 or the pinned error, fill foregrounds from steps 25/975 via `fillForegroundHex()`, focus ring in the primary color. The Shape export computes shadows against the same surface palette (`shapeOptsFromState(state, palettes.surface)`), so Shape, System and MCP export identical `--shadow-*` values.
 
 ### URL State
 
