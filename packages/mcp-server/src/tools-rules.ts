@@ -55,7 +55,7 @@ export function registerRuleTools(server: McpServer) {
     'get_design_rules',
     {
       title: 'Get design rules',
-      description: `Universal design rules for building UI with design tokens: layout, flow (empty, loading and error states, dialogs), shape, surfaces, interaction states, typography, color and stack rules for Tailwind/React Native. The tokens say which values exist; these rules say how to use them. Call this before building or reviewing views. Without arguments it returns every rule as one line (${RULES.length} rules); pass rules (slugs) or a category with detail "full" for the complete text including how to detect violations in code. Rule texts are in German. Categories: ${CATEGORIES.join(', ')}.`,
+      description: `Universal design rules for building UI with design tokens: layout, flow (empty, loading and error states, dialogs), shape, surfaces, interaction and keyboard access, forms, content structure, states, typography, color and stack rules for Tailwind/React Native. The tokens say which values exist; these rules say how to use them. Call this before building or reviewing views. Without arguments it returns every rule as one line (${RULES.length} rules); pass rules (slugs) or a category with detail "full" for the complete text including how to detect violations in code. Rule texts are in German. Categories: ${CATEGORIES.join(', ')}.`,
       inputSchema: {
         category: z.string().optional().describe(`Only rules from this category: ${CATEGORIES.join(', ')}.`),
         platform: z.enum(PLATFORMS as [string, ...string[]]).optional().describe('Only rules that apply to this platform.'),

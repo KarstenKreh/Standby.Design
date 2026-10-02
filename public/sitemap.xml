@@ -45,23 +45,55 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://standby.design/docs/rules/bedienung-alles-geht-mit-der-tastatur-in-der-reihenfolge-des-bildes</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://standby.design/docs/rules/bedienung-bewegung-hat-einen-wert-und-haelt-nichts-auf</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://standby.design/docs/rules/bedienung-der-fokus-ist-sichtbar-und-hat-immer-einen-ort</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://standby.design/docs/rules/bedienung-die-hoehe-gehoert-der-zeile-nicht-dem-element</loc>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://standby.design/docs/rules/bedienung-ein-dauerhafter-zustand-braucht-ein-zweites-zeichen</loc>
+    <loc>https://standby.design/docs/rules/bedienung-ein-button-ist-nie-gesperrt</loc>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://standby.design/docs/rules/bedienung-fokus-ist-immer-sichtbar</loc>
+    <loc>https://standby.design/docs/rules/bedienung-ein-tooltip-ergaenzt-er-traegt-nie-allein</loc>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://standby.design/docs/rules/bedienung-klickbares-braucht-eine-flaeche</loc>
+    <loc>https://standby.design/docs/rules/bedienung-eine-handlung-loest-beim-loslassen-aus</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://standby.design/docs/rules/bedienung-eine-lange-auswahl-laesst-sich-durchsuchen</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://standby.design/docs/rules/bedienung-gewicht-ist-ein-budget-ein-primary-pro-ansicht</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://standby.design/docs/rules/bedienung-jede-geste-hat-einen-zweiten-weg-per-klick</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://standby.design/docs/rules/bedienung-klickbares-hat-eine-flaeche-und-nur-klickbares-sieht-so-aus</loc>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://standby.design/docs/rules/bedienung-kurze-zustaende-verschieben-dauerhafte-wechseln-die-palette</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://standby.design/docs/rules/bedienung-name-und-zustand-stehen-im-code</loc>
     <priority>0.6</priority>
   </url>
   <url>
@@ -73,11 +105,23 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://standby.design/docs/rules/bedienung-uebergaenge-haben-genau-einen-wert</loc>
+    <loc>https://standby.design/docs/rules/bedienung-was-sich-von-selbst-bewegt-laesst-sich-anhalten</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://standby.design/docs/rules/bedienung-zerstoerendes-trifft-man-nicht-aus-versehen</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://standby.design/docs/rules/farbe-farbe-traegt-nie-allein</loc>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://standby.design/docs/rules/farbe-hell-und-dunkel-sind-zwei-entwuerfe-keine-umkehrung</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://standby.design/docs/rules/farbe-kontrast-hat-eine-untergrenze</loc>
     <priority>0.6</priority>
   </url>
   <url>
@@ -89,6 +133,18 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://standby.design/docs/rules/fluss-der-zustand-der-ansicht-steht-in-der-adresse</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://standby.design/docs/rules/fluss-die-sprache-kommt-aus-der-einstellung-nicht-aus-dem-ort</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://standby.design/docs/rules/fluss-ein-ablauf-mit-schritten-zeigt-wie-weit-man-ist</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://standby.design/docs/rules/fluss-ein-fehler-steht-dort-wo-er-entstanden-ist</loc>
     <priority>0.6</priority>
   </url>
@@ -97,15 +153,27 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://standby.design/docs/rules/fluss-eine-eingabe-wechselt-nie-von-selbst-den-ort</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://standby.design/docs/rules/fluss-eine-zeitgrenze-warnt-vorher</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://standby.design/docs/rules/fluss-konfiguration-bekommt-eine-seite-ansichts-einstellungen-bleiben</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://standby.design/docs/rules/fluss-leer-ist-ein-zustand-keine-luecke</loc>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://standby.design/docs/rules/flaeche-die-ebene-folgt-der-rolle-nicht-der-schachtelung</loc>
+    <loc>https://standby.design/docs/rules/fluss-was-vorweg-angezeigt-wird-wird-bei-fehler-zurueckgenommen</loc>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://standby.design/docs/rules/flaeche-eine-linie-trennt-sie-schmueckt-nicht</loc>
+    <loc>https://standby.design/docs/rules/flaeche-die-ebene-folgt-der-rolle-nicht-der-schachtelung</loc>
     <priority>0.6</priority>
   </url>
   <url>
@@ -117,6 +185,34 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://standby.design/docs/rules/formular-der-nutzer-tippt-nur-was-das-system-nicht-weiss</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://standby.design/docs/rules/formular-was-der-nutzer-tippt-oder-einfuegt-kommt-an</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://standby.design/docs/rules/formular-was-ein-feld-beschreibt-steht-im-feld</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://standby.design/docs/rules/formular-was-zusammen-gespeichert-wird-steht-in-einem-formular</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://standby.design/docs/rules/inhalt-alles-hat-eine-textfassung</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://standby.design/docs/rules/inhalt-lange-zeichenketten-stehen-in-gruppen</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://standby.design/docs/rules/inhalt-struktur-steckt-im-element</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://standby.design/docs/rules/layout-der-divider-ist-die-unterkante-einer-section</loc>
     <priority>0.6</priority>
   </url>
@@ -125,11 +221,27 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://standby.design/docs/rules/layout-jede-ansicht-bricht-bei-320-pixeln-um</loc>
+    <loc>https://standby.design/docs/rules/layout-die-titel-bilden-eine-gliederung</loc>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://standby.design/docs/rules/layout-naehe-gruppiert-nicht-die-linie</loc>
+    <loc>https://standby.design/docs/rules/layout-ein-bedienelement-steht-bei-dem-was-es-veraendert</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://standby.design/docs/rules/layout-eine-schmale-spalte-steht-in-der-mitte</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://standby.design/docs/rules/layout-erst-abstand-dann-flaeche-dann-linie</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://standby.design/docs/rules/layout-jede-ansicht-folgt-dem-platz-und-bricht-bei-320-pixeln-um</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://standby.design/docs/rules/layout-jeder-textbehaelter-haelt-jede-textmenge-aus</loc>
     <priority>0.6</priority>
   </url>
   <url>
@@ -153,7 +265,15 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://standby.design/docs/rules/stack-was-der-browser-mitbringt-wird-gestaltet-oder-ersetzt</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://standby.design/docs/rules/typografie-betone-mit-einem-mittel-nicht-mit-zweien</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://standby.design/docs/rules/typografie-fliesstext-hat-eine-hoechstbreite</loc>
     <priority>0.6</priority>
   </url>
   <url>
@@ -165,7 +285,7 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://standby.design/docs/rules/zustand-dieselbe-zahl-bedeutet-ueberall-dasselbe</loc>
+    <loc>https://standby.design/docs/rules/zustand-eine-bedeutung-ueberall-gleich</loc>
     <priority>0.6</priority>
   </url>
   <url>

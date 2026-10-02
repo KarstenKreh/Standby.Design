@@ -150,7 +150,7 @@ if (res.isError || !res.content[0].text.includes('## Warum')) {
 console.log('=== design rule full text OK ===');
 
 res = await client.callTool({ name: 'get_design_rules', arguments: { category: 'Flaeche', detail: 'full' } });
-if (res.isError || !res.content[0].text.includes('# Eine Linie trennt')) {
+if (res.isError || !res.content[0].text.includes('# Die Ebene folgt der Rolle')) {
   throw new Error('get_design_rules category filter failed:\n' + res.content[0].text.slice(0, 400));
 }
 console.log('=== design rules category filter OK ===');

@@ -45,6 +45,7 @@ Die Monospace gilt dabei für die Zahlen, nicht für die ganze Oberfläche. Besc
 - Eine Zahlenspalte ist mit Leerzeichen auf gleiche Breite gebracht.
 - Die Ziffern springen beim Wechsel der Werte hin und her, weil die Tabellenziffern nicht eingeschaltet sind.
 - Eine technische Anwendung zeigt lange Nummern in der Textschrift, und Null und O sind nicht zu unterscheiden.
+- Ein einzelnes Betragsfeld steht rechtsbündig zwischen linksbündigen Textfeldern.
 
 ## Richtig / falsch
 
@@ -62,6 +63,8 @@ Die Monospace gilt dabei für die Zahlen, nicht für die ganze Oberfläche. Besc
 ## Grenzen
 
 Zahlen, die keine Größe sind, folgen ihrem Inhalt: Kundennummern, Postleitzahlen, Jahreszahlen, Telefonnummern. Sie werden nicht verglichen, sondern gelesen, und stehen deshalb linksbündig wie Text.
+
+Ein einzelnes Zahlenfeld in einem Formular ist keine Spalte. Niemand vergleicht es mit etwas, man füllt es nur aus. Es steht deshalb linksbündig wie die Felder darüber und darunter, die Einheit steht im Feld am Ende. Rechtsbündig wird ein Feld erst, wenn mehrere Zahlenfelder untereinander eine Spalte bilden, etwa in einem Planungsraster.
 
 ## Verwandt
 

@@ -183,7 +183,7 @@
     <h1>Keine Deckkraft-Modifier auf semantischen Farben</h1>
     <dl class="rule-meta"><div><dt>Geltung</dt><dd>stack · web, react-native</dd></div></dl>
 
-<aside class="callout callout-tip"><p class="callout-title">Regel</p><p>Schreibe nie <code>bg-primary/10</code>, <code>text-destructive/60</code> oder Ähnliches. Für Abstufungen gibt es benannte Stufen, für Hover und Gedrückt benannte Zustandsstufen. Fehlen sie, nimm eine Helligkeitsänderung: heller beim Hover (<code>brightness-110</code>), dunkler beim Drücken (<code>brightness-95</code>).</p>
+<aside class="callout callout-tip"><p class="callout-title">Regel</p><p>Schreibe nie <code>bg-primary/10</code>, <code>text-destructive/60</code> oder Ähnliches. Für Abstufungen und Zustände gibt es benannte Stufen, siehe <a href="/docs/rules/bedienung-kurze-zustaende-verschieben-dauerhafte-wechseln-die-palette">Kurze Zustände verschieben, dauerhafte wechseln die Palette</a>.</p>
 </aside>
 <h2>Warum</h2>
 <p>Eine semantische Farbe steht für eine Bedeutung. Ein Zehntel davon steht für gar nichts — es ist eine neue Farbe ohne Namen, ohne Definition und ohne Eintrag im System. Sie lässt sich nicht wiederverwenden, weil niemand weiß, dass es sie gibt, und sie taucht beim nächsten Mal als <code>/12</code> wieder auf.</p>

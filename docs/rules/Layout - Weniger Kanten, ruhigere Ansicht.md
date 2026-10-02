@@ -24,7 +24,7 @@ Der Blick sucht beim Lesen einer Ansicht nach Anhaltspunkten und findet sie an d
 
 Deshalb ist das eines der wirksamsten Mittel überhaupt: es kostet nichts. Es ändert keine Farbe, keine Größe, keinen Inhalt. Es räumt nur die Anfänge zusammen.
 
-Ausrichtung und Nähe sind dabei ein Paar. Nähe sagt, **was zusammengehört**, Ausrichtung sagt, **dass es zusammengehört**. Siehe [[Layout - Nähe gruppiert, nicht die Linie]].
+Ausrichtung und Nähe sind dabei ein Paar. Nähe sagt, **was zusammengehört**, Ausrichtung sagt, **dass es zusammengehört**. Siehe [[Layout - Erst Abstand, dann Fläche, dann Linie]].
 
 ## Der Kanten-Test
 
@@ -53,6 +53,12 @@ Der schlechte Fall ist die Mischung: drei Blöcke linksbündig und einer zentrie
 
 Zentrierter Fließtext über mehr als zwei Zeilen fällt ohnehin weg: dort wandert der Zeilenanfang bei jeder Zeile, und der Blick findet ihn nicht mehr.
 
+## Icons teilen sich eine Kante
+
+Stehen Icons vor Einträgen, bilden sie eine eigene Kante, und der Text dahinter eine zweite. Das Icon im Titel gehört auf dieselbe Kante wie die Icons der Einträge. Hat der Titel einen Rahmen oder ein Padding, weil er ein Knopf ist, zieh das ab, bis sein Icon auf der Kante der anderen steht.
+
+Bei mehrzeiligen Einträgen steht das Icon auf der ersten Zeile, nicht in der Mitte des Eintrags. Es gehört zum Anfang des Textes.
+
 ## Woran Du den Verstoß erkennst
 
 - Beschriftung, Wert und Knopf beginnen an drei verschiedenen Stellen.
@@ -60,6 +66,9 @@ Zentrierter Fließtext über mehr als zwei Zeilen fällt ohnehin weg: dort wande
 - Eingerückte Blöcke stehen an frei gewählten Stellen statt an einer gemeinsamen zweiten Kante.
 - Ein Text ist zentriert und länger als zwei Zeilen.
 - Zahlen und Text in einer Tabelle richten sich an derselben Kante aus, statt Zahlen rechts zu setzen (siehe [[Typografie - Zahlenspalten stehen rechtsbündig]]).
+- Der Titel einer aufklappbaren Liste ist gegenüber den Einträgen eingerückt.
+- Icon im Titel und Icons der Einträge stehen ein paar Pixel versetzt.
+- Ein Icon vor einem mehrzeiligen Eintrag steht senkrecht in dessen Mitte.
 
 ## Grenzen
 
@@ -69,6 +78,6 @@ Und eine zweite Kante für Einrückungen ist normal und richtig — Aufzählunge
 
 ## Verwandt
 
-- [[Layout - Nähe gruppiert, nicht die Linie]]
+- [[Layout - Erst Abstand, dann Fläche, dann Linie]]
 - [[Typografie - Zahlenspalten stehen rechtsbündig]]
 - [[Bedienung - Die Höhe gehört der Zeile, nicht dem Element]]

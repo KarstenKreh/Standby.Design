@@ -32,7 +32,7 @@ Ein häufiger Widerspruch löst sich damit auf. Ein Token-Export nennt für Zahl
 
 | | Status |
 |---|---|
-| Ein Element wird nicht gleichzeitig über Größe und Gewicht betont | hart |
+| Ein Element wird nicht gleichzeitig über Größe und Gewicht betont, außer Titelstufen | hart |
 | Eine alleinstehende große Zahl läuft im normalen Schnitt | hart |
 | Gewichte kommen aus der Skala, nicht aus der Ansicht | hart |
 | Welche Gewichte und Größen das sind | weich |
@@ -59,9 +59,12 @@ Ein häufiger Widerspruch löst sich damit auf. Ein Token-Export nennt für Zahl
 
 Eine Zahl im Fließtext ist keine alleinstehende Zahl und folgt dem Text.
 
+Titelstufen dürfen Größe und Gewicht zusammen nutzen. Dort geht es nicht um Betonung eines Wertes, sondern darum, dass jede Ebene der Gliederung sichtbar ist. Das regelt [[Layout - Die Titel bilden eine Gliederung]].
+
 Marketing- und Titelseiten dürfen mit ihren eigenen Display-Stufen arbeiten. Dort ist Schrift Bild, und ein Bild darf laut sein.
 
 ## Verwandt
 
 - [[Typografie - Zahlenspalten stehen rechtsbündig]]
+- [[Layout - Die Titel bilden eine Gliederung]]
 - [[Farbe - Werte kommen aus Tokens, nie aus der Hand]]

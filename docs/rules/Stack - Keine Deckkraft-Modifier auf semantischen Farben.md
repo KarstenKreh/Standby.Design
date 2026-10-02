@@ -17,7 +17,7 @@ tags:
 # Keine Deckkraft-Modifier auf semantischen Farben
 
 > [!TIP] Regel
-> Schreibe nie `bg-primary/10`, `text-destructive/60` oder Ähnliches. Für Abstufungen gibt es benannte Stufen, für Hover und Gedrückt benannte Zustandsstufen. Fehlen sie, nimm eine Helligkeitsänderung: heller beim Hover (`brightness-110`), dunkler beim Drücken (`brightness-95`).
+> Schreibe nie `bg-primary/10`, `text-destructive/60` oder Ähnliches. Für Abstufungen und Zustände gibt es benannte Stufen, siehe [[Bedienung - Kurze Zustände verschieben, dauerhafte wechseln die Palette]].
 
 ## Warum
 

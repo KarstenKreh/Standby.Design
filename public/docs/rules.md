@@ -62,7 +62,7 @@ Damit die Ecke dabei sauber bleibt, muss die Karte ihren Überlauf beschneiden. 
 
 ### Padding-Werte im Abschnitt
 
-Nur das erste Kind bekommt oben Padding. Die weiteren nicht, weil der untere Abstand des Vorgängers den Abstand schon liefert. Sobald Trennlinien im Spiel sind, bekommt jeder Abschnitt oben und unten Padding, sonst klebt der Inhalt an der Linie.
+Das erste Kind ist das, was oben steht. Hat die Karte einen Kopf, ist es der Kopf. Hat sie keinen, ist es der Inhalt, und der bekommt oben Padding. Setz die Null deshalb nicht an eine bestimmte Art von Abschnitt, sondern an den Fall „Abschnitt folgt auf Abschnitt“. Dann stimmt die Regel ohne Fallunterscheidung. Die weiteren nicht, weil der untere Abstand des Vorgängers den Abstand schon liefert. Sobald Trennlinien im Spiel sind, bekommt jeder Abschnitt oben und unten Padding, sonst klebt der Inhalt an der Linie.
 
 | Fall | oben | rechts | unten | links |
 |---|---|---|---|---|
@@ -88,6 +88,8 @@ Warum senkrecht kleiner: Senkrechtes Padding wird optisch ausgeglichen.
 - Ein Abschnitt setzt sein Padding mit negativen Margins wieder zurück. Das ist der sichere Beweis, dass das Padding eine Ebene zu hoch sitzt.
 - Ein Bild in einer Karte hat links und rechts denselben Abstand wie der Fließtext darüber, obwohl es bis an die Kante gehört.
 - Ein Chart läuft bis zur Kante, aber die Ecke ist eckig.
+- Der Inhalt einer Karte ohne Kopf klebt an der Oberkante.
+- Die Null für das obere Padding hängt an einem Abschnittstyp statt an seiner Position.
 
 ### Grenzen
 
@@ -140,63 +142,15 @@ Das zusätzliche Padding oben ist nötig, weil der Inhalt sonst an der Linie kle
 
 ### Grenzen
 
-Die Regel sagt, wie eine Trennlinie gebaut wird, nicht wann es eine braucht. Das steht in Nähe gruppiert, nicht die Linie.
+Die Regel sagt, wie eine Trennlinie gebaut wird, nicht wann es eine braucht. Das steht in Erst Abstand, dann Fläche, dann Linie.
 
 Ein Primitive, das die Kante zeichnet, ist erlaubt, solange es die Unterkante des Abschnitts ist. Ein eigenes Kind zwischen zwei Abschnitten ist es nicht. Der Name der Hilfsklasse ändert das nicht.
 
 ### Verwandt
 
-- Nähe gruppiert, nicht die Linie
+- Erst Abstand, dann Fläche, dann Linie
 - Die Karte hat kein Padding
-- Eine Linie trennt, sie schmückt nicht
-
-## Nähe gruppiert, nicht die Linie
-
-Layout · https://standby.design/docs/rules/layout-naehe-gruppiert-nicht-die-linie
-
-**Geltung:** universal · web, react-native
-
-> **Regel**
-> Gruppiere über Abstand. Elemente, die zusammengehören, stehen dichter beieinander als zu allem anderen. Setze eine Trennlinie erst dann, wenn die Abschnitte inhaltlich wirklich getrennt sind — etwa bei einer Liste gleichrangiger Positionen.
-
-### Warum
-
-Abstand ist die stärkste Gruppierung, die es gibt, und sie kostet nichts. Der Blick fasst zusammen, was dicht steht, noch bevor er liest. Eine Linie behauptet dasselbe noch einmal, fügt aber ein sichtbares Element hinzu. Bei Titel, Chart und Button trennt der Abstand schon deutlich genug, und jede zusätzliche Linie ist nur Rauschen.
-
-Der praktische Test: Nimm die Linien testweise heraus. Ist die Gruppierung danach immer noch klar, waren sie überflüssig. Fällt der Aufbau auseinander, waren die Abstände zu gleichförmig — dann ist die Abstandsstaffelung das eigentliche Problem, nicht die fehlende Linie.
-
-### Woran Du den Verstoß erkennst
-
-- Zwischen jedem Abschnitt einer Karte sitzt eine Linie, unabhängig vom Inhalt.
-- Alle Abstände in einer Ansicht sind gleich groß, und die Struktur entsteht nur aus Linien und Rahmen.
-- Ein Formular trennt jedes einzelne Feld mit einer Linie, statt zusammengehörige Felder als Block zu setzen.
-
-### Richtig / falsch
-
-```
-        RICHTIG                             FALSCH
-  Abstand macht die Gruppe           Linie macht die Gruppe
-
-  Rechnungsadresse                   Rechnungsadresse
-  Straße        [__________]         Straße        [__________]
-  PLZ, Ort      [__________]         ─────────────────────────
-                                     PLZ, Ort      [__________]
-  Lieferadresse                      ─────────────────────────
-  Straße        [__________]         Lieferadresse
-  PLZ, Ort      [__________]         ─────────────────────────
-                                     Straße        [__________]
-  Zwei Blöcke, sofort lesbar.        Sieben gleich starke Zeilen.
-```
-
-### Grenzen
-
-Bei einer langen Liste gleichrangiger Zeilen — Buchungen, Positionen, Kontakte — hilft die Linie wirklich, weil der Abstand zwischen zwei Zeilen dort aus Platzgründen klein bleiben muss. Das ist der Fall, für den die Trennlinie gedacht ist.
-
-### Verwandt
-
-- Der Divider ist die Unterkante einer Section
-- Eine Linie trennt, sie schmückt nicht
-- Die Karte hat kein Padding
+- Erst Abstand, dann Fläche, dann Linie
 
 ## Weniger Kanten, ruhigere Ansicht
 
@@ -213,7 +167,7 @@ Der Blick sucht beim Lesen einer Ansicht nach Anhaltspunkten und findet sie an d
 
 Deshalb ist das eines der wirksamsten Mittel überhaupt: es kostet nichts. Es ändert keine Farbe, keine Größe, keinen Inhalt. Es räumt nur die Anfänge zusammen.
 
-Ausrichtung und Nähe sind dabei ein Paar. Nähe sagt, **was zusammengehört**, Ausrichtung sagt, **dass es zusammengehört**. Siehe Nähe gruppiert, nicht die Linie.
+Ausrichtung und Nähe sind dabei ein Paar. Nähe sagt, **was zusammengehört**, Ausrichtung sagt, **dass es zusammengehört**. Siehe Erst Abstand, dann Fläche, dann Linie.
 
 ### Der Kanten-Test
 
@@ -242,6 +196,12 @@ Der schlechte Fall ist die Mischung: drei Blöcke linksbündig und einer zentrie
 
 Zentrierter Fließtext über mehr als zwei Zeilen fällt ohnehin weg: dort wandert der Zeilenanfang bei jeder Zeile, und der Blick findet ihn nicht mehr.
 
+### Icons teilen sich eine Kante
+
+Stehen Icons vor Einträgen, bilden sie eine eigene Kante, und der Text dahinter eine zweite. Das Icon im Titel gehört auf dieselbe Kante wie die Icons der Einträge. Hat der Titel einen Rahmen oder ein Padding, weil er ein Knopf ist, zieh das ab, bis sein Icon auf der Kante der anderen steht.
+
+Bei mehrzeiligen Einträgen steht das Icon auf der ersten Zeile, nicht in der Mitte des Eintrags. Es gehört zum Anfang des Textes.
+
 ### Woran Du den Verstoß erkennst
 
 - Beschriftung, Wert und Knopf beginnen an drei verschiedenen Stellen.
@@ -249,6 +209,9 @@ Zentrierter Fließtext über mehr als zwei Zeilen fällt ohnehin weg: dort wande
 - Eingerückte Blöcke stehen an frei gewählten Stellen statt an einer gemeinsamen zweiten Kante.
 - Ein Text ist zentriert und länger als zwei Zeilen.
 - Zahlen und Text in einer Tabelle richten sich an derselben Kante aus, statt Zahlen rechts zu setzen (siehe Zahlenspalten stehen rechtsbündig).
+- Der Titel einer aufklappbaren Liste ist gegenüber den Einträgen eingerückt.
+- Icon im Titel und Icons der Einträge stehen ein paar Pixel versetzt.
+- Ein Icon vor einem mehrzeiligen Eintrag steht senkrecht in dessen Mitte.
 
 ### Grenzen
 
@@ -258,18 +221,320 @@ Und eine zweite Kante für Einrückungen ist normal und richtig — Aufzählunge
 
 ### Verwandt
 
-- Nähe gruppiert, nicht die Linie
+- Erst Abstand, dann Fläche, dann Linie
 - Zahlenspalten stehen rechtsbündig
 - Die Höhe gehört der Zeile, nicht dem Element
 
-## Jede Ansicht bricht bei 320 Pixeln um
+## Die Titel bilden eine Gliederung
 
-Layout · https://standby.design/docs/rules/layout-jede-ansicht-bricht-bei-320-pixeln-um
+Layout · https://standby.design/docs/rules/layout-die-titel-bilden-eine-gliederung
 
-**Geltung:** universal · web
+**Geltung:** universal · web, react-native
 
 > **Regel**
-> Bau jede Ansicht so, dass der Inhalt bei einer Breite von 320 CSS-Pixeln umbricht, ohne dass man waagerecht scrollen muss. Nichts wird abgeschnitten, nichts überlappt, nichts schiebt die Seite zur Seite. Halte das von Anfang an ein, statt es später nachzurüsten.
+> Behandle die Titel einer Ansicht wie ein Inhaltsverzeichnis. Ebene 1 ist der Seitentitel und steht genau einmal da. Jede weitere Ebene liegt in einem Abschnitt der Ebene darüber, und von oben nach unten gelesen geben die Titel den Ablauf der Seite wieder. Kein Titel kommt zweimal vor, auch nicht in einer anderen Größe. Jede Ebene hebt sich sichtbar von der darunter ab, und ein Titel hebt sich genauso von seinen Einträgen ab. Der Titel im Browser-Tab nennt die aktuelle Ansicht.
+
+### Warum
+
+Die Größe eines Titels sagt, wie viel er umfasst. Der Seitentitel umfasst alles, ein Abschnittstitel nur seinen Abschnitt. Liest Du nur die Titel von oben nach unten, kennst Du den Aufbau der Seite, bevor Du ein Feld gelesen hast.
+
+Steht derselbe Titel zweimal da, einmal groß im Kopf und einmal kleiner über dem Formular, behauptet die Seite zwei Ebenen für eine Sache. Der Blick liest dasselbe zweimal und fragt sich, ob es zwei Dinge sind. Ändert später jemand nur einen der beiden, weiß niemand mehr, wie die Seite heißt.
+
+Screenreader lesen dieselbe Gliederung vor. Wer von Überschrift zu Überschrift springt, hört die Struktur, nicht das Aussehen. Ein doppelter Titel oder eine übersprungene Ebene ist dort ein Fehler in der Navigation.
+
+### Jede Stufe ist sichtbar
+
+Die Gliederung muss man auch sehen. Jede Ebene unterscheidet sich von der darunter durch Größe, Gewicht oder beides. Titelstufen dürfen beide Mittel zusammen nutzen, anders als Kennzahlen in Betone mit einem Mittel, nicht mit zweien. Das gilt auch für die unterste Stufe: Ein Titel über einer Liste hebt sich von ihren Einträgen ab. Hat er dieselbe Größe und dasselbe Gewicht, liest er sich als erster Eintrag. Ein zusätzliches Icon oder eine Einrückung ersetzt Größe und Gewicht nicht, sie fügen nur eine Kante hinzu.
+
+### Hart und weich
+
+| | Status |
+|---|---|
+| Genau ein Titel der Ebene 1 pro Ansicht | hart |
+| Jeder Titel steht einmal da | hart |
+| Die Ebenen folgen der Schachtelung, keine wird übersprungen | hart |
+| Ein Titel steht vor seinem Inhalt, die Reihenfolge ist die Lesereihenfolge | hart |
+| Jede Ebene hebt sich von der darunter und von ihren Einträgen über Größe, Gewicht oder beides ab | hart |
+| Der Titel im Browser-Tab nennt die aktuelle Ansicht | hart |
+| Ob Ebene 1 im Kopf der Anwendung oder in der Ansicht steht | weich, das Projekt entscheidet einmal für alle Ansichten |
+| Wie viele Ebenen | weich, Vorgabe höchstens drei in einer Ansicht |
+| Welche Mittel eine Ebene nutzt | weich, Größe, Gewicht oder beides |
+| Aufbau des Tab-Titels | weich, Vorgabe „Ansicht · Produkt“ |
+
+### Woran Du den Verstoß erkennst
+
+- Kopfleiste und erste Überschrift der Ansicht nennen dasselbe.
+- Eine Karte direkt unter dem Titel trägt ihn noch einmal als Kopf.
+- Titel und Untertitel sagen dasselbe mit anderen Worten.
+- Auf einen Titel der Ebene 1 folgt direkt einer der Ebene 3.
+- Ein Titel ist nur über Größe und Gewicht gesetzt, ohne Überschriften-Element.
+- Ein Titel hat dieselbe Größe und dasselbe Gewicht wie die Einträge darunter.
+- Ein Titel hebt sich nur über ein zweites Icon oder eine Einrückung ab.
+- Jeder Browser-Tab der Anwendung heißt gleich, der Titel ändert sich beim Seitenwechsel nicht.
+
+### Richtig / falsch
+
+```
+        RICHTIG                             FALSCH
+
+  1 Stammdaten bearbeiten             1 Stammdaten bearbeiten
+    2 Anstellung                      1 Stammdaten bearbeiten   ← doppelt
+    2 Daten                               3 Anstellung          ← Ebene 2 fehlt
+    2 Gehalt und Abfindung              2 Daten
+```
+
+### Grenzen
+
+Ein Abschnittstitel darf ein Wort mit dem Seitentitel teilen. Ein Pfad im Kopf der Anwendung („Bereich › Objekt“) ist Navigation und kein Titel. Dann trägt die Ansicht den Namen des Objekts als Ebene 1.
+
+Druckansichten und Exporte brauchen Ebene 1 im Dokument, weil dort der Kopf der Anwendung fehlt.
+
+### Verwandt
+
+- Betone mit einem Mittel, nicht mit zweien
+
+## Eine schmale Spalte steht in der Mitte
+
+Layout · https://standby.design/docs/rules/layout-eine-schmale-spalte-steht-in-der-mitte
+
+**Geltung:** universal · web · **Vorgabe:** 48rem für Formulare
+
+> **Regel**
+> Ist der Inhalt einer Ansicht schmaler als die Inhaltsfläche, setz die Spalte in deren Mitte. Was zur Spalte gehört, also Zurück, Titel und Aktionen, steht an ihren Kanten und nicht an der Kante der Seite.
+
+### Warum
+
+Der Nutzer sitzt mittig vor seinem Bildschirm, und sein Blick landet zuerst in der Mitte. Auf einem breiten Bildschirm liegt eine linksbündige Spalte am Rand seines Blickfelds, und er muss zum Lesen nach links schauen, während in der Mitte nichts steht.
+
+Dazu bleibt rechts eine leere Fläche, die wie fehlender Inhalt aussieht. Auf breiten Bildschirmen wird sie größer als die Spalte selbst. In der Mitte liest sich dieselbe Leere als Rand, und die Lesebreite bleibt gleich.
+
+Steht der Zurück-Knopf dagegen an der Seitenkante und das Formular in der Mitte, entstehen zwei Kanten ohne Bezug. Der Knopf gehört zur Spalte, also steht er an ihrer Kante.
+
+### Hart und weich
+
+| | Status |
+|---|---|
+| Eine schmale Spalte steht in der Mitte der Inhaltsfläche, nicht des Fensters | hart |
+| Begleitende Elemente richten sich an der Spalte aus | hart |
+| Die Breite der Spalte | weich, Vorgabe 48rem für Formulare |
+
+### Woran Du den Verstoß erkennst
+
+- Eine Spalte hat eine maximale Breite, aber keinen automatischen Rand links und rechts.
+- Zurück steht links an der Seite, das Formular darunter in der Mitte.
+- Die leere Fläche rechts ist breiter als der Inhalt.
+
+### Richtig / falsch
+
+```
+        RICHTIG                             FALSCH
+
+  │      ‹ Zurück             │       │ ‹ Zurück                  │
+  │      ┌───────────┐        │       │ ┌───────────┐             │
+  │      │ Formular  │        │       │ │ Formular  │             │
+  │      └───────────┘        │       │ └───────────┘             │
+         ^ eine Kante                   rechts leer, wirkt halb fertig
+```
+
+### Grenzen
+
+Ansichten, die die Breite füllen (Tabellen, Raster, Dashboards), betrifft das nicht. Gehört eine Seitenleiste zur Ansicht selbst, etwa ein Inhaltsverzeichnis, steht die Spalte neben ihr.
+
+Das ist keine Ausnahme zu Weniger Kanten, ruhigere Ansicht. Die Spalte steht in der Mitte, ihr Inhalt bleibt linksbündig.
+
+### Verwandt
+
+- Weniger Kanten, ruhigere Ansicht
+- Jede Ansicht folgt dem Platz und bricht bei 320 Pixeln um
+
+## Ein Bedienelement steht bei dem, was es verändert
+
+Layout · https://standby.design/docs/rules/layout-ein-bedienelement-steht-bei-dem-was-es-veraendert
+
+**Geltung:** universal · web, react-native
+
+> **Regel**
+> Setz jedes Bedienelement in dieselbe Fläche wie das, was es verändert.
+
+### Warum
+
+Das Auge ordnet einen Knopf der Fläche zu, in der er steht. Steht „Speichern“ oben im Seitenkopf, fragt sich der Nutzer, ob es die Karte unten speichert oder die ganze Seite.
+
+### Woran Du den Verstoß erkennst
+
+- Der Speichern-Knopf einer Karte steht im Seitenkopf.
+- Ein Filter steht über einer anderen Liste als der, die er filtert.
+- Die Sammelaktionen einer Tabelle stehen weit weg von ihr.
+- Der Löschen-Knopf einer Zeile steht außerhalb der Zeile.
+
+### Hart und weich
+
+Hart.
+
+### Grenzen
+
+Handlungen, die die ganze Ansicht betreffen. Die stehen im Kopf der Ansicht.
+
+### Quelle
+
+Laws of UX › Law of Common Region und Law of Proximity, https://lawsofux.com/. Don Norman, The Design of Everyday Things › Mapping.
+
+### Verwandt
+
+- Erst Abstand, dann Fläche, dann Linie
+- Ein Fehler steht dort, wo er entstanden ist
+- Die Karte hat kein Padding
+
+## Jeder Textbehälter hält jede Textmenge aus
+
+Layout · https://standby.design/docs/rules/layout-jeder-textbehaelter-haelt-jede-textmenge-aus
+
+**Geltung:** universal · web, react-native
+
+> **Regel**
+> Setz Schriftgrößen relativ, gib Textbehältern keine feste Höhe und sperr nie den Zoom. Leg für jeden Text fest, ob er umbricht oder gekürzt wird, und halte Gekürztes vollständig erreichbar. Die Ansicht hält 200 % Schrift und den längsten echten Inhalt aus.
+
+### Warum
+
+Wer schlecht sieht, vergrößert die Schrift. Feste Höhen schneiden den Text dann ab.
+
+Agenten bauen mit Beispieltext. Echte Namen, Übersetzungen und Nutzerinhalte sind oft dreimal so lang. Aus „Max Mustermann“ wird „Maximilian von Hohenzollern-Sigmaringen“, aus einem Link eine URL ohne ein einziges Leerzeichen. Ohne festgelegtes Verhalten läuft so ein Text aus der Karte heraus oder drückt das Layout breit.
+
+### Hart und weich
+
+Hart. Die Höhen aus Die Höhe gehört der Zeile, nicht dem Element stehen in `rem` und gelten als `min-height`.
+
+Hart: jeder Text hat ein Verhalten für Überlänge. Weich: welches. Vorgabe: Fließtext bricht um, Zellen und Beschriftungen kürzen.
+
+### Woran Du den Verstoß erkennst
+
+- `user-scalable=no` oder `maximum-scale=1`.
+- `height` statt `min-height` an Elementen mit Text.
+- `font-size` in `px`.
+- `overflow: hidden` mit fester Höhe.
+- Flex-Kind mit Text ohne `min-w-0`.
+- `truncate` ohne Weg zum vollen Text.
+- Lange URL oder E-Mail ohne `break-words` sprengt die Karte.
+
+### Grenzen
+
+Text in Bildern und Grafiken.
+
+Inhalte, die das Produkt selbst festlegt, etwa Kürzel und Codes.
+
+### Quelle
+
+WCAG 1.4.4 Resize Text, 1.4.12 Text Spacing. Vercel › Targets & Input („Never disable browser zoom"). Vercel › Content Handling („Text containers handle long content", „Flex children need `min-w-0`") und Content & Accessibility („Resilient to user-generated content").
+
+### Verwandt
+
+- Jede Ansicht folgt dem Platz und bricht bei 320 Pixeln um
+- Die Höhe gehört der Zeile, nicht dem Element
+- Icons sind auf die Schrift abgestimmt
+- Fließtext hat eine Höchstbreite
+- Leer ist ein Zustand, keine Lücke
+- Ein Tooltip ergänzt, er trägt nie allein
+
+## Erst Abstand, dann Fläche, dann Linie
+
+Layout · https://standby.design/docs/rules/layout-erst-abstand-dann-flaeche-dann-linie
+
+**Geltung:** universal · web, react-native · **Korridor:** Abstand zwischen Einträgen mindestens doppelter Durchschuss · **Vorgabe:** 1rem bei Fließtext 14px, Zeilenhöhe 1.5
+
+> **Regel**
+> Gruppiere über Abstand: Was zusammengehört, steht dichter beieinander als zu allem anderen. Reicht der Abstand nicht, wechsle die Fläche. Erst dann kommt eine Linie, in der zurückhaltenden Stärke. Eine kräftige Linie ist ein Signal und bleibt dem vorbehalten, was hervorgehoben werden soll.
+
+### Warum
+
+Abstand ist die stärkste Gruppierung, die es gibt, und sie kostet nichts. Der Blick fasst zusammen, was dicht steht, noch bevor er liest. Eine Linie behauptet dasselbe noch einmal, fügt aber ein sichtbares Element hinzu. Bei Titel, Chart und Button trennt der Abstand schon deutlich genug, und jede zusätzliche Linie ist nur Rauschen.
+
+Der praktische Test: Nimm die Linien testweise heraus. Ist die Gruppierung danach immer noch klar, waren sie überflüssig. Fällt der Aufbau auseinander, waren die Abstände zu gleichförmig — dann ist die Abstandsstaffelung das eigentliche Problem, nicht die fehlende Linie.
+
+Eine Linie hat eine Aufgabe: trennen. Sie soll nicht selbst gesehen werden. Trotzdem ist sie das lauteste Mittel, das dafür zur Verfügung steht, und das einzige, das dem Bild etwas hinzufügt. Abstand und Flächenwechsel trennen genauso zuverlässig, ohne dass ein Element mehr auf dem Schirm liegt.
+
+Zieht man jede Trennung als Linie, entsteht ein Gitter aus Rahmen, das lauter ist als der Inhalt darin. Und wenn die kräftige Stärke überall steht, hebt sie nichts mehr hervor. Sie ist dann keine Aussage mehr, sondern Tapete.
+
+Es gibt gute Systeme ganz ohne Linien, die allein mit Fläche, Abstand und Erhebung arbeiten. Das ist keine Abweichung von der Regel, sondern ihre konsequenteste Anwendung.
+
+### Die Rangfolge
+
+Bevor Du eine Linie setzt, geh die Liste von oben durch:
+
+1. **Abstand** — trennt am stärksten und kostet nichts. Siehe Erst Abstand, dann Fläche, dann Linie
+2. **Fläche** — eine Stufe der Surface-Leiter macht die Grenze sichtbar, ohne sie zu zeichnen
+3. **Linie** — wenn der Platz für Abstand fehlt und ein Flächenwechsel zu schwer wäre
+4. **Erhebung** — Schatten und Licht, wenn etwas wirklich über dem Übrigen liegt
+
+Die meisten Linien im Bestand sind übersprungene Schritte 1 und 2.
+
+### Hart und weich
+
+Zwei Einträge stehen weiter auseinander als zwei Zeilen innerhalb eines Eintrags. Sonst liest der Blick mehrzeilige Einträge als eine Textwand und findet den Anfang des nächsten nicht.
+
+Messbar wird das über den Durchschuss, also Zeilenhöhe minus Schriftgröße. Bei 14 Pixel Schrift und Zeilenhöhe 1,5 sind das 7 Pixel. Der Abstand zwischen zwei Einträgen liegt dann bei mindestens 14 Pixel, als Vorgabe die nächste Stufe der Abstandsskala.
+
+| | Status |
+|---|---|
+| Abstand zwischen Einträgen größer als der Durchschuss innerhalb | hart |
+| Mindestens das Doppelte des Durchschusses | hart |
+| Die Stufe aus der Skala | weich, Vorgabe die erste Stufe über dem Doppelten |
+| Eine Linie ist ein Mittel unter mehreren, nicht die Voreinstellung | hart |
+| Gibt es mehrere Stärken, ist die zurückhaltende der Alltag | hart |
+| Die kräftige Stärke bleibt der Hervorhebung vorbehalten | hart |
+| Linienfarben kommen aus benannten Tokens, nicht pro Stelle als Grauwert | hart |
+| Ob das System überhaupt mit Linien arbeitet und wie viele Stärken es gibt | weich |
+
+### Woran Du den Verstoß erkennst
+
+- Zwischen jedem Abschnitt einer Karte sitzt eine Linie, unabhängig vom Inhalt.
+- Alle Abstände in einer Ansicht sind gleich groß, und die Struktur entsteht nur aus Linien und Rahmen.
+- Ein Formular trennt jedes einzelne Feld mit einer Linie, statt zusammengehörige Felder als Block zu setzen.
+- Mehrzeilige Einträge einer Liste stehen so dicht wie ihre eigenen Zeilen.
+- Jede Fläche auf der Seite hat eine sichtbare Umrandung.
+- Die kräftige Stärke kommt so oft vor, dass sie nichts mehr hervorhebt.
+- Eine Linie trennt Dinge, die schon durch Abstand getrennt sind.
+- Eine Linie wird pro Stelle als Hex- oder Grauwert gesetzt.
+- Es gibt drei oder vier Linienstärken, und niemand kann sagen, wann welche gilt.
+
+### Richtig / falsch
+
+```
+        RICHTIG                             FALSCH
+  Abstand macht die Gruppe           Linie macht die Gruppe
+
+  Rechnungsadresse                   Rechnungsadresse
+  Straße        [__________]         Straße        [__________]
+  PLZ, Ort      [__________]         ─────────────────────────
+                                     PLZ, Ort      [__________]
+  Lieferadresse                      ─────────────────────────
+  Straße        [__________]         Lieferadresse
+  PLZ, Ort      [__________]         ─────────────────────────
+                                     Straße        [__________]
+  Zwei Blöcke, sofort lesbar.        Sieben gleich starke Zeilen.
+```
+
+### Grenzen
+
+Bei einer langen Liste gleichrangiger Zeilen — Buchungen, Positionen, Kontakte — hilft die Linie wirklich, weil der Abstand zwischen zwei Zeilen dort aus Platzgründen klein bleiben muss. Das ist der Fall, für den die Trennlinie gedacht ist.
+
+Bei dichten Listen und Tabellen kann der Abstand zwischen zwei Zeilen aus Platzgründen nicht groß genug werden. Dort verdient sich die Linie ihren Platz, und dort ist sie auch ohne schlechtes Gewissen richtig.
+
+Wenn ein Projekt nur eine einzige Linienstärke kennt, ist die Unterscheidung zwischen leise und kräftig gegenstandslos. Dann bleibt von der Regel nur die Rangfolge, und die reicht.
+
+### Verwandt
+
+- Der Divider ist die Unterkante einer Section
+- Die Karte hat kein Padding
+- Die Ebene folgt der Rolle, nicht der Schachtelung
+
+## Jede Ansicht folgt dem Platz und bricht bei 320 Pixeln um
+
+Layout · https://standby.design/docs/rules/layout-jede-ansicht-folgt-dem-platz-und-bricht-bei-320-pixeln-um
+
+**Geltung:** universal · web, react-native
+
+> **Regel**
+> Entscheide das Layout nach dem verfügbaren Platz, nie nach Gerätetyp oder Ausrichtung, und sperr die Ausrichtung nicht. Bau jede Ansicht so, dass der Inhalt bei 320 CSS-Pixeln umbricht, ohne waagerechtes Scrollen. Nichts wird abgeschnitten, nichts überlappt, und Text und Bedienelemente halten Abstand zu den Rändern des Geräts.
 
 ### Warum
 
@@ -281,17 +546,11 @@ Dass die Regel damit auch kleine Geräte abdeckt, ist ein Nebeneffekt und kein G
 
 Und sie von Anfang an einzuhalten ist billiger als nachzurüsten. Beim Nachrüsten stehen die Entscheidungen schon fest — die vierspaltige Kachelreihe, die Werkzeugleiste mit acht Elementen, die Tabelle mit zwölf Spalten —, und jede davon muss einzeln aufgebrochen werden. Wer früh bei 320 prüft, trifft diese Entscheidungen gar nicht erst.
 
+Ein Tablet im geteilten Fenster ist schmaler als ein Telefon quer. Wer das Gerät abfragt, zeigt dann das falsche Layout oder versteckt Funktionen.
+
 ### Was die Regel verlangt und was nicht
 
 Verlangt ist **Benutzbarkeit**, nicht Schönheit. Es darf eng aussehen. Es darf gestapelt aussehen. Es darf nach Notlösung aussehen. Was nicht sein darf: abgeschnittener Inhalt, überlappende Elemente, ein Schieber unter der ganzen Seite, unerreichbare Bedienelemente.
-
-### Woran Du den Verstoß erkennst
-
-- Bei 320 Pixeln erscheint ein waagerechter Schieber unter der ganzen Seite statt unter dem breiten Element.
-- Eine Filter- oder Buttonzeile schiebt sich aus dem Bild, weil der Umbruch fehlt.
-- Ein Overlay steht bündig an den Bildschirmkanten oder ist höher als das Fenster und nicht scrollbar.
-- Die Ansicht rechnet mit `vh` und springt beim Ein- und Ausblenden der Browserleiste.
-- Beim Vergrößern auf 400 Prozent am Desktop bricht die Ansicht auseinander, obwohl sie am Telefon in Ordnung aussieht.
 
 ### Die Baseline
 
@@ -303,6 +562,25 @@ Verlangt ist **Benutzbarkeit**, nicht Schönheit. Es darf eng aussehen. Es darf 
 | Raster | Stapeln nach unten. Kachel- und Kennzahlraster dürfen zweispaltig bleiben |
 | Filter- und Buttonzeilen | Umbrechen, Reiterleisten alternativ waagerecht scrollen |
 | Höhen | Dynamische Viewport-Einheiten statt fester, wo die Browserleiste hineinspielt |
+| Ränder des Geräts | Text und Bedienelemente halten Abstand zu allem, was das System über die Ansicht legt: Statusleiste oben, Kerbe oder Kamera-Insel, abgerundete Ecken, Navigationsleiste oder Home-Strich unten, mit dem man zwischen Apps und Screens wechselt. Nur Flächen und Bilder laufen darunter. Im Web über `env(safe-area-inset-*)`, in React Native über den Safe-Area-Rahmen |
+
+### Hart und weich
+
+Hart.
+
+### Woran Du den Verstoß erkennst
+
+- Bei 320 Pixeln erscheint ein waagerechter Schieber unter der ganzen Seite statt unter dem breiten Element.
+- Eine Filter- oder Buttonzeile schiebt sich aus dem Bild, weil der Umbruch fehlt.
+- Ein Overlay steht bündig an den Bildschirmkanten oder ist höher als das Fenster und nicht scrollbar.
+- Die Ansicht rechnet mit `vh` und springt beim Ein- und Ausblenden der Browserleiste.
+- Beim Vergrößern auf 400 Prozent am Desktop bricht die Ansicht auseinander, obwohl sie am Telefon in Ordnung aussieht.
+- Eine fixierte Leiste unten sitzt auf dem Home-Strich oder der Navigationsleiste des Systems, oder ein Titel oben liegt unter der Statusleiste.
+- `viewport-fit=cover` ohne `env(safe-area-inset-*)`.
+- Layout hängt an `navigator.userAgent`, `isMobile` oder `Platform.isPad`.
+- Media Query auf `orientation`, die Inhalt ausblendet.
+- `screen.orientation.lock()`.
+- JS liest `window.innerWidth`, um Komponenten zu tauschen, wo CSS reicht.
 
 ### Grenzen
 
@@ -310,10 +588,18 @@ WCAG nimmt ausdrücklich aus, was zwingend zwei Dimensionen braucht: Tabellen, L
 
 Ein Werkzeug, das ohne Fläche sinnlos ist, darf schmal eine ehrliche Ersatzansicht zeigen. Der Hinweis „Diese Ansicht braucht ein größeres Fenster" ist erlaubt, das stumme Abschneiden nicht.
 
+Ausrichtung, die für die Sache nötig ist, etwa ein Scheckscanner oder ein Klavier.
+
+### Quelle
+
+Apple HIG › Layout („Determine layout based on size classes, not device type or orientation"). WCAG 1.3.4 Orientation. Fluent 2 › Accessibility › Responsive layouts.
+
 ### Verwandt
 
 - Die Höhe gehört der Zeile, nicht dem Element
 - Ein Pop-up unterbricht, es führt nicht
+- Jeder Textbehälter hält jede Textmenge aus
+- Fließtext hat eine Höchstbreite
 
 ## Ein Pop-up unterbricht, es führt nicht
 
@@ -377,6 +663,8 @@ Bleibt beides „nein", darf es ein Pop-up sein. Der Test ist die praktische Fas
 
 In allen drei Fällen redet die Anwendung, und der Nutzer antwortet mit einem Wort.
 
+Solange ein Pop-up offen ist, ist alles dahinter still: Die Seite scrollt nicht mit, und weder Tab noch Screenreader erreichen etwas dahinter. Sonst bedient der Nutzer eine Seite, die er nicht sieht.
+
 ### Woran Du den Verstoß erkennst
 
 - Im Pop-up stehen mehrere Eingabefelder oder ein „Speichern" für mehrere Werte.
@@ -386,6 +674,7 @@ In allen drei Fällen redet die Anwendung, und der Nutzer antwortet mit einem Wo
 - Der Zurück-Knopf des Geräts schließt etwas anderes als das, was der Nutzer erwartet.
 - Der Zustand lässt sich nicht verlinken und kommt nach einem Neuladen nicht wieder.
 - Das Pop-up hat eine Überschrift, die eigentlich ein Seitentitel ist.
+- Hinter dem offenen Pop-up scrollt die Seite mit, oder Tab erreicht Elemente dahinter. Kein `inert` am Hintergrund, kein `overscroll-behavior: contain` im Pop-up.
 
 ### Richtig / falsch
 
@@ -426,9 +715,9 @@ Ein Panel, das von der Seite oder von unten einfährt, ist kein Schlupfloch. Ste
 
 ### Verwandt
 
-- Fokus ist immer sichtbar
-- Jede Ansicht bricht bei 320 Pixeln um
-- Klickbares braucht eine Fläche
+- Der Fokus ist sichtbar und hat immer einen Ort
+- Jede Ansicht folgt dem Platz und bricht bei 320 Pixeln um
+- Klickbares hat eine Fläche, und nur Klickbares sieht so aus
 
 ## Leer ist ein Zustand, keine Lücke
 
@@ -474,11 +763,11 @@ Der häufigste Fehler ist nicht der fehlende leere Zustand, sondern derselbe Tex
 
 ### Grenzen
 
-Nicht jede leere Fläche braucht Text. Eine Spalte in einer Tabelle, ein einzelnes Feld, ein Diagrammabschnitt ohne Wert — dort reicht ein Strich oder ein Zeichen für „kein Wert", siehe Dieselbe Zahl bedeutet überall dasselbe. Die Regel gilt für Bereiche, die als Ganzes leer sind.
+Nicht jede leere Fläche braucht Text. Eine Spalte in einer Tabelle, ein einzelnes Feld, ein Diagrammabschnitt ohne Wert — dort reicht ein Strich oder ein Zeichen für „kein Wert", siehe Eine Bedeutung, überall gleich. Die Regel gilt für Bereiche, die als Ganzes leer sind.
 
 ### Verwandt
 
-- Dieselbe Zahl bedeutet überall dasselbe
+- Eine Bedeutung, überall gleich
 - Der Platz ist da, bevor die Daten kommen
 - Ein Fehler steht dort, wo er entstanden ist
 
@@ -520,10 +809,20 @@ Lädt ein Bereich, wird auch nur dieser Bereich als ladend gezeigt. Eine ganze S
 
 Die Zahlen sind eine Vorgabe. Hart ist die Staffelung: erst nichts, dann Form, dann Auskunft.
 
+Ist ein Ladehinweis einmal erschienen, bleibt er eine Mindestzeit stehen. Kommt die Antwort kurz nach der Schwelle, blitzt er sonst für ein paar Millisekunden auf, genau das Flackern, das die Schwelle verhindern soll.
+
+| | Status |
+|---|---|
+| Erst nichts, dann Form, dann Auskunft | hart |
+| Ein erschienener Ladehinweis hat eine Mindestdauer | hart |
+| Schwelle bis zur ersten Anzeige | weich, Korridor 150 bis 250 ms, Vorgabe 200 |
+| Mindestdauer | weich, Korridor 300 bis 500 ms, Vorgabe 400 |
+
 ### Woran Du den Verstoß erkennst
 
 - Der Inhalt trifft ein und schiebt die Seite nach unten.
 - Ein Ladezeichen blitzt bei jedem Wechsel kurz auf.
+- Ein Ladehinweis verschwindet wenige Millisekunden nach dem Erscheinen.
 - Ein einzelner ladender Bereich sperrt die ganze Ansicht.
 - Der Platzhalter hat eine andere Höhe als der echte Inhalt.
 - Bei einem langen Vorgang steht minutenlang ein sich drehender Kreis ohne Auskunft.
@@ -539,7 +838,288 @@ Ein Vorgang, den der Nutzer selbst ausgelöst hat und dessen Ergebnis er abwarte
 
 - Leer ist ein Zustand, keine Lücke
 - Ein Fehler steht dort, wo er entstanden ist
-- Übergänge haben genau einen Wert
+- Bewegung hat einen Wert und hält nichts auf
+
+## Der Zustand der Ansicht steht in der Adresse
+
+Fluss · https://standby.design/docs/rules/fluss-der-zustand-der-ansicht-steht-in-der-adresse
+
+**Geltung:** universal · web, react-native
+
+> **Regel**
+> Leg Filter, Sortierung, Suche, Tab, Seite und geöffnetes Detail in die URL. Zurück stellt Ansicht und Scrollposition wieder her.
+
+### Warum
+
+Nur so lässt sich eine Ansicht teilen, neu laden und mit Zurück wiederfinden.
+
+### Woran Du den Verstoß erkennst
+
+- Filter nur im Komponenten-State.
+- Tabs ohne Query-Parameter.
+- Neuladen setzt alles zurück.
+- Zurück landet oben statt an der alten Stelle.
+
+### Hart und weich
+
+Hart.
+
+### Grenzen
+
+Flüchtiges (Hover, offenes Menü, ungespeicherte Eingaben) und alles Vertrauliche.
+
+### Quelle
+
+Vercel › State & Navigation („URL reflects state", „Back/Forward restores scroll position").
+
+### Verwandt
+
+- Ein Pop-up unterbricht, es führt nicht
+- Eine Eingabe wechselt nie von selbst den Ort
+
+## Eine Eingabe wechselt nie von selbst den Ort
+
+Fluss · https://standby.design/docs/rules/fluss-eine-eingabe-wechselt-nie-von-selbst-den-ort
+
+**Geltung:** universal · web, react-native
+
+> **Regel**
+> Eine Auswahl, Eingabe oder ein Fokus allein öffnet keine neue Seite, sendet nichts ab und springt in kein anderes Feld.
+
+### Warum
+
+Wer mit Pfeiltasten durch eine Auswahl blättert, landet sonst bei jedem Schritt woanders.
+
+### Woran Du den Verstoß erkennst
+
+- `select` mit `onChange={navigate}`.
+- Absenden beim letzten Zeichen.
+- Fokus springt ungefragt ins nächste Feld.
+
+### Hart und weich
+
+Hart.
+
+### Grenzen
+
+Filter und Sortierung, die nur die aktuelle Ansicht ändern. Code-Felder, deren Weiterspringen angekündigt ist.
+
+### Quelle
+
+WCAG 3.2.1 On Focus, 3.2.2 On Input.
+
+### Verwandt
+
+- Der Zustand der Ansicht steht in der Adresse
+- Ein Fehler steht dort, wo er entstanden ist
+
+## Eine Zeitgrenze warnt vorher
+
+Fluss · https://standby.design/docs/rules/fluss-eine-zeitgrenze-warnt-vorher
+
+**Geltung:** universal · web, react-native · **Vorgabe:** Warnung zwei Minuten vor Ablauf
+
+> **Regel**
+> Warne vor dem Ablauf jeder Zeitgrenze, biete eine Verlängerung an und bewahre die Eingaben über eine neue Anmeldung hinweg.
+
+### Warum
+
+Wer langsam tippt oder kurz weg ist, verliert sonst seine Arbeit an eine Uhr, die er nicht sieht.
+
+### Woran Du den Verstoß erkennst
+
+- Abmeldung ohne Hinweis vorher.
+- Nach dem neuen Login ist das Formular leer.
+- Ein Angebot oder Schritt läuft ab, ohne dass die Ansicht es ankündigt.
+
+### Hart und weich
+
+Hart: Warnung, Verlängerung, Eingaben bleiben. Weich: wann gewarnt wird. Vorgabe zwei Minuten vorher.
+
+### Grenzen
+
+Echtzeit-Vorgänge wie Auktionen. Zeitgrenzen über 20 Stunden.
+
+### Quelle
+
+WCAG 2.2.1 Timing Adjustable, 2.2.5 Re-authenticating, 2.2.6 Timeouts.
+
+### Verwandt
+
+- Ein Fehler steht dort, wo er entstanden ist
+- Was vorweg angezeigt wird, wird bei Fehler zurückgenommen
+
+## Was vorweg angezeigt wird, wird bei Fehler zurückgenommen
+
+Fluss · https://standby.design/docs/rules/fluss-was-vorweg-angezeigt-wird-wird-bei-fehler-zurueckgenommen
+
+**Geltung:** universal · web, react-native
+
+> **Regel**
+> Nimm eine Änderung, die Du vor der Antwort des Servers angezeigt hast, bei einem Fehler sichtbar zurück und sag dazu, dass es nicht geklappt hat.
+
+### Warum
+
+Sonst glaubt der Nutzer, es sei gespeichert. Den Unterschied merkt er erst beim nächsten Laden, wenn er nicht mehr weiß, was er getan hat.
+
+### Woran Du den Verstoß erkennst
+
+- Optimistisches Setzen des Zustands ohne `catch` und ohne Rücknahme.
+- Fehler landet nur in der Konsole.
+- Nach dem Fehler steht der neue Wert weiter da.
+
+### Hart und weich
+
+Hart.
+
+### Grenzen
+
+Änderungen, die erst nach der Antwort angezeigt werden.
+
+### Quelle
+
+Vercel Web Interface Guidelines › Interactions („Optimistic updates … On failure, show an error & roll back or provide Undo").
+
+### Verwandt
+
+- Ein Fehler steht dort, wo er entstanden ist
+- Der Platz ist da, bevor die Daten kommen
+- Eine Zeitgrenze warnt vorher
+
+## Die Sprache kommt aus der Einstellung, nicht aus dem Ort
+
+Fluss · https://standby.design/docs/rules/fluss-die-sprache-kommt-aus-der-einstellung-nicht-aus-dem-ort
+
+**Geltung:** universal · web, react-native
+
+> **Regel**
+> Wähle die Sprache aus der Einstellung von Browser oder Konto und lass sie jederzeit umstellen.
+
+### Warum
+
+Wer im Urlaub ist oder eine andere Sprache spricht als sein Land, bekommt sonst eine Oberfläche, die er nicht lesen kann.
+
+Die gewählte Sprache steht auch im Code, als `lang` an der Wurzel der Seite, und wechselt mit. Danach richten sich Aussprache des Screenreaders, Silbentrennung und das Übersetzungsangebot des Browsers. Ein Abschnitt in einer anderen Sprache bekommt sein eigenes `lang`.
+
+### Woran Du den Verstoß erkennst
+
+- Sprachwahl über IP oder Standort.
+- Kein Weg, die Sprache zu wechseln.
+- Die Wahl wird beim nächsten Besuch vergessen.
+- `lang` fehlt, steht auf „en“ an einer deutschen Oberfläche oder wechselt beim Umschalten der Sprache nicht mit.
+
+### Hart und weich
+
+Hart.
+
+### Grenzen
+
+Inhalte, die rechtlich am Ort hängen, etwa Preise und Steuern. Die Sprache bleibt trotzdem frei.
+
+### Quelle
+
+WCAG 3.1.1 Language of Page, 3.1.2 Language of Parts. Vercel Web Interface Guidelines › Content („Prefer language settings over location … Never rely on IP/GPS for language").
+
+### Verwandt
+
+- Jede Ansicht folgt dem Platz und bricht bei 320 Pixeln um
+
+## Konfiguration bekommt eine Seite, Ansichts-Einstellungen bleiben
+
+Fluss · https://standby.design/docs/rules/fluss-konfiguration-bekommt-eine-seite-ansichts-einstellungen-bleiben
+
+**Geltung:** universal · web, react-native
+
+> **Regel**
+> Lass eine Einstellung auf der Seite, wenn sie drei Bedingungen erfüllt: Sie wirkt sofort, sie betrifft nur diese Ansicht, und sie braucht kein Speichern. Fehlt eine davon, ist sie Konfiguration und bekommt eine eigene Seite mit Adresse. Dort gibt es ein Formular und ein Speichern.
+
+### Warum
+
+Die beiden Arten unterscheiden sich darin, wann der Nutzer sie braucht. Eine Ansichts-Einstellung braucht er mitten in der Arbeit: Filter, Sortierung, Zeitraum, sichtbare Spalten, Einheit. Er sieht das Ergebnis sofort, also gehört sie dorthin, wo er hinschaut.
+
+Eine Konfiguration legt er einmal fest und ändert sie selten: einen Abgabensatz, Kontonummern, eine Schwelle. Sie wirkt auf andere Seiten und oft auf andere Nutzer. Liegt sie aufklappbar auf einer Arbeitsseite, schiebt sie beim Öffnen die Arbeit aus dem Blick. Beim nächsten Mal findet sie niemand, weil sie hinter einem Pfeil liegt statt hinter einer Adresse.
+
+Das Speichern ist das sicherste Zeichen. Braucht eine Einstellung einen Speichern-Knopf, ist sie ein Formular, und ein Formular braucht eine Adresse, wie bei Ein Pop-up unterbricht, es führt nicht. Mehrere Speichern-Knöpfe auf einer Seite werfen die Frage auf, ob der untere auch das speichert, was oben geändert wurde.
+
+### Der Schnitt
+
+| Beispiel | wirkt sofort | nur diese Ansicht | ohne Speichern | Ort |
+|---|---|---|---|---|
+| Zeitraum, Filter, Sortierung | ja | ja | ja | auf der Seite |
+| Schalter „Wochenenden ausblenden“ | ja | ja | ja | auf der Seite |
+| Spaltenauswahl, die für den Nutzer gemerkt wird | ja | ja | ja, speichert beim Ändern | auf der Seite |
+| Abgabensatz für alle Berechnungen | nein | nein | nein | eigene Seite |
+| Kontonummern, aus denen eine Kennzahl rechnet | nein | nein | nein | eigene Seite |
+| Benachrichtigungen | nein | nein | ja | eigene Seite, weil sie nicht zur Ansicht gehört |
+
+### Mehrere Listen und Tabellen
+
+Die Regel misst keine Länge und begrenzt keinen Inhalt. Eine Seite darf viele Listen und Tabellen zeigen. Sie begrenzt nur das Sammeln: Höchstens ein Bereich einer Seite sammelt Änderungen und speichert sie gemeinsam. Alles andere speichert beim Ändern oder zeigt nur an.
+
+### Hart und weich
+
+| | Status |
+|---|---|
+| Eine Ansichts-Einstellung bleibt auf der Seite und wirkt sofort | hart |
+| Eine Konfiguration bekommt eine eigene Seite mit Adresse | hart |
+| Höchstens ein Bereich pro Seite sammelt Änderungen für ein gemeinsames Speichern | hart |
+| Wo die Einstellungsseite in der Navigation hängt | weich, Vorgabe im Bereich, von einer zentralen Einstellungsseite verlinkt |
+
+### Woran Du den Verstoß erkennst
+
+- Ein Abschnitt „Einstellungen“ mit Pfeil liegt über einer Tabelle.
+- Ein Aufklappbereich hat einen eigenen Speichern-Knopf.
+- Jeder Abschnitt einer Seite speichert für sich.
+- Eine Konfiguration lässt sich nicht verlinken.
+- Ein Filter oder eine Sortierung hat einen Speichern-Knopf. Das ist derselbe Fehler, nur andersherum.
+
+### Grenzen
+
+Aufklappen bleibt richtig für Hinweise, Erklärungen und die Details einer Tabellenzeile.
+
+Ein leerer Zustand, dem eine Konfiguration fehlt, darf direkt zur Einstellungsseite führen. Siehe Leer ist ein Zustand, keine Lücke.
+
+### Verwandt
+
+- Ein Pop-up unterbricht, es führt nicht
+- Ein Fehler steht dort, wo er entstanden ist
+
+## Ein Ablauf mit Schritten zeigt, wie weit man ist
+
+Fluss · https://standby.design/docs/rules/fluss-ein-ablauf-mit-schritten-zeigt-wie-weit-man-ist
+
+**Geltung:** universal · web, react-native
+
+> **Regel**
+> Zeig in jedem Ablauf über mehrere Schritte, wie weit der Nutzer ist, und lass auf jedem Schritt zurück, ohne dass eine Eingabe verloren geht.
+
+### Warum
+
+Wer nicht weiß, wie viel noch kommt, bricht eher ab. Wer zurückgeht und alles neu tippen muss, bricht sicher ab.
+
+### Woran Du den Verstoß erkennst
+
+- Mehrstufiges Formular ohne Fortschrittsanzeige.
+- Zurück leert die Felder.
+- Es gibt nur den Zurück-Knopf des Browsers, und der verlässt den Ablauf.
+
+### Hart und weich
+
+Hart: der Fortschritt ist sichtbar, Zurück ohne Verlust. Weich: wie der Fortschritt aussieht. Ein Fortschrittsbalken reicht, ausgeschriebene Schritte sind nicht nötig.
+
+### Grenzen
+
+Abläufe mit einem Schritt. Hängt die Länge von den Antworten ab, zeigt die Anzeige den Fortschritt nach dem, was bekannt ist.
+
+### Quelle
+
+Laws of UX › Zeigarnik Effect und Goal-Gradient Effect, https://lawsofux.com/
+
+### Verwandt
+
+- Ein Pop-up unterbricht, es führt nicht
+- Der Platz ist da, bevor die Daten kommen
+- Der Zustand der Ansicht steht in der Adresse
 
 ## Ein Fehler steht dort, wo er entstanden ist
 
@@ -548,7 +1128,7 @@ Fluss · https://standby.design/docs/rules/fluss-ein-fehler-steht-dort-wo-er-ent
 **Geltung:** universal · web, react-native
 
 > **Regel**
-> Zeige einen Fehler an der Stelle, die er betrifft — beim Feld das Feld, beim Bereich der Bereich. Sag, was zu tun ist, nicht was kaputt gegangen ist. Und lass die Eingaben des Nutzers stehen.
+> Zeige einen Fehler an der Stelle, die er betrifft, beim Feld das Feld, beim Bereich der Bereich. Sag, was zu tun ist, nicht was kaputt gegangen ist. Lass die Eingaben des Nutzers stehen. Jede Meldung ohne Seitenwechsel liegt in einem Live-Bereich, damit der Screenreader sie ansagt.
 
 ### Warum
 
@@ -557,6 +1137,14 @@ Ein Fehler ist eine Anweisung, keine Meldung. Der Nutzer will nicht wissen, was 
 Deshalb muss er auch dort stehen, wo gehandelt wird. Steht der Fehler weit weg von dem Feld, das er betrifft, muss der Nutzer die Verbindung selbst herstellen — bei drei Fehlern in einem Formular ist das eine Suchaufgabe.
 
 Und das Wichtigste, das am häufigsten verletzt wird: **die Eingaben bleiben.** Ein Fehler, der das Formular leert, bestraft den Nutzer für einen Tippfehler. Nach dem zweiten Mal macht er nicht weiter.
+
+Sonst erfährt ein Screenreader-Nutzer nie, dass gespeichert wurde oder dass es keine Treffer gibt.
+
+### Wann der Fehler kommt
+
+Prüf ein Feld, wenn der Nutzer es verlässt. Beim Tippen meldet sich der Fehler zu früh, weil die Eingabe noch nicht fertig ist. Erst beim Absenden ist es zu spät, weil der Nutzer dann schon drei Felder weiter ist.
+
+Das Feld nimmt dabei jede Eingabe an, siehe Was der Nutzer tippt oder einfügt, kommt an. Ist sie ungültig, markiert sich das Feld beim Verlassen und sagt, was fehlt.
 
 ### Wo eine Meldung hingehört
 
@@ -582,12 +1170,18 @@ Dafür gelten drei Bedingungen:
 
 Ist eine Handlung rückgängig zu machen, gehört das Angebot dazu in die Kurzmeldung („Gelöscht — rückgängig"). Das ist ihr stärkster Einsatz, weil sie damit eine Bestätigung vorher überflüssig macht.
 
+Eine Kurzmeldung mit Handlung bleibt stehen, solange der Mauszeiger auf ihr liegt oder sie den Fokus hat, und sie ist per Tastatur erreichbar. Sonst ist das Angebot weg, bevor ein langsamer Nutzer es greifen kann.
+
 ### Was in einer Meldung steht
 
 - Was der Nutzer tun kann, in seiner Sprache.
 - Kein Fehlercode, kein technischer Wortlaut, keine Meldung aus dem System durchgereicht.
 - Keine Schuldzuweisung, weder an ihn noch an das System.
 - Bei einem Fehler, der nicht in seiner Hand liegt: was gerade gilt und wann er es erneut versuchen kann.
+
+### Hart und weich
+
+Hart. Weich: `polite` oder `assertive`. Vorgabe `polite`.
 
 ### Woran Du den Verstoß erkennst
 
@@ -597,16 +1191,30 @@ Ist eine Handlung rückgängig zu machen, gehört das Angebot dazu in die Kurzme
 - Eine technische Meldung steht ungefiltert in der Oberfläche.
 - Eine Kurzmeldung trägt eine Information, die der Nutzer später wieder braucht.
 - Es gibt eine Bestätigungsfrage für etwas, das man auch rückgängig machen könnte.
+- Eine Kurzmeldung mit „Rückgängig“ verschwindet nach fester Zeit, auch wenn die Maus auf ihr liegt.
+- Ein ungültiges Feld schweigt bis zum Absenden.
+- Die Fehlermeldung erscheint beim ersten Tastendruck.
+- Kurzmeldung ohne `role="status"` oder `aria-live`.
+- Trefferzahl ändert sich still.
+- Der Live-Bereich wird erst mit der Meldung eingefügt.
 
 ### Grenzen
 
 Fehler, die die ganze Anwendung betreffen — keine Verbindung, abgelaufene Anmeldung —, gehören an eine Stelle, die über allem liegt. Sie betreffen kein einzelnes Feld, und der Nutzer muss sie sehen, bevor er weitertippt.
+
+Fehler, die nach Der Fokus ist sichtbar und hat immer einen Ort ohnehin den Fokus bekommen.
+
+### Quelle
+
+WCAG 4.1.3 Status Messages. Vercel › Feedback („Use polite `aria-live` for toasts/inline validation").
 
 ### Verwandt
 
 - Ein Pop-up unterbricht, es führt nicht
 - Leer ist ein Zustand, keine Lücke
 - Rot ist nicht ein Rot
+- Der Platz ist da, bevor die Daten kommen
+- Der Fokus ist sichtbar und hat immer einen Ort
 
 ## Konzentrische Radien
 
@@ -628,6 +1236,8 @@ Der Fehler passiert fast immer dadurch, dass innen und außen derselbe Radius st
 - Innere und äußere Fläche haben denselben Radius-Wert.
 - Der innere Radius ist größer als der äußere.
 - Die Ecke sieht bei genauem Hinsehen enger aus als die Gerade daneben.
+- Zwei Buttons in einer Zeile haben verschiedene Radien.
+- Eine Ansicht setzt den Radius eines Buttons, Feldes oder einer Auswahl selbst.
 
 ### Richtig / falsch
 
@@ -654,6 +1264,10 @@ Damit die Rechnung überhaupt aufgehen kann, muss es eine begrenzte, benannte Me
 Der häufigste Weg, auf dem Radien an der Skala vorbeiwachsen: eine Utility-Klasse für einen mittleren Radius wird überall benutzt, ist in der Konfiguration aber gar nicht definiert und fällt auf den Standardwert des Frameworks zurück. Daneben steht eine Stufe aus dem eigenen System. Zwei Rundungen ohne gemeinsame Skala, und niemand hat je eine Entscheidung dazu getroffen.
 
 Wie viele Stufen es gibt und ob sie mit der Verschachtelungstiefe kleiner werden, entscheidet das Projekt. Manche Systeme fahren einen einzigen Radius für alles, und das ist eine gültige Antwort.
+
+### Gleiche Zeile, gleicher Radius
+
+Bedienelemente, die nebeneinander stehen, haben alle denselben Radius. Verschiedene Radien in einer Reihe sind ein Verstoß. Der Radius gehört dem Bauteil. Eine Ansicht überschreibt ihn nicht, auch nicht, damit eine Gruppe „dichter“ wirkt. Ein Knopf im Rahmen eines Feldes ist das innere Element und folgt der Rechnung oben: Feld 8, Abstand 4, Knopf 4.
 
 ### Grenzen
 
@@ -800,66 +1414,8 @@ Ein Overlay liegt über allem und hat sein eigenes Verhältnis zum Schleier daru
 
 ### Verwandt
 
-- Eine Linie trennt, sie schmückt nicht
+- Erst Abstand, dann Fläche, dann Linie
 - Werte kommen aus Tokens, nie aus der Hand
-
-## Eine Linie trennt, sie schmückt nicht
-
-Fläche · https://standby.design/docs/rules/flaeche-eine-linie-trennt-sie-schmueckt-nicht
-
-**Geltung:** universal · web, react-native
-
-> **Regel**
-> Trenne zuerst über Abstand, dann über einen Wechsel der Fläche. Greif erst zur Linie, wenn beides nicht trägt, und nimm dann die zurückhaltende Stärke. Eine kräftige Linie ist ein Signal und bleibt dem vorbehalten, was hervorgehoben werden soll.
-
-### Warum
-
-Eine Linie hat eine Aufgabe: trennen. Sie soll nicht selbst gesehen werden. Trotzdem ist sie das lauteste Mittel, das dafür zur Verfügung steht, und das einzige, das dem Bild etwas hinzufügt. Abstand und Flächenwechsel trennen genauso zuverlässig, ohne dass ein Element mehr auf dem Schirm liegt.
-
-Zieht man jede Trennung als Linie, entsteht ein Gitter aus Rahmen, das lauter ist als der Inhalt darin. Und wenn die kräftige Stärke überall steht, hebt sie nichts mehr hervor. Sie ist dann keine Aussage mehr, sondern Tapete.
-
-Es gibt gute Systeme ganz ohne Linien, die allein mit Fläche, Abstand und Erhebung arbeiten. Das ist keine Abweichung von der Regel, sondern ihre konsequenteste Anwendung.
-
-### Die Rangfolge
-
-Bevor Du eine Linie setzt, geh die Liste von oben durch:
-
-1. **Abstand** — trennt am stärksten und kostet nichts. Siehe Nähe gruppiert, nicht die Linie
-2. **Fläche** — eine Stufe der Surface-Leiter macht die Grenze sichtbar, ohne sie zu zeichnen
-3. **Linie** — wenn der Platz für Abstand fehlt und ein Flächenwechsel zu schwer wäre
-4. **Erhebung** — Schatten und Licht, wenn etwas wirklich über dem Übrigen liegt
-
-Die meisten Linien im Bestand sind übersprungene Schritte 1 und 2.
-
-### Hart und weich
-
-| | Status |
-|---|---|
-| Eine Linie ist ein Mittel unter mehreren, nicht die Voreinstellung | hart |
-| Gibt es mehrere Stärken, ist die zurückhaltende der Alltag | hart |
-| Die kräftige Stärke bleibt der Hervorhebung vorbehalten | hart |
-| Linienfarben kommen aus benannten Tokens, nicht pro Stelle als Grauwert | hart |
-| Ob das System überhaupt mit Linien arbeitet und wie viele Stärken es gibt | weich |
-
-### Woran Du den Verstoß erkennst
-
-- Jede Fläche auf der Seite hat eine sichtbare Umrandung.
-- Die kräftige Stärke kommt so oft vor, dass sie nichts mehr hervorhebt.
-- Eine Linie trennt Dinge, die schon durch Abstand getrennt sind.
-- Eine Linie wird pro Stelle als Hex- oder Grauwert gesetzt.
-- Es gibt drei oder vier Linienstärken, und niemand kann sagen, wann welche gilt.
-
-### Grenzen
-
-Bei dichten Listen und Tabellen kann der Abstand zwischen zwei Zeilen aus Platzgründen nicht groß genug werden. Dort verdient sich die Linie ihren Platz, und dort ist sie auch ohne schlechtes Gewissen richtig.
-
-Wenn ein Projekt nur eine einzige Linienstärke kennt, ist die Unterscheidung zwischen leise und kräftig gegenstandslos. Dann bleibt von der Regel nur die Rangfolge, und die reicht.
-
-### Verwandt
-
-- Nähe gruppiert, nicht die Linie
-- Der Divider ist die Unterkante einer Section
-- Die Ebene folgt der Rolle, nicht der Schachtelung
 
 ## Verhalten und Aussehen bleiben getrennt
 
@@ -888,31 +1444,41 @@ Für einen Agenten ist die Tabelle der Verhaltensarten die Antwort auf die häuf
 
 Die Verhaltensarten entsprechen dem, was ein blinder Nutzer heute schon erlebt: der Accessibility Tree kennt Verhalten, kein Aussehen. Sie sind damit keine Wette auf eine Abstraktion, sondern die Wahrheit der Plattform.
 
+### Das Element im Code
+
+Jede Verhaltensart hat ihr Bauteil im Code. `navigable` ist ein Link mit Adresse, `pressable` und `toggleable` sind ein `button`, `editable` ist ein Feld mit verbundener Beschriftung, `readable` ist Text. Ein Kasten mit Klick sieht für die Maus genauso aus, aber die Tastatur erreicht ihn nicht, der Screenreader erkennt ihn nicht, und ein Link lässt sich nicht in einem neuen Tab öffnen. Gibt es kein passendes Bauteil, etwa für Tabs oder eine Kombi-Box, gilt das Muster aus der ARIA APG.
+
+Eine Rolle im Code ist ein Versprechen. Wer behauptet, etwas sei ein Menü, Tabs oder ein Raster, baut auch die Tastaturbedienung dazu, sonst erwartet der Nutzer Pfeiltasten, die nichts tun. Eine Hauptnavigation ist deshalb keine Menü-Rolle, sondern eine Liste von Links.
+
 ### Das Wörterbuch
 
 Bekannte Paare aus Verhalten und Aussehen, die einen Namen tragen. Der Name der Zeile ist die Abkürzung für das Paar. Die Namen in der Spalte Aussehen sind die Vorgabe. Ein Projekt darf sie anders nennen.
 
-| Name | Verhalten | Aussehen | Eigenes Zeichen für „aktiv" |
-|---|---|---|---|
-| Button | pressable | press | — |
-| Icon-Button | pressable | press, nur Icon | — |
-| Chip | pressable | chip | Punkt vorn |
-| Switch | toggleable | track | Position des Knopfs |
-| Tab | toggleable | tab | Strich darunter |
-| Eingabefeld | editable | field | — |
-| Navigations-Zeile | navigable | row | Balken links |
-| Fließtext-Link | navigable | text | verdickte Unterstreichung |
-| Badge | readable | chip | — |
+| Name | Verhalten | Aussehen | Eigenes Zeichen für „aktiv" | Element im Code |
+|---|---|---|---|---|
+| Button | pressable | press | — | `button` |
+| Icon-Button | pressable | press, nur Icon | — | `button` mit Namen |
+| Chip | toggleable | chip | Punkt vorn | `button` mit `aria-pressed` |
+| Switch | toggleable | track | Position des Knopfs | `button` mit `role="switch"` |
+| Tab | toggleable | tab | Strich darunter | `button` mit `role="tab"` |
+| Eingabefeld | editable | field | — | `input` mit verbundenem `label` |
+| Navigations-Zeile | navigable | row | Balken links | `a` mit `href` |
+| Fließtext-Link | navigable | text | verdickte Unterstreichung | `a` mit `href` |
+| Badge | readable | badge | — | Text |
 
-Chip und Badge teilen sich das Aussehen und trennen sich im Verhalten: der Chip lässt sich drücken, das Badge nicht. Genau dafür ist die Trennung da.
+Chip und Badge sind verwandt, aber nicht gleich. Der Chip ist ein kleiner Umschalter, etwa ein Filter, der an oder aus ist. Das Badge hebt nur eine Information als Etikett hervor. Weil das Auge Gleiches für Gleichartiges hält, sehen die beiden nicht gleich aus: Das Badge ist schmaler und hat nur ein knappes Padding, der Chip hat die Polsterung eines Bedienelements. So sieht man vor dem Klick, was sich drücken lässt.
 
 ### Woran Du den Verstoß erkennst
 
 - Ein Badge reagiert auf Klick. Dann ist es kein Badge, sondern ein Chip.
+- Chip und Badge haben dasselbe Padding und dieselbe Höhe.
 - Ein Switch löst eine einmalige Aktion aus, statt einen Zustand zu halten. Dann ist es ein Button.
 - Etwas wird über seine Farbe beschrieben („der graue Knopf") statt über sein Verhalten.
 - Das Aussehen bringt Interaktions-Code mit, oder das Verhalten setzt Farben.
 - Das Verhalten wird in einer einzelnen Ansicht nachgebaut statt benutzt.
+- Ein Klick sitzt auf einem `div`, `span` oder `li`.
+- Ein `button` wechselt per Code die Seite, oder ein `a` hat kein `href`.
+- Die Hauptnavigation hat `role="menu"`, oder ein Element hat eine Rolle ohne die Tastaturbedienung dazu.
 
 ### Grenzen
 
@@ -923,10 +1489,10 @@ Und nicht jede Kombination ergibt Sinn. Welche verboten sind, gehört in die Gra
 ### Verwandt
 
 - Verhalten und Aussehen werden nicht in der Ansicht nachgebaut
-- Ein dauerhafter Zustand braucht ein zweites Zeichen
+- Farbe trägt nie allein
 - Kurze Zustände verschieben, dauerhafte wechseln die Palette
 - Die Höhe gehört der Zeile, nicht dem Element
-- Klickbares braucht eine Fläche
+- Klickbares hat eine Fläche, und nur Klickbares sieht so aus
 
 ## Verhalten und Aussehen werden nicht in der Ansicht nachgebaut
 
@@ -983,63 +1549,6 @@ Eine Anordnung, die es genau einmal gibt — eine bestimmte Kachel, ein bestimmt
 - Utility-Klassen statt Inline-Styles
 - Werte kommen aus Tokens, nie aus der Hand
 
-## Klickbares braucht eine Fläche
-
-Bedienung · https://standby.design/docs/rules/bedienung-klickbares-braucht-eine-flaeche
-
-**Geltung:** universal · web, react-native
-
-> **Regel**
-> Alles, was man anklicken kann, ist ein Button — mindestens in der stillsten Variante (`ghost`), für Navigation als Button um einen Link herum. Nackte Textlinks sind nicht erlaubt, auch nicht in Fußzeilen und auch nicht als „unauffälliger" Umschalter.
-
-### Warum
-
-Ein nackter Textlink ist auf dem Handy kaum zu treffen. Die Zeilenhöhe von Text ist keine Trefferfläche, und der Daumen ist kein Mauszeiger. Die Höhe eines Buttons in Standardgröße ist genau dafür da: sie ist die Fläche, die ein Finger sicher trifft.
-
-Der zweite Grund ist Erkennbarkeit. Eine Fläche sagt „hier kannst Du drücken", bevor der Nutzer den Text gelesen hat. Ein Textlink sagt es erst danach, und in einer Fußzeile voller Text gar nicht.
-
-Der Wunsch hinter dem Textlink ist meistens „das soll unauffällig sein". Das ist ein berechtigter Wunsch, aber die Antwort darauf ist Schriftfarbe und Schriftgröße, nicht eine kleinere Fläche. Dezent heißt leise, nicht schwer zu treffen.
-
-### Woran Du den Verstoß erkennst
-
-- Ein `<a>` oder ein `Text` mit `onPress`, ohne umgebende Fläche.
-- Ein Umschalter („Zur Monatsansicht", „Alle anzeigen") ist als reiner Text gebaut.
-- Die Fußzeile besteht aus einer Reihe nackter Links.
-- Die Trefferfläche wird kleiner gesetzt, um das Element unauffälliger zu machen.
-
-### Richtig / falsch
-
-```
-        RICHTIG                             FALSCH
-
-  ┌──────────────────┐              Alle anzeigen
-  │  Alle anzeigen   │  40px hoch   ‾‾‾‾‾‾‾‾‾‾‾‾
-  └──────────────────┘              ~18px, kaum zu treffen
-
-  ghost-Variante: keine sichtbare    „unauffällig" über
-  Fläche im Ruhezustand, aber        kleinere Fläche gelöst
-  volle Trefferfläche
-```
-
-### Hart und weich
-
-| | Status |
-|---|---|
-| Klickbares hat eine echte Trefferfläche, kein nackter Textlink | hart |
-| Dezent wird über Farbe gelöst, nicht über eine kleinere Fläche | hart |
-| Die Standardhöhe liegt in der Größe einer Finger-Trefferfläche | hart |
-| Die konkreten Höhen | weich, Vorgabe 40 Pixel Standard, 32 Pixel nur am Zeigegerät |
-
-### Grenzen
-
-Die einzige Ausnahme ist ein Wort oder eine Wortgruppe **mitten im Fließtext**, etwa ein Verweis innerhalb eines Absatzes in den Rechtstexten. Dort wäre eine Fläche der Fremdkörper. Sobald der Link auf einer eigenen Zeile steht, gilt die Regel wieder.
-
-### Verwandt
-
-- Die Höhe gehört der Zeile, nicht dem Element
-- Verhalten und Aussehen bleiben getrennt
-- Fokus ist immer sichtbar
-
 ## Die Höhe gehört der Zeile, nicht dem Element
 
 Bedienung · https://standby.design/docs/rules/bedienung-die-hoehe-gehoert-der-zeile-nicht-dem-element
@@ -1055,7 +1564,7 @@ Bedienung · https://standby.design/docs/rules/bedienung-die-hoehe-gehoert-der-z
 
 Ein Eingabefeld mit einem Button daneben ist ein Paar. Der Button gehört zu dem Feld, er tut etwas mit dem, was darin steht. Sind beide verschieden hoch, verliert die Zeile ihre Ober- und Unterkante, der Button hängt in der Luft, und die beiden lesen sich als zwei Dinge, die zufällig nebeneinander liegen.
 
-Das ist dieselbe Mechanik wie in Nähe gruppiert, nicht die Linie, nur auf der anderen Achse: Nähe gruppiert waagerecht, eine gemeinsame Kante gruppiert senkrecht. Beides wirkt, bevor jemand liest.
+Das ist dieselbe Mechanik wie in Erst Abstand, dann Fläche, dann Linie, nur auf der anderen Achse: Nähe gruppiert waagerecht, eine gemeinsame Kante gruppiert senkrecht. Beides wirkt, bevor jemand liest.
 
 #### Warum es überhaupt mehr als eine Höhe gibt
 
@@ -1091,6 +1600,8 @@ Zwei Stufen reichen für die meisten Anwendungen. Wer eine dritte einführt, bra
 - Es gibt eine Höhe, die nur an einer einzigen Stelle vorkommt.
 - Ein Icon-Element ist rechteckig statt quadratisch.
 - Ein Element wird per Sonderschalter angehoben, obwohl seine Zeile schon sagt, welche Höhe gilt.
+- Unter einem Formular stehen Speichern und Abbrechen in der dichten Höhe.
+- Ein Suchfeld in einer Werkzeugleiste ist höher als die Knöpfe daneben.
 
 ### Richtig / falsch
 
@@ -1109,16 +1620,18 @@ Zwei Stufen reichen für die meisten Anwendungen. Wer eine dritte einführt, bra
 
 ### Grenzen
 
-Nach unten begrenzt die Trefferfläche aus Klickbares braucht eine Fläche. Auf Touch-Oberflächen ist die dichte Stufe zu klein für den Finger, sie bleibt dort Werkzeugleisten am Zeigegerät vorbehalten.
+Nach unten begrenzt die Trefferfläche aus Klickbares hat eine Fläche, und nur Klickbares sieht so aus. Auf Touch-Oberflächen ist die dichte Stufe zu klein für den Finger, sie bleibt dort Werkzeugleisten am Zeigegerät vorbehalten.
 
 Ein Element, das allein steht und in keiner Zeile sitzt, nimmt die Höhe seines Umfelds. Im Zweifel die großzügige, weil ein einzelner Knopf fast immer eine Aufgabe ist und keine Werkzeugleiste.
 
 Beschriftete Elemente wachsen nur in der Breite mit ihrem Inhalt. Die Höhe ändert sich nie durch den Text darin.
 
+Die Aktionszeile unter einem Formular ist eine Formularzeile. Speichern und Abbrechen nehmen die Formularhöhe, auch wenn kein Feld neben ihnen steht. Umgekehrt nimmt ein Feld in einer Werkzeugleiste, etwa die Suche, die dichte Höhe der Leiste.
+
 ### Verwandt
 
-- Klickbares braucht eine Fläche
-- Nähe gruppiert, nicht die Linie
+- Klickbares hat eine Fläche, und nur Klickbares sieht so aus
+- Erst Abstand, dann Fläche, dann Linie
 - Senkrechtes Padding wird optisch ausgeglichen
 
 ## Kurze Zustände verschieben, dauerhafte wechseln die Palette
@@ -1184,98 +1697,320 @@ Ein Eingabefeld im Fehlerzustand wechselt die Palette, obwohl der Fehler vorübe
 
 ### Verwandt
 
-- Ein dauerhafter Zustand braucht ein zweites Zeichen
+- Farbe trägt nie allein
 - Verhalten und Aussehen bleiben getrennt
 
-## Ein dauerhafter Zustand braucht ein zweites Zeichen
+## Ein Tooltip ergänzt, er trägt nie allein
 
-Bedienung · https://standby.design/docs/rules/bedienung-ein-dauerhafter-zustand-braucht-ein-zweites-zeichen
+Bedienung · https://standby.design/docs/rules/bedienung-ein-tooltip-ergaenzt-er-traegt-nie-allein
 
 **Geltung:** universal · web, react-native
 
 > **Regel**
-> Zeige jeden dauerhaften Zustand neben der Farbe mit einem zweiten Merkmal: Position, Strich, Balken, Punkt, Unterstreichung. Das Zeichen gehört zum Element. Es wird nicht an jedem Einsatzort neu erfunden.
+> Zeig alles, was man zum Bedienen wissen muss, sichtbar. Ein Tooltip erscheint bei Hover und bei Fokus, bleibt beim Darüberfahren stehen und schließt mit Esc.
 
 ### Warum
 
-Rund jeder zwölfte Mann sieht Rot und Grün nicht auseinander. Für ihn ist ein aktiver Tab, der sich nur durch die Textfarbe auszeichnet, kein aktiver Tab, sondern einer von fünf gleichen. Dasselbe gilt bei starkem Sonnenlicht, auf schlecht kalibrierten Bildschirmen und bei jedem, der die Ansicht nur kurz überfliegt.
-
-Das zweite Zeichen kostet nichts. Es ist ohnehin da, sobald das Element sauber gebaut ist: der Knopf des Switch steht rechts, unter dem Tab liegt ein Strich, vor dem Chip sitzt ein Punkt. Der Fehler entsteht nur, wenn ein Zustand nachträglich „schnell über die Farbe" gelöst wird.
+Auf Touch gibt es kein Hover. Was nur dort steht, sieht ein Teil der Nutzer nie.
 
 ### Woran Du den Verstoß erkennst
 
-- Der aktive Tab unterscheidet sich nur in der Textfarbe.
-- Eine ausgewählte Kachel ist nur farblich hervorgehoben.
-- In Graustufen ist nicht mehr erkennbar, welches Element an ist. Das ist der schnellste Test.
+- Pflichthinweis nur im `title`.
+- Tooltip nur mit `onMouseEnter`.
+- Link oder Button im Tooltip.
+- Tooltip verschwindet, sobald die Maus hineinfährt.
 
-### Die Zeichen je Element
+### Hart und weich
 
-| Element | Zweites Zeichen |
-|---|---|
-| Switch | Position des Knopfs |
-| Tab | Strich darunter |
-| Chip | Punkt vorn |
-| Navigations-Zeile | Balken links |
-| Fließtext-Link | verdickte Unterstreichung |
-| Button, Icon-Button | — (kein dauerhafter Zustand) |
-| Eingabefeld | — (der Zustand steht in Rand und Meldung) |
-| Badge | — (nicht bedienbar) |
-
-Wo ein Strich steht, hat das Element einen dauerhaften Zustand und braucht das Zeichen. Wo keiner steht, hat es keinen.
+Hart: Fokus, Stehenbleiben, Esc. Weich: Verzögerung. Vorgabe: der erste kommt verzögert, die Nachbarn danach sofort.
 
 ### Grenzen
 
-Für kurzzeitige Zustände wie Hover gilt die Regel nicht. Hover ist eine Rückmeldung auf eine Handlung, die gerade passiert, und der Nutzer weiß bereits, wo er ist.
+Der Tooltip an einem Icon-Button wiederholt dessen Namen. Der Name steht trotzdem im `aria-label`.
+
+### Quelle
+
+WCAG 1.4.13 Content on Hover or Focus. Vercel › Touch & Drag („Delay first tooltip; subsequent peers instant") und Content & Accessibility („Inline help first; tooltips last resort").
 
 ### Verwandt
 
-- Kurze Zustände verschieben, dauerhafte wechseln die Palette
-- Rot ist nicht ein Rot
+- Der Fokus ist sichtbar und hat immer einen Ort
+- Klickbares hat eine Fläche, und nur Klickbares sieht so aus
 
-## Fokus ist immer sichtbar
+## Eine Handlung löst beim Loslassen aus
 
-Bedienung · https://standby.design/docs/rules/bedienung-fokus-ist-immer-sichtbar
+Bedienung · https://standby.design/docs/rules/bedienung-eine-handlung-loest-beim-loslassen-aus
 
-**Geltung:** universal · web
+**Geltung:** universal · web, react-native
 
 > **Regel**
-> Jedes bedienbare Element zeigt sichtbar, wenn es den Fokus hat. Entferne den Fokus nie ersatzlos. Er ist im ganzen Projekt gleich gebaut und verschiebt beim Erscheinen kein Layout.
+> Löse eine Handlung beim Loslassen aus, nicht beim Drücken.
 
 ### Warum
 
-Wer mit der Tastatur bedient, sieht ohne Fokus gar nicht, wo er ist. Das betrifft nicht nur Screenreader-Nutzer, sondern jeden, der ein Formular schnell durchtabbt. Der Fokus ist die einzige Rückmeldung, die diese Nutzer bekommen.
-
-Die Voreinstellung des Browsers wird oft entfernt, weil sie nicht zum Rest passt, und dann bleibt nichts übrig. Der Wunsch dahinter ist berechtigt — die Antwort darauf ist ein eigener Fokus, kein fehlender.
-
-Dass er das Layout nicht verschieben darf, hat einen praktischen Grund: sitzt er außerhalb des Elements, springt er in engen Reihen über die Nachbarn.
+Wer daneben drückt, zieht den Finger oder die Maus weg und bricht ab. Beim Drücken gibt es diesen Ausweg nicht.
 
 ### Woran Du den Verstoß erkennst
 
-- Irgendwo steht `outline: none` ohne Ersatz.
-- Beim Durchtabben einer Ansicht verliert man die Position.
-- Der Fokus verschiebt beim Erscheinen das Layout oder überlagert Nachbarn.
-- Der Fokus wird pro Komponente anders gebaut.
+- Handlung in `onMouseDown`, `onPointerDown`, `onTouchStart` oder `onPressIn`.
+
+### Hart und weich
+
+Hart.
 
 ### Grenzen
 
-Die Regel gilt für Tastaturfokus. Ein Fokus nach einem Mausklick darf unterdrückt werden (`:focus-visible`), weil der Mausnutzer schon weiß, wo er geklickt hat.
+Ziehen, Zeichnen, Spiele und Klaviertasten, bei denen das Drücken selbst die Eingabe ist.
 
-Wie der Fokus aussieht, ist eine Entscheidung des Projekts und steht dort. Ein weicher Ring auf der Kante ist eine gute Antwort, ein kräftiger Umriss mit Abstand auch — solange er die Nachbarn nicht überlagert.
+### Quelle
+
+WCAG 2.5.2 Pointer Cancellation, https://www.w3.org/WAI/WCAG22/quickref/#pointer-cancellation
 
 ### Verwandt
 
-- Klickbares braucht eine Fläche
-- Ein dauerhafter Zustand braucht ein zweites Zeichen
-- Übergänge haben genau einen Wert
+- Klickbares hat eine Fläche, und nur Klickbares sieht so aus
+- Zerstörendes trifft man nicht aus Versehen
 
-## Übergänge haben genau einen Wert
+## Was sich von selbst bewegt, lässt sich anhalten
 
-Bedienung · https://standby.design/docs/rules/bedienung-uebergaenge-haben-genau-einen-wert
+Bedienung · https://standby.design/docs/rules/bedienung-was-sich-von-selbst-bewegt-laesst-sich-anhalten
+
+**Geltung:** universal · web, react-native
+
+> **Regel**
+> Gib jeder Bewegung, die von selbst startet und länger als fünf Sekunden läuft, eine Pause, und starte Ton nie von selbst.
+
+### Warum
+
+Bewegung neben Inhalt zieht den Blick ab und macht manchen Menschen übel. Ton, der von selbst startet, übertönt den Screenreader.
+
+### Woran Du den Verstoß erkennst
+
+- Karussell ohne Pause-Knopf.
+- Video mit `autoplay` ohne `muted`.
+- Laufband oder animierter Hintergrund ohne Stopp.
+- Endlos-Animation, die `prefers-reduced-motion` ignoriert.
+
+### Hart und weich
+
+Hart. Die fünf Sekunden sind der Wert aus WCAG, keine Vorgabe.
+
+### Grenzen
+
+Ladeanzeigen. Bewegung, die der Nutzer selbst gestartet hat.
+
+### Quelle
+
+WCAG 2.2.2 Pause, Stop, Hide und 1.4.2 Audio Control. Vercel AGENTS.md › Animation („autoplay only for muted, non-essential loops").
+
+### Verwandt
+
+- Bewegung hat einen Wert und hält nichts auf
+- Bewegung hat einen Wert und hält nichts auf
+- Alles hat eine Textfassung
+
+## Gewicht ist ein Budget, ein Primary pro Ansicht
+
+Bedienung · https://standby.design/docs/rules/bedienung-gewicht-ist-ein-budget-ein-primary-pro-ansicht
+
+**Geltung:** universal · web, react-native
+
+> **Regel**
+> Gib jeder Ansicht und jedem ihrer Zustände höchstens einen Primary-Button, für die Hauptaufgabe. Alles andere ist leiser. Jeder Button sagt mit Verb und Gegenstand, was beim Klick passiert. Ein Zustand steht neben dem Knopf, nicht auf ihm.
+
+### Warum
+
+Gewicht ist ein Budget. Jeder laute Button macht den wichtigen leiser, und eine Ansicht mit drei gefüllten Buttons sagt dem Nutzer nicht mehr, wo es weitergeht.
+
+Eine Beschriftung wie „Keine Änderungen“ macht aus dem Knopf eine Anzeige. Der Nutzer kann nicht vorhersagen, was ein Klick auslöst. Wechselt die Beschriftung mit dem Zustand, springt außerdem die Breite des Knopfes.
+
+„Speichern“ allein reicht, solange die Seite nur einen Gegenstand hat. Gibt es mehrere, nennt der Knopf seinen: „Fehlzeiten speichern“. Eine Menge darf dabei stehen, weil sie den Umfang der Handlung beschreibt: „3 Monate speichern“.
+
+### Die Stufen
+
+| Stufe | Wofür |
+|---|---|
+| primary | die Hauptaufgabe: einziger Weg weiter, Abschluss eines Ablaufs |
+| secondary | eine echte Aktion, die nicht das Ziel der Ansicht ist |
+| outline | der Standard: Optionen, die man nutzen kann, aber nicht muss |
+| ghost | Nebensächliches, Zurück, Werkzeuge in dichten Leisten |
+| destructive | Löschen und Unumkehrbares |
+
+### Hart und weich
+
+| | Status |
+|---|---|
+| Höchstens ein Primary pro Ansicht und Zustand | hart |
+| Die Beschriftung ist eine Handlung, kein Zustand | hart |
+| Die Stufen sind eine geschlossene Menge, der Standard ist eine leise Stufe | hart |
+| Wie viele Stufen und welcher Wortlaut | weich, Vorgabe die fünf Stufen oben |
+
+### Woran Du den Verstoß erkennst
+
+- In einer Ansicht stehen zwei gefüllte Buttons.
+- Die Beschriftung beschreibt einen Zustand: „Keine Änderungen“, „Gespeichert“, „Fertig“.
+- Eine Nebenaufgabe in der Werkzeugleiste trägt die Primary-Farbe.
+- Ein Button ohne Angabe fällt auf Primary zurück statt auf die leise Standardstufe.
+
+### Grenzen
+
+Ein Dialog ist eine eigene Ansicht und hat seinen eigenen Primary. Eine Bestätigung zum Löschen trägt die destruktive Stufe, nicht Primary.
+
+Gibt es nichts zu speichern, bleibt der Knopf derselbe und aktiv, siehe Ein Button ist nie gesperrt. Den Zustand sagt die Ansicht daneben.
+
+### Verwandt
+
+- Klickbares hat eine Fläche, und nur Klickbares sieht so aus
+- Verhalten und Aussehen bleiben getrennt
+- Farbe trägt nie allein
+
+## Ein Button ist nie gesperrt
+
+Bedienung · https://standby.design/docs/rules/bedienung-ein-button-ist-nie-gesperrt
+
+**Geltung:** universal · web, react-native
+
+> **Regel**
+> Graue keinen Button aus. Fehlt etwas, bleibt er aktiv und zeigt beim Klick, was fehlt. Steht etwas Grundsätzliches im Weg, wird er durch die Handlung ersetzt, die es löst. Gesperrt ist er nur, solange eine Anfrage läuft.
+
+### Warum
+
+Ein ausgegrauter Button ist eine Sackgasse ohne Erklärung. Der Nutzer sieht, dass er nicht weiterkommt, aber nicht warum. Er sucht das Formular nach dem fehlenden Häkchen ab, oder er gibt auf.
+
+Ein aktiver Button beantwortet die Frage beim Klick. Das fehlende Feld markiert sich, die Meldung sagt, was zu tun ist, und der Fehler verschwindet, sobald das Feld stimmt. Das ist derselbe Weg wie in Ein Fehler steht dort, wo er entstanden ist.
+
+Steht kein Feld im Weg, sondern eine Grenze, etwa ein volles Kontingent oder ein fehlender Tarif, ist der gesperrte Button die falsche Handlung am richtigen Ort. „Mitglied einladen“ wird dann zu „Mehr Plätze buchen“. Der Nutzer sieht sofort, was ihn weiterbringt.
+
+Die eine Sperre, die bleibt, schützt vor doppeltem Absenden. Während die Anfrage läuft, ist ein zweiter Klick nie gewollt.
+
+### Die Fälle
+
+| Fall | Was passiert |
+|---|---|
+| Eine Eingabe fehlt oder stimmt nicht | Button bleibt aktiv. Beim Klick markiert sich das Feld, die Meldung sagt, was fehlt |
+| Eine Grenze steht im Weg (Kontingent, Tarif, Frist) | Button wird durch die Handlung ersetzt, die die Grenze löst |
+| Eine Anfrage läuft | Button gesperrt, Ladezeichen neben der Beschriftung, Beschriftung bleibt |
+| Der Nutzer hat kein Recht zu dieser Handlung | Button wird nicht gezeigt |
+
+### Hart und weich
+
+| | Status |
+|---|---|
+| Kein Button ist gesperrt, außer während einer Anfrage | hart |
+| Beim Klick auf einen unvollständigen Stand zeigt die Ansicht, was fehlt | hart |
+| Ohne Recht wird die Handlung nicht gezeigt, nicht ausgegraut | hart |
+| Wie der Fehler erscheint | weich, Vorgabe am Feld nach Ein Fehler steht dort, wo er entstanden ist |
+
+### Woran Du den Verstoß erkennst
+
+- `disabled={!isValid}`, `disabled={!isDirty}` oder `disabled={!accepted}` an einem Button.
+- Ein ausgegrauter Button ohne Erklärung in der Nähe.
+- Ein Button ohne Recht ist grau statt weg.
+- Das Ladezeichen ersetzt die Beschriftung, oder der Button bleibt während der Anfrage klickbar.
+- Ein Feld, das nur einen Wert anzeigt, ist als gesperrtes Eingabefeld gebaut. Dann lässt sich der Wert nicht kopieren, und der Screenreader überspringt ihn.
+
+### Grenzen
+
+Steht der Grund unmittelbar neben dem Button und ist ohne Lesen zu sehen, darf er gesperrt sein. Das Beispiel ist der Senden-Knopf neben einem leeren Chatfeld.
+
+Ein Wert, den man sehen, aber nicht ändern darf, ist kein gesperrtes Feld, sondern Text. Er steht lesbar und kopierbar da, ohne Rahmen und ohne Bedienzeichen.
+
+Sperren, die sich aus dem Bild erklären, bleiben erlaubt: „Zurück“ auf der ersten Seite, „Weiter“ auf der letzten.
+
+### Quelle
+
+Vercel Web Interface Guidelines › Forms („Don’t pre-disable submit“, „Keep submit enabled until submission starts“, „Loading buttons show spinner and keep original label“). Carbon › Patterns › Disabled states (Disabled, Read-only, Hidden).
+
+### Verwandt
+
+- Ein Fehler steht dort, wo er entstanden ist
+- Verhalten und Aussehen bleiben getrennt
+- Was der Nutzer tippt oder einfügt, kommt an
+
+## Eine lange Auswahl lässt sich durchsuchen
+
+Bedienung · https://standby.design/docs/rules/bedienung-eine-lange-auswahl-laesst-sich-durchsuchen
+
+**Geltung:** universal · web, react-native · **Korridor:** 7-15 Einträge · **Vorgabe:** Suche ab 10 Einträgen
+
+> **Regel**
+> Gib jeder Auswahl ab einer festen Zahl von Einträgen eine Suche oder teil sie in benannte Gruppen.
+
+### Warum
+
+Jede weitere Option verlängert die Entscheidung. Bei 200 Ländern sucht niemand mit den Augen, er tippt.
+
+### Woran Du den Verstoß erkennst
+
+- Auswahl mit 200 Ländern ohne Tippsuche.
+- Menü mit 25 Einträgen ohne Gruppen.
+- Eine Liste von Personen ohne Suchfeld.
+
+### Hart und weich
+
+Hart: ab einer Schwelle gibt es Suche oder Gruppen, als Token. Weich: die Schwelle, Korridor 7 bis 15, Vorgabe 10.
+
+### Grenzen
+
+Natürlich geordnete Reihen wie Jahre oder Zahlen, in denen man per Tastatur springt.
+
+### Quelle
+
+Laws of UX › Hick’s Law und Choice Overload, https://lawsofux.com/hicks-law/
+
+### Verwandt
+
+- Was ein Feld beschreibt, steht im Feld
+- Was der Browser mitbringt, wird gestaltet oder ersetzt
+
+## Jede Geste hat einen zweiten Weg per Klick
+
+Bedienung · https://standby.design/docs/rules/bedienung-jede-geste-hat-einen-zweiten-weg-per-klick
+
+**Geltung:** universal · web, react-native
+
+> **Regel**
+> Gib jeder Geste einen zweiten Weg per Klick und Tastatur, der zum selben Ergebnis führt. Das gilt für Ziehen, Wischen, Zwei-Finger-Gesten, Langdrücken und für Bewegungen des Geräts wie Schütteln und Kippen.
+
+### Warum
+
+Nicht jeder kann ziehen oder präzise wischen. Und keine Geste ist sichtbar.
+
+Nachgebaut wird nicht die Geste, sondern das Ergebnis. Eine Liste, die man per Ziehen sortiert, bekommt „Nach oben“ und „Nach unten“ im Menü der Zeile. Was man per Wischen löscht, lässt sich auch im Menü löschen. Ein Regler reagiert auf Pfeiltasten. Eine Funktion, die auf Schütteln reagiert, lässt sich abschalten.
+
+### Woran Du den Verstoß erkennst
+
+- Sortieren nur per Drag.
+- Löschen nur per Wischen.
+- Zoom nur per Pinch.
+- Regler ohne Pfeiltasten.
+- Rückgängig nur per Schütteln, oder Kippen löst etwas aus, ohne dass es sich abschalten lässt.
+
+### Hart und weich
+
+Hart.
+
+### Grenzen
+
+Wo die Bewegung selbst die Eingabe ist, etwa Unterschrift oder Zeichnen.
+
+### Quelle
+
+WCAG 2.5.1 Pointer Gestures, 2.5.7 Dragging Movements. Vercel › Touch & Drag. WCAG 2.5.4 Motion Actuation.
+
+### Verwandt
+
+- Alles geht mit der Tastatur, in der Reihenfolge des Bildes
+- Klickbares hat eine Fläche, und nur Klickbares sieht so aus
+
+## Bewegung hat einen Wert und hält nichts auf
+
+Bedienung · https://standby.design/docs/rules/bedienung-bewegung-hat-einen-wert-und-haelt-nichts-auf
 
 **Geltung:** universal · web, react-native · **Korridor:** 100-200ms · **Vorgabe:** 150ms
 
 > **Regel**
-> Lege für Zustandswechsel am Ort genau eine Dauer fest und halte sie als Token. Sie liegt zwischen 100 und 200 Millisekunden. Solange das Projekt nichts anderes festlegt, gilt 150. Hat der Nutzer weniger Bewegung eingestellt (`prefers-reduced-motion`), findet der Wechsel sofort statt.
+> Gib Zustandswechseln genau eine Dauer als Token, im Korridor 100 bis 200 Millisekunden, Vorgabe 150. Animiere nur `transform` und `opacity` und nenne jede Eigenschaft einzeln. Jede neue Eingabe bricht eine laufende Bewegung ab, und was zusammengehört, bewegt sich gemeinsam. Hat der Nutzer weniger Bewegung eingestellt, wechselt alles sofort.
 
 ### Warum
 
@@ -1287,7 +2022,13 @@ Hart ist etwas anderes: dass es **eine** Dauer gibt. Verschiedene Dauern nebenei
 
 Die letzte Hälfte ist keine Höflichkeit. Für Menschen mit vestibulärer Störung löst Bewegung auf dem Bildschirm Schwindel und Übelkeit aus. Die Systemeinstellung ist ihre Bitte, und sie wird beachtet.
 
-### Was hart ist und was weich
+Layout-Eigenschaften rechnen bei jedem Bild die Seite neu, ruckeln und schieben Nachbarn. `all` animiert auch, was nie gemeint war, etwa jede Farbe beim Moduswechsel.
+
+Eine Animation ist Rückmeldung, keine Wartezeit. Wer schnell klickt, darf nicht auf das Ende warten.
+
+Was sich zusammen bewegt, liest das Auge als eine Sache. Fahren Kopf und Inhalt einer Karte getrennt ein, wirkt sie wie zwei.
+
+### Hart und weich
 
 | | Status |
 |---|---|
@@ -1303,6 +2044,15 @@ Die letzte Hälfte ist keine Höflichkeit. Für Menschen mit vestibulärer Stör
 - Eine Dauer liegt außerhalb des Korridors, ohne dass jemand das begründen kann.
 - `prefers-reduced-motion` kommt im Projekt nirgends vor.
 - Eine Ansicht animiert beim Laden Elemente ein, obwohl die Einstellung Bewegung reduziert.
+- `transition: all`, Tailwind `transition-all`.
+- Animiertes `height`, `width`, `top`, `left`, `margin`.
+- `pointer-events: none` während eines Übergangs.
+- Flag wie `isAnimating`, das Klicks verwirft.
+- `await` auf das Ende einer Animation vor dem Seitenwechsel.
+- Ein schneller Doppelklick öffnet und schließt nicht.
+- Kopf und Inhalt einer Karte haben verschiedene Animationen oder Verzögerungen.
+- Abschnitte ohne Bezug blenden gestaffelt nacheinander ein.
+- Beim Öffnen eines Panels rutscht ein Element mit, das nicht dazugehört.
 
 ### Grenzen
 
@@ -1310,64 +2060,633 @@ Größere Bewegungen sind nicht gemeint und dürfen länger dauern: ein Off-Canv
 
 Legt eine Marken-Richtlinie im Projekt eine eigene Zahl fest, gilt diese. Der Vorgabewert ist dafür da, dass man ohne eine solche Richtlinie trotzdem loslegen kann, und nicht dafür, sie zu überstimmen.
 
+Farbe, Rahmen und Schatten bei Zustandswechseln, einzeln genannt und mit der Dauer von oben.
+
+Listen, deren Einträge bewusst nacheinander erscheinen, um eine Reihenfolge zu zeigen. Bei reduzierter Bewegung fällt ohnehin alles weg.
+
+### Quelle
+
+Vercel › Animation („Animate compositor-friendly props only", „Never animate layout props", „Never `transition: all`"). Vercel Web Interface Guidelines › Animations („Interruptible. Animations are cancelable by user input"). Gestaltgesetz des gemeinsamen Schicksals (Wertheimer, 1923).
+
 ### Verwandt
 
 - Kurze Zustände verschieben, dauerhafte wechseln die Palette
-- Fokus ist immer sichtbar
+- Der Fokus ist sichtbar und hat immer einen Ort
 - Werte kommen aus Tokens, nie aus der Hand
+- Was sich von selbst bewegt, lässt sich anhalten
 
-## Dieselbe Zahl bedeutet überall dasselbe
+## Alles geht mit der Tastatur, in der Reihenfolge des Bildes
 
-Zustand · https://standby.design/docs/rules/zustand-dieselbe-zahl-bedeutet-ueberall-dasselbe
+Bedienung · https://standby.design/docs/rules/bedienung-alles-geht-mit-der-tastatur-in-der-reihenfolge-des-bildes
 
 **Geltung:** universal · web, react-native
 
 > **Regel**
-> Lege einmal fest, ab welcher Grenze ein Wert gut, mittel oder schlecht ist, und halte diese Übersetzung auf jeder Seite gleich. Fehlt der Wert, ist der Zustand neutral.
+> Mach jedes Bedienelement mit Tab erreichbar und mit Enter oder Leertaste auslösbar, in der Reihenfolge, in der man es sieht. CSS stellt diese Reihenfolge nicht um. Zusammengesetzte Elemente folgen der APG: Tab hinein, Pfeiltasten innen, Esc schließt. Globale Tastenkürzel brauchen Strg, Alt oder Cmd.
 
 ### Warum
 
-Farbe ist eine Aussage über Daten. Steht derselbe Wert auf einer Seite in Gelb und auf der anderen in Grün, widerspricht sich die Oberfläche selbst. Der Nutzer merkt das, auch wenn er es nicht benennen kann, und er lernt daraus das Falsche: der Farbe nicht zu trauen. Danach nützt sie nirgends mehr etwas, auch dort nicht, wo sie stimmt.
+Wer keine Maus nutzt, kommt sonst an diese Stelle nie heran.
 
-Das passiert nicht aus Nachlässigkeit, sondern weil jede Stelle ihre Grenze einzeln setzt. Jede für sich ist plausibel gewählt, und zusammen ergeben sie vier verschiedene Skalen im selben Produkt.
+Wer per Sprache diktiert oder sich vertippt, löst sonst Handlungen aus, die er nie wollte.
 
-Die Regel greift überall, wo eine Zahl in einen Zustand übersetzt wird: Speicherplatz, der knapp wird. Passwortstärke. Akkustand. Lagerbestand. Temperatur, Luftqualität, Lieferzeit. Ein Fortschritt, der „hinter Plan" heißt. Sobald es eine Grenze gibt, ab der etwas anders aussieht, gilt sie.
+Das Auge folgt dem Bild, die Tab-Taste und der Screenreader folgen dem Code. Solange beides gleich ist, merkt niemand etwas. Weichen sie ab, springt der Fokus quer über den Schirm.
 
-### Ohne Daten kein Zustand
+Ein typischer Fall: Am Desktop steht „Abbrechen“ links und „Speichern“ rechts, am Handy soll „Speichern“ oben stehen. Steht „Speichern“ dafür im Code zuerst und dreht CSS die Reihenfolge am Desktop um, landet der erste Tab rechts und der zweite links. Optisch fällt das nie auf, beim Bedienen sofort.
 
-Fehlt der Wert, ist der Zustand neutral und die Anzeige bleibt grau. Es wird nichts angenommen.
+### Hart und weich
 
-Wer bei fehlendem Wert Grün zeigt, behauptet „alles in Ordnung", obwohl niemand nachgesehen hat. Das ist die gefährlichste Falschaussage, weil sie beruhigt. Wer Rot zeigt, löst einen Alarm ohne Anlass aus, und nach dem dritten Mal glaubt niemand mehr an die roten Felder. Grau ist die ehrliche Antwort: es liegt nichts vor.
-
-Die Regel hat eine unbequeme Seite. Eine frisch eingerichtete Ansicht sieht dadurch grau und leer aus. Das ist der richtige Eindruck. Der Weg zu einer bunten Ansicht führt über Daten, nicht über Annahmen.
-
-**Sonderfall Zähler.** Bei einem Zähler für etwas, das es nicht geben sollte — offene Fehler, fehlende Belege, ungelesene Warnungen — ist die Null nicht grün, sondern grau. Grün hieße „geprüft und in Ordnung". Grau heißt „hier ist nichts", und das ist der ehrlichere Satz.
-
-### Wo die Grenzen herkommen
-
-Die Zahlen selbst sind eine fachliche Festlegung, keine Gestaltungsfrage. Wo die Grenze zwischen mittel und schlecht liegt, entscheidet nicht der Designer, sondern wer für die Zahl fachlich einsteht.
-
-Getrennt davon steht die Übersetzung in das, was man sieht. Wer die Grenzen ändert, ändert sie an einer Stelle, ohne dass sich das Aussehen bewegt. Wer das Aussehen ändert, fasst die Grenzen nicht an.
+Hart: alles per Tastatur, Tastenbelegung nach APG. Weich: zusätzliche Kürzel.
 
 ### Woran Du den Verstoß erkennst
 
-- Zwei Ansichten zeigen denselben Wert in verschiedenen Farben.
-- Der Vergleich mit einer Grenze steht in mehr als einer Datei.
-- Eine neue Anzeige bekommt ihre Grenzen mitgegeben, statt sie zu erfragen.
-- Ein fehlender Wert wird zu null gemacht und dann eingefärbt.
-- Ein Feld ohne Daten ist grün, weil „kein Problem gemeldet" als gut gewertet wird.
-- Eine Kennzahl zeigt einen Strich und trotzdem einen farbigen Rand oder ein farbiges Badge.
+- Klick-Handler ohne Tastenweg.
+- `tabindex="-1"` an etwas Bedienbarem.
+- Menü oder Popover, das Esc ignoriert.
+- Eine Stelle, aus der Tab nicht mehr herausführt.
+- `keydown` am `document` für eine einzelne Taste ohne Strg, Alt oder Cmd.
+- Das Kürzel feuert auch, während ein Feld den Fokus hat.
+- Kürzel auf `/` oder `?`, die auf einer anderen Tastaturbelegung nicht erreichbar sind.
+- `tabindex` größer als 0.
+- CSS `order`, `flex-direction: row-reverse` oder `column-reverse` an Elementen mit Text oder Bedienung.
+- Umgestellte `grid-area` oder absolute Positionierung, die die sichtbare Reihenfolge ändert.
+- Beim Durchtabben springt der Fokus rückwärts oder quer.
 
 ### Grenzen
 
-Eine Kennzahl mit fachlich eigenen Grenzen — eine gesetzliche Quote, ein vertraglicher Schwellwert — bekommt ihre Werte natürlich von dort. Sie geht trotzdem durch dieselbe Übersetzung, damit der Weg von der Zahl zur Farbe an einer Stelle bleibt.
+Bewegungen, deren Weg selbst die Eingabe ist, etwa Freihandzeichnen.
 
-Ein leerer Zustand darf erklären, warum nichts da ist, und einen Weg anbieten („Noch keine Buchungen — Import starten"). Neutral heißt grau, nicht wortlos.
+Kürzel, die nur gelten, solange das Element den Fokus hat, etwa Pfeiltasten in einer Liste.
+
+Rein dekorative Elemente ohne Text und ohne Bedienung. Braucht ein kleiner Schirm eine andere Reihenfolge, wird sie dort im Code anders gebaut, nicht per CSS umgedreht.
+
+### Quelle
+
+WCAG 2.1.1 Keyboard, 2.1.2 No Keyboard Trap. APG › Developing a Keyboard Interface. Vercel › Keyboard. WCAG 2.1.4 Character Key Shortcuts. Vercel › Interactions („Locale-aware keyboard shortcuts"). WCAG 1.3.2 Meaningful Sequence, 2.4.3 Focus Order.
 
 ### Verwandt
 
-- Rot ist nicht ein Rot
-- Ein dauerhafter Zustand braucht ein zweites Zeichen
+- Der Fokus ist sichtbar und hat immer einen Ort
+- Die Titel bilden eine Gliederung
+
+## Der Fokus ist sichtbar und hat immer einen Ort
+
+Bedienung · https://standby.design/docs/rules/bedienung-der-fokus-ist-sichtbar-und-hat-immer-einen-ort
+
+**Geltung:** universal · web, react-native
+
+> **Regel**
+> Jedes bedienbare Element zeigt sichtbar, wenn es den Fokus hat. Entferne den Fokus nie ersatzlos. Er ist im ganzen Projekt gleich gebaut, verschiebt kein Layout und wird nie von einer fixierten Leiste verdeckt. Leg für jeden Wechsel fest, wo er landet: Pop-up öffnet, Fokus hinein. Pop-up schließt, Fokus zurück auf den Auslöser. Element gelöscht, Fokus auf den Nachbarn. Absenden mit Fehlern, Fokus aufs erste fehlerhafte Feld.
+
+### Warum
+
+Wer mit der Tastatur bedient, sieht ohne Fokus gar nicht, wo er ist. Das betrifft nicht nur Screenreader-Nutzer, sondern jeden, der ein Formular schnell durchtabbt. Der Fokus ist die einzige Rückmeldung, die diese Nutzer bekommen.
+
+Die Voreinstellung des Browsers wird oft entfernt, weil sie nicht zum Rest passt, und dann bleibt nichts übrig. Der Wunsch dahinter ist berechtigt — die Antwort darauf ist ein eigener Fokus, kein fehlender.
+
+Dass er das Layout nicht verschieben darf, hat einen praktischen Grund: sitzt er außerhalb des Elements, springt er in engen Reihen über die Nachbarn.
+
+Ein Fokus, der hinter einer fixierten Kopf- oder Fußleiste liegt, ist so unsichtbar wie ein entfernter. Der Browser scrollt das fokussierte Element nur bis an den Rand des Fensters, und dort steht die Leiste. Der Abstand zur Leiste muss deshalb im Scrollverhalten der Seite stehen. Dasselbe gilt für Sprungziele: Springt ein Anker zu einer Überschrift, landet sie unter der Leiste, nicht dahinter.
+
+Verschwindet das fokussierte Element, springt der Fokus an den Seitenanfang. Der Nutzer verliert seinen Platz.
+
+### Hart und weich
+
+Hart: jeder Wechsel hat ein Ziel. Weich: nichts.
+
+### Woran Du den Verstoß erkennst
+
+- Irgendwo steht `outline: none` ohne Ersatz.
+- Eine Leiste mit `position: sticky` oder `fixed`, aber kein `scroll-padding` an der Seite. Beim Durchtabben verschwindet der Fokus darunter.
+- Beim Durchtabben einer Ansicht verliert man die Position.
+- Der Fokus verschiebt beim Erscheinen das Layout oder überlagert Nachbarn.
+- Der Fokus wird pro Komponente anders gebaut.
+- Ein Anker springt zu einer Überschrift, und sie liegt hinter der fixierten Leiste. Kein `scroll-margin-top` an Überschriften.
+- Dialog ohne Fokusfalle.
+- Nach dem Schließen ist `document.activeElement` der `body`.
+- Absenden mit Fehlern ohne `focus()` auf ein Feld.
+
+### Grenzen
+
+Die Regel gilt für Tastaturfokus. Ein Fokus nach einem Mausklick darf unterdrückt werden (`:focus-visible`), weil der Mausnutzer schon weiß, wo er geklickt hat.
+
+Wie der Fokus aussieht, ist eine Entscheidung des Projekts und steht dort. Ein weicher Ring auf der Kante ist eine gute Antwort, ein kräftiger Umriss mit Abstand auch — solange er die Nachbarn nicht überlagert.
+
+Nicht-modale Hinweise wie Kurzmeldungen ziehen den Fokus nicht.
+
+### Quelle
+
+APG › Dialog (Modal) Pattern. Vercel › Keyboard („Manage focus (trap, move, return)") und Forms („on submit, focus first error"). WCAG 2.4.3 Focus Order.
+
+### Verwandt
+
+- Klickbares hat eine Fläche, und nur Klickbares sieht so aus
+- Farbe trägt nie allein
+- Bewegung hat einen Wert und hält nichts auf
+- Ein Pop-up unterbricht, es führt nicht
+- Zerstörendes trifft man nicht aus Versehen
+- Ein Fehler steht dort, wo er entstanden ist
+
+## Name und Zustand stehen im Code
+
+Bedienung · https://standby.design/docs/rules/bedienung-name-und-zustand-stehen-im-code
+
+**Geltung:** universal · web, react-native
+
+> **Regel**
+> Gib jedem Bedienelement einen zugänglichen Namen: Ein Feld hat ein verknüpftes `label`, ein Icon-Button ein `aria-label`, und der sichtbare Text ist Teil des Namens. Leg jeden dauerhaften Zustand als Attribut ab: `aria-pressed`, `aria-expanded`, `aria-selected`, `aria-checked`, `aria-current`, `aria-invalid`, `aria-sort`.
+
+### Warum
+
+Ohne Namen sagt der Screenreader nur „Button". Und wer per Sprache steuert, sagt, was er sieht.
+
+Für das Design heißt das: Jeder Icon-Button braucht in der Spezifikation einen Namen, auch wenn er nie zu sehen ist. Bei einer Zeile mit Bearbeiten, Kopieren und Löschen hört der Nutzer sonst „Button, Button, Button“.
+
+Ein Screenreader liest kein Aussehen. Ohne Attribut hört der Nutzer „Button" und weiß nicht, ob er an oder aus ist.
+
+### Hart und weich
+
+Hart.
+
+### Woran Du den Verstoß erkennst
+
+- `<button><Icon/></button>` ohne `aria-label`.
+- `<input placeholder="E-Mail">` ohne `label`.
+- `aria-label`, das vom sichtbaren Text abweicht.
+- Umschalter, dessen Zustand nur eine Klasse ändert.
+- Aufklapper ohne `aria-expanded`.
+- Aktiver Menüpunkt ohne `aria-current`.
+- Sortierbare Spalte ohne `aria-sort`.
+- Fehlerhaftes Feld ohne `aria-invalid`.
+
+### Grenzen
+
+Ein Icon neben Text ist Schmuck. Es bekommt `aria-hidden`, keinen Namen.
+
+Native Elemente, die den Zustand selbst melden: `checkbox`, `radio`, `select`, `details`.
+
+### Quelle
+
+WCAG 4.1.2 Name, Role, Value, 3.3.2 Labels or Instructions, 2.5.3 Label in Name. Vercel › Content & Accessibility („Icon-only buttons have descriptive `aria-label`"). WCAG 4.1.2 Name, Role, Value. APG › Button Pattern (Toggle), Disclosure Pattern.
+
+### Verwandt
+
+- Verhalten und Aussehen bleiben getrennt
+- Was ein Feld beschreibt, steht im Feld
+- Farbe trägt nie allein
+- Kurze Zustände verschieben, dauerhafte wechseln die Palette
+- Struktur steckt im Element
+
+## Zerstörendes trifft man nicht aus Versehen
+
+Bedienung · https://standby.design/docs/rules/bedienung-zerstoerendes-trifft-man-nicht-aus-versehen
+
+**Geltung:** universal · web, react-native
+
+> **Regel**
+> Stell eine zerstörende Handlung nie direkt neben die häufigste und nie an den Platz des Hauptknopfs. Im Dialog vor einer unumkehrbaren Handlung liegt der Fokus auf dem sicheren Knopf, die zerstörende Handlung ist nie die Standardtaste, und der Dialog nennt Gegenstand und Folge.
+
+### Warum
+
+Was nah und groß ist, trifft man schnell, auch aus Versehen. Wer zehnmal am Tag auf „Speichern“ klickt, trifft beim elften Mal den Nachbarn.
+
+Wer Enter drückt, um ein Fenster wegzuklicken, soll dabei nichts löschen.
+
+Der Dialog nennt dazu den Gegenstand und die Folge, und die Knöpfe nennen die Handlung: „‚Projekt Alpha‘ löschen?“ mit „Löschen“ und „Abbrechen“. Der Nutzer soll nicht erinnern müssen, worauf er geklickt hat.
+
+### Hart und weich
+
+Hart: getrennt durch Ort oder deutlichen Abstand. Weich: wie. Vorgabe: Löschen an der gegenüberliegenden Kante oder im Menü der Zeile.
+
+Hart: die zerstörende Handlung ist nie Standard. Weich: ob der Fokus auf „Abbrechen" oder auf dem Dialog selbst liegt. Vorgabe „Abbrechen".
+
+### Woran Du den Verstoß erkennst
+
+- „Löschen“ direkt neben „Speichern“, ohne Abstand.
+- „Löschen“ steht rechts unten, wo auf allen anderen Seiten „Speichern“ steht.
+- „Alle entfernen“ neben „Hinzufügen“.
+- `autoFocus` auf „Löschen".
+- Enter im Dialog löst die zerstörende Handlung aus.
+- Der Löschknopf ist der `type="submit"` im Dialog-Formular.
+- „Sind Sie sicher?“ ohne Namen des Gegenstands. Knöpfe „Ja“ und „Nein“ oder „OK“.
+
+### Grenzen
+
+Der Bestätigungsdialog. Dort steht „Löschen“ bewusst neben „Abbrechen“, und Zerstörendes trifft man nicht aus Versehen regelt den Fokus.
+
+Der Nutzer hat die Handlung eben selbst gewählt und sie ist umkehrbar. Dann gilt Rückgängig statt Dialog, siehe die Fehler-Regel.
+
+### Quelle
+
+Laws of UX › Fitts’s Law, https://lawsofux.com/fittss-law/ Nielsen Norman Group › 10 Usability Heuristics, Nr. 6 Recognition rather than recall. APG › Dialog (Modal) Pattern („set focus on the least destructive action"). Apple HIG › Alerts („include a Cancel button to give people a clear, safe way").
+
+### Verwandt
+
+- Gewicht ist ein Budget, ein Primary pro Ansicht
+- Ein Pop-up unterbricht, es führt nicht
+- Ein Fehler steht dort, wo er entstanden ist
+- Der Fokus ist sichtbar und hat immer einen Ort
+
+## Klickbares hat eine Fläche, und nur Klickbares sieht so aus
+
+Bedienung · https://standby.design/docs/rules/bedienung-klickbares-hat-eine-flaeche-und-nur-klickbares-sieht-so-aus
+
+**Geltung:** universal · web, react-native
+
+> **Regel**
+> Alles, was man anklicken kann, ist ein Button, mindestens in der stillsten Variante (`ghost`), für Navigation als Button um einen Link herum. Nackte Textlinks sind nicht erlaubt, auch nicht in Fußzeilen. Umgekehrt bekommt nichts das Aussehen eines Bedienelements, das keine Handlung hat.
+
+### Warum
+
+Ein nackter Textlink ist auf dem Handy kaum zu treffen. Die Zeilenhöhe von Text ist keine Trefferfläche, und der Daumen ist kein Mauszeiger. Die Höhe eines Buttons in Standardgröße ist genau dafür da: sie ist die Fläche, die ein Finger sicher trifft.
+
+Der zweite Grund ist Erkennbarkeit. Eine Fläche sagt „hier kannst Du drücken", bevor der Nutzer den Text gelesen hat. Ein Textlink sagt es erst danach, und in einer Fußzeile voller Text gar nicht.
+
+Der Wunsch hinter dem Textlink ist meistens „das soll unauffällig sein". Das ist ein berechtigter Wunsch, aber die Antwort darauf ist Schriftfarbe und Schriftgröße, nicht eine kleinere Fläche. Dezent heißt leise, nicht schwer zu treffen.
+
+Ein toter Klick lässt den Nutzer zweifeln, ob die Seite kaputt ist. Danach traut er auch den echten Knöpfen weniger.
+
+### Hart und weich
+
+| | Status |
+|---|---|
+| Klickbares hat eine echte Trefferfläche, kein nackter Textlink | hart |
+| Dezent wird über Farbe gelöst, nicht über eine kleinere Fläche | hart |
+| Die Standardhöhe liegt in der Größe einer Finger-Trefferfläche | hart |
+| Keine Trefferfläche ist kleiner als 24 × 24 Pixel, auch nicht in dichten Leisten | hart |
+| Kästchen oder Schalter und ihre Beschriftung sind eine gemeinsame Trefferfläche | hart |
+| Die konkreten Höhen | weich, Vorgabe 40 Pixel Standard, 32 Pixel nur am Zeigegerät |
+
+### Woran Du den Verstoß erkennst
+
+- Ein `<a>` oder ein `Text` mit `onPress`, ohne umgebende Fläche.
+- Ein Umschalter („Zur Monatsansicht", „Alle anzeigen") ist als reiner Text gebaut.
+- Die Fußzeile besteht aus einer Reihe nackter Links.
+- Die Trefferfläche wird kleiner gesetzt, um das Element unauffälliger zu machen.
+- Ein Zurück über dem Inhalt ist ein Pfeil mit Text, ohne Fläche.
+- Ein Icon-Button ist kleiner als 24 × 24 Pixel, etwa ein Schließen-X mit 12 Pixel.
+- Nur das Kästchen einer Checkbox ist klickbar, nicht ihre Beschriftung.
+- `cursor: pointer` oder Hover-Effekt an einer Karte ohne Handlung.
+- Pfeil-Icon in einer Zeile, die sich nicht öffnet.
+- Unterstrichener Text, der kein Link ist.
+- Ein Teil der Karte ist klickbar, der Rest sieht gleich aus und ist es nicht.
+
+### Richtig / falsch
+
+```
+        RICHTIG                             FALSCH
+
+  ┌──────────────────┐              Alle anzeigen
+  │  Alle anzeigen   │  40px hoch   ‾‾‾‾‾‾‾‾‾‾‾‾
+  └──────────────────┘              ~18px, kaum zu treffen
+
+  ghost-Variante: keine sichtbare    „unauffällig" über
+  Fläche im Ruhezustand, aber        kleinere Fläche gelöst
+  volle Trefferfläche
+```
+
+### Grenzen
+
+Die einzige Ausnahme ist ein Wort oder eine Wortgruppe **mitten im Fließtext**, etwa ein Verweis innerhalb eines Absatzes in den Rechtstexten. Dort wäre eine Fläche der Fremdkörper. Sobald der Link auf einer eigenen Zeile steht, gilt die Regel wieder.
+
+### Quelle
+
+Vercel AGENTS.md › Touch & Drag („If it looks clickable, it must be clickable"). Vercel Guidelines › Interactions („No dead zones").
+
+### Verwandt
+
+- Die Höhe gehört der Zeile, nicht dem Element
+- Verhalten und Aussehen bleiben getrennt
+- Der Fokus ist sichtbar und hat immer einen Ort
+- Eine Handlung löst beim Loslassen aus
+
+## Was der Nutzer tippt oder einfügt, kommt an
+
+Formular · https://standby.design/docs/rules/formular-was-der-nutzer-tippt-oder-einfuegt-kommt-an
+
+**Geltung:** universal · web, react-native
+
+> **Regel**
+> Sperr nie das Einfügen und verändere eine Eingabe nie stillschweigend.
+
+### Warum
+
+Ein verschlucktes Zeichen ist ein Fehler, den der Nutzer nicht sieht. Aus eingefügtem „1.250,00 €" wird dann still „125000".
+
+### Woran Du den Verstoß erkennst
+
+- `onPaste` mit `preventDefault()`.
+- Ein `onChange`, der Zeichen herausfiltert.
+- `maxLength`, das ohne Zähler abschneidet.
+- Ein Code-Feld, das eingefügte Codes nicht verteilt.
+
+### Hart und weich
+
+Hart.
+
+### Grenzen
+
+Das Feld darf beim Verlassen sichtbar normalisieren, etwa Leerzeichen am Rand entfernen oder eine IBAN gruppieren.
+
+### Quelle
+
+Vercel › Forms („Never block paste", „Accept free text, validate after—don't block typing", „allow pasting codes"). WCAG 3.3.8 Accessible Authentication (Minimum).
+
+### Verwandt
+
+- Der Nutzer tippt nur, was das System nicht weiß
+- Ein Fehler steht dort, wo er entstanden ist
+
+## Was ein Feld beschreibt, steht im Feld
+
+Formular · https://standby.design/docs/rules/formular-was-ein-feld-beschreibt-steht-im-feld
+
+**Geltung:** universal · web, react-native
+
+> **Regel**
+> Setz Icon, Einheit und Vorzeichen, die zu einem Feld gehören, in den Rahmen des Feldes. Was den Inhalt beschreibt, steht an der Stelle, an der man es auch spricht: die Lupe und das Vorzeichen vorn, Euro und Prozent hinten. Was etwas mit dem Feld tut, steht am Ende: Kalender öffnen, leeren, Passwort zeigen. Nichts steht dazwischen und nichts außerhalb.
+
+### Warum
+
+Ein Icon außerhalb des Rahmens liest sich als eigenes Element. Der Blick muss raten, ob es ein Knopf ist, eine Überschrift oder Schmuck. Im Rahmen gehört es zum Feld, weil der Rahmen die Gruppe ist.
+
+Die Einheit im Feld spart Arbeit an zwei Stellen. Der Nutzer tippt nur die Zahl und sieht trotzdem, was sie meint. Und niemand tippt das Euro-Zeichen mit, das die Prüfung danach wieder herausrechnen muss.
+
+Die feste Stelle zählt genauso. Ein Icon, das hinter dem Text herläuft, wandert mit jeder Eingabe und bildet in einer Reihe von Feldern keine gemeinsame Kante. So baut es das native Datumsfeld mancher Browser.
+
+### Hart und weich
+
+| | Status |
+|---|---|
+| Icon, Einheit und Vorzeichen stehen im Rahmen des Feldes | hart |
+| Beschreibendes vorn oder hinten wie gesprochen, Handelndes am Ende | hart |
+| Ein Knopf im Feld ist das innere Element und hat den konzentrischen Radius | hart |
+| Abstand zwischen Icon und Text | weich, Vorgabe die kleinste Abstandsstufe |
+
+### Woran Du den Verstoß erkennst
+
+- Ein Icon steht neben dem Feld statt darin.
+- Die Einheit steht als eigenes Wort hinter dem Rahmen.
+- Ein Icon liegt absolut positioniert über dem Feld, und der Text läuft darunter durch.
+- Das Icon steht an einer Stelle, die die Länge des Inhalts bestimmt.
+
+### Richtig / falsch
+
+```
+        RICHTIG                             FALSCH
+
+  ┌───────────────────────┐          ⌕ ┌───────────────────────┐
+  │ ⌕  Mitarbeiter suchen │            │ Mitarbeiter suchen    │
+  └───────────────────────┘            └───────────────────────┘
+
+  ┌──────────────┐                     ┌──────────────┐
+  │ 1.200      € │                     │        1.200 │ €
+  └──────────────┘                     └──────────────┘
+
+  ┌───────────────────────┐            ┌───────────────────────┐
+  │ 04.08.2026      [▦]   │            │ 04.08.2026  ▦         │
+  └───────────────────────┘            └───────────────────────┘
+  Icon an der Kante                    Icon folgt dem Text
+```
+
+### Grenzen
+
+Ein Button neben dem Feld mit eigener Aufgabe (Suchen, Anlegen) gehört nicht ins Feld. Die beiden sind ein Paar, siehe Die Höhe gehört der Zeile, nicht dem Element.
+
+Die Beschriftung steht über dem Feld. Ein Platzhalter ersetzt sie nicht, weil er beim ersten Tastendruck verschwindet.
+
+### Verwandt
+
+- Konzentrische Radien
+- Weniger Kanten, ruhigere Ansicht
+- Zahlenspalten stehen rechtsbündig
+
+## Was zusammen gespeichert wird, steht in einem Formular
+
+Formular · https://standby.design/docs/rules/formular-was-zusammen-gespeichert-wird-steht-in-einem-formular
+
+**Geltung:** universal · web
+
+> **Regel**
+> Leg Felder, die zusammen gespeichert werden, in ein Formular. Enter im Feld speichert.
+
+### Warum
+
+Nutzer erwarten, dass Enter abschickt. Das liefert nur ein echtes Formular im Code, und nur dann erkennt auch der Passwortmanager die Felder. Gemeint sind Felder, die einen Speichern-Knopf teilen, etwa Name, E-Mail und Telefon mit einem „Speichern“ darunter.
+
+### Woran Du den Verstoß erkennst
+
+- Felder ohne umgebendes `form`.
+- Speichern als `type="button"` mit `onClick`.
+- Enter im Feld bewirkt nichts.
+
+### Hart und weich
+
+Hart.
+
+### Grenzen
+
+Im mehrzeiligen Textfeld macht Enter eine neue Zeile. Dort sendet Strg oder Cmd plus Enter.
+
+### Quelle
+
+Vercel › Forms („Enter submits focused input; in `<textarea>`, ⌘/Ctrl+Enter submits").
+
+### Verwandt
+
+- Der Nutzer tippt nur, was das System nicht weiß
+- Ein Button ist nie gesperrt
+- Konfiguration bekommt eine Seite, Ansichts-Einstellungen bleiben
+
+## Der Nutzer tippt nur, was das System nicht weiß
+
+Formular · https://standby.design/docs/rules/formular-der-nutzer-tippt-nur-was-das-system-nicht-weiss
+
+**Geltung:** universal · web, react-native
+
+> **Regel**
+> Frag keinen Wert ab, den das System schon kennt oder ableiten kann. Gib jedem Feld mit festem Zweck den passenden `type`, `inputmode` und `autocomplete`, damit Browser, Passwortmanager und Tastatur den Rest übernehmen.
+
+### Warum
+
+Jedes Feld kostet den Nutzer Zeit und ist eine Fehlerquelle. Was das System selbst weiß, muss es selbst tragen.
+
+Browser, Passwortmanager und Handytastatur helfen nur, wenn sie den Zweck kennen.
+
+Dazu gehört das Gegenteil: Wo die Hilfe stört, bleibt sie aus. Bei E-Mail, Codes und Nutzernamen ist die Rechtschreibprüfung aus, und Felder ohne Anmeldung, etwa die Suche, rufen keinen Passwortmanager auf. Einmalcodes tragen `autocomplete="one-time-code"`, dann bietet das Handy den Code aus der SMS an.
+
+### Hart und weich
+
+Hart: der Zweck steht am Feld.
+
+### Woran Du den Verstoß erkennst
+
+- Das Feld „E-Mail wiederholen“.
+- Die Stadt bleibt leer, obwohl die Postleitzahl sie verrät.
+- Die Kartenart wird abgefragt, obwohl die Nummer sie zeigt.
+- Ein angemeldeter Nutzer tippt seine Adresse im Bestellformular neu.
+- Rechnungsadresse ohne „wie Lieferadresse“.
+- E-Mail, Telefon oder Betrag als `type="text"` ohne `inputmode`.
+- Login ohne `autocomplete="username"` und `"current-password"`.
+- `autocomplete="off"` an Name oder Adresse.
+- Rote Wellenlinie unter einer E-Mail-Adresse.
+- Ein Suchfeld heißt `name="password"`, oder der Passwortmanager bietet sich im Suchfeld an.
+
+### Grenzen
+
+Neues Passwort, wenn es nicht angezeigt werden kann. Werte, die der Nutzer bewusst prüfen soll, werden vorbelegt statt verborgen.
+
+Freitext und Suche haben keinen festen Zweck.
+
+### Quelle
+
+Laws of UX › Tesler’s Law, https://lawsofux.com/teslers-law/. WCAG 3.3.7 Redundant Entry. WCAG 1.3.5 Identify Input Purpose, 3.3.7 Redundant Entry. Vercel › Forms („`autocomplete` + meaningful `name`; correct `type` and `inputmode`").
+
+### Verwandt
+
+- Was der Nutzer tippt oder einfügt, kommt an
+- Ein Fehler steht dort, wo er entstanden ist
+
+## Lange Zeichenketten stehen in Gruppen
+
+Inhalt · https://standby.design/docs/rules/inhalt-lange-zeichenketten-stehen-in-gruppen
+
+**Geltung:** universal · web, react-native
+
+> **Regel**
+> Zeig IBAN, Telefonnummern, Codes und andere lange Zeichenketten in Gruppen an und gib sie beim Kopieren ohne Trennzeichen heraus.
+
+### Warum
+
+22 Zeichen am Stück kann niemand vergleichen oder abtippen. In Vierergruppen findet das Auge seinen Platz wieder.
+
+### Woran Du den Verstoß erkennst
+
+- IBAN als eine lange Zeile.
+- Telefonnummer ohne Leerzeichen.
+- Achtstelliger Code am Stück.
+- Kopieren liefert die Leerzeichen mit.
+
+### Hart und weich
+
+Hart: gruppiert in der Anzeige, ohne Trennzeichen beim Kopieren. Weich: die Gruppengröße. Vorgabe: die Norm des Formats, sonst Vierergruppen.
+
+### Grenzen
+
+Werte, die nur kopiert und nie gelesen werden, etwa lange Schlüssel. Die bekommen einen Kopierknopf.
+
+### Quelle
+
+Laws of UX › Chunking, https://lawsofux.com/chunking/
+
+### Verwandt
+
+- Was der Nutzer tippt oder einfügt, kommt an
+- Zahlenspalten stehen rechtsbündig
+
+## Struktur steckt im Element
+
+Inhalt · https://standby.design/docs/rules/inhalt-struktur-steckt-im-element
+
+**Geltung:** universal · web
+
+> **Regel**
+> Baue Tabellen als `table` mit Kopfzellen, Listen als Liste, zusammengehörige Felder als Gruppe mit Titel und die Seite aus benannten Bereichen (`header`, `nav`, `main`, `footer`). Der erste Tab-Halt springt zum Inhalt.
+
+### Warum
+
+Der Screenreader sagt „Tabelle, 5 Spalten" oder „Liste, 12 Einträge". Bei `div`-Gittern hört der Nutzer nur einzelne Wörter ohne Zusammenhang.
+
+Sonst tabbt der Nutzer auf jeder Seite erst durch die ganze Navigation. Bei einer Navigation mit 20 Einträgen sind das 20 Tabs, auf jeder Seite neu.
+
+Für das Design heißt das: Der Link „Zum Inhalt springen“ ist im Ruhezustand unsichtbar und erscheint erst beim ersten Tab. Er braucht deshalb nur ein Aussehen im Fokus-Zustand.
+
+### Hart und weich
+
+Hart.
+
+### Woran Du den Verstoß erkennst
+
+- Datentabelle aus `div` mit Grid.
+- Tabelle ohne `th` und `scope`.
+- Aufzählung als Folge von `div`.
+- Radiogruppe ohne `fieldset` und `legend`, oder ohne `role="radiogroup"` und Namen.
+- Kein `main`.
+- Alles in `div`.
+- Der erste Tab landet im Menü.
+
+### Grenzen
+
+Tabellen nur fürs Layout gibt es nicht. Dort gehört Grid hin, ohne Tabellenrolle.
+
+Ansichten ohne wiederkehrende Navigation, etwa der Login.
+
+### Quelle
+
+WCAG 1.3.1 Info and Relationships. Vercel AGENTS.md › Content & Accessibility („Prefer native semantics (`button`, `a`, `label`, `table`)"). WCAG 2.4.1 Bypass Blocks. Vercel › Content & Accessibility („‚Skip to content' link").
+
+### Verwandt
+
+- Name und Zustand stehen im Code
+- Zahlenspalten stehen rechtsbündig
+- Die Titel bilden eine Gliederung
+- Alles geht mit der Tastatur, in der Reihenfolge des Bildes
+- Der Fokus ist sichtbar und hat immer einen Ort
+
+## Alles hat eine Textfassung
+
+Inhalt · https://standby.design/docs/rules/inhalt-alles-hat-eine-textfassung
+
+**Geltung:** universal · web, react-native
+
+> **Regel**
+> Gib jedem Bild mit Bedeutung einen Alternativtext, der sagt, was es zeigt, und jedem Schmuckbild ein leeres `alt`. Gib gesprochenem Inhalt in Videos Untertitel und reinem Ton ein Transkript. Setz Überschriften, Beschriftungen und Zahlen als Text, nie als Grafik.
+
+### Warum
+
+Ohne Text liest der Screenreader den Dateinamen vor oder gar nichts. Mit Text bei einem Schmuckbild hört der Nutzer Rauschen.
+
+Ein leeres `alt=""` ist dabei kein Versehen, sondern der Standard in HTML: Es sagt dem Screenreader „überspringen“. Fehlt das `alt` ganz, liest er stattdessen den Dateinamen vor. Schmuck ist ein Bild ohne Information, etwa ein Hintergrundmuster oder eine Deko-Illustration.
+
+Text in einem Bild lässt sich nicht vergrößern, nicht übersetzen, nicht kopieren und nicht vorlesen.
+
+Wer nicht hört oder gerade keinen Ton anmachen kann, bekommt den Inhalt sonst gar nicht.
+
+### Hart und weich
+
+Hart.
+
+### Woran Du den Verstoß erkennst
+
+- `img` ohne `alt`.
+- `alt` mit Dateinamen oder „Bild".
+- Bedeutungsvolles SVG ohne `role="img"` und Titel.
+- Schmuckbild mit beschreibendem `alt` statt `alt=""`.
+- Überschrift als PNG oder SVG mit Pfaden.
+- Text in ein Titelbild eingebrannt.
+- Beschriftungen per `canvas` gezeichnet ohne Textfassung.
+- `video` ohne `track kind="captions"`.
+- Podcast oder Sprachnachricht ohne Text.
+- Eingebrannte Untertitel, die sich nicht ausschalten lassen.
+
+### Grenzen
+
+Icons in Buttons regelt Name und Zustand stehen im Code.
+
+Logos und Wortmarken.
+
+Video ohne Sprache und ohne wichtige Geräusche. Schmuckvideo, das nach Was sich von selbst bewegt, lässt sich anhalten stumm läuft.
+
+### Quelle
+
+WCAG 1.1.1 Non-text Content. Fluent 2 › Accessibility › Rich media and alternatives. WCAG 1.4.5 Images of Text. WCAG 1.2.1 Audio-only and Video-only, 1.2.2 Captions (Prerecorded). Vercel › Content („Accessible media").
+
+### Verwandt
+
+- Name und Zustand stehen im Code
+- Jeder Textbehälter hält jede Textmenge aus
+- Icons sind auf die Schrift abgestimmt
+- Was sich von selbst bewegt, lässt sich anhalten
 
 ## Rot ist nicht ein Rot
 
@@ -1425,7 +2744,7 @@ Wie die Werte heißen und wie viele es genau sind, entscheidet das Projekt. Dass
 Ist die Marke nun einmal grün oder rot, ist das kein Grund, sie zu ändern. Dann braucht es zwei Dinge:
 
 - Die Zustandsfarben liegen sichtbar neben der Markenfarbe, nicht auf ihr. Ein anderer Farbton, eine andere Sättigung, irgendetwas, das den Unterschied trägt.
-- Der Zustand hängt nicht an der Farbe allein. Ein Zeichen, ein Wort oder ein Symbol trägt die Bedeutung mit, siehe Ein dauerhafter Zustand braucht ein zweites Zeichen. Das ist ohnehin schon Pflicht, hier wird es nur besonders wichtig.
+- Der Zustand hängt nicht an der Farbe allein. Ein Zeichen, ein Wort oder ein Symbol trägt die Bedeutung mit, siehe Farbe trägt nie allein. Das ist ohnehin schon Pflicht, hier wird es nur besonders wichtig.
 
 ### Grenzen
 
@@ -1433,9 +2752,84 @@ Auf einer Marketing- oder Titelseite mit eigener Haut gilt das nicht, dort regie
 
 ### Verwandt
 
-- Dieselbe Zahl bedeutet überall dasselbe
-- Ein dauerhafter Zustand braucht ein zweites Zeichen
+- Eine Bedeutung, überall gleich
+- Farbe trägt nie allein
 - Werte kommen aus Tokens, nie aus der Hand
+
+## Eine Bedeutung, überall gleich
+
+Zustand · https://standby.design/docs/rules/zustand-eine-bedeutung-ueberall-gleich
+
+**Geltung:** universal · web, react-native
+
+> **Regel**
+> Leg jede Bedeutung einmal fest und halte sie im ganzen Produkt gleich. Eine Handlung hat überall denselben Namen und dasselbe Icon, und ein Icon steht nie für zwei Handlungen. Ein Wert hat überall dieselbe Grenze für gut, mittel und schlecht, und fehlt er, ist der Zustand neutral.
+
+### Warum
+
+Liest der Nutzer hier „Entfernen" und dort „Löschen", fragt er sich, ob es dasselbe ist.
+
+Bekannte Zeichen behalten dabei die Bedeutung, die sie außerhalb des Produkts haben: Lupe heißt Suche, Zahnrad heißt Einstellungen, X heißt Schließen, das Logo führt zur Startseite. Der Nutzer bringt diese Bedeutung mit und lernt sie nicht neu.
+
+Dasselbe gilt für den Weg zur Hilfe. Er muss nicht auf jeder Seite stehen, ein Platz im Profil reicht. Aber wo es ihn gibt, steht er immer an derselben Stelle.
+
+Farbe ist eine Aussage über Daten. Steht derselbe Wert auf einer Seite in Gelb und auf der anderen in Grün, widerspricht sich die Oberfläche selbst. Der Nutzer merkt das, auch wenn er es nicht benennen kann, und er lernt daraus das Falsche: der Farbe nicht zu trauen. Danach nützt sie nirgends mehr etwas, auch dort nicht, wo sie stimmt.
+
+Das passiert nicht aus Nachlässigkeit, sondern weil jede Stelle ihre Grenze einzeln setzt. Jede für sich ist plausibel gewählt, und zusammen ergeben sie vier verschiedene Skalen im selben Produkt.
+
+Die Regel greift überall, wo eine Zahl in einen Zustand übersetzt wird: Speicherplatz, der knapp wird. Passwortstärke. Akkustand. Lagerbestand. Temperatur, Luftqualität, Lieferzeit. Ein Fortschritt, der „hinter Plan" heißt. Sobald es eine Grenze gibt, ab der etwas anders aussieht, gilt sie.
+
+### Ohne Daten kein Zustand
+
+Fehlt der Wert, ist der Zustand neutral und die Anzeige bleibt grau. Es wird nichts angenommen.
+
+Wer bei fehlendem Wert Grün zeigt, behauptet „alles in Ordnung", obwohl niemand nachgesehen hat. Das ist die gefährlichste Falschaussage, weil sie beruhigt. Wer Rot zeigt, löst einen Alarm ohne Anlass aus, und nach dem dritten Mal glaubt niemand mehr an die roten Felder. Grau ist die ehrliche Antwort: es liegt nichts vor.
+
+Die Regel hat eine unbequeme Seite. Eine frisch eingerichtete Ansicht sieht dadurch grau und leer aus. Das ist der richtige Eindruck. Der Weg zu einer bunten Ansicht führt über Daten, nicht über Annahmen.
+
+**Sonderfall Zähler.** Bei einem Zähler für etwas, das es nicht geben sollte — offene Fehler, fehlende Belege, ungelesene Warnungen — ist die Null nicht grün, sondern grau. Grün hieße „geprüft und in Ordnung". Grau heißt „hier ist nichts", und das ist der ehrlichere Satz.
+
+### Wo die Grenzen herkommen
+
+Die Zahlen selbst sind eine fachliche Festlegung, keine Gestaltungsfrage. Wo die Grenze zwischen mittel und schlecht liegt, entscheidet nicht der Designer, sondern wer für die Zahl fachlich einsteht.
+
+Getrennt davon steht die Übersetzung in das, was man sieht. Wer die Grenzen ändert, ändert sie an einer Stelle, ohne dass sich das Aussehen bewegt. Wer das Aussehen ändert, fasst die Grenzen nicht an.
+
+### Hart und weich
+
+Hart: eins zu eins. Weich: welche Wörter und Icons. Das legt das Projekt fest.
+
+### Woran Du den Verstoß erkennst
+
+- „Speichern", „Sichern" und „Übernehmen" für dieselbe Handlung.
+- Mülleimer und X für Löschen.
+- X für Schließen und für Löschen.
+- Die Lupe öffnet einen Zoom, das Zahnrad öffnet Filter, oder ein Klick aufs Logo tut nichts.
+- Hilfe oder Kontakt stehen mal im Kopf, mal in der Fußzeile, mal im Profil.
+- Zwei Ansichten zeigen denselben Wert in verschiedenen Farben.
+- Der Vergleich mit einer Grenze steht in mehr als einer Datei.
+- Eine neue Anzeige bekommt ihre Grenzen mitgegeben, statt sie zu erfragen.
+- Ein fehlender Wert wird zu null gemacht und dann eingefärbt.
+- Ein Feld ohne Daten ist grün, weil „kein Problem gemeldet" als gut gewertet wird.
+- Eine Kennzahl zeigt einen Strich und trotzdem einen farbigen Rand oder ein farbiges Badge.
+
+### Grenzen
+
+Handlungen, die wirklich verschieden sind, etwa aus einer Liste entfernen und endgültig löschen. Die heißen bewusst verschieden.
+
+Eine Kennzahl mit fachlich eigenen Grenzen — eine gesetzliche Quote, ein vertraglicher Schwellwert — bekommt ihre Werte natürlich von dort. Sie geht trotzdem durch dieselbe Übersetzung, damit der Weg von der Zahl zur Farbe an einer Stelle bleibt.
+
+Ein leerer Zustand darf erklären, warum nichts da ist, und einen Weg anbieten („Noch keine Buchungen — Import starten"). Neutral heißt grau, nicht wortlos.
+
+### Quelle
+
+Laws of UX › Jakob’s Law, https://lawsofux.com/jakobs-law/. WCAG 3.2.4 Consistent Identification, 3.2.3 Consistent Navigation.
+
+### Verwandt
+
+- Verhalten und Aussehen bleiben getrennt
+- Rot ist nicht ein Rot
+- Farbe trägt nie allein
 
 ## Betone mit einem Mittel, nicht mit zweien
 
@@ -1460,7 +2854,7 @@ Ein häufiger Widerspruch löst sich damit auf. Ein Token-Export nennt für Zahl
 
 | | Status |
 |---|---|
-| Ein Element wird nicht gleichzeitig über Größe und Gewicht betont | hart |
+| Ein Element wird nicht gleichzeitig über Größe und Gewicht betont, außer Titelstufen | hart |
 | Eine alleinstehende große Zahl läuft im normalen Schnitt | hart |
 | Gewichte kommen aus der Skala, nicht aus der Ansicht | hart |
 | Welche Gewichte und Größen das sind | weich |
@@ -1487,11 +2881,14 @@ Ein häufiger Widerspruch löst sich damit auf. Ein Token-Export nennt für Zahl
 
 Eine Zahl im Fließtext ist keine alleinstehende Zahl und folgt dem Text.
 
+Titelstufen dürfen Größe und Gewicht zusammen nutzen. Dort geht es nicht um Betonung eines Wertes, sondern darum, dass jede Ebene der Gliederung sichtbar ist. Das regelt Die Titel bilden eine Gliederung.
+
 Marketing- und Titelseiten dürfen mit ihren eigenen Display-Stufen arbeiten. Dort ist Schrift Bild, und ein Bild darf laut sein.
 
 ### Verwandt
 
 - Zahlenspalten stehen rechtsbündig
+- Die Titel bilden eine Gliederung
 - Werte kommen aus Tokens, nie aus der Hand
 
 ## Zahlenspalten stehen rechtsbündig
@@ -1530,6 +2927,7 @@ Die Monospace gilt dabei für die Zahlen, nicht für die ganze Oberfläche. Besc
 - Eine Zahlenspalte ist mit Leerzeichen auf gleiche Breite gebracht.
 - Die Ziffern springen beim Wechsel der Werte hin und her, weil die Tabellenziffern nicht eingeschaltet sind.
 - Eine technische Anwendung zeigt lange Nummern in der Textschrift, und Null und O sind nicht zu unterscheiden.
+- Ein einzelnes Betragsfeld steht rechtsbündig zwischen linksbündigen Textfeldern.
 
 ### Richtig / falsch
 
@@ -1547,6 +2945,8 @@ Die Monospace gilt dabei für die Zahlen, nicht für die ganze Oberfläche. Besc
 ### Grenzen
 
 Zahlen, die keine Größe sind, folgen ihrem Inhalt: Kundennummern, Postleitzahlen, Jahreszahlen, Telefonnummern. Sie werden nicht verglichen, sondern gelesen, und stehen deshalb linksbündig wie Text.
+
+Ein einzelnes Zahlenfeld in einem Formular ist keine Spalte. Niemand vergleicht es mit etwas, man füllt es nur aus. Es steht deshalb linksbündig wie die Felder darüber und darunter, die Einheit steht im Feld am Ende. Rechtsbündig wird ein Feld erst, wenn mehrere Zahlenfelder untereinander eine Spalte bilden, etwa in einem Planungsraster.
 
 ### Verwandt
 
@@ -1623,6 +3023,42 @@ Ein eigenes Icon-Set als variable Schrift wäre außerhalb von Apple der einzige
 - Betone mit einem Mittel, nicht mit zweien
 - Werte kommen aus Tokens, nie aus der Hand
 - Die Höhe gehört der Zeile, nicht dem Element
+
+## Fließtext hat eine Höchstbreite
+
+Typografie · https://standby.design/docs/rules/typografie-fliesstext-hat-eine-hoechstbreite
+
+**Geltung:** universal · web, react-native · **Korridor:** 45-80 Zeichen · **Vorgabe:** 65ch
+
+> **Regel**
+> Begrenze die Breite von Fließtext mit genau einem Token in Zeichen.
+
+### Warum
+
+Bei sehr langen Zeilen findet das Auge den Anfang der nächsten Zeile nicht. Auf breiten Bildschirmen läuft Text sonst über 200 Zeichen.
+
+### Woran Du den Verstoß erkennst
+
+- Absatz ohne `max-width`.
+- Breite in `px` statt `ch`.
+- Bei 1920 Pixeln läuft ein Hilfetext über die ganze Breite.
+
+### Hart und weich
+
+Hart: es gibt eine Höchstbreite, als Token, höchstens 80 Zeichen. Weich: der Wert im Korridor 45 bis 80ch. Vorgabe 65ch.
+
+### Grenzen
+
+Tabellen, Code, einzeilige Beschriftungen.
+
+### Quelle
+
+WCAG 1.4.8 Visual Presentation (AAA, „width is no more than 80 characters"). Vercel › Layout („Responsive coverage … ultra-wide").
+
+### Verwandt
+
+- Jeder Textbehälter hält jede Textmenge aus
+- Weniger Kanten, ruhigere Ansicht
 
 ## Werte kommen aus Tokens, nie aus der Hand
 
@@ -1739,6 +3175,124 @@ Marketing- und Titelseiten mit eigener Haut können bei einer Erscheinung bleibe
 - Die Ebene folgt der Rolle, nicht der Schachtelung
 - Rot ist nicht ein Rot
 
+## Kontrast hat eine Untergrenze
+
+Farbe · https://standby.design/docs/rules/farbe-kontrast-hat-eine-untergrenze
+
+**Geltung:** universal · web, react-native
+
+> **Regel**
+> Halte für Text 4,5:1 gegen den Untergrund ein, für große Schrift 3:1, für die Grenze eines Bedienelements und jedes Zustandszeichen ebenfalls 3:1, in jedem Zustand und in beiden Modi. Verlangt das System erhöhten Kontrast oder erzwungene Farben, bleiben Grenzen, Fokus und Zustände sichtbar.
+
+### Warum
+
+Darunter kann ein Teil der Nutzer den Text nicht lesen oder das Feld nicht finden, egal wie stimmig es aussieht.
+
+Die Untergrenze gilt in jedem Zustand, nicht nur in Ruhe: auch bei Hover, Gedrückt und Fokus, und in beiden Modi. Wird ein dunkler Knopf im Hellen beim Hover heller (siehe Kurze Zustände verschieben, dauerhafte wechseln die Palette), darf seine Beschriftung trotzdem nicht unter 4,5:1 fallen.
+
+Wer schlecht sieht, stellt das System auf hohen Kontrast. Dann verschwinden Hintergrundfarben und Schatten, und was nur über sie gebaut ist, ist weg.
+
+### Hart und weich
+
+Hart: die WCAG-AA-Werte als Untergrenze. Weich: das Messverfahren. APCA darf zusätzlich prüfen (Vercel empfiehlt es), ersetzt die Untergrenze aber nicht.
+
+Hart: alles Nötige bleibt sichtbar. Weich: wie stark die Kontrastvariante abweicht.
+
+### Woran Du den Verstoß erkennst
+
+- Platzhalter- oder Hilfetext unter 4,5:1.
+- Feldrahmen als einzige Grenze eines Feldes unter 3:1.
+- Fokusring oder Häkchen unter 3:1.
+- Geprüft nur im hellen Modus.
+- Kontrast nur im Ruhezustand geprüft.
+- Weiße Schrift auf dem helleren Hover-Zustand unter 4,5:1.
+- Fokusring nur als `box-shadow`, ohne `outline` als Rückfall.
+- Feldgrenze nur über eine andere Hintergrundfarbe.
+- Icon als CSS-Hintergrundbild.
+- Kein `@media (prefers-contrast: more)` oder `(forced-colors: active)` im Projekt.
+
+### Grenzen
+
+Gesperrte Elemente, Logos, reine Schmuckflächen.
+
+Native Apps ohne Web-Ansicht nutzen die Kontrastvarianten der Plattform.
+
+### Quelle
+
+WCAG 1.4.3 Contrast (Minimum), 1.4.11 Non-text Contrast. Vercel › Design („Meet contrast"). Apple HIG › Accessibility › Color and effects („provides a higher contrast color scheme when the system setting Increase Contrast is turned on").
+
+### Verwandt
+
+- Rot ist nicht ein Rot
+- Erst Abstand, dann Fläche, dann Linie
+- Kurze Zustände verschieben, dauerhafte wechseln die Palette
+- Was der Browser mitbringt, wird gestaltet oder ersetzt
+- Der Fokus ist sichtbar und hat immer einen Ort
+- Farbe trägt nie allein
+
+## Farbe trägt nie allein
+
+Farbe · https://standby.design/docs/rules/farbe-farbe-traegt-nie-allein
+
+**Geltung:** universal · web, react-native
+
+> **Regel**
+> Zeige jeden dauerhaften Zustand und jede Datenreihe neben der Farbe mit einem zweiten Merkmal. Bei Zuständen ist es Position, Strich, Balken, Punkt oder Unterstreichung, und es gehört zum Element. Bei Datenreihen ist es eine direkte Beschriftung, die Form der Marker oder die Strichart.
+
+### Warum
+
+Rund jeder zwölfte Mann sieht Rot und Grün nicht auseinander. Für ihn ist ein aktiver Tab, der sich nur durch die Textfarbe auszeichnet, kein aktiver Tab, sondern einer von fünf gleichen. Dasselbe gilt bei starkem Sonnenlicht, auf schlecht kalibrierten Bildschirmen und bei jedem, der die Ansicht nur kurz überfliegt.
+
+Das zweite Zeichen kostet nichts. Es ist ohnehin da, sobald das Element sauber gebaut ist: der Knopf des Switch steht rechts, unter dem Tab liegt ein Strich, vor dem Chip sitzt ein Punkt. Der Fehler entsteht nur, wenn ein Zustand nachträglich „schnell über die Farbe" gelöst wird.
+
+Für einen von zwölf Männern sehen Rot und Grün gleich aus. Eine Legende nur aus Farbfeldern ist für ihn leer.
+
+### Die Zeichen je Element
+
+| Element | Zweites Zeichen |
+|---|---|
+| Switch | Position des Knopfs |
+| Tab | Strich darunter |
+| Chip | Punkt vorn |
+| Navigations-Zeile | Balken links |
+| Fließtext-Link | verdickte Unterstreichung |
+| Button, Icon-Button | — (kein dauerhafter Zustand) |
+| Eingabefeld | — (der Zustand steht in Rand und Meldung) |
+| Badge | — (nicht bedienbar) |
+
+Wo ein Strich steht, hat das Element einen dauerhaften Zustand und braucht das Zeichen. Wo keiner steht, hat es keinen.
+
+### Hart und weich
+
+Hart: ein zweites Merkmal. Weich: welches. Vorgabe direkte Beschriftung am Ende der Linie.
+
+### Woran Du den Verstoß erkennst
+
+- Der aktive Tab unterscheidet sich nur in der Textfarbe.
+- Eine ausgewählte Kachel ist nur farblich hervorgehoben.
+- In Graustufen ist nicht mehr erkennbar, welches Element an ist. Das ist der schnellste Test.
+- Legende nur aus Farbkästchen.
+- Zwei Linien, die sich nur im Farbton unterscheiden.
+- Kreisdiagramm ohne Beschriftung an den Stücken.
+- Benachbarte Reihen unter 3:1 zueinander.
+
+### Grenzen
+
+Für kurzzeitige Zustände wie Hover gilt die Regel nicht. Hover ist eine Rückmeldung auf eine Handlung, die gerade passiert, und der Nutzer weiß bereits, wo er ist.
+
+Diagramme mit genau einer Reihe.
+
+### Quelle
+
+WCAG 1.4.1 Use of Color, 1.4.11 Non-text Contrast. Vercel › Design („Accessible charts").
+
+### Verwandt
+
+- Kurze Zustände verschieben, dauerhafte wechseln die Palette
+- Rot ist nicht ein Rot
+- Kontrast hat eine Untergrenze
+- Eine Bedeutung, überall gleich
+
 ## Utility-Klassen statt Inline-Styles
 
 Stack · https://standby.design/docs/rules/stack-utility-klassen-statt-inline-styles
@@ -1746,7 +3300,7 @@ Stack · https://standby.design/docs/rules/stack-utility-klassen-statt-inline-st
 **Geltung:** stack · web, react-native
 
 > **Regel**
-> Setze jede Gestaltung über Utility-Klassen. Keine Inline-Styles, keine Style-Objekte, keine festen Farbwerte im Markup.
+> Setze jede Gestaltung über Utility-Klassen. Keine Inline-Styles, keine Style-Objekte.
 
 ### Warum
 
@@ -1830,7 +3384,7 @@ Der Abstand einer Gruppe zu ihrem Umfeld ist kein Abstand zwischen Geschwistern.
 
 ### Verwandt
 
-- Nähe gruppiert, nicht die Linie
+- Erst Abstand, dann Fläche, dann Linie
 - Die Karte hat kein Padding
 - Utility-Klassen statt Inline-Styles
 
@@ -1841,7 +3395,7 @@ Stack · https://standby.design/docs/rules/stack-keine-deckkraft-modifier-auf-se
 **Geltung:** stack · web, react-native
 
 > **Regel**
-> Schreibe nie `bg-primary/10`, `text-destructive/60` oder Ähnliches. Für Abstufungen gibt es benannte Stufen, für Hover und Gedrückt benannte Zustandsstufen. Fehlen sie, nimm eine Helligkeitsänderung: heller beim Hover (`brightness-110`), dunkler beim Drücken (`brightness-95`).
+> Schreibe nie `bg-primary/10`, `text-destructive/60` oder Ähnliches. Für Abstufungen und Zustände gibt es benannte Stufen, siehe Kurze Zustände verschieben, dauerhafte wechseln die Palette.
 
 ### Warum
 
@@ -1879,3 +3433,72 @@ Deckkraft auf einer **Ebene** ist etwas anderes als Deckkraft auf einer Farbe: e
 
 - Rot ist nicht ein Rot
 - Werte kommen aus Tokens, nie aus der Hand
+
+## Was der Browser mitbringt, wird gestaltet oder ersetzt
+
+Stack · https://standby.design/docs/rules/stack-was-der-browser-mitbringt-wird-gestaltet-oder-ersetzt
+
+**Geltung:** stack · web
+
+> **Regel**
+> Lass kein Bedienelement im Aussehen des Browsers stehen. Sag dem Browser per `color-scheme` den aktiven Modus. Was CSS erreicht, gestaltest Du. Was CSS nicht erreicht, ersetzt Du durch ein eigenes Element.
+
+### Warum
+
+Native Teile bringen die Gestaltung des Betriebssystems mit: eigene Icons, eigene Strichstärken, eigene Farben. Neben den eigenen Elementen wirken sie wie aus einem fremden Set. Das ist derselbe Bruch wie zwei Icon-Pakete in einem Projekt.
+
+Dazu ändern sie sich mit Browser und Systemsprache. Ein natives Datumsfeld zeigt in einem englisch eingestellten Browser mm/dd/yyyy, auch wenn die Anwendung Deutsch spricht. Viele lassen sich im Dunkelmodus nicht einfärben.
+
+Ohne die Angabe zeichnet der Browser Scrollbalken, Auswahllisten und Autofill hell, auch auf einer dunklen Seite.
+
+### Was wohin gehört
+
+| Element | Weg | Ergebnis |
+|---|---|---|
+| Scrollbalken | gestalten | Breite und Farbe aus Tokens, beide Modi geprüft |
+| Markierter Text | gestalten | Markenfarbe mit geprüftem Kontrast |
+| Checkbox, Radio, Regler | gestalten | Akzentfarbe aus der Marke |
+| Autofill-Hintergrund | gestalten | Feld behält seine Fläche |
+| Kreuz im Suchfeld | ausblenden | eigener Leeren-Knopf, wenn er gebraucht wird |
+| Pfeile im Zahlenfeld | ausblenden | Zahl wird getippt. Schritte, wenn nötig, als eigene Knöpfe |
+| Datumsfeld | ersetzen | eigenes Feld im Format der Oberflächensprache, eigener Kalender |
+| Aufklappliste einer Auswahl | ersetzen | eigene Liste mit den Rollen des Systems |
+
+### Hart und weich
+
+Hart. Scope `stack`, gilt für `web`.
+
+| | Status |
+|---|---|
+| Kein Bedienelement zeigt das Aussehen des Browsers | hart |
+| Formate folgen der Sprache der Oberfläche, nicht der des Browsers. Das gilt für jede angezeigte Zahl, jedes Datum und jeden Betrag, nicht nur im Feld. Formatiert wird über die Sprachfunktionen der Plattform (`Intl`) | hart |
+| Ob gestaltet oder ersetzt wird | weich, Vorgabe die Tabelle oben |
+
+### Woran Du den Verstoß erkennst
+
+- Ein Datums-, Monats- oder Zahlenfeld steht ohne eigenes Element darum in der Ansicht.
+- Im globalen CSS fehlt eine Regel für markierten Text.
+- Der Scrollbalken ist im Dunkelmodus hellgrau und breit.
+- Das Datumsformat wechselt, wenn Du die Sprache des Browsers umstellst.
+- Ein Betrag wird von Hand zusammengesetzt, etwa `"€ " + n.toFixed(2)`, oder ein Datum steht als `toISOString()` in der Anzeige.
+- Dunkles Thema ohne `color-scheme: dark`.
+- Natives `select` ohne eigene Hintergrund- und Textfarbe.
+
+### Grenzen
+
+Auf Touch-Geräten bedient sich die Auswahl des Systems oft besser als eine eigene Liste. Dort darf das System-Rad bleiben, wenn der Auslöser gestaltet ist.
+
+Dateiauswahl und Druckdialog gehören dem Betriebssystem und bleiben, wie sie sind.
+
+Native Apps ohne Web-Ansicht. Dort regelt es die Plattform.
+
+### Quelle
+
+Vercel › Dark Mode & Theming („`color-scheme: dark` on `<html>`", „Native `<select>`: explicit `background-color` and `color`").
+
+### Verwandt
+
+- Icons sind auf die Schrift abgestimmt
+- Hell und Dunkel sind zwei Entwürfe, keine Umkehrung
+- Verhalten und Aussehen bleiben getrennt
+- Kontrast hat eine Untergrenze

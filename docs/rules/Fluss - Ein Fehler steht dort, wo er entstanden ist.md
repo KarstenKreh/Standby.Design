@@ -1,6 +1,6 @@
 ---
 dateCreated: 2026-08-27
-description: Eine Meldung erscheint an der Stelle, die sie betrifft, sagt was zu tun ist, und die Eingaben des Nutzers bleiben erhalten.
+description: "Eine Meldung erscheint an der Stelle, die sie betrifft, sagt was zu tun ist, und wird angesagt. Die Eingaben des Nutzers bleiben erhalten."
 type: design-rule
 scope: universal
 applies-to:
@@ -16,7 +16,7 @@ tags:
 # Ein Fehler steht dort, wo er entstanden ist
 
 > [!TIP] Regel
-> Zeige einen Fehler an der Stelle, die er betrifft — beim Feld das Feld, beim Bereich der Bereich. Sag, was zu tun ist, nicht was kaputt gegangen ist. Und lass die Eingaben des Nutzers stehen.
+> Zeige einen Fehler an der Stelle, die er betrifft, beim Feld das Feld, beim Bereich der Bereich. Sag, was zu tun ist, nicht was kaputt gegangen ist. Lass die Eingaben des Nutzers stehen. Jede Meldung ohne Seitenwechsel liegt in einem Live-Bereich, damit der Screenreader sie ansagt.
 
 ## Warum
 
@@ -25,6 +25,14 @@ Ein Fehler ist eine Anweisung, keine Meldung. Der Nutzer will nicht wissen, was 
 Deshalb muss er auch dort stehen, wo gehandelt wird. Steht der Fehler weit weg von dem Feld, das er betrifft, muss der Nutzer die Verbindung selbst herstellen — bei drei Fehlern in einem Formular ist das eine Suchaufgabe.
 
 Und das Wichtigste, das am häufigsten verletzt wird: **die Eingaben bleiben.** Ein Fehler, der das Formular leert, bestraft den Nutzer für einen Tippfehler. Nach dem zweiten Mal macht er nicht weiter.
+
+Sonst erfährt ein Screenreader-Nutzer nie, dass gespeichert wurde oder dass es keine Treffer gibt.
+
+## Wann der Fehler kommt
+
+Prüf ein Feld, wenn der Nutzer es verlässt. Beim Tippen meldet sich der Fehler zu früh, weil die Eingabe noch nicht fertig ist. Erst beim Absenden ist es zu spät, weil der Nutzer dann schon drei Felder weiter ist.
+
+Das Feld nimmt dabei jede Eingabe an, siehe [[Formular - Was der Nutzer tippt oder einfügt, kommt an]]. Ist sie ungültig, markiert sich das Feld beim Verlassen und sagt, was fehlt.
 
 ## Wo eine Meldung hingehört
 
@@ -50,12 +58,18 @@ Dafür gelten drei Bedingungen:
 
 Ist eine Handlung rückgängig zu machen, gehört das Angebot dazu in die Kurzmeldung („Gelöscht — rückgängig"). Das ist ihr stärkster Einsatz, weil sie damit eine Bestätigung vorher überflüssig macht.
 
+Eine Kurzmeldung mit Handlung bleibt stehen, solange der Mauszeiger auf ihr liegt oder sie den Fokus hat, und sie ist per Tastatur erreichbar. Sonst ist das Angebot weg, bevor ein langsamer Nutzer es greifen kann.
+
 ## Was in einer Meldung steht
 
 - Was der Nutzer tun kann, in seiner Sprache.
 - Kein Fehlercode, kein technischer Wortlaut, keine Meldung aus dem System durchgereicht.
 - Keine Schuldzuweisung, weder an ihn noch an das System.
 - Bei einem Fehler, der nicht in seiner Hand liegt: was gerade gilt und wann er es erneut versuchen kann.
+
+## Hart und weich
+
+Hart. Weich: `polite` oder `assertive`. Vorgabe `polite`.
 
 ## Woran Du den Verstoß erkennst
 
@@ -65,13 +79,27 @@ Ist eine Handlung rückgängig zu machen, gehört das Angebot dazu in die Kurzme
 - Eine technische Meldung steht ungefiltert in der Oberfläche.
 - Eine Kurzmeldung trägt eine Information, die der Nutzer später wieder braucht.
 - Es gibt eine Bestätigungsfrage für etwas, das man auch rückgängig machen könnte.
+- Eine Kurzmeldung mit „Rückgängig“ verschwindet nach fester Zeit, auch wenn die Maus auf ihr liegt.
+- Ein ungültiges Feld schweigt bis zum Absenden.
+- Die Fehlermeldung erscheint beim ersten Tastendruck.
+- Kurzmeldung ohne `role="status"` oder `aria-live`.
+- Trefferzahl ändert sich still.
+- Der Live-Bereich wird erst mit der Meldung eingefügt.
 
 ## Grenzen
 
 Fehler, die die ganze Anwendung betreffen — keine Verbindung, abgelaufene Anmeldung —, gehören an eine Stelle, die über allem liegt. Sie betreffen kein einzelnes Feld, und der Nutzer muss sie sehen, bevor er weitertippt.
+
+Fehler, die nach [[Bedienung - Der Fokus ist sichtbar und hat immer einen Ort]] ohnehin den Fokus bekommen.
+
+## Quelle
+
+WCAG 4.1.3 Status Messages. Vercel › Feedback („Use polite `aria-live` for toasts/inline validation").
 
 ## Verwandt
 
 - [[Fluss - Ein Pop-up unterbricht, es führt nicht]]
 - [[Fluss - Leer ist ein Zustand, keine Lücke]]
 - [[Zustand - Rot ist nicht ein Rot]]
+- [[Fluss - Der Platz ist da, bevor die Daten kommen]]
+- [[Bedienung - Der Fokus ist sichtbar und hat immer einen Ort]]

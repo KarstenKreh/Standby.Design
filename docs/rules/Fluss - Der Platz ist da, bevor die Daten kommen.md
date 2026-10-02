@@ -49,10 +49,20 @@ Lädt ein Bereich, wird auch nur dieser Bereich als ladend gezeigt. Eine ganze S
 
 Die Zahlen sind eine Vorgabe. Hart ist die Staffelung: erst nichts, dann Form, dann Auskunft.
 
+Ist ein Ladehinweis einmal erschienen, bleibt er eine Mindestzeit stehen. Kommt die Antwort kurz nach der Schwelle, blitzt er sonst für ein paar Millisekunden auf, genau das Flackern, das die Schwelle verhindern soll.
+
+| | Status |
+|---|---|
+| Erst nichts, dann Form, dann Auskunft | hart |
+| Ein erschienener Ladehinweis hat eine Mindestdauer | hart |
+| Schwelle bis zur ersten Anzeige | weich, Korridor 150 bis 250 ms, Vorgabe 200 |
+| Mindestdauer | weich, Korridor 300 bis 500 ms, Vorgabe 400 |
+
 ## Woran Du den Verstoß erkennst
 
 - Der Inhalt trifft ein und schiebt die Seite nach unten.
 - Ein Ladezeichen blitzt bei jedem Wechsel kurz auf.
+- Ein Ladehinweis verschwindet wenige Millisekunden nach dem Erscheinen.
 - Ein einzelner ladender Bereich sperrt die ganze Ansicht.
 - Der Platzhalter hat eine andere Höhe als der echte Inhalt.
 - Bei einem langen Vorgang steht minutenlang ein sich drehender Kreis ohne Auskunft.
@@ -68,4 +78,4 @@ Ein Vorgang, den der Nutzer selbst ausgelöst hat und dessen Ergebnis er abwarte
 
 - [[Fluss - Leer ist ein Zustand, keine Lücke]]
 - [[Fluss - Ein Fehler steht dort, wo er entstanden ist]]
-- [[Bedienung - Übergänge haben genau einen Wert]]
+- [[Bedienung - Bewegung hat einen Wert und hält nichts auf]]

@@ -217,7 +217,7 @@
 <p>Nicht randlos läuft Inhalt, der seinen Weißraum schon mitbringt: ein freigestelltes Logo, eine Illustration auf hellem Grund, Text. Der braucht das Padding des Abschnitts.</p>
 <p>Damit die Ecke dabei sauber bleibt, muss die Karte ihren Überlauf beschneiden. Läuft ein Bild bis zur Kante und die Ecke ist trotzdem eckig, fehlt genau das.</p>
 <h2>Padding-Werte im Abschnitt</h2>
-<p>Nur das erste Kind bekommt oben Padding. Die weiteren nicht, weil der untere Abstand des Vorgängers den Abstand schon liefert. Sobald Trennlinien im Spiel sind, bekommt jeder Abschnitt oben und unten Padding, sonst klebt der Inhalt an der Linie.</p>
+<p>Das erste Kind ist das, was oben steht. Hat die Karte einen Kopf, ist es der Kopf. Hat sie keinen, ist es der Inhalt, und der bekommt oben Padding. Setz die Null deshalb nicht an eine bestimmte Art von Abschnitt, sondern an den Fall „Abschnitt folgt auf Abschnitt“. Dann stimmt die Regel ohne Fallunterscheidung. Die weiteren nicht, weil der untere Abstand des Vorgängers den Abstand schon liefert. Sobald Trennlinien im Spiel sind, bekommt jeder Abschnitt oben und unten Padding, sonst klebt der Inhalt an der Linie.</p>
 <div class="table-wrap"><table>
 <thead>
 <tr>
@@ -289,6 +289,8 @@
 <li>Ein Abschnitt setzt sein Padding mit negativen Margins wieder zurück. Das ist der sichere Beweis, dass das Padding eine Ebene zu hoch sitzt.</li>
 <li>Ein Bild in einer Karte hat links und rechts denselben Abstand wie der Fließtext darüber, obwohl es bis an die Kante gehört.</li>
 <li>Ein Chart läuft bis zur Kante, aber die Ecke ist eckig.</li>
+<li>Der Inhalt einer Karte ohne Kopf klebt an der Oberkante.</li>
+<li>Die Null für das obere Padding hängt an einem Abschnittstyp statt an seiner Position.</li>
 </ul>
 <h2>Grenzen</h2>
 <p>Keine. Auch eine Karte, die nur einen Textblock enthält, bekommt kein Padding. Sonst ist die Ausnahme nach dem dritten Einsatz die Regel, und beim nächsten Mal steht wieder ein Padding auf der Karte.</p>

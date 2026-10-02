@@ -217,6 +217,7 @@
 <li>Genau einen Wert abfragen, wenn er allein steht und der Vorgang danach zu Ende ist</li>
 </ul>
 <p>In allen drei Fällen redet die Anwendung, und der Nutzer antwortet mit einem Wort.</p>
+<p>Solange ein Pop-up offen ist, ist alles dahinter still: Die Seite scrollt nicht mit, und weder Tab noch Screenreader erreichen etwas dahinter. Sonst bedient der Nutzer eine Seite, die er nicht sieht.</p>
 <h2>Woran Du den Verstoß erkennst</h2>
 <ul>
 <li>Im Pop-up stehen mehrere Eingabefelder oder ein „Speichern&quot; für mehrere Werte.</li>
@@ -226,6 +227,7 @@
 <li>Der Zurück-Knopf des Geräts schließt etwas anderes als das, was der Nutzer erwartet.</li>
 <li>Der Zustand lässt sich nicht verlinken und kommt nach einem Neuladen nicht wieder.</li>
 <li>Das Pop-up hat eine Überschrift, die eigentlich ein Seitentitel ist.</li>
+<li>Hinter dem offenen Pop-up scrollt die Seite mit, oder Tab erreicht Elemente dahinter. Kein <code>inert</code> am Hintergrund, kein <code>overscroll-behavior: contain</code> im Pop-up.</li>
 </ul>
 <h2>Richtig / falsch</h2>
 <pre><code>        RICHTIG                             FALSCH
@@ -260,9 +262,9 @@
 <p>Ein Panel, das von der Seite oder von unten einfährt, ist kein Schlupfloch. Steht ein Formular darin, gilt die Regel genauso: es hat keine Adresse und stapelt genauso.</p>
 <h2>Verwandt</h2>
 <ul>
-<li><a href="/docs/rules/bedienung-fokus-ist-immer-sichtbar">Fokus ist immer sichtbar</a></li>
-<li><a href="/docs/rules/layout-jede-ansicht-bricht-bei-320-pixeln-um">Jede Ansicht bricht bei 320 Pixeln um</a></li>
-<li><a href="/docs/rules/bedienung-klickbares-braucht-eine-flaeche">Klickbares braucht eine Fläche</a></li>
+<li><a href="/docs/rules/bedienung-der-fokus-ist-sichtbar-und-hat-immer-einen-ort">Der Fokus ist sichtbar und hat immer einen Ort</a></li>
+<li><a href="/docs/rules/layout-jede-ansicht-folgt-dem-platz-und-bricht-bei-320-pixeln-um">Jede Ansicht folgt dem Platz und bricht bei 320 Pixeln um</a></li>
+<li><a href="/docs/rules/bedienung-klickbares-hat-eine-flaeche-und-nur-klickbares-sieht-so-aus">Klickbares hat eine Fläche, und nur Klickbares sieht so aus</a></li>
 </ul>
 
 

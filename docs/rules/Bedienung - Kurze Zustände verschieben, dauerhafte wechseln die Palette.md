@@ -72,5 +72,5 @@ Ein Eingabefeld im Fehlerzustand wechselt die Palette, obwohl der Fehler vorübe
 
 ## Verwandt
 
-- [[Bedienung - Ein dauerhafter Zustand braucht ein zweites Zeichen]]
+- [[Farbe - Farbe trägt nie allein]]
 - [[Bedienung - Verhalten und Aussehen bleiben getrennt]]
