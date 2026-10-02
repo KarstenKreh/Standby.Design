@@ -188,7 +188,7 @@
 <h2>Warum</h2>
 <h3>Ein Paar hat eine gemeinsame Kante</h3>
 <p>Ein Eingabefeld mit einem Button daneben ist ein Paar. Der Button gehört zu dem Feld, er tut etwas mit dem, was darin steht. Sind beide verschieden hoch, verliert die Zeile ihre Ober- und Unterkante, der Button hängt in der Luft, und die beiden lesen sich als zwei Dinge, die zufällig nebeneinander liegen.</p>
-<p>Das ist dieselbe Mechanik wie in <a href="/docs/rules/layout-naehe-gruppiert-nicht-die-linie">Nähe gruppiert, nicht die Linie</a>, nur auf der anderen Achse: Nähe gruppiert waagerecht, eine gemeinsame Kante gruppiert senkrecht. Beides wirkt, bevor jemand liest.</p>
+<p>Das ist dieselbe Mechanik wie in <a href="/docs/rules/layout-erst-abstand-dann-flaeche-dann-linie">Erst Abstand, dann Fläche, dann Linie</a>, nur auf der anderen Achse: Nähe gruppiert waagerecht, eine gemeinsame Kante gruppiert senkrecht. Beides wirkt, bevor jemand liest.</p>
 <h3>Warum es überhaupt mehr als eine Höhe gibt</h3>
 <p>Weil Dichte eine Eigenschaft des Kontexts ist. In einer Werkzeugleiste stehen viele Bedienelemente nebeneinander, jedes wird kurz berührt und wieder losgelassen. Dort gewinnt Kompaktheit, weil die Leiste sonst mehr Platz frisst als der Inhalt, für den sie da ist.</p>
 <p>In einem Formular tippt der Nutzer. Er hält sich dort auf, er trifft dort, er liest dort. Da gewinnen Ruhe und Trefferfläche.</p>
@@ -237,6 +237,8 @@
 <li>Es gibt eine Höhe, die nur an einer einzigen Stelle vorkommt.</li>
 <li>Ein Icon-Element ist rechteckig statt quadratisch.</li>
 <li>Ein Element wird per Sonderschalter angehoben, obwohl seine Zeile schon sagt, welche Höhe gilt.</li>
+<li>Unter einem Formular stehen Speichern und Abbrechen in der dichten Höhe.</li>
+<li>Ein Suchfeld in einer Werkzeugleiste ist höher als die Knöpfe daneben.</li>
 </ul>
 <h2>Richtig / falsch</h2>
 <pre><code>        RICHTIG                             FALSCH
@@ -251,13 +253,14 @@
   für die ganze Zeile                 hat keine gemeinsame Kante
 </code></pre>
 <h2>Grenzen</h2>
-<p>Nach unten begrenzt die Trefferfläche aus <a href="/docs/rules/bedienung-klickbares-braucht-eine-flaeche">Klickbares braucht eine Fläche</a>. Auf Touch-Oberflächen ist die dichte Stufe zu klein für den Finger, sie bleibt dort Werkzeugleisten am Zeigegerät vorbehalten.</p>
+<p>Nach unten begrenzt die Trefferfläche aus <a href="/docs/rules/bedienung-klickbares-hat-eine-flaeche-und-nur-klickbares-sieht-so-aus">Klickbares hat eine Fläche, und nur Klickbares sieht so aus</a>. Auf Touch-Oberflächen ist die dichte Stufe zu klein für den Finger, sie bleibt dort Werkzeugleisten am Zeigegerät vorbehalten.</p>
 <p>Ein Element, das allein steht und in keiner Zeile sitzt, nimmt die Höhe seines Umfelds. Im Zweifel die großzügige, weil ein einzelner Knopf fast immer eine Aufgabe ist und keine Werkzeugleiste.</p>
 <p>Beschriftete Elemente wachsen nur in der Breite mit ihrem Inhalt. Die Höhe ändert sich nie durch den Text darin.</p>
+<p>Die Aktionszeile unter einem Formular ist eine Formularzeile. Speichern und Abbrechen nehmen die Formularhöhe, auch wenn kein Feld neben ihnen steht. Umgekehrt nimmt ein Feld in einer Werkzeugleiste, etwa die Suche, die dichte Höhe der Leiste.</p>
 <h2>Verwandt</h2>
 <ul>
-<li><a href="/docs/rules/bedienung-klickbares-braucht-eine-flaeche">Klickbares braucht eine Fläche</a></li>
-<li><a href="/docs/rules/layout-naehe-gruppiert-nicht-die-linie">Nähe gruppiert, nicht die Linie</a></li>
+<li><a href="/docs/rules/bedienung-klickbares-hat-eine-flaeche-und-nur-klickbares-sieht-so-aus">Klickbares hat eine Fläche, und nur Klickbares sieht so aus</a></li>
+<li><a href="/docs/rules/layout-erst-abstand-dann-flaeche-dann-linie">Erst Abstand, dann Fläche, dann Linie</a></li>
 <li><a href="/docs/rules/form-senkrechtes-padding-wird-optisch-ausgeglichen">Senkrechtes Padding wird optisch ausgeglichen</a></li>
 </ul>
 

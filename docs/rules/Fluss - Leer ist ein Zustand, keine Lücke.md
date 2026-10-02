@@ -53,10 +53,10 @@ Der häufigste Fehler ist nicht der fehlende leere Zustand, sondern derselbe Tex
 
 ## Grenzen
 
-Nicht jede leere Fläche braucht Text. Eine Spalte in einer Tabelle, ein einzelnes Feld, ein Diagrammabschnitt ohne Wert — dort reicht ein Strich oder ein Zeichen für „kein Wert", siehe [[Zustand - Dieselbe Zahl bedeutet überall dasselbe]]. Die Regel gilt für Bereiche, die als Ganzes leer sind.
+Nicht jede leere Fläche braucht Text. Eine Spalte in einer Tabelle, ein einzelnes Feld, ein Diagrammabschnitt ohne Wert — dort reicht ein Strich oder ein Zeichen für „kein Wert", siehe [[Zustand - Eine Bedeutung, überall gleich]]. Die Regel gilt für Bereiche, die als Ganzes leer sind.
 
 ## Verwandt
 
-- [[Zustand - Dieselbe Zahl bedeutet überall dasselbe]]
+- [[Zustand - Eine Bedeutung, überall gleich]]
 - [[Fluss - Der Platz ist da, bevor die Daten kommen]]
 - [[Fluss - Ein Fehler steht dort, wo er entstanden ist]]

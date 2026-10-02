@@ -16,7 +16,7 @@ tags:
 # Utility-Klassen statt Inline-Styles
 
 > [!TIP] Regel
-> Setze jede Gestaltung über Utility-Klassen. Keine Inline-Styles, keine Style-Objekte, keine festen Farbwerte im Markup.
+> Setze jede Gestaltung über Utility-Klassen. Keine Inline-Styles, keine Style-Objekte.
 
 ## Warum
 

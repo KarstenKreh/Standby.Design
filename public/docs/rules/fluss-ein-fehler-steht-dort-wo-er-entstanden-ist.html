@@ -4,13 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ein Fehler steht dort, wo er entstanden ist — Design Rules — standby.design</title>
-  <meta name="description" content="Eine Meldung erscheint an der Stelle, die sie betrifft, sagt was zu tun ist, und die Eingaben des Nutzers bleiben erhalten." />
+  <meta name="description" content="Eine Meldung erscheint an der Stelle, die sie betrifft, sagt was zu tun ist, und wird angesagt. Die Eingaben des Nutzers bleiben erhalten." />
   <link rel="canonical" href="https://standby.design/docs/rules/fluss-ein-fehler-steht-dort-wo-er-entstanden-ist" />
   <link rel="alternate" type="text/markdown" href="https://standby.design/docs/rules.md" title="Design Rules (Markdown)" />
 
   <meta property="og:type" content="article" />
   <meta property="og:title" content="Ein Fehler steht dort, wo er entstanden ist — Design Rules — standby.design" />
-  <meta property="og:description" content="Eine Meldung erscheint an der Stelle, die sie betrifft, sagt was zu tun ist, und die Eingaben des Nutzers bleiben erhalten." />
+  <meta property="og:description" content="Eine Meldung erscheint an der Stelle, die sie betrifft, sagt was zu tun ist, und wird angesagt. Die Eingaben des Nutzers bleiben erhalten." />
   <meta property="og:url" content="https://standby.design/docs/rules/fluss-ein-fehler-steht-dort-wo-er-entstanden-ist" />
   <meta property="og:site_name" content="standby.design" />
   <meta property="og:image" content="https://standby.design/og-image?tool=github" />
@@ -183,12 +183,16 @@
     <h1>Ein Fehler steht dort, wo er entstanden ist</h1>
     <dl class="rule-meta"><div><dt>Geltung</dt><dd>universal · web, react-native</dd></div></dl>
 
-<aside class="callout callout-tip"><p class="callout-title">Regel</p><p>Zeige einen Fehler an der Stelle, die er betrifft — beim Feld das Feld, beim Bereich der Bereich. Sag, was zu tun ist, nicht was kaputt gegangen ist. Und lass die Eingaben des Nutzers stehen.</p>
+<aside class="callout callout-tip"><p class="callout-title">Regel</p><p>Zeige einen Fehler an der Stelle, die er betrifft, beim Feld das Feld, beim Bereich der Bereich. Sag, was zu tun ist, nicht was kaputt gegangen ist. Lass die Eingaben des Nutzers stehen. Jede Meldung ohne Seitenwechsel liegt in einem Live-Bereich, damit der Screenreader sie ansagt.</p>
 </aside>
 <h2>Warum</h2>
 <p>Ein Fehler ist eine Anweisung, keine Meldung. Der Nutzer will nicht wissen, was das System nicht konnte, sondern was er jetzt macht. „Ungültiges Format&quot; sagt ihm nichts. „Bitte im Format TT.MM.JJJJ eingeben&quot; sagt ihm alles.</p>
 <p>Deshalb muss er auch dort stehen, wo gehandelt wird. Steht der Fehler weit weg von dem Feld, das er betrifft, muss der Nutzer die Verbindung selbst herstellen — bei drei Fehlern in einem Formular ist das eine Suchaufgabe.</p>
 <p>Und das Wichtigste, das am häufigsten verletzt wird: <strong>die Eingaben bleiben.</strong> Ein Fehler, der das Formular leert, bestraft den Nutzer für einen Tippfehler. Nach dem zweiten Mal macht er nicht weiter.</p>
+<p>Sonst erfährt ein Screenreader-Nutzer nie, dass gespeichert wurde oder dass es keine Treffer gibt.</p>
+<h2>Wann der Fehler kommt</h2>
+<p>Prüf ein Feld, wenn der Nutzer es verlässt. Beim Tippen meldet sich der Fehler zu früh, weil die Eingabe noch nicht fertig ist. Erst beim Absenden ist es zu spät, weil der Nutzer dann schon drei Felder weiter ist.</p>
+<p>Das Feld nimmt dabei jede Eingabe an, siehe <a href="/docs/rules/formular-was-der-nutzer-tippt-oder-einfuegt-kommt-an">Was der Nutzer tippt oder einfügt, kommt an</a>. Ist sie ungültig, markiert sich das Feld beim Verlassen und sagt, was fehlt.</p>
 <h2>Wo eine Meldung hingehört</h2>
 <div class="table-wrap"><table>
 <thead>
@@ -228,6 +232,7 @@
 <li>Sie erscheint nicht für einen Fehler, den man an einem Feld beheben kann. Der gehört ans Feld.</li>
 </ul>
 <p>Ist eine Handlung rückgängig zu machen, gehört das Angebot dazu in die Kurzmeldung („Gelöscht — rückgängig&quot;). Das ist ihr stärkster Einsatz, weil sie damit eine Bestätigung vorher überflüssig macht.</p>
+<p>Eine Kurzmeldung mit Handlung bleibt stehen, solange der Mauszeiger auf ihr liegt oder sie den Fokus hat, und sie ist per Tastatur erreichbar. Sonst ist das Angebot weg, bevor ein langsamer Nutzer es greifen kann.</p>
 <h2>Was in einer Meldung steht</h2>
 <ul>
 <li>Was der Nutzer tun kann, in seiner Sprache.</li>
@@ -235,6 +240,8 @@
 <li>Keine Schuldzuweisung, weder an ihn noch an das System.</li>
 <li>Bei einem Fehler, der nicht in seiner Hand liegt: was gerade gilt und wann er es erneut versuchen kann.</li>
 </ul>
+<h2>Hart und weich</h2>
+<p>Hart. Weich: <code>polite</code> oder <code>assertive</code>. Vorgabe <code>polite</code>.</p>
 <h2>Woran Du den Verstoß erkennst</h2>
 <ul>
 <li>Ein Eingabefehler erscheint als Pop-up.</li>
@@ -243,14 +250,25 @@
 <li>Eine technische Meldung steht ungefiltert in der Oberfläche.</li>
 <li>Eine Kurzmeldung trägt eine Information, die der Nutzer später wieder braucht.</li>
 <li>Es gibt eine Bestätigungsfrage für etwas, das man auch rückgängig machen könnte.</li>
+<li>Eine Kurzmeldung mit „Rückgängig“ verschwindet nach fester Zeit, auch wenn die Maus auf ihr liegt.</li>
+<li>Ein ungültiges Feld schweigt bis zum Absenden.</li>
+<li>Die Fehlermeldung erscheint beim ersten Tastendruck.</li>
+<li>Kurzmeldung ohne <code>role=&quot;status&quot;</code> oder <code>aria-live</code>.</li>
+<li>Trefferzahl ändert sich still.</li>
+<li>Der Live-Bereich wird erst mit der Meldung eingefügt.</li>
 </ul>
 <h2>Grenzen</h2>
 <p>Fehler, die die ganze Anwendung betreffen — keine Verbindung, abgelaufene Anmeldung —, gehören an eine Stelle, die über allem liegt. Sie betreffen kein einzelnes Feld, und der Nutzer muss sie sehen, bevor er weitertippt.</p>
+<p>Fehler, die nach <a href="/docs/rules/bedienung-der-fokus-ist-sichtbar-und-hat-immer-einen-ort">Der Fokus ist sichtbar und hat immer einen Ort</a> ohnehin den Fokus bekommen.</p>
+<h2>Quelle</h2>
+<p>WCAG 4.1.3 Status Messages. Vercel › Feedback („Use polite <code>aria-live</code> for toasts/inline validation&quot;).</p>
 <h2>Verwandt</h2>
 <ul>
 <li><a href="/docs/rules/fluss-ein-pop-up-unterbricht-es-fuehrt-nicht">Ein Pop-up unterbricht, es führt nicht</a></li>
 <li><a href="/docs/rules/fluss-leer-ist-ein-zustand-keine-luecke">Leer ist ein Zustand, keine Lücke</a></li>
 <li><a href="/docs/rules/zustand-rot-ist-nicht-ein-rot">Rot ist nicht ein Rot</a></li>
+<li><a href="/docs/rules/fluss-der-platz-ist-da-bevor-die-daten-kommen">Der Platz ist da, bevor die Daten kommen</a></li>
+<li><a href="/docs/rules/bedienung-der-fokus-ist-sichtbar-und-hat-immer-einen-ort">Der Fokus ist sichtbar und hat immer einen Ort</a></li>
 </ul>
 
 

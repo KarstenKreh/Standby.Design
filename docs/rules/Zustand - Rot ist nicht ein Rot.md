@@ -66,7 +66,7 @@ Wie die Werte heißen und wie viele es genau sind, entscheidet das Projekt. Dass
 Ist die Marke nun einmal grün oder rot, ist das kein Grund, sie zu ändern. Dann braucht es zwei Dinge:
 
 - Die Zustandsfarben liegen sichtbar neben der Markenfarbe, nicht auf ihr. Ein anderer Farbton, eine andere Sättigung, irgendetwas, das den Unterschied trägt.
-- Der Zustand hängt nicht an der Farbe allein. Ein Zeichen, ein Wort oder ein Symbol trägt die Bedeutung mit, siehe [[Bedienung - Ein dauerhafter Zustand braucht ein zweites Zeichen]]. Das ist ohnehin schon Pflicht, hier wird es nur besonders wichtig.
+- Der Zustand hängt nicht an der Farbe allein. Ein Zeichen, ein Wort oder ein Symbol trägt die Bedeutung mit, siehe [[Farbe - Farbe trägt nie allein]]. Das ist ohnehin schon Pflicht, hier wird es nur besonders wichtig.
 
 ## Grenzen
 
@@ -74,6 +74,6 @@ Auf einer Marketing- oder Titelseite mit eigener Haut gilt das nicht, dort regie
 
 ## Verwandt
 
-- [[Zustand - Dieselbe Zahl bedeutet überall dasselbe]]
-- [[Bedienung - Ein dauerhafter Zustand braucht ein zweites Zeichen]]
+- [[Zustand - Eine Bedeutung, überall gleich]]
+- [[Farbe - Farbe trägt nie allein]]
 - [[Farbe - Werte kommen aus Tokens, nie aus der Hand]]

@@ -220,10 +220,36 @@
 </tr>
 </tbody></table></div>
 <p>Die Zahlen sind eine Vorgabe. Hart ist die Staffelung: erst nichts, dann Form, dann Auskunft.</p>
+<p>Ist ein Ladehinweis einmal erschienen, bleibt er eine Mindestzeit stehen. Kommt die Antwort kurz nach der Schwelle, blitzt er sonst für ein paar Millisekunden auf, genau das Flackern, das die Schwelle verhindern soll.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Erst nichts, dann Form, dann Auskunft</td>
+<td>hart</td>
+</tr>
+<tr>
+<td>Ein erschienener Ladehinweis hat eine Mindestdauer</td>
+<td>hart</td>
+</tr>
+<tr>
+<td>Schwelle bis zur ersten Anzeige</td>
+<td>weich, Korridor 150 bis 250 ms, Vorgabe 200</td>
+</tr>
+<tr>
+<td>Mindestdauer</td>
+<td>weich, Korridor 300 bis 500 ms, Vorgabe 400</td>
+</tr>
+</tbody></table></div>
 <h2>Woran Du den Verstoß erkennst</h2>
 <ul>
 <li>Der Inhalt trifft ein und schiebt die Seite nach unten.</li>
 <li>Ein Ladezeichen blitzt bei jedem Wechsel kurz auf.</li>
+<li>Ein Ladehinweis verschwindet wenige Millisekunden nach dem Erscheinen.</li>
 <li>Ein einzelner ladender Bereich sperrt die ganze Ansicht.</li>
 <li>Der Platzhalter hat eine andere Höhe als der echte Inhalt.</li>
 <li>Bei einem langen Vorgang steht minutenlang ein sich drehender Kreis ohne Auskunft.</li>
@@ -236,7 +262,7 @@
 <ul>
 <li><a href="/docs/rules/fluss-leer-ist-ein-zustand-keine-luecke">Leer ist ein Zustand, keine Lücke</a></li>
 <li><a href="/docs/rules/fluss-ein-fehler-steht-dort-wo-er-entstanden-ist">Ein Fehler steht dort, wo er entstanden ist</a></li>
-<li><a href="/docs/rules/bedienung-uebergaenge-haben-genau-einen-wert">Übergänge haben genau einen Wert</a></li>
+<li><a href="/docs/rules/bedienung-bewegung-hat-einen-wert-und-haelt-nichts-auf">Bewegung hat einen Wert und hält nichts auf</a></li>
 </ul>
 
 

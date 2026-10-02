@@ -188,7 +188,7 @@
 <h2>Warum</h2>
 <p>Der Blick sucht beim Lesen einer Ansicht nach Anhaltspunkten und findet sie an den Kanten: dort, wo mehrere Dinge gemeinsam beginnen. Zwei solche Linien liest man ohne Anstrengung. Bei sechs muss der Blick bei jedem Element neu ansetzen, und die Ansicht wirkt unruhig, ohne dass man sagen könnte woran es liegt. Man sieht die Kanten nicht, aber man spürt sie.</p>
 <p>Deshalb ist das eines der wirksamsten Mittel überhaupt: es kostet nichts. Es ändert keine Farbe, keine Größe, keinen Inhalt. Es räumt nur die Anfänge zusammen.</p>
-<p>Ausrichtung und Nähe sind dabei ein Paar. Nähe sagt, <strong>was zusammengehört</strong>, Ausrichtung sagt, <strong>dass es zusammengehört</strong>. Siehe <a href="/docs/rules/layout-naehe-gruppiert-nicht-die-linie">Nähe gruppiert, nicht die Linie</a>.</p>
+<p>Ausrichtung und Nähe sind dabei ein Paar. Nähe sagt, <strong>was zusammengehört</strong>, Ausrichtung sagt, <strong>dass es zusammengehört</strong>. Siehe <a href="/docs/rules/layout-erst-abstand-dann-flaeche-dann-linie">Erst Abstand, dann Fläche, dann Linie</a>.</p>
 <h2>Der Kanten-Test</h2>
 <p>Screenshot der Ansicht nehmen, durch jede linke Kante eine senkrechte Linie ziehen, zählen. Meistens sind es fünf oder sechs. Meistens kommt man auf zwei, ohne dass sonst etwas anders wird.</p>
 <pre><code>        VORHER                              NACHHER
@@ -208,6 +208,9 @@
 <p>Ein zentrierter Block ist in Ordnung — ein Anmeldefenster, ein leerer Zustand, eine Fehlerseite. Dann ist aber <strong>alles</strong> darin zentriert, auch die Beschriftungen und der Knopf.</p>
 <p>Der schlechte Fall ist die Mischung: drei Blöcke linksbündig und einer zentriert. Der zentrierte hat dann zwei eigene Kanten, links und rechts, die zu keiner anderen passen, und er zieht die Aufmerksamkeit auf sich, ohne dass das gemeint war.</p>
 <p>Zentrierter Fließtext über mehr als zwei Zeilen fällt ohnehin weg: dort wandert der Zeilenanfang bei jeder Zeile, und der Blick findet ihn nicht mehr.</p>
+<h2>Icons teilen sich eine Kante</h2>
+<p>Stehen Icons vor Einträgen, bilden sie eine eigene Kante, und der Text dahinter eine zweite. Das Icon im Titel gehört auf dieselbe Kante wie die Icons der Einträge. Hat der Titel einen Rahmen oder ein Padding, weil er ein Knopf ist, zieh das ab, bis sein Icon auf der Kante der anderen steht.</p>
+<p>Bei mehrzeiligen Einträgen steht das Icon auf der ersten Zeile, nicht in der Mitte des Eintrags. Es gehört zum Anfang des Textes.</p>
 <h2>Woran Du den Verstoß erkennst</h2>
 <ul>
 <li>Beschriftung, Wert und Knopf beginnen an drei verschiedenen Stellen.</li>
@@ -215,13 +218,16 @@
 <li>Eingerückte Blöcke stehen an frei gewählten Stellen statt an einer gemeinsamen zweiten Kante.</li>
 <li>Ein Text ist zentriert und länger als zwei Zeilen.</li>
 <li>Zahlen und Text in einer Tabelle richten sich an derselben Kante aus, statt Zahlen rechts zu setzen (siehe <a href="/docs/rules/typografie-zahlenspalten-stehen-rechtsbuendig">Zahlenspalten stehen rechtsbündig</a>).</li>
+<li>Der Titel einer aufklappbaren Liste ist gegenüber den Einträgen eingerückt.</li>
+<li>Icon im Titel und Icons der Einträge stehen ein paar Pixel versetzt.</li>
+<li>Ein Icon vor einem mehrzeiligen Eintrag steht senkrecht in dessen Mitte.</li>
 </ul>
 <h2>Grenzen</h2>
 <p>Zahlenspalten sind die gewollte Ausnahme: sie bekommen ihre eigene rechte Kante, weil dort die Vergleichbarkeit schwerer wiegt als eine Kante weniger.</p>
 <p>Und eine zweite Kante für Einrückungen ist normal und richtig — Aufzählungen, verschachtelte Listen, Antworten in einem Verlauf. Die Regel sagt nicht „eine Kante&quot;, sie sagt „so wenige wie möglich, und jede mit Grund&quot;.</p>
 <h2>Verwandt</h2>
 <ul>
-<li><a href="/docs/rules/layout-naehe-gruppiert-nicht-die-linie">Nähe gruppiert, nicht die Linie</a></li>
+<li><a href="/docs/rules/layout-erst-abstand-dann-flaeche-dann-linie">Erst Abstand, dann Fläche, dann Linie</a></li>
 <li><a href="/docs/rules/typografie-zahlenspalten-stehen-rechtsbuendig">Zahlenspalten stehen rechtsbündig</a></li>
 <li><a href="/docs/rules/bedienung-die-hoehe-gehoert-der-zeile-nicht-dem-element">Die Höhe gehört der Zeile, nicht dem Element</a></li>
 </ul>

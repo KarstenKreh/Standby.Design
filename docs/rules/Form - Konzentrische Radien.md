@@ -29,6 +29,8 @@ Der Fehler passiert fast immer dadurch, dass innen und außen derselbe Radius st
 - Innere und äußere Fläche haben denselben Radius-Wert.
 - Der innere Radius ist größer als der äußere.
 - Die Ecke sieht bei genauem Hinsehen enger aus als die Gerade daneben.
+- Zwei Buttons in einer Zeile haben verschiedene Radien.
+- Eine Ansicht setzt den Radius eines Buttons, Feldes oder einer Auswahl selbst.
 
 ## Richtig / falsch
 
@@ -55,6 +57,10 @@ Damit die Rechnung überhaupt aufgehen kann, muss es eine begrenzte, benannte Me
 Der häufigste Weg, auf dem Radien an der Skala vorbeiwachsen: eine Utility-Klasse für einen mittleren Radius wird überall benutzt, ist in der Konfiguration aber gar nicht definiert und fällt auf den Standardwert des Frameworks zurück. Daneben steht eine Stufe aus dem eigenen System. Zwei Rundungen ohne gemeinsame Skala, und niemand hat je eine Entscheidung dazu getroffen.
 
 Wie viele Stufen es gibt und ob sie mit der Verschachtelungstiefe kleiner werden, entscheidet das Projekt. Manche Systeme fahren einen einzigen Radius für alles, und das ist eine gültige Antwort.
+
+## Gleiche Zeile, gleicher Radius
+
+Bedienelemente, die nebeneinander stehen, haben alle denselben Radius. Verschiedene Radien in einer Reihe sind ein Verstoß. Der Radius gehört dem Bauteil. Eine Ansicht überschreibt ihn nicht, auch nicht, damit eine Gruppe „dichter“ wirkt. Ein Knopf im Rahmen eines Feldes ist das innere Element und folgt der Rechnung oben: Feld 8, Abstand 4, Knopf 4.
 
 ## Grenzen
 

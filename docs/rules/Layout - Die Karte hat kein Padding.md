@@ -66,7 +66,7 @@ Damit die Ecke dabei sauber bleibt, muss die Karte ihren Überlauf beschneiden. 
 
 ## Padding-Werte im Abschnitt
 
-Nur das erste Kind bekommt oben Padding. Die weiteren nicht, weil der untere Abstand des Vorgängers den Abstand schon liefert. Sobald Trennlinien im Spiel sind, bekommt jeder Abschnitt oben und unten Padding, sonst klebt der Inhalt an der Linie.
+Das erste Kind ist das, was oben steht. Hat die Karte einen Kopf, ist es der Kopf. Hat sie keinen, ist es der Inhalt, und der bekommt oben Padding. Setz die Null deshalb nicht an eine bestimmte Art von Abschnitt, sondern an den Fall „Abschnitt folgt auf Abschnitt“. Dann stimmt die Regel ohne Fallunterscheidung. Die weiteren nicht, weil der untere Abstand des Vorgängers den Abstand schon liefert. Sobald Trennlinien im Spiel sind, bekommt jeder Abschnitt oben und unten Padding, sonst klebt der Inhalt an der Linie.
 
 | Fall | oben | rechts | unten | links |
 |---|---|---|---|---|
@@ -92,6 +92,8 @@ Warum senkrecht kleiner: [[Form - Senkrechtes Padding wird optisch ausgeglichen]
 - Ein Abschnitt setzt sein Padding mit negativen Margins wieder zurück. Das ist der sichere Beweis, dass das Padding eine Ebene zu hoch sitzt.
 - Ein Bild in einer Karte hat links und rechts denselben Abstand wie der Fließtext darüber, obwohl es bis an die Kante gehört.
 - Ein Chart läuft bis zur Kante, aber die Ecke ist eckig.
+- Der Inhalt einer Karte ohne Kopf klebt an der Oberkante.
+- Die Null für das obere Padding hängt an einem Abschnittstyp statt an seiner Position.
 
 ## Grenzen
 

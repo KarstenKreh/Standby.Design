@@ -25,7 +25,7 @@ tags:
 
 Ein Eingabefeld mit einem Button daneben ist ein Paar. Der Button gehört zu dem Feld, er tut etwas mit dem, was darin steht. Sind beide verschieden hoch, verliert die Zeile ihre Ober- und Unterkante, der Button hängt in der Luft, und die beiden lesen sich als zwei Dinge, die zufällig nebeneinander liegen.
 
-Das ist dieselbe Mechanik wie in [[Layout - Nähe gruppiert, nicht die Linie]], nur auf der anderen Achse: Nähe gruppiert waagerecht, eine gemeinsame Kante gruppiert senkrecht. Beides wirkt, bevor jemand liest.
+Das ist dieselbe Mechanik wie in [[Layout - Erst Abstand, dann Fläche, dann Linie]], nur auf der anderen Achse: Nähe gruppiert waagerecht, eine gemeinsame Kante gruppiert senkrecht. Beides wirkt, bevor jemand liest.
 
 ### Warum es überhaupt mehr als eine Höhe gibt
 
@@ -61,6 +61,8 @@ Zwei Stufen reichen für die meisten Anwendungen. Wer eine dritte einführt, bra
 - Es gibt eine Höhe, die nur an einer einzigen Stelle vorkommt.
 - Ein Icon-Element ist rechteckig statt quadratisch.
 - Ein Element wird per Sonderschalter angehoben, obwohl seine Zeile schon sagt, welche Höhe gilt.
+- Unter einem Formular stehen Speichern und Abbrechen in der dichten Höhe.
+- Ein Suchfeld in einer Werkzeugleiste ist höher als die Knöpfe daneben.
 
 ## Richtig / falsch
 
@@ -79,14 +81,16 @@ Zwei Stufen reichen für die meisten Anwendungen. Wer eine dritte einführt, bra
 
 ## Grenzen
 
-Nach unten begrenzt die Trefferfläche aus [[Bedienung - Klickbares braucht eine Fläche]]. Auf Touch-Oberflächen ist die dichte Stufe zu klein für den Finger, sie bleibt dort Werkzeugleisten am Zeigegerät vorbehalten.
+Nach unten begrenzt die Trefferfläche aus [[Bedienung - Klickbares hat eine Fläche, und nur Klickbares sieht so aus]]. Auf Touch-Oberflächen ist die dichte Stufe zu klein für den Finger, sie bleibt dort Werkzeugleisten am Zeigegerät vorbehalten.
 
 Ein Element, das allein steht und in keiner Zeile sitzt, nimmt die Höhe seines Umfelds. Im Zweifel die großzügige, weil ein einzelner Knopf fast immer eine Aufgabe ist und keine Werkzeugleiste.
 
 Beschriftete Elemente wachsen nur in der Breite mit ihrem Inhalt. Die Höhe ändert sich nie durch den Text darin.
 
+Die Aktionszeile unter einem Formular ist eine Formularzeile. Speichern und Abbrechen nehmen die Formularhöhe, auch wenn kein Feld neben ihnen steht. Umgekehrt nimmt ein Feld in einer Werkzeugleiste, etwa die Suche, die dichte Höhe der Leiste.
+
 ## Verwandt
 
-- [[Bedienung - Klickbares braucht eine Fläche]]
-- [[Layout - Nähe gruppiert, nicht die Linie]]
+- [[Bedienung - Klickbares hat eine Fläche, und nur Klickbares sieht so aus]]
+- [[Layout - Erst Abstand, dann Fläche, dann Linie]]
 - [[Form - Senkrechtes Padding wird optisch ausgeglichen]]

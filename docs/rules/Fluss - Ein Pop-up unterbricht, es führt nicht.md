@@ -71,6 +71,8 @@ Bleibt beides „nein", darf es ein Pop-up sein. Der Test ist die praktische Fas
 
 In allen drei Fällen redet die Anwendung, und der Nutzer antwortet mit einem Wort.
 
+Solange ein Pop-up offen ist, ist alles dahinter still: Die Seite scrollt nicht mit, und weder Tab noch Screenreader erreichen etwas dahinter. Sonst bedient der Nutzer eine Seite, die er nicht sieht.
+
 ## Woran Du den Verstoß erkennst
 
 - Im Pop-up stehen mehrere Eingabefelder oder ein „Speichern" für mehrere Werte.
@@ -80,6 +82,7 @@ In allen drei Fällen redet die Anwendung, und der Nutzer antwortet mit einem Wo
 - Der Zurück-Knopf des Geräts schließt etwas anderes als das, was der Nutzer erwartet.
 - Der Zustand lässt sich nicht verlinken und kommt nach einem Neuladen nicht wieder.
 - Das Pop-up hat eine Überschrift, die eigentlich ein Seitentitel ist.
+- Hinter dem offenen Pop-up scrollt die Seite mit, oder Tab erreicht Elemente dahinter. Kein `inert` am Hintergrund, kein `overscroll-behavior: contain` im Pop-up.
 
 ## Richtig / falsch
 
@@ -120,6 +123,6 @@ Ein Panel, das von der Seite oder von unten einfährt, ist kein Schlupfloch. Ste
 
 ## Verwandt
 
-- [[Bedienung - Fokus ist immer sichtbar]]
-- [[Layout - Jede Ansicht bricht bei 320 Pixeln um]]
-- [[Bedienung - Klickbares braucht eine Fläche]]
+- [[Bedienung - Der Fokus ist sichtbar und hat immer einen Ort]]
+- [[Layout - Jede Ansicht folgt dem Platz und bricht bei 320 Pixeln um]]
+- [[Bedienung - Klickbares hat eine Fläche, und nur Klickbares sieht so aus]]
