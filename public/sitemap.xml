@@ -213,6 +213,10 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://standby.design/docs/rules/inhalt-zahlen-daten-und-betraege-folgen-dem-sprachraum</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://standby.design/docs/rules/layout-der-divider-ist-die-unterkante-einer-section</loc>
     <priority>0.6</priority>
   </url>

@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zahlen, Daten und Beträge folgen dem Sprachraum — Design Rules — standby.design</title>
+  <meta name="description" content="Zahlen, Beträge, Daten, Uhrzeiten und Einheiten kommen formatiert aus den Daten von Unicode CLDR, im Sprachraum der Einstellung. Gespeichert wird neutral." />
+  <link rel="canonical" href="https://standby.design/docs/rules/inhalt-zahlen-daten-und-betraege-folgen-dem-sprachraum" />
+  <link rel="alternate" type="text/markdown" href="https://standby.design/docs/rules.md" title="Design Rules (Markdown)" />
+
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Zahlen, Daten und Beträge folgen dem Sprachraum — Design Rules — standby.design" />
+  <meta property="og:description" content="Zahlen, Beträge, Daten, Uhrzeiten und Einheiten kommen formatiert aus den Daten von Unicode CLDR, im Sprachraum der Einstellung. Gespeichert wird neutral." />
+  <meta property="og:url" content="https://standby.design/docs/rules/inhalt-zahlen-daten-und-betraege-folgen-dem-sprachraum" />
+  <meta property="og:site_name" content="standby.design" />
+  <meta property="og:image" content="https://standby.design/og-image?tool=github" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://standby.design/og-image?tool=github" />
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23111'/%3E%3Ccircle cx='16' cy='16' r='6' fill='none' stroke='%234a7aaa' stroke-width='2'/%3E%3C/svg%3E">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@1,2&f[]=jet-brains-mono@1,2&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --font-heading: 'Satoshi', sans-serif;
+      --font-body: 'Satoshi', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --text-h3: clamp(1.9344rem, 0.2719vw + 1.8707rem, 2.197rem);
+      --text-h5: clamp(1.246rem, 0.0559vw + 1.2329rem, 1.3rem);
+      --text-body-s: 1rem;
+      --text-caption: 0.7692rem;
+      --leading-h3: 1.2;
+      --leading-h5: 1.3;
+      --leading-body-s: 1.5;
+      --tracking-h3: -0.01em;
+      --tracking-body-s: 0.01em;
+      --background: oklch(0.145 0 0);
+      --foreground: oklch(0.985 0 0);
+      --card: oklch(0.205 0 0);
+      --muted-foreground: oklch(0.708 0 0);
+      --border: oklch(1 0 0 / 10%);
+      --emphasis: oklch(0.78 0.1 230);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: var(--font-body);
+      font-size: var(--text-body-s);
+      line-height: var(--leading-body-s);
+      letter-spacing: var(--tracking-body-s);
+      background: var(--background);
+      color: var(--foreground);
+      padding: 2rem 1.5rem 3rem;
+    }
+    main { max-width: 720px; margin: 0 auto; }
+    .back {
+      display: inline-block;
+      padding: 0.5rem 0.75rem;
+      margin: 0 0 2rem -0.75rem;
+      border-radius: 8px;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      transition: color 0.2s, background 0.2s;
+    }
+    .back:hover { color: var(--foreground); background: var(--card); }
+    .eyebrow {
+      font-size: var(--text-caption);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted-foreground);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-heading);
+      font-size: var(--text-h3);
+      font-weight: 700;
+      line-height: var(--leading-h3);
+      letter-spacing: var(--tracking-h3);
+      margin-bottom: 0.4em;
+    }
+    h2 {
+      font-family: var(--font-heading);
+      font-size: var(--text-h5);
+      font-weight: 700;
+      line-height: var(--leading-h5);
+      margin-top: 2.25em;
+      margin-bottom: 0.5em;
+    }
+    h3 {
+      font-family: var(--font-heading);
+      font-size: var(--text-body-s);
+      font-weight: 700;
+      margin-top: 1.5em;
+      margin-bottom: 0.4em;
+    }
+    p, li { color: var(--muted-foreground); margin-bottom: 0.75em; }
+    strong { color: var(--foreground); font-weight: 500; }
+    ul, ol { padding-left: 1.25rem; margin-bottom: 0.75em; }
+    a { color: var(--emphasis); overflow-wrap: anywhere; }
+    code { font-family: var(--font-mono); font-size: 0.9em; }
+    pre {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      line-height: 1.5;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.9rem 1rem;
+      margin-bottom: 1rem;
+      overflow-x: auto;
+      white-space: pre;
+    }
+    pre code { font-size: inherit; color: var(--foreground); }
+    hr { border: 0; border-top: 1px solid var(--border); margin: 2rem 0; }
+    .lead { font-size: 1.125rem; }
+    .table-wrap { overflow-x: auto; margin-bottom: 1rem; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td {
+      text-align: left;
+      vertical-align: top;
+      padding: 0.6rem 0.75rem 0.6rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    th { color: var(--foreground); font-weight: 500; }
+    td { color: var(--muted-foreground); }
+    td code { color: var(--foreground); }
+    blockquote {
+      border-left: 2px solid var(--border);
+      padding-left: 1rem;
+      margin-bottom: 0.9rem;
+    }
+    blockquote p { margin-bottom: 0; }
+    .callout {
+      background: var(--card);
+      border-radius: 8px;
+      padding: 0.9rem 1rem;
+      margin-bottom: 1.25rem;
+    }
+    .callout p:last-child, .callout ul:last-child { margin-bottom: 0; }
+    .callout-title {
+      font-size: var(--text-caption);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted-foreground);
+      margin-bottom: 0.35rem;
+    }
+    .callout-tip p:not(.callout-title) { color: var(--foreground); font-size: 1.125rem; }
+    .callout-tip .callout-title { color: var(--emphasis); }
+    .rule-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1.5rem;
+      margin: 0.25rem 0 1.75rem;
+      font-size: 0.875rem;
+    }
+    .rule-meta dt { color: var(--muted-foreground); }
+    .rule-meta dd { color: var(--foreground); }
+    .agent-hint { font-size: 0.875rem; }
+    .legal-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 3.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+    .legal-links a {
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      transition: color 0.2s, background 0.2s;
+    }
+    .legal-links a:hover { color: var(--foreground); background: var(--card); }
+  </style>
+  <script defer src="https://umami.standby.design/script.js" data-website-id="255e8c46-9a39-4cc8-ba66-5cb4fc53b91e"></script>
+</head>
+<body>
+  <main>
+    <a class="back" href="/docs/rules">&larr; Design Rules</a>
+
+    <p class="eyebrow">Inhalt</p>
+    <h1>Zahlen, Daten und Beträge folgen dem Sprachraum</h1>
+    <dl class="rule-meta"><div><dt>Geltung</dt><dd>universal · web, react-native</dd></div><div><dt>Korridor</dt><dd>Gruppieren ab 4 oder ab 5 Stellen</dd></div><div><dt>Vorgabe</dt><dd>Ab 5 Stellen, in Tabellen ab 4</dd></div></dl>
+
+<aside class="callout callout-tip"><p class="callout-title">Regel</p><p>Formatiere Zahlen, Beträge, Daten, Uhrzeiten und Einheiten mit den Mustern aus Unicode CLDR, im Sprachraum aus der Einstellung. Bau keine eigenen Muster und speichere jeden Wert neutral.</p>
+</aside>
+<h2>Warum</h2>
+<p>„1.250“ heißt in Deutschland tausendzweihundertfünfzig und in den USA eins Komma zwei fünf. „03/04/2026“ ist der 3. April oder der 4. März. Eine falsch gelesene Zahl fällt nicht als Fehler auf. Sie wird geglaubt.</p>
+<p>Die Zeichen dafür sind für jeden Sprachraum gepflegt: Dezimalzeichen, Tausendertrennung, Stellung des Währungszeichens, Reihenfolge im Datum, 12 oder 24 Stunden. Die Quelle ist Unicode CLDR. <code>Intl</code> im Browser, ICU, Android und iOS lesen daraus. Ein selbst gebautes Muster kennt nur die Sprachräume, an die sein Autor gedacht hat. Beispiele für die Zahl 1234567,5, den Betrag 1234,50 € und den 19. Oktober 2026:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Sprachraum</th>
+<th>Zahl</th>
+<th>Betrag</th>
+<th>Datum</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>de-DE</td>
+<td>1.234.567,5</td>
+<td>1.234,50 €</td>
+<td>19.10.2026</td>
+</tr>
+<tr>
+<td>de-CH</td>
+<td>1&#39;234&#39;567.5</td>
+<td>EUR 1&#39;234.50</td>
+<td>19.10.2026</td>
+</tr>
+<tr>
+<td>en-US</td>
+<td>1,234,567.5</td>
+<td>€1,234.50</td>
+<td>10/19/2026</td>
+</tr>
+<tr>
+<td>fr-FR</td>
+<td>1 234 567,5</td>
+<td>1 234,50 €</td>
+<td>19/10/2026</td>
+</tr>
+<tr>
+<td>en-IN</td>
+<td>12,34,567.5</td>
+<td>€1,234.50</td>
+<td>19/10/2026</td>
+</tr>
+</tbody></table></div>
+<p>Die Tabelle ist kein Nachschlagewerk. Das ist CLDR.</p>
+<h2>Was CLDR offen lässt</h2>
+<p>CLDR sagt, mit welchem Zeichen formatiert wird. Wann und wie viel, entscheidet die Ansicht:</p>
+<ul>
+<li><strong>Ab wann getrennt wird.</strong> Vierstellige Zahlen bleiben im Text ungetrennt, ab fünf Stellen wird gruppiert (<code>useGrouping: &quot;min2&quot;</code>). In einer Tabelle wird schon ab vier Stellen gruppiert, damit die Spalte gleich aussieht.</li>
+<li><strong>Was keine Zahl ist.</strong> Jahreszahlen, Postleitzahlen, Kunden- und Versionsnummern sind Kennungen. Sie bekommen keine Tausendertrennung.</li>
+<li><strong>Nachkommastellen.</strong> In einer Ansicht haben Beträge entweder 0 oder 2 Nachkommastellen, nie gemischt.</li>
+<li><strong>Welche Währung.</strong> Kommen mehrere Währungen mit demselben Zeichen vor, etwa Dollar, steht der Code (USD, CAD) statt des Zeichens.</li>
+<li><strong>Wie lang ein Datum ist.</strong> Wo Platz ist, mit Monatsnamen (<code>dateStyle: &quot;long&quot;</code>), dann gibt es keine Verwechslung. Weicht die Zeitzone von der des Nutzers ab, steht sie dabei.</li>
+<li><strong>Zahl und Einheit.</strong> Dazwischen steht ein geschütztes Leerzeichen, damit „10 MB“ nicht umbricht. Das Einheitensystem, metrisch oder imperial, folgt der Region.</li>
+</ul>
+<h2>Eingabe</h2>
+<ul>
+<li>Ein Feld liest die Eingabe im Sprachraum der Einstellung. Sobald der Nutzer das Feld verlässt, zeigt es den erkannten Wert formatiert an. So sieht er, wie „1.250“ verstanden wurde.</li>
+<li>Beträge und Mengen bekommen <code>inputmode=&quot;decimal&quot;</code>, nicht <code>type=&quot;number&quot;</code>. Das zeigt keine Tausendertrennung, und das Mausrad ändert den Wert.</li>
+<li>Eine Maske, also ein Feld, das beim Tippen formatiert, nur für Formate, die für das Land geprüft sind, etwa Kartennummern. Sonst ein freies Feld.</li>
+<li>Ein bekanntes Datum, etwa der Geburtstag, bekommt drei Felder für Tag, Monat und Jahr in der Reihenfolge des Sprachraums. Ein Kalender ist nie die einzige Eingabe.</li>
+</ul>
+<h2>Speichern</h2>
+<p>Neutral und ohne Format: Zahlen als Zahl, Beträge in der kleinsten Einheit mit Währungscode, Zeitpunkte nach ISO 8601 mit Zeitzone, Telefonnummern als E.164 (<code>+493012345678</code>). Formatiert wird erst in der Anzeige.</p>
+<h2>Woran Du den Verstoß erkennst</h2>
+<ul>
+<li><code>toFixed(2).replace(&quot;.&quot;, &quot;,&quot;)</code> oder ein eigener regulärer Ausdruck für Tausenderpunkte.</li>
+<li>Ein Datum aus <code>getDate() + &quot;.&quot; + getMonth()</code> zusammengesetzt.</li>
+<li>Ein fester Sprachraum wie <code>&quot;de-DE&quot;</code> im Code einer App, die mehrere Sprachen anbietet.</li>
+<li><code>Intl</code> oder <code>toLocaleString()</code> ohne den Sprachraum, den der Nutzer in der App gewählt hat.</li>
+<li>Ein Betragsfeld mit <code>type=&quot;number&quot;</code>.</li>
+<li>Ein Datum wie „03/04/2026“ in einer Oberfläche für mehrere Länder.</li>
+<li>In einer Spalte stehen „12 €“ und „12,50 €“ nebeneinander.</li>
+<li>„10MB“ ohne Leerzeichen, oder die Einheit bricht in die nächste Zeile.</li>
+<li>Eine Postleitzahl als Zahl gespeichert, aus 01067 wird 1067.</li>
+</ul>
+<h2>Richtig / falsch</h2>
+<pre><code>        RICHTIG                          FALSCH
+
+  de   12.560 €   19. Oktober 2026    de   12560.00 EUR   10/19/2026
+  en   €12,560    October 19, 2026    en   12.560 €       19.10.2026
+
+  Format aus dem Sprachraum           ein Muster für alle
+</code></pre>
+<h2>Hart und weich</h2>
+<p>Hart: das Format kommt aus CLDR für den Sprachraum der Einstellung, gespeichert wird neutral. Weich: ab wie vielen Stellen gruppiert wird. Vorgabe: ab fünf Stellen, in Tabellen ab vier.</p>
+<h2>Grenzen</h2>
+<p>Werte für Maschinen bleiben neutral: Logs, API-Antworten, CSV-Exporte für die Weiterverarbeitung.</p>
+<p>Deutsche Drucksachen nach DIN 5008 trennen nur Beträge mit dem Punkt und andere Zahlen mit einem Leerzeichen. CLDR setzt für Deutsch überall den Punkt. Auf dem Bildschirm gilt CLDR. Verlangt ein Dokument die Norm, gilt die Norm.</p>
+<h2>Quelle</h2>
+<p>Unicode CLDR, <a href="https://www.unicode.org/cldr/charts/latest/by_type/index.html">https://www.unicode.org/cldr/charts/latest/by_type/index.html</a>. Microsoft Globalization › Format numbers, <a href="https://learn.microsoft.com/en-us/globalization/locale/number-formatting">https://learn.microsoft.com/en-us/globalization/locale/number-formatting</a>. GOV.UK Design System › Dates, <a href="https://design-system.service.gov.uk/patterns/dates/">https://design-system.service.gov.uk/patterns/dates/</a>. Baymard › Input masking, <a href="https://baymard.com/blog/input-masking-form-field">https://baymard.com/blog/input-masking-form-field</a>. Shopify Polaris › Formatting localized currency. Vercel Web Interface Guidelines › Content („Format dates, times, numbers, delimiters, &amp; currencies for the user’s locale&quot;). DIN 5008, DIN 1333.</p>
+<h2>Verwandt</h2>
+<ul>
+<li><a href="/docs/rules/fluss-die-sprache-kommt-aus-der-einstellung-nicht-aus-dem-ort">Die Sprache kommt aus der Einstellung, nicht aus dem Ort</a></li>
+<li><a href="/docs/rules/inhalt-lange-zeichenketten-stehen-in-gruppen">Lange Zeichenketten stehen in Gruppen</a></li>
+<li><a href="/docs/rules/formular-was-der-nutzer-tippt-oder-einfuegt-kommt-an">Was der Nutzer tippt oder einfügt, kommt an</a></li>
+<li><a href="/docs/rules/typografie-zahlenspalten-stehen-rechtsbuendig">Zahlenspalten stehen rechtsbündig</a></li>
+</ul>
+
+
+    <nav class="legal-links">
+      <a href="/">Home</a>
+      <a href="/docs/mcp">MCP Server</a>
+      <a href="/docs/rules">Design Rules</a>
+      <a href="/docs/research">Research</a>
+      <a href="/impressum.html">Impressum</a>
+      <a href="/datenschutz.html">Datenschutz</a>
+    </nav>
+  </main>
+</body>
+</html>

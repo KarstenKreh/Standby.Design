@@ -46,3 +46,4 @@ WCAG 3.1.1 Language of Page, 3.1.2 Language of Parts. Vercel Web Interface Guide
 ## Verwandt
 
 - [[Layout - Jede Ansicht folgt dem Platz und bricht bei 320 Pixeln um]]
+- [[Inhalt - Zahlen, Daten und Beträge folgen dem Sprachraum]]

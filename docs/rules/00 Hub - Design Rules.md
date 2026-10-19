@@ -130,6 +130,7 @@ Dazu sagt `applies-to`, für welche Techniken eine Regel gedacht ist. Damit läs
 | [[Inhalt - Lange Zeichenketten stehen in Gruppen]] | universal | IBAN, Telefon, Codes in Gruppen. Kopieren ohne Trennzeichen |
 | [[Inhalt - Struktur steckt im Element]] | universal | `table`, Liste, Feldgruppe, benannte Seitenbereiche, Sprung zum Inhalt |
 | [[Inhalt - Alles hat eine Textfassung]] | universal | Alternativtext, Untertitel, Transkript. Text nie als Grafik |
+| [[Inhalt - Zahlen, Daten und Beträge folgen dem Sprachraum]] | universal | Format aus CLDR für den Sprachraum der Einstellung. Gespeichert wird neutral. Gruppiert ab 5 Stellen |
 
 ## Zustand
 
