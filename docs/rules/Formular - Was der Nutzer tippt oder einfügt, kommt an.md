@@ -45,3 +45,4 @@ Vercel › Forms („Never block paste", „Accept free text, validate after—d
 
 - [[Formular - Der Nutzer tippt nur, was das System nicht weiß]]
 - [[Fluss - Ein Fehler steht dort, wo er entstanden ist]]
+- [[Inhalt - Zahlen, Daten und Beträge folgen dem Sprachraum]]

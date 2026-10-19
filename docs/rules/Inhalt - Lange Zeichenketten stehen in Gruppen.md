@@ -45,3 +45,4 @@ Laws of UX › Chunking, https://lawsofux.com/chunking/
 
 - [[Formular - Was der Nutzer tippt oder einfügt, kommt an]]
 - [[Typografie - Zahlenspalten stehen rechtsbündig]]
+- [[Inhalt - Zahlen, Daten und Beträge folgen dem Sprachraum]]
