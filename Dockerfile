@@ -80,7 +80,7 @@ RUN npm run build
 
 FROM node:20-alpine
 WORKDIR /app
-RUN npm install sharp --no-save
+RUN npm install sharp@0.35.5 --no-save
 # Satoshi for OG-image text rendering (librsvg resolves fonts via fontconfig)
 RUN apk add --no-cache fontconfig
 COPY og-assets/fonts/*.otf /usr/share/fonts/satoshi/
