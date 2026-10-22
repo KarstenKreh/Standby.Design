@@ -2,7 +2,7 @@
 # Build context is the repo root — the bundle pulls sources from
 # packages/core via an esbuild alias.
 
-FROM node:20-alpine AS build
+FROM node:22-alpine AS build
 WORKDIR /app
 COPY packages/core/ packages/core/
 COPY packages/mcp-server/package.json packages/mcp-server/package-lock.json packages/mcp-server/
@@ -12,7 +12,7 @@ COPY packages/mcp-server/build.mjs packages/mcp-server/tsconfig.json ./
 COPY packages/mcp-server/src/ src/
 RUN node build.mjs
 
-FROM node:20-alpine
+FROM node:22-alpine
 WORKDIR /app
 ENV NODE_ENV=production
 COPY packages/mcp-server/package.json packages/mcp-server/package-lock.json ./
