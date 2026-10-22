@@ -1,4 +1,4 @@
-FROM node:20-alpine AS build-color
+FROM node:22-alpine AS build-color
 WORKDIR /app/color-react
 COPY color-react/package.json color-react/package-lock.json ./
 RUN npm ci
@@ -7,7 +7,7 @@ COPY packages/core/ /app/packages/core/
 COPY shared.css /app/shared.css
 RUN npm run build
 
-FROM node:20-alpine AS build-type
+FROM node:22-alpine AS build-type
 WORKDIR /app/type-react
 COPY type-react/package.json type-react/package-lock.json ./
 RUN npm ci
@@ -16,7 +16,7 @@ COPY packages/core/ /app/packages/core/
 COPY shared.css /app/shared.css
 RUN npm run build
 
-FROM node:20-alpine AS build-system
+FROM node:22-alpine AS build-system
 WORKDIR /app/system-react
 COPY system-react/package.json system-react/package-lock.json ./
 RUN npm ci
@@ -25,7 +25,7 @@ COPY packages/core/ /app/packages/core/
 COPY shared.css /app/shared.css
 RUN npm run build
 
-FROM node:20-alpine AS build-shape
+FROM node:22-alpine AS build-shape
 WORKDIR /app/shape-react
 COPY shape-react/package.json shape-react/package-lock.json ./
 RUN npm ci
@@ -34,7 +34,7 @@ COPY packages/core/ /app/packages/core/
 COPY shared.css /app/shared.css
 RUN npm run build
 
-FROM node:20-alpine AS build-symbol
+FROM node:22-alpine AS build-symbol
 WORKDIR /app/symbol-react
 COPY symbol-react/package.json symbol-react/package-lock.json ./
 RUN npm ci
@@ -43,7 +43,7 @@ COPY packages/core/ /app/packages/core/
 COPY shared.css /app/shared.css
 RUN npm run build
 
-FROM node:20-alpine AS build-space
+FROM node:22-alpine AS build-space
 WORKDIR /app/space-react
 COPY space-react/package.json space-react/package-lock.json ./
 RUN npm ci
@@ -52,7 +52,7 @@ COPY packages/core/ /app/packages/core/
 COPY shared.css /app/shared.css
 RUN npm run build
 
-FROM node:20-alpine AS build-role
+FROM node:22-alpine AS build-role
 WORKDIR /app/role-react
 COPY role-react/package.json role-react/package-lock.json ./
 RUN npm ci
@@ -61,7 +61,7 @@ COPY packages/core/ /app/packages/core/
 COPY shared.css /app/shared.css
 RUN npm run build
 
-FROM node:20-alpine AS build-motion
+FROM node:22-alpine AS build-motion
 WORKDIR /app/motion-react
 COPY motion-react/package.json motion-react/package-lock.json ./
 RUN npm ci
@@ -70,7 +70,7 @@ COPY packages/core/ /app/packages/core/
 COPY shared.css /app/shared.css
 RUN npm run build
 
-FROM node:20-alpine AS build-qa
+FROM node:22-alpine AS build-qa
 WORKDIR /app/qa-gallery
 COPY qa-gallery/package.json qa-gallery/package-lock.json ./
 RUN npm ci
@@ -78,7 +78,7 @@ COPY qa-gallery/ ./
 COPY packages/core/ /app/packages/core/
 RUN npm run build
 
-FROM node:20-alpine
+FROM node:22-alpine
 WORKDIR /app
 RUN npm install sharp@0.35.5 --no-save
 # Satoshi for OG-image text rendering (librsvg resolves fonts via fontconfig)
