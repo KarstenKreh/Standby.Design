@@ -3331,7 +3331,7 @@ Farbe · https://standby.design/docs/rules/farbe-farbe-traegt-nie-allein
 **Geltung:** universal · web, react-native
 
 > **Regel**
-> Zeige jeden dauerhaften Zustand und jede Datenreihe neben der Farbe mit einem zweiten Merkmal. Bei Zuständen ist es Position, Strich, Balken, Punkt oder Unterstreichung, und es gehört zum Element. Bei Datenreihen ist es eine direkte Beschriftung, die Form der Marker oder die Strichart.
+> Trägt Farbe eine Information, die sonst nirgends steht, zeig sie mit einem zweiten Merkmal. Das gilt für jeden dauerhaften Zustand und jede Datenreihe. Bei Zuständen ist es Position, Strich, Balken, Punkt oder Unterstreichung, und es gehört zum Element. Bei Datenreihen ist es eine direkte Beschriftung, die Form der Marker oder die Strichart. Nennt ein Text die Information schon, betont die Farbe nur und braucht kein zweites Zeichen.
 
 ### Warum
 
@@ -3375,6 +3375,8 @@ Hart: ein zweites Merkmal. Weich: welches. Vorgabe direkte Beschriftung am Ende 
 Für kurzzeitige Zustände wie Hover gilt die Regel nicht. Hover ist eine Rückmeldung auf eine Handlung, die gerade passiert, und der Nutzer weiß bereits, wo er ist.
 
 Diagramme mit genau einer Reihe.
+
+Farbe, die nur betont, was ein Text daneben schon sagt. Eine rote Kennzahl unter dem Titel „Frist überschritten“ braucht keinen zusätzlichen Punkt. Den Zustand trägt der Text, die Farbe lenkt nur den Blick. Ein Punkt in derselben Farbe würde ohnehin nichts unterscheiden, denn Warnung und Fehler sähen in Graustufen gleich aus.
 
 ### Quelle
 
