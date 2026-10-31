@@ -68,3 +68,4 @@ Marketing- und Titelseiten dürfen mit ihren eigenen Display-Stufen arbeiten. Do
 - [[Typografie - Zahlenspalten stehen rechtsbündig]]
 - [[Layout - Die Titel bilden eine Gliederung]]
 - [[Farbe - Werte kommen aus Tokens, nie aus der Hand]]
+- [[Typografie - Jeder Textstil hat eine Rolle]]

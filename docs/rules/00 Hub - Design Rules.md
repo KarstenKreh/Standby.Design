@@ -56,7 +56,7 @@ Dazu sagt `applies-to`, für welche Techniken eine Regel gedacht ist. Damit läs
 | [[Layout - Die Karte hat kein Padding]] | universal | Padding im Abschnitt, nicht in der Karte. Nur so darf ein Bild randlos laufen |
 | [[Layout - Der Divider ist die Unterkante einer Section]] | universal | Die Linie ist keine Komponente, sondern eine Kante. Der letzte Abschnitt hat keine |
 | [[Layout - Weniger Kanten, ruhigere Ansicht]] | universal | Ausrichtungskanten zählen und zusammenlegen. Nicht linksbündig mit zentriert mischen |
-| [[Layout - Die Titel bilden eine Gliederung]] | universal | Titel als Inhaltsverzeichnis. Ebene 1 einmal, nichts doppelt, jede Ebene sichtbar |
+| [[Layout - Die Titel bilden eine Gliederung]] | universal | Titel als Inhaltsverzeichnis. Titelstufe 1 einmal, nichts doppelt, jede Titelstufe sichtbar |
 | [[Layout - Eine schmale Spalte steht in der Mitte]] | universal | Schmale Spalte mittig, Zurück und Titel an ihrer Kante. Vorgabe 48rem für Formulare |
 | [[Layout - Ein Bedienelement steht bei dem, was es verändert]] | universal | Steuerung steht in der Fläche dessen, was sie verändert |
 | [[Layout - Jeder Textbehälter hält jede Textmenge aus]] | universal | Keine feste Höhe, Schrift relativ, Überlänge bricht um oder wird gekürzt |
@@ -147,6 +147,7 @@ Dazu sagt `applies-to`, für welche Techniken eine Regel gedacht ist. Damit läs
 | [[Typografie - Zahlenspalten stehen rechtsbündig]] | universal | Größenordnung wird an der Länge lesbar |
 | [[Typografie - Icons sind auf die Schrift abgestimmt]] | universal | Wie ein Schriftzeichen behandeln. Abstand optisch je Icon, nicht ein fester gap |
 | [[Typografie - Fließtext hat eine Höchstbreite]] | universal | Höchstbreite in Zeichen als Token. Korridor 45-80, Vorgabe 65 |
+| [[Typografie - Jeder Textstil hat eine Rolle]] | universal | Jeder Stil eine Rolle, zwei Stufen Abstand, Display-Schrift nur an einer Rolle. Korridor 4-7, Vorgabe 5 |
 
 ## Farbe und Tokens
 

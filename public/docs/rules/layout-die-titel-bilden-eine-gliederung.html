@@ -4,13 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Die Titel bilden eine Gliederung — Design Rules — standby.design</title>
-  <meta name="description" content="Die Titel einer Ansicht bilden ein Inhaltsverzeichnis: Ebene 1 genau einmal, keine Ebene übersprungen, kein Titel doppelt. Jede Ebene hebt sich sichtbar ab." />
+  <meta name="description" content="Die Titel einer Ansicht bilden ein Inhaltsverzeichnis: Titelstufe 1 genau einmal, keine Titelstufe übersprungen, kein Titel doppelt. Jede Titelstufe hebt sich sichtbar ab." />
   <link rel="canonical" href="https://standby.design/docs/rules/layout-die-titel-bilden-eine-gliederung" />
   <link rel="alternate" type="text/markdown" href="https://standby.design/docs/rules.md" title="Design Rules (Markdown)" />
 
   <meta property="og:type" content="article" />
   <meta property="og:title" content="Die Titel bilden eine Gliederung — Design Rules — standby.design" />
-  <meta property="og:description" content="Die Titel einer Ansicht bilden ein Inhaltsverzeichnis: Ebene 1 genau einmal, keine Ebene übersprungen, kein Titel doppelt. Jede Ebene hebt sich sichtbar ab." />
+  <meta property="og:description" content="Die Titel einer Ansicht bilden ein Inhaltsverzeichnis: Titelstufe 1 genau einmal, keine Titelstufe übersprungen, kein Titel doppelt. Jede Titelstufe hebt sich sichtbar ab." />
   <meta property="og:url" content="https://standby.design/docs/rules/layout-die-titel-bilden-eine-gliederung" />
   <meta property="og:site_name" content="standby.design" />
   <meta property="og:image" content="https://standby.design/og-image?tool=github" />
@@ -183,14 +183,14 @@
     <h1>Die Titel bilden eine Gliederung</h1>
     <dl class="rule-meta"><div><dt>Geltung</dt><dd>universal · web, react-native</dd></div></dl>
 
-<aside class="callout callout-tip"><p class="callout-title">Regel</p><p>Behandle die Titel einer Ansicht wie ein Inhaltsverzeichnis. Ebene 1 ist der Seitentitel und steht genau einmal da. Jede weitere Ebene liegt in einem Abschnitt der Ebene darüber, und von oben nach unten gelesen geben die Titel den Ablauf der Seite wieder. Kein Titel kommt zweimal vor, auch nicht in einer anderen Größe. Jede Ebene hebt sich sichtbar von der darunter ab, und ein Titel hebt sich genauso von seinen Einträgen ab. Der Titel im Browser-Tab nennt die aktuelle Ansicht.</p>
+<aside class="callout callout-tip"><p class="callout-title">Regel</p><p>Behandle die Titel einer Ansicht wie ein Inhaltsverzeichnis. Titelstufe 1 ist der Seitentitel und steht genau einmal da. Jede weitere Titelstufe liegt in einem Abschnitt der Titelstufe darüber, und von oben nach unten gelesen geben die Titel den Ablauf der Seite wieder. Kein Titel kommt zweimal vor, auch nicht in einer anderen Größe. Jede Titelstufe hebt sich sichtbar von der darunter ab, und ein Titel hebt sich genauso von seinen Einträgen ab. Der Titel im Browser-Tab nennt die aktuelle Ansicht.</p>
 </aside>
 <h2>Warum</h2>
 <p>Die Größe eines Titels sagt, wie viel er umfasst. Der Seitentitel umfasst alles, ein Abschnittstitel nur seinen Abschnitt. Liest Du nur die Titel von oben nach unten, kennst Du den Aufbau der Seite, bevor Du ein Feld gelesen hast.</p>
-<p>Steht derselbe Titel zweimal da, einmal groß im Kopf und einmal kleiner über dem Formular, behauptet die Seite zwei Ebenen für eine Sache. Der Blick liest dasselbe zweimal und fragt sich, ob es zwei Dinge sind. Ändert später jemand nur einen der beiden, weiß niemand mehr, wie die Seite heißt.</p>
-<p>Screenreader lesen dieselbe Gliederung vor. Wer von Überschrift zu Überschrift springt, hört die Struktur, nicht das Aussehen. Ein doppelter Titel oder eine übersprungene Ebene ist dort ein Fehler in der Navigation.</p>
+<p>Steht derselbe Titel zweimal da, einmal groß im Kopf und einmal kleiner über dem Formular, behauptet die Seite zwei Titelstufen für eine Sache. Der Blick liest dasselbe zweimal und fragt sich, ob es zwei Dinge sind. Ändert später jemand nur einen der beiden, weiß niemand mehr, wie die Seite heißt.</p>
+<p>Screenreader lesen dieselbe Gliederung vor. Wer von Überschrift zu Überschrift springt, hört die Struktur, nicht das Aussehen. Ein doppelter Titel oder eine übersprungene Titelstufe ist dort ein Fehler in der Navigation.</p>
 <h2>Jede Stufe ist sichtbar</h2>
-<p>Die Gliederung muss man auch sehen. Jede Ebene unterscheidet sich von der darunter durch Größe, Gewicht oder beides. Titelstufen dürfen beide Mittel zusammen nutzen, anders als Kennzahlen in <a href="/docs/rules/typografie-betone-mit-einem-mittel-nicht-mit-zweien">Betone mit einem Mittel, nicht mit zweien</a>. Das gilt auch für die unterste Stufe: Ein Titel über einer Liste hebt sich von ihren Einträgen ab. Hat er dieselbe Größe und dasselbe Gewicht, liest er sich als erster Eintrag. Ein zusätzliches Icon oder eine Einrückung ersetzt Größe und Gewicht nicht, sie fügen nur eine Kante hinzu.</p>
+<p>Die Gliederung muss man auch sehen. Jede Titelstufe unterscheidet sich von der darunter durch Größe, Gewicht oder beides. Titelstufen dürfen beide Mittel zusammen nutzen, anders als Kennzahlen in <a href="/docs/rules/typografie-betone-mit-einem-mittel-nicht-mit-zweien">Betone mit einem Mittel, nicht mit zweien</a>. Das gilt auch für die unterste Stufe: Ein Titel über einer Liste hebt sich von ihren Einträgen ab. Hat er dieselbe Größe und dasselbe Gewicht, liest er sich als erster Eintrag. Ein zusätzliches Icon oder eine Einrückung ersetzt Größe und Gewicht nicht, sie fügen nur eine Kante hinzu.</p>
 <h2>Hart und weich</h2>
 <div class="table-wrap"><table>
 <thead>
@@ -200,7 +200,7 @@
 </tr>
 </thead>
 <tbody><tr>
-<td>Genau ein Titel der Ebene 1 pro Ansicht</td>
+<td>Genau ein Titel in Titelstufe 1 pro Ansicht</td>
 <td>hart</td>
 </tr>
 <tr>
@@ -208,7 +208,7 @@
 <td>hart</td>
 </tr>
 <tr>
-<td>Die Ebenen folgen der Schachtelung, keine wird übersprungen</td>
+<td>Die Titelstufen folgen der Schachtelung, keine wird übersprungen</td>
 <td>hart</td>
 </tr>
 <tr>
@@ -216,7 +216,7 @@
 <td>hart</td>
 </tr>
 <tr>
-<td>Jede Ebene hebt sich von der darunter und von ihren Einträgen über Größe, Gewicht oder beides ab</td>
+<td>Jede Titelstufe hebt sich von der darunter und von ihren Einträgen über Größe, Gewicht oder beides ab</td>
 <td>hart</td>
 </tr>
 <tr>
@@ -224,15 +224,15 @@
 <td>hart</td>
 </tr>
 <tr>
-<td>Ob Ebene 1 im Kopf der Anwendung oder in der Ansicht steht</td>
+<td>Ob Titelstufe 1 im Kopf der Anwendung oder in der Ansicht steht</td>
 <td>weich, das Projekt entscheidet einmal für alle Ansichten</td>
 </tr>
 <tr>
-<td>Wie viele Ebenen</td>
+<td>Wie viele Titelstufen</td>
 <td>weich, Vorgabe höchstens drei in einer Ansicht</td>
 </tr>
 <tr>
-<td>Welche Mittel eine Ebene nutzt</td>
+<td>Welche Mittel eine Titelstufe nutzt</td>
 <td>weich, Größe, Gewicht oder beides</td>
 </tr>
 <tr>
@@ -245,7 +245,7 @@
 <li>Kopfleiste und erste Überschrift der Ansicht nennen dasselbe.</li>
 <li>Eine Karte direkt unter dem Titel trägt ihn noch einmal als Kopf.</li>
 <li>Titel und Untertitel sagen dasselbe mit anderen Worten.</li>
-<li>Auf einen Titel der Ebene 1 folgt direkt einer der Ebene 3.</li>
+<li>Auf einen Titel in Titelstufe 1 folgt direkt einer in Titelstufe 3.</li>
 <li>Ein Titel ist nur über Größe und Gewicht gesetzt, ohne Überschriften-Element.</li>
 <li>Ein Titel hat dieselbe Größe und dasselbe Gewicht wie die Einträge darunter.</li>
 <li>Ein Titel hebt sich nur über ein zweites Icon oder eine Einrückung ab.</li>
@@ -256,15 +256,16 @@
 
   1 Stammdaten bearbeiten             1 Stammdaten bearbeiten
     2 Anstellung                      1 Stammdaten bearbeiten   ← doppelt
-    2 Daten                               3 Anstellung          ← Ebene 2 fehlt
+    2 Daten                               3 Anstellung          ← Titelstufe 2 fehlt
     2 Gehalt und Abfindung              2 Daten
 </code></pre>
 <h2>Grenzen</h2>
-<p>Ein Abschnittstitel darf ein Wort mit dem Seitentitel teilen. Ein Pfad im Kopf der Anwendung („Bereich › Objekt“) ist Navigation und kein Titel. Dann trägt die Ansicht den Namen des Objekts als Ebene 1.</p>
-<p>Druckansichten und Exporte brauchen Ebene 1 im Dokument, weil dort der Kopf der Anwendung fehlt.</p>
+<p>Ein Abschnittstitel darf ein Wort mit dem Seitentitel teilen. Ein Pfad im Kopf der Anwendung („Bereich › Objekt“) ist Navigation und kein Titel. Dann trägt die Ansicht den Namen des Objekts als Titelstufe 1.</p>
+<p>Druckansichten und Exporte brauchen Titelstufe 1 im Dokument, weil dort der Kopf der Anwendung fehlt.</p>
 <h2>Verwandt</h2>
 <ul>
 <li><a href="/docs/rules/typografie-betone-mit-einem-mittel-nicht-mit-zweien">Betone mit einem Mittel, nicht mit zweien</a></li>
+<li><a href="/docs/rules/typografie-jeder-textstil-hat-eine-rolle">Jeder Textstil hat eine Rolle</a></li>
 </ul>
 
 

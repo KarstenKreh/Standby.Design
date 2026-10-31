@@ -71,5 +71,15 @@ file is the how-to-not-get-stuck.
 - The apps build with `vite build` only (no type checking). Run
   `npx tsc --noEmit` where needed; `packages/mcp-server` has a proper
   `typecheck` script.
+- On Windows the docs build appends a second copy of every entry to
+  `public/sitemap.xml` when the file has CRLF line endings. Convert it to LF
+  before `npm run build` (`sed -i 's/\r$//' public/sitemap.xml`) and check
+  that the diff only adds the new pages.
+- `packages/design-lint` enforces the design rules: a Claude Code hook
+  (`.claude/settings.json`) lints every edited line, `.githooks/pre-commit`
+  the staged lines (activate once with `git config core.hooksPath .githooks`),
+  CI the lines of a PR. Run `npm install` in `packages/design-lint` first.
+  Existing violations in the apps are known; they only show up when a line
+  is touched.
 - Verify MCP server changes with `npm run smoke` (end-to-end stdio test);
   the remote variant serves `/health` for a quick liveness check.
