@@ -58,6 +58,7 @@ export const PROJECT_SETUP_GUIDE = [
   '1. Run `npx standby-design-lint@latest init`. It installs or updates the package and sets up, or updates in place:',
   '   - a Claude Code hook in `.claude/settings.json` that lints every edited line against the rules,',
   '   - a pre-commit hook that warns about new violations (husky if present, otherwise the git hooks folder),',
+  '   - a `prepare` script in package.json that sets up the pre-commit hook on every install, so teammates get it too,',
   '   - a CI workflow `.github/workflows/design-lint.yml` that fails a pull request with new violations,',
   '   - the skill `.claude/skills/design-review` for a visual review of a finished screen,',
   '   - a short rules block in `CLAUDE.md` / `AGENTS.md`, and `standbyDesignLint` settings in package.json.',

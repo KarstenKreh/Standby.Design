@@ -1,6 +1,6 @@
 {
   "name": "standby-design-lint",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Enforces the standby.design design rules in code: an ESLint plugin, a CLI and a Claude Code hook that report violations with the rule and the fix.",
   "license": "MIT",
   "type": "module",

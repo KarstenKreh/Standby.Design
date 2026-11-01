@@ -5,7 +5,7 @@ import { ESLint } from 'eslint';
 import { recommended } from './index.js';
 import { addedLines } from './git-diff.js';
 import { reviewScreen } from './review.js';
-import { initProject, formatInitReport } from './init.js';
+import { initProject, formatInitReport, installHooks } from './init.js';
 
 const LINTABLE = /\.(?:jsx|tsx|js|ts|mjs)$/;
 const HOOK_MESSAGE_LIMIT = 20;
@@ -13,6 +13,7 @@ const DEFAULT_IGNORES = ['**/node_modules/**', '**/dist/**', '**/build/**', '**/
 const USAGE = `standby-design-lint: prüft Code gegen die Design-Regeln von standby.design
 
   standby-design-lint init       richtet Hook, Pre-Commit, CI, Skill und Agenten-Anweisung ein oder aktualisiert sie
+  standby-design-lint hooks      richtet nur den Pre-Commit ein (läuft über das prepare-Skript bei npm install)
   standby-design-lint [Pfade…]   prüft Dateien oder Ordner (Vorgabe: src)
   standby-design-lint --staged   prüft nur die Zeilen, die für den Commit vorgemerkt sind (Pre-Commit)
   standby-design-lint --since <ref>  prüft nur die Zeilen, die seit <ref> dazukamen (CI, z. B. origin/main)
@@ -169,6 +170,16 @@ function optionValue(argv, name) {
   return index === -1 ? undefined : argv[index + 1];
 }
 
+function runInstallHooks() {
+  try {
+    const { file, status } = installHooks(process.cwd());
+    if (file && status !== 'unverändert') process.stdout.write(`standby-design-lint: Pre-Commit ${file} ${status}\n`);
+  } catch (error) {
+    process.stderr.write(`standby-design-lint: Pre-Commit nicht eingerichtet (${error.message})\n`);
+  }
+  return 0;
+}
+
 export async function main(argv) {
   if (argv.includes('--help') || argv.includes('-h')) {
     process.stdout.write(`${USAGE}\n`);
@@ -180,6 +191,7 @@ export async function main(argv) {
     process.stdout.write(`${formatInitReport(initProject(process.cwd(), { install: !argv.includes('--no-install') }))}\n`);
     return 0;
   }
+  if (argv[0] === 'hooks') return runInstallHooks();
   const warn = argv.includes('--warn');
   if (argv.includes('--staged')) return runChanged({ staged: true, warn });
   const base = optionValue(argv, '--since');
