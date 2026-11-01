@@ -20,11 +20,11 @@ tags:
 
 ## Warum
 
-Größe und Gewicht sagen dasselbe: schau hierhin. Setzt Du beides zugleich ein, verstärken sie sich nicht, sie verstopfen sich. Eine große Zahl im fetten Schnitt wirkt nicht wichtiger, nur schwer — die Innenräume der 8, der 0 und der 6 laufen zu, und die Ziffern rücken zusammen. Auf großen Graden ist genau das der sichtbarste Nebeneffekt von Fettung.
+Größe und Gewicht lenken beide den Blick auf eine Stelle. Setzt Du beides zugleich ein, wird die Betonung nicht stärker. Eine große Zahl im fetten Schnitt wirkt nur schwerer. Die Innenräume der 8, der 0 und der 6 laufen zu, und die Ziffern rücken zusammen. Auf großen Graden ist genau das der sichtbarste Nebeneffekt von Fettung.
 
 Eine kleine Überschrift hat das umgekehrte Problem. Sie kann sich über die Größe kaum vom Fließtext lösen, weil der Unterschied zu klein wäre, um zu wirken. Dort ist das Gewicht das richtige Mittel.
 
-Daraus folgt die Aufteilung von selbst: klein und schwer für Überschriften, groß und normal für Kennzahlen. Beides betont gleich stark, nur mit verschiedenen Mitteln.
+Daraus folgt die Aufteilung: klein und schwer für Überschriften, groß und normal für Kennzahlen. Beides betont gleich stark, nur mit verschiedenen Mitteln.
 
 Ein häufiger Widerspruch löst sich damit auf. Ein Token-Export nennt für Zahlen oft ein leichteres Gewicht als für Überschriften. Das ist kein Fehler im Export, das ist diese Unterscheidung.
 
@@ -59,7 +59,7 @@ Ein häufiger Widerspruch löst sich damit auf. Ein Token-Export nennt für Zahl
 
 Eine Zahl im Fließtext ist keine alleinstehende Zahl und folgt dem Text.
 
-Titelstufen dürfen Größe und Gewicht zusammen nutzen. Dort geht es nicht um Betonung eines Wertes, sondern darum, dass jede Ebene der Gliederung sichtbar ist. Das regelt [[Layout - Die Titel bilden eine Gliederung]].
+Titelstufen dürfen Größe und Gewicht zusammen nutzen. Dort betonen sie keinen Wert. Sie machen jede Titelstufe der Gliederung sichtbar. Das regelt [[Layout - Die Titel bilden eine Gliederung]].
 
 Marketing- und Titelseiten dürfen mit ihren eigenen Display-Stufen arbeiten. Dort ist Schrift Bild, und ein Bild darf laut sein.
 

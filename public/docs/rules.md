@@ -238,13 +238,13 @@ Layout · https://standby.design/docs/rules/layout-die-titel-bilden-eine-glieder
 
 Die Größe eines Titels sagt, wie viel er umfasst. Der Seitentitel umfasst alles, ein Abschnittstitel nur seinen Abschnitt. Liest Du nur die Titel von oben nach unten, kennst Du den Aufbau der Seite, bevor Du ein Feld gelesen hast.
 
-Steht derselbe Titel zweimal da, einmal groß im Kopf und einmal kleiner über dem Formular, behauptet die Seite zwei Titelstufen für eine Sache. Der Blick liest dasselbe zweimal und fragt sich, ob es zwei Dinge sind. Ändert später jemand nur einen der beiden, weiß niemand mehr, wie die Seite heißt.
+Steht derselbe Titel zweimal da, einmal groß im Kopf und einmal kleiner über dem Formular, zeigt die Seite zwei Titelstufen für eine Sache. Der Nutzer liest dasselbe zweimal und fragt sich, ob es zwei Dinge sind. Ändert später jemand nur einen der beiden, weiß niemand mehr, wie die Seite heißt.
 
-Screenreader lesen dieselbe Gliederung vor. Wer von Überschrift zu Überschrift springt, hört die Struktur, nicht das Aussehen. Ein doppelter Titel oder eine übersprungene Titelstufe ist dort ein Fehler in der Navigation.
+Screenreader lesen dieselbe Gliederung vor. Wer von Überschrift zu Überschrift springt, hört nur die Struktur. Ein doppelter Titel oder eine übersprungene Titelstufe ist dort ein Fehler in der Navigation.
 
 ### Jede Stufe ist sichtbar
 
-Die Gliederung muss man auch sehen. Jede Titelstufe unterscheidet sich von der darunter durch Größe, Gewicht oder beides. Titelstufen dürfen beide Mittel zusammen nutzen, anders als Kennzahlen in Betone mit einem Mittel, nicht mit zweien. Das gilt auch für die unterste Stufe: Ein Titel über einer Liste hebt sich von ihren Einträgen ab. Hat er dieselbe Größe und dasselbe Gewicht, liest er sich als erster Eintrag. Ein zusätzliches Icon oder eine Einrückung ersetzt Größe und Gewicht nicht, sie fügen nur eine Kante hinzu.
+Die Gliederung muss man auch sehen. Jede Titelstufe unterscheidet sich von der darunter durch Größe, Gewicht oder beides. Titelstufen dürfen beide Mittel zusammen nutzen, anders als Kennzahlen in Betone mit einem Mittel, nicht mit zweien. Das gilt auch für die unterste Stufe: Ein Titel über einer Liste hebt sich von ihren Einträgen ab. Hat er dieselbe Größe und dasselbe Gewicht, liest er sich als erster Eintrag. Ein zusätzliches Icon oder eine Einrückung ersetzt Größe und Gewicht nicht. Beides fügt nur eine Kante hinzu.
 
 ### Hart und weich
 
@@ -2937,11 +2937,11 @@ Typografie · https://standby.design/docs/rules/typografie-betone-mit-einem-mitt
 
 ### Warum
 
-Größe und Gewicht sagen dasselbe: schau hierhin. Setzt Du beides zugleich ein, verstärken sie sich nicht, sie verstopfen sich. Eine große Zahl im fetten Schnitt wirkt nicht wichtiger, nur schwer — die Innenräume der 8, der 0 und der 6 laufen zu, und die Ziffern rücken zusammen. Auf großen Graden ist genau das der sichtbarste Nebeneffekt von Fettung.
+Größe und Gewicht lenken beide den Blick auf eine Stelle. Setzt Du beides zugleich ein, wird die Betonung nicht stärker. Eine große Zahl im fetten Schnitt wirkt nur schwerer. Die Innenräume der 8, der 0 und der 6 laufen zu, und die Ziffern rücken zusammen. Auf großen Graden ist genau das der sichtbarste Nebeneffekt von Fettung.
 
 Eine kleine Überschrift hat das umgekehrte Problem. Sie kann sich über die Größe kaum vom Fließtext lösen, weil der Unterschied zu klein wäre, um zu wirken. Dort ist das Gewicht das richtige Mittel.
 
-Daraus folgt die Aufteilung von selbst: klein und schwer für Überschriften, groß und normal für Kennzahlen. Beides betont gleich stark, nur mit verschiedenen Mitteln.
+Daraus folgt die Aufteilung: klein und schwer für Überschriften, groß und normal für Kennzahlen. Beides betont gleich stark, nur mit verschiedenen Mitteln.
 
 Ein häufiger Widerspruch löst sich damit auf. Ein Token-Export nennt für Zahlen oft ein leichteres Gewicht als für Überschriften. Das ist kein Fehler im Export, das ist diese Unterscheidung.
 
@@ -2976,7 +2976,7 @@ Ein häufiger Widerspruch löst sich damit auf. Ein Token-Export nennt für Zahl
 
 Eine Zahl im Fließtext ist keine alleinstehende Zahl und folgt dem Text.
 
-Titelstufen dürfen Größe und Gewicht zusammen nutzen. Dort geht es nicht um Betonung eines Wertes, sondern darum, dass jede Ebene der Gliederung sichtbar ist. Das regelt Die Titel bilden eine Gliederung.
+Titelstufen dürfen Größe und Gewicht zusammen nutzen. Dort betonen sie keinen Wert. Sie machen jede Titelstufe der Gliederung sichtbar. Das regelt Die Titel bilden eine Gliederung.
 
 Marketing- und Titelseiten dürfen mit ihren eigenen Display-Stufen arbeiten. Dort ist Schrift Bild, und ein Bild darf laut sein.
 
@@ -3172,17 +3172,17 @@ Typografie · https://standby.design/docs/rules/typografie-jeder-textstil-hat-ei
 - **Stufe:** ein Schritt der Typo-Skala.
 - **Familie:** die Schriftart, etwa eine Grotesk oder eine Display-Schrift.
 
-Rolle heißt hier dasselbe wie bei Flächen und Bedienelementen in Body, Role und Skin: Was ein Element tut, bestimmt, wie es aussieht. Ein Textstil ist die Haut einer Text-Rolle.
+Rolle heißt hier dasselbe wie bei Flächen und Bedienelementen in Body, Role und Skin: Was ein Element tut, bestimmt, wie es aussieht. Ein Textstil ist die Skin einer Text-Rolle.
 
 ### Warum
 
-Jeder Textstil behauptet etwas: Dieser Text ist eine andere Sorte als der daneben. Der Blick sortiert danach, noch bevor er liest. Gibt es mehr Stile als Sorten, sortiert er ins Leere. Zwei Beschriftungen in leicht verschiedenen Graden lesen sich als zwei Dinge, obwohl sie dasselbe sind. Die Ansicht wirkt unruhig, und niemand kann sagen, woran es liegt.
+Ein eigener Textstil sagt: Dieser Text ist eine andere Sorte als der daneben. Das Auge ordnet Texte nach ihrem Stil, bevor es sie liest. Gibt es mehr Stile als Sorten, ordnet es falsch. Zwei Beschriftungen in leicht verschiedenen Größen wirken wie zwei verschiedene Dinge, obwohl sie dasselbe sind. Die Ansicht wirkt unruhig, und man sieht nicht sofort, warum.
 
 Eine feste Höchstzahl hilft dagegen nur zum Teil. Ein Formular braucht weniger Stile als eine Übersicht mit Kennzahlen, und eine Zahl, die für jede Ansicht passt, gibt es nicht. Deshalb leitet die Regel die Zahl aus zwei Bedingungen ab. Jeder Stil braucht eine Rolle, die man benennen kann. Damit folgt die Zahl dem Inhalt. Und jeder Stil muss sich deutlich vom nächsten abheben. Damit ist die Zahl begrenzt, weil die Skala nur so viele deutlich verschiedene Stufen hat.
 
-Eine Stufe Abstand reicht dafür nicht. Benachbarte Stufen liegen so dicht, dass das Auge sie nebeneinander als „fast gleich“ liest. Das ist schlechter als gleich: Es sieht nach einem Versehen aus. Zwei Stufen Abstand oder ein zweites Mittel, etwa Gewicht, Farbe oder Versalien, machen den Unterschied zur Absicht.
+Eine Stufe Abstand reicht dafür nicht. Benachbarte Stufen liegen so dicht, dass das Auge sie nebeneinander als fast gleich liest. Das wirkt wie ein Versehen. Zwei Stufen Abstand oder ein zusätzliches Mittel wie Gewicht, Farbe oder Versalien zeigen, dass der Unterschied gewollt ist.
 
-Eine Display- oder Zierschrift hat einen eigenen Charakter. Steht sie an mehreren Rollen, verliert sie ihn und macht jede dieser Rollen lauter, als sie sein soll. Eine ruhige Grotesk dagegen trägt viele Rollen, weil sie sich zurücknimmt.
+Eine Display- oder Zierschrift hat einen eigenen Charakter. Steht sie an mehreren Rollen, fällt sie nicht mehr auf, und jede dieser Rollen wirkt stärker betont, als sie sein soll. Eine ruhige Grotesk kann viele Rollen tragen, weil sie wenig auffällt.
 
 ### Hart und weich
 
@@ -3222,7 +3222,7 @@ Eine Display- oder Zierschrift hat einen eigenen Charakter. Steht sie an mehrere
 
 ### Grenzen
 
-Marketing- und Titelseiten dürfen eigene Display-Stufen haben. Dort ist Schrift Bild, siehe Betone mit einem Mittel, nicht mit zweien.
+Marketing- und Titelseiten dürfen eigene Display-Stufen haben. Dort wirkt die Schrift als Bild, siehe Betone mit einem Mittel, nicht mit zweien.
 
 Dichte Tabellen haben eigene Rollen für Kopf und Zellen. Sie zählen als Rollen wie alle anderen, auch wenn sie nur in der Tabelle vorkommen.
 

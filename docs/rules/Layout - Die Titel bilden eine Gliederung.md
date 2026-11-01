@@ -22,13 +22,13 @@ tags:
 
 Die Größe eines Titels sagt, wie viel er umfasst. Der Seitentitel umfasst alles, ein Abschnittstitel nur seinen Abschnitt. Liest Du nur die Titel von oben nach unten, kennst Du den Aufbau der Seite, bevor Du ein Feld gelesen hast.
 
-Steht derselbe Titel zweimal da, einmal groß im Kopf und einmal kleiner über dem Formular, behauptet die Seite zwei Titelstufen für eine Sache. Der Blick liest dasselbe zweimal und fragt sich, ob es zwei Dinge sind. Ändert später jemand nur einen der beiden, weiß niemand mehr, wie die Seite heißt.
+Steht derselbe Titel zweimal da, einmal groß im Kopf und einmal kleiner über dem Formular, zeigt die Seite zwei Titelstufen für eine Sache. Der Nutzer liest dasselbe zweimal und fragt sich, ob es zwei Dinge sind. Ändert später jemand nur einen der beiden, weiß niemand mehr, wie die Seite heißt.
 
-Screenreader lesen dieselbe Gliederung vor. Wer von Überschrift zu Überschrift springt, hört die Struktur, nicht das Aussehen. Ein doppelter Titel oder eine übersprungene Titelstufe ist dort ein Fehler in der Navigation.
+Screenreader lesen dieselbe Gliederung vor. Wer von Überschrift zu Überschrift springt, hört nur die Struktur. Ein doppelter Titel oder eine übersprungene Titelstufe ist dort ein Fehler in der Navigation.
 
 ## Jede Stufe ist sichtbar
 
-Die Gliederung muss man auch sehen. Jede Titelstufe unterscheidet sich von der darunter durch Größe, Gewicht oder beides. Titelstufen dürfen beide Mittel zusammen nutzen, anders als Kennzahlen in [[Typografie - Betone mit einem Mittel, nicht mit zweien]]. Das gilt auch für die unterste Stufe: Ein Titel über einer Liste hebt sich von ihren Einträgen ab. Hat er dieselbe Größe und dasselbe Gewicht, liest er sich als erster Eintrag. Ein zusätzliches Icon oder eine Einrückung ersetzt Größe und Gewicht nicht, sie fügen nur eine Kante hinzu.
+Die Gliederung muss man auch sehen. Jede Titelstufe unterscheidet sich von der darunter durch Größe, Gewicht oder beides. Titelstufen dürfen beide Mittel zusammen nutzen, anders als Kennzahlen in [[Typografie - Betone mit einem Mittel, nicht mit zweien]]. Das gilt auch für die unterste Stufe: Ein Titel über einer Liste hebt sich von ihren Einträgen ab. Hat er dieselbe Größe und dasselbe Gewicht, liest er sich als erster Eintrag. Ein zusätzliches Icon oder eine Einrückung ersetzt Größe und Gewicht nicht. Beides fügt nur eine Kante hinzu.
 
 ## Hart und weich
 

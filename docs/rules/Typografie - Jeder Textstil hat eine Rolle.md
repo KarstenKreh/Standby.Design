@@ -27,17 +27,17 @@ tags:
 - **Stufe:** ein Schritt der Typo-Skala.
 - **Familie:** die Schriftart, etwa eine Grotesk oder eine Display-Schrift.
 
-Rolle heißt hier dasselbe wie bei Flächen und Bedienelementen in [[Philosophie - Body, Role und Skin]]: Was ein Element tut, bestimmt, wie es aussieht. Ein Textstil ist die Haut einer Text-Rolle.
+Rolle heißt hier dasselbe wie bei Flächen und Bedienelementen in [[Philosophie - Body, Role und Skin]]: Was ein Element tut, bestimmt, wie es aussieht. Ein Textstil ist die Skin einer Text-Rolle.
 
 ## Warum
 
-Jeder Textstil behauptet etwas: Dieser Text ist eine andere Sorte als der daneben. Der Blick sortiert danach, noch bevor er liest. Gibt es mehr Stile als Sorten, sortiert er ins Leere. Zwei Beschriftungen in leicht verschiedenen Graden lesen sich als zwei Dinge, obwohl sie dasselbe sind. Die Ansicht wirkt unruhig, und niemand kann sagen, woran es liegt.
+Ein eigener Textstil sagt: Dieser Text ist eine andere Sorte als der daneben. Das Auge ordnet Texte nach ihrem Stil, bevor es sie liest. Gibt es mehr Stile als Sorten, ordnet es falsch. Zwei Beschriftungen in leicht verschiedenen Größen wirken wie zwei verschiedene Dinge, obwohl sie dasselbe sind. Die Ansicht wirkt unruhig, und man sieht nicht sofort, warum.
 
 Eine feste Höchstzahl hilft dagegen nur zum Teil. Ein Formular braucht weniger Stile als eine Übersicht mit Kennzahlen, und eine Zahl, die für jede Ansicht passt, gibt es nicht. Deshalb leitet die Regel die Zahl aus zwei Bedingungen ab. Jeder Stil braucht eine Rolle, die man benennen kann. Damit folgt die Zahl dem Inhalt. Und jeder Stil muss sich deutlich vom nächsten abheben. Damit ist die Zahl begrenzt, weil die Skala nur so viele deutlich verschiedene Stufen hat.
 
-Eine Stufe Abstand reicht dafür nicht. Benachbarte Stufen liegen so dicht, dass das Auge sie nebeneinander als „fast gleich“ liest. Das ist schlechter als gleich: Es sieht nach einem Versehen aus. Zwei Stufen Abstand oder ein zweites Mittel, etwa Gewicht, Farbe oder Versalien, machen den Unterschied zur Absicht.
+Eine Stufe Abstand reicht dafür nicht. Benachbarte Stufen liegen so dicht, dass das Auge sie nebeneinander als fast gleich liest. Das wirkt wie ein Versehen. Zwei Stufen Abstand oder ein zusätzliches Mittel wie Gewicht, Farbe oder Versalien zeigen, dass der Unterschied gewollt ist.
 
-Eine Display- oder Zierschrift hat einen eigenen Charakter. Steht sie an mehreren Rollen, verliert sie ihn und macht jede dieser Rollen lauter, als sie sein soll. Eine ruhige Grotesk dagegen trägt viele Rollen, weil sie sich zurücknimmt.
+Eine Display- oder Zierschrift hat einen eigenen Charakter. Steht sie an mehreren Rollen, fällt sie nicht mehr auf, und jede dieser Rollen wirkt stärker betont, als sie sein soll. Eine ruhige Grotesk kann viele Rollen tragen, weil sie wenig auffällt.
 
 ## Hart und weich
 
@@ -77,7 +77,7 @@ Eine Display- oder Zierschrift hat einen eigenen Charakter. Steht sie an mehrere
 
 ## Grenzen
 
-Marketing- und Titelseiten dürfen eigene Display-Stufen haben. Dort ist Schrift Bild, siehe [[Typografie - Betone mit einem Mittel, nicht mit zweien]].
+Marketing- und Titelseiten dürfen eigene Display-Stufen haben. Dort wirkt die Schrift als Bild, siehe [[Typografie - Betone mit einem Mittel, nicht mit zweien]].
 
 Dichte Tabellen haben eigene Rollen für Kopf und Zellen. Sie zählen als Rollen wie alle anderen, auch wenn sie nur in der Tabelle vorkommen.
 
