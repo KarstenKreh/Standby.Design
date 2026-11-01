@@ -200,11 +200,11 @@
 <aside class="callout callout-tip"><p class="callout-title">Regel</p><p>Jedes bedienbare Element zeigt sichtbar, wenn es den Fokus hat. Entferne den Fokus nie ersatzlos. Er ist im ganzen Projekt gleich gebaut, verschiebt kein Layout und wird nie von einer fixierten Leiste verdeckt. Leg für jeden Wechsel fest, wo er landet: Pop-up öffnet, Fokus hinein. Pop-up schließt, Fokus zurück auf den Auslöser. Element gelöscht, Fokus auf den Nachbarn. Absenden mit Fehlern, Fokus aufs erste fehlerhafte Feld.</p>
 </aside>
 <h2>Warum</h2>
-<p>Wer mit der Tastatur bedient, sieht ohne Fokus gar nicht, wo er ist. Das betrifft nicht nur Screenreader-Nutzer, sondern jeden, der ein Formular schnell durchtabbt. Der Fokus ist die einzige Rückmeldung, die diese Nutzer bekommen.</p>
-<p>Die Voreinstellung des Browsers wird oft entfernt, weil sie nicht zum Rest passt, und dann bleibt nichts übrig. Der Wunsch dahinter ist berechtigt — die Antwort darauf ist ein eigener Fokus, kein fehlender.</p>
-<p>Dass er das Layout nicht verschieben darf, hat einen praktischen Grund: sitzt er außerhalb des Elements, springt er in engen Reihen über die Nachbarn.</p>
-<p>Ein Fokus, der hinter einer fixierten Kopf- oder Fußleiste liegt, ist so unsichtbar wie ein entfernter. Der Browser scrollt das fokussierte Element nur bis an den Rand des Fensters, und dort steht die Leiste. Der Abstand zur Leiste muss deshalb im Scrollverhalten der Seite stehen. Dasselbe gilt für Sprungziele: Springt ein Anker zu einer Überschrift, landet sie unter der Leiste, nicht dahinter.</p>
-<p>Verschwindet das fokussierte Element, springt der Fokus an den Seitenanfang. Der Nutzer verliert seinen Platz.</p>
+<p>Wer mit der Tastatur bedient, sieht ohne Fokus gar nicht, wo er ist. Das betrifft Screenreader-Nutzer und jeden, der ein Formular schnell durchtabbt. Der Fokus ist die einzige Rückmeldung, die diese Nutzer bekommen.</p>
+<p>Oft wird der Fokus des Browsers entfernt, weil er nicht zum Rest passt. Dann bleibt gar kein Fokus übrig. Der Wunsch dahinter ist berechtigt. Die Lösung ist ein eigener Fokus statt gar keinem.</p>
+<p>Dass er das Layout nicht verschieben darf, hat einen praktischen Grund. Sitzt er außerhalb des Elements, springt er in engen Reihen über die Nachbarn.</p>
+<p>Einen Fokus, der hinter einer fixierten Kopf- oder Fußleiste liegt, sieht der Nutzer so wenig wie einen entfernten. Der Browser scrollt das fokussierte Element nur bis an den Rand des Fensters, und dort steht die Leiste. Der Abstand zur Leiste muss deshalb im Scrollverhalten der Seite stehen. Dasselbe gilt für Sprungziele: Springt ein Anker zu einer Überschrift, landet sie unter der Leiste, nicht dahinter.</p>
+<p>Verschwindet das fokussierte Element, springt der Fokus an den Seitenanfang. Der Nutzer muss seine Stelle neu suchen.</p>
 <h2>Hart und weich</h2>
 <p>Hart: jeder Wechsel hat ein Ziel. Weich: nichts.</p>
 <h2>Woran Du den Verstoß erkennst</h2>
@@ -221,7 +221,7 @@
 </ul>
 <h2>Grenzen</h2>
 <p>Die Regel gilt für Tastaturfokus. Ein Fokus nach einem Mausklick darf unterdrückt werden (<code>:focus-visible</code>), weil der Mausnutzer schon weiß, wo er geklickt hat.</p>
-<p>Wie der Fokus aussieht, ist eine Entscheidung des Projekts und steht dort. Ein weicher Ring auf der Kante ist eine gute Antwort, ein kräftiger Umriss mit Abstand auch — solange er die Nachbarn nicht überlagert.</p>
+<p>Wie der Fokus aussieht, ist eine Entscheidung des Projekts und steht dort. Ein weicher Ring auf der Kante ist eine gute Antwort, ein kräftiger Umriss mit Abstand auch, solange er die Nachbarn nicht überlagert.</p>
 <p>Nicht-modale Hinweise wie Kurzmeldungen ziehen den Fokus nicht.</p>
 <h2>Quelle</h2>
 <p>APG › Dialog (Modal) Pattern. Vercel › Keyboard („Manage focus (trap, move, return)&quot;) und Forms („on submit, focus first error&quot;). WCAG 2.4.3 Focus Order.</p>

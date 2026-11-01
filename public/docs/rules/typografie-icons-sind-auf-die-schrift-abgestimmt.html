@@ -4,13 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Icons sind auf die Schrift abgestimmt — Design Rules — standby.design</title>
-  <meta name="description" content="Ein Icon steht neben Text und wird mit ihm gelesen. Größe, Strichstärke und Abstand richten sich nach der Schrift, und der Abstand ist optisch, nicht gemessen." />
+  <meta name="description" content="Ein Icon steht neben Text und wird mit ihm gelesen. Größe, Strichstärke und Abstand richten sich nach der Schrift, und der Abstand wird optisch ausgeglichen statt gemessen." />
   <link rel="canonical" href="https://standby.design/docs/rules/typografie-icons-sind-auf-die-schrift-abgestimmt" />
   <link rel="alternate" type="text/markdown" href="https://standby.design/docs/rules.md" title="Design Rules (Markdown)" />
 
   <meta property="og:type" content="article" />
   <meta property="og:title" content="Icons sind auf die Schrift abgestimmt — Design Rules — standby.design" />
-  <meta property="og:description" content="Ein Icon steht neben Text und wird mit ihm gelesen. Größe, Strichstärke und Abstand richten sich nach der Schrift, und der Abstand ist optisch, nicht gemessen." />
+  <meta property="og:description" content="Ein Icon steht neben Text und wird mit ihm gelesen. Größe, Strichstärke und Abstand richten sich nach der Schrift, und der Abstand wird optisch ausgeglichen statt gemessen." />
   <meta property="og:url" content="https://standby.design/docs/rules/typografie-icons-sind-auf-die-schrift-abgestimmt" />
   <meta property="og:site_name" content="standby.design" />
   <meta property="og:image" content="https://standby.design/og-image?tool=github" />
@@ -201,25 +201,25 @@
 </aside>
 <h2>Warum</h2>
 <p>Ein Icon in einer Beschriftung wird als Teil derselben Zeile gelesen, in einem Zug mit dem Wort daneben. Was für den Buchstaben gilt, gilt deshalb auch für das Icon.</p>
-<p>Der Punkt, an dem fast alle Systeme scheitern, ist der Abstand. Ein Icon aus drei senkrechten Punkten lässt an seiner rechten Kante Luft, ein gefülltes Quadrat nicht. Bei gleichem gemessenem Abstand wirkt das erste weiter vom Wort entfernt.</p>
+<p>Am Abstand scheitern fast alle Systeme. Ein Icon aus drei senkrechten Punkten lässt an seiner rechten Kante Luft, ein gefülltes Quadrat nicht. Bei gleichem gemessenem Abstand wirkt das erste weiter vom Wort entfernt.</p>
 <pre><code>        Beide Abstände sind gemessen gleich groß.
 
         ⋮  Optionen                ■  Optionen
           ^^^                        ^^^
         wirkt zu weit              wirkt richtig
 </code></pre>
-<p><strong>Der Ausgleich gehört ins Icon, nicht in die Zeile.</strong> Jedes Icon bringt seinen eigenen Seitenabstand mit, so wie jede Glyphe ihre Vor- und Nachbreite hat. Ein einziger <code>gap</code> für alle Icons löst ein optisches Problem mit einer Konstante.</p>
+<p><strong>Der Ausgleich gehört ins Icon, nicht in die Zeile.</strong> Jedes Icon bringt seinen eigenen Seitenabstand mit, so wie jede Glyphe ihre Vor- und Nachbreite hat. Ein einziger <code>gap</code> für alle Icons setzt überall denselben Wert und gleicht den optischen Unterschied deshalb nicht aus.</p>
 <p>Dasselbe gilt für Gewicht und Größe: ein Icon neben halbfettem Text soll halbfett wirken, seine Größe kommt aus der Typo-Skala, und bei vergrößerter Systemschrift wächst es mit.</p>
 <h2>Zwei Varianten</h2>
 <p>Beide haben gute Gründe. Die Regel entscheidet den Weg nicht, sie sagt, was am Ende stimmen muss.</p>
-<p><strong>Variante 1 — Icons als Schriftzeichen.</strong> Vorbild SF Symbols. Der Vorteil liegt nicht in der Sorgfalt der Gestalter, sondern im Format: <strong>der optische Ausgleich ist nicht optional.</strong> Man kann keine Glyphe zeichnen, ohne ihre Seitenbreiten festzulegen. Grundlinie, Gewichtsstufen und das Mitwachsen kommen aus dem Format, nicht aus Disziplin.</p>
-<p>Der Preis ist der fehlende Rückfall. Ist die Schrift nicht da, ist nichts da, denn kein Ersatzzeichen bedeutet irgendetwas. Bei Apple fällt das nicht auf, weil die Schrift zum System gehört. Eine frei ausgelieferte Anwendung hat diese Garantie nicht. Dazu: nur eine Farbe in einfachen Formaten, Vorlesen als Zeichen, unsauberes Rendern in kleinen Graden. Und SF Symbols ist auf Apple-Plattformen beschränkt.</p>
-<p><strong>Variante 2 — Icons als SVG-Set.</strong> Der Vorteil ist Sicherheit: entweder da oder nicht, kein Zwischenzustand mit falschen Zeichen. Mehrfarbig möglich, überall lauffähig.</p>
-<p>Der Preis ist, dass alles Freiwillige auch freiwillig bleibt. Wer diesen Weg geht, muss die Arbeit bewusst leisten: Seitenabstand je Icon statt ein <code>gap</code> für alle, Strichstärken je Gewichtsstufe, Größen an der Typo-Skala, Abstände in <code>em</code>.</p>
+<p><strong>Variante 1: Icons als Schriftzeichen.</strong> Vorbild SF Symbols. Der Vorteil kommt aus dem Format, unabhängig von der Sorgfalt der Gestalter: <strong>Der optische Ausgleich ist Pflicht.</strong> Man kann keine Glyphe zeichnen, ohne ihre Seitenbreiten festzulegen. Auch Grundlinie, Gewichtsstufen und das Mitwachsen liefert das Format, ohne dass jemand darauf achten muss.</p>
+<p>Der Preis ist der fehlende Rückfall. Lädt die Schrift nicht, fehlen alle Icons, denn kein Ersatzzeichen hat eine Bedeutung. Bei Apple fällt das nicht auf, weil die Schrift zum System gehört. Eine frei ausgelieferte Anwendung hat diese Garantie nicht. Dazu: nur eine Farbe in einfachen Formaten, Vorlesen als Zeichen, unsauberes Rendern in kleinen Graden. Und SF Symbols ist auf Apple-Plattformen beschränkt.</p>
+<p><strong>Variante 2: Icons als SVG-Set.</strong> Der Vorteil ist Sicherheit: Ein Icon ist entweder da oder nicht, falsche Zeichen erscheinen nie. Mehrfarbig möglich, überall lauffähig.</p>
+<p>Der Preis: Das Format erzwingt nichts davon. Wer diesen Weg geht, muss die Arbeit bewusst leisten: Seitenabstand je Icon statt ein <code>gap</code> für alle, Strichstärken je Gewichtsstufe, Größen an der Typo-Skala, Abstände in <code>em</code>.</p>
 <h2>Einschätzung</h2>
 <p><strong>Gestalterisch ist Variante 1 überlegen</strong>, weil sie erzwingt, was die Regel verlangt, und zwar für jedes einzelne Icon.</p>
-<p><strong>Variante 2 ist die sichere Wahl und eine Übergangslösung.</strong> Sie ist heute für die meisten Projekte richtig, weil es außerhalb von Apple kaum Icon-Schriften gibt, die das Handwerk wirklich machen.</p>
-<p>Icons setzen sich langfristig als Schrift durch. Wer heute Variante 2 fährt, baut sie deshalb so, dass der Wechsel möglich bleibt: Größen an der Typo-Skala führen, Abstände je Icon pflegen. Dann ist der Umstieg ein Austausch der Quelle und kein Umbau der Oberfläche.</p>
+<p><strong>Variante 2 ist die sichere Wahl und eine Übergangslösung.</strong> Sie ist heute für die meisten Projekte richtig, weil es außerhalb von Apple kaum Icon-Schriften gibt, die handwerklich sauber gemacht sind.</p>
+<p>Icons setzen sich langfristig als Schrift durch. Wer heute Variante 2 nutzt, baut sie deshalb so, dass der Wechsel möglich bleibt: Größen an der Typo-Skala führen, Abstände je Icon pflegen. Dann tauscht man beim Umstieg nur die Quelle aus und muss die Oberfläche nicht umbauen.</p>
 <h2>Woran Du den Verstoß erkennst</h2>
 <ul>
 <li><strong>Punkte-Test:</strong> ein Icon mit lockerer und eines mit geschlossener Kante vor demselben Wort. Wirken die Abstände verschieden, gleicht das Set nicht aus.</li>
@@ -230,10 +230,10 @@
 <li>Mehr als ein Icon-Paket im Projekt, oder ein einzelnes SVG, weil das passende im Set fehlte. Verschiedene Familien haben verschiedene Strichstärken und optische Größen, und das fällt auf, weil Icons fast immer in Reihen stehen.</li>
 </ul>
 <h2>Grenzen</h2>
-<p>Ein Icon-only-Bedienelement ist kein Schriftzeichen, sondern eine Trefferfläche. Es braucht die Box auf der Höhe seiner Zeile, siehe <a href="/docs/rules/bedienung-die-hoehe-gehoert-der-zeile-nicht-dem-element">Die Höhe gehört der Zeile, nicht dem Element</a>. Die Regel gilt für Icons neben Text.</p>
+<p>Ein Icon-only-Bedienelement ist eine Trefferfläche und wird nicht wie ein Schriftzeichen behandelt. Es braucht die Box auf der Höhe seiner Zeile, siehe <a href="/docs/rules/bedienung-die-hoehe-gehoert-der-zeile-nicht-dem-element">Die Höhe gehört der Zeile, nicht dem Element</a>. Die Regel gilt für Icons neben Text.</p>
 <p>Marken-Logos, Zahlungsanbieter-Zeichen und Länderflaggen sind keine Icons in diesem Sinne.</p>
 <h2>Offen</h2>
-<p>Ein eigenes Icon-Set als variable Schrift wäre außerhalb von Apple der einzige Weg zu Variante 1. Eigenes Vorhaben, kein Nebenbei-Schritt. Zu klären wäre vor allem der Rückfall, wenn die Schrift nicht lädt.</p>
+<p>Ein eigenes Icon-Set als variable Schrift wäre außerhalb von Apple der einzige Weg zu Variante 1. Das ist ein eigenes Vorhaben und nichts für nebenbei. Zu klären wäre vor allem der Rückfall, wenn die Schrift nicht lädt.</p>
 <h2>Verwandt</h2>
 <ul>
 <li><a href="/docs/rules/typografie-betone-mit-einem-mittel-nicht-mit-zweien">Betone mit einem Mittel, nicht mit zweien</a></li>

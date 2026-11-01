@@ -200,10 +200,10 @@
 <aside class="callout callout-tip"><p class="callout-title">Regel</p><p>Eine Ansicht setzt vorhandene Elemente zusammen. Sie definiert weder ihr Verhalten noch ihr Aussehen neu. Wer in einer Ansicht Hover, Fokus, Fläche, Radius oder Padding von Hand schreibt, hat etwas nachgebaut, das an einer gemeinsamen Stelle schon festgelegt ist.</p>
 </aside>
 <h2>Warum</h2>
-<p>Was in der Ansicht steht, bekommt die nächste Änderung nicht mit. Es ist nicht auffindbar, weil niemand weiß, dass es existiert, und es ist nicht zählbar, weil es keinen Namen hat.</p>
-<p>In einer gewachsenen Anwendung findet man dafür schnell mehrere hundert Stellen: die Karte gibt es gar nicht als benanntes Aussehen, sondern als Hunderte handgebauter Flächen mit uneinheitlichem Radius und Padding. Jede einzelne war zum Zeitpunkt ihrer Entstehung richtig. Zusammen ergeben sie kein System mehr, sondern mehrere hundert Meinungen darüber, wie eine Karte aussieht.</p>
-<p>Beim Verhalten ist es dasselbe, nur unsichtbarer. Schreibt eine Ansicht ihren eigenen Hover, hat sie das Drücken neu gebaut — mit eigener Dauer, eigener Stufe und eigener Richtung. Ändert sich die Regel im System, ändert sich diese Stelle nicht mit, und niemand merkt es, weil sie ja aussieht wie vorher.</p>
-<p>Der Nachbau passiert selten aus Absicht. Er passiert, weil das vorhandene Aussehen eine Kleinigkeit nicht kann. Genau dann ist der richtige Schritt, dieses Aussehen zu erweitern oder ein neues zu benennen — nicht, es in der Ansicht zu umgehen. Sonst gibt es die Kleinigkeit ab jetzt zweimal.</p>
+<p>Was in der Ansicht steht, bleibt bei der nächsten Änderung, wie es war. Niemand findet es, weil niemand weiß, dass es existiert. Niemand kann es zählen, weil es keinen Namen hat.</p>
+<p>In einer gewachsenen Anwendung findet man schnell mehrere hundert solcher Stellen. Die Karte gibt es dann nicht als benanntes Aussehen, nur als Hunderte handgebauter Flächen mit uneinheitlichem Radius und Padding. Jede einzelne war richtig, als sie entstand. Zusammen ergeben sie kein System mehr. Jede Stelle legt anders fest, wie eine Karte aussieht.</p>
+<p>Beim Verhalten ist es dasselbe, nur schwerer zu sehen. Schreibt eine Ansicht ihren eigenen Hover, hat sie das Drücken neu gebaut, mit eigener Dauer, Stufe und Richtung. Ändert sich die Regel im System, ändert sich diese Stelle nicht mit. Niemand merkt es, weil sie aussieht wie vorher.</p>
+<p>Selten baut jemand absichtlich nach. Meist kann das vorhandene Aussehen eine Kleinigkeit nicht. Dann erweitert er dieses Aussehen oder benennt ein neues. Umgeht er es in der Ansicht, gibt es die Kleinigkeit ab jetzt zweimal.</p>
 <h2>Woran Du den Verstoß erkennst</h2>
 <ul>
 <li>Ein <code>Pressable</code> oder ein <code>div</code> mit <code>onClick</code> trägt in der Ansicht Fläche, Radius und Padding.</li>
@@ -227,7 +227,7 @@
 </code></pre>
 <p>Ein häufiger Name wie Button ist in Ordnung. Er ist die Abkürzung für ein bekanntes Paar aus Verhalten und Aussehen, siehe <a href="/docs/rules/bedienung-verhalten-und-aussehen-bleiben-getrennt">Verhalten und Aussehen bleiben getrennt</a>.</p>
 <h2>Grenzen</h2>
-<p>Eine Anordnung, die es genau einmal gibt — eine bestimmte Kachel, ein bestimmtes Kopfelement —, gehört in den Bereichsordner ihres Themas. Das ist kein Verstoß: sie setzt vorhandene Elemente zusammen. Sie legt kein neues Verhalten und kein neues Aussehen fest.</p>
+<p>Eine Anordnung, die es genau einmal gibt, etwa eine bestimmte Kachel oder ein bestimmtes Kopfelement, gehört in den Bereichsordner ihres Themas. Das ist kein Verstoß. Sie setzt vorhandene Elemente zusammen. Sie legt kein neues Verhalten und kein neues Aussehen fest.</p>
 <h2>Verwandt</h2>
 <ul>
 <li><a href="/docs/rules/bedienung-verhalten-und-aussehen-bleiben-getrennt">Verhalten und Aussehen bleiben getrennt</a></li>

@@ -20,7 +20,7 @@ tags:
 
 ## Warum
 
-Das Auge ordnet einen Knopf der Fläche zu, in der er steht. Steht „Speichern“ oben im Seitenkopf, fragt sich der Nutzer, ob es die Karte unten speichert oder die ganze Seite.
+Der Nutzer ordnet einen Knopf der Fläche zu, in der er steht. Steht „Speichern“ oben im Seitenkopf, fragt sich der Nutzer, ob es die Karte unten speichert oder die ganze Seite.
 
 ## Woran Du den Verstoß erkennst
 
@@ -43,6 +43,6 @@ Laws of UX › Law of Common Region und Law of Proximity, https://lawsofux.com/.
 
 ## Verwandt
 
-- [[Layout - Erst Abstand, dann Fläche, dann Linie]]
+- [[Layout - Erst Abstand, dann Fläche oder Linie]]
 - [[Fluss - Ein Fehler steht dort, wo er entstanden ist]]
 - [[Layout - Die Karte hat kein Padding]]

@@ -21,7 +21,7 @@ tags:
 
 Native Teile bringen die Gestaltung des Betriebssystems mit: eigene Icons, eigene Strichstärken, eigene Farben. Neben den eigenen Elementen wirken sie wie aus einem fremden Set. Das ist derselbe Bruch wie zwei Icon-Pakete in einem Projekt.
 
-Dazu ändern sie sich mit Browser und Systemsprache. Ein natives Datumsfeld zeigt in einem englisch eingestellten Browser mm/dd/yyyy, auch wenn die Anwendung Deutsch spricht. Viele lassen sich im Dunkelmodus nicht einfärben.
+Dazu ändern sie sich mit Browser und Systemsprache. Ein natives Datumsfeld zeigt in einem englisch eingestellten Browser mm/dd/yyyy, auch wenn die Anwendung auf Deutsch eingestellt ist. Viele lassen sich im Dunkelmodus nicht einfärben.
 
 Ohne die Angabe zeichnet der Browser Scrollbalken, Auswahllisten und Autofill hell, auch auf einer dunklen Seite.
 

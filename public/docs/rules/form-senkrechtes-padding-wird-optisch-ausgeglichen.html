@@ -197,12 +197,12 @@
     <h1>Senkrechtes Padding wird optisch ausgeglichen</h1>
     <dl class="rule-meta"><div><dt>Geltung</dt><dd>universal · web, react-native</dd></div><div><dt>Vorgabe</dt><dd>14 senkrecht gegen 16 waagerecht</dd></div></dl>
 
-<aside class="callout callout-tip"><p class="callout-title">Regel</p><p>Setze das senkrechte Padding eine Spur kleiner als das waagerechte, wenn es rundherum gleich aussehen soll. Gleich gemessen ist nicht gleich gesehen.</p>
+<aside class="callout callout-tip"><p class="callout-title">Regel</p><p>Setze das senkrechte Padding eine Spur kleiner als das waagerechte, wenn es rundherum gleich aussehen soll. Gleiche Werte sehen nicht gleich aus.</p>
 </aside>
 <h2>Warum</h2>
-<p>Senkrechter Weißraum wirkt größer als waagerechter desselben Maßes. Setzt Du rundherum denselben Wert, sieht die Fläche oben und unten luftiger aus als an den Seiten, obwohl das Lineal etwas anderes sagt. Die kleine Absenkung gleicht das aus.</p>
-<p>Das ist keine Frage des Geschmacks, sondern Wahrnehmung, und sie ist in der Gestaltung seit langem bekannt. Derselbe Effekt eine Ebene tiefer: ein waagerechter Strich wirkt dicker als ein senkrechter gleicher Breite. Schriftgestalter ziehen die Waagerechten in einem Buchstaben deshalb dünner als die Senkrechten, sonst wirkt das Zeichen kopflastig. Wer es misst, findet den Unterschied. Wer es liest, sieht ihn nicht — und genau das ist das Ziel.</p>
-<p>Es ist derselbe Gedanke wie bei optischer statt mathematischer Zentrierung: das Auge entscheidet, nicht das Maßband.</p>
+<p>Senkrechter Weißraum wirkt größer als waagerechter desselben Maßes. Setzt Du rundherum denselben Wert, sieht die Fläche oben und unten luftiger aus als an den Seiten, obwohl die Werte gleich sind. Die kleine Absenkung gleicht das aus.</p>
+<p>Das liegt an der Wahrnehmung, mit Geschmack hat es nichts zu tun. In der Gestaltung ist der Effekt seit langem bekannt. Er zeigt sich auch im Kleinen. Ein waagerechter Strich wirkt dicker als ein senkrechter gleicher Breite. Schriftgestalter ziehen die Waagerechten in einem Buchstaben deshalb dünner als die Senkrechten, sonst wirkt das Zeichen kopflastig. Wer nachmisst, findet den Unterschied. Beim Lesen sieht man ihn nicht, und das ist so gewollt.</p>
+<p>Es ist derselbe Gedanke wie bei optischer statt mathematischer Zentrierung. Maßgeblich ist, was das Auge sieht.</p>
 <h2>Hart und weich</h2>
 <div class="table-wrap"><table>
 <thead>
@@ -224,7 +224,7 @@
 <td>weich, Vorgabe 14 gegen 16, also etwa ein Achtel</td>
 </tr>
 </tbody></table></div>
-<p>Der Abstand zwischen den beiden Werten darf klein sein. Er soll nicht auffallen, er soll die Auffälligkeit beseitigen.</p>
+<p>Der Abstand zwischen den beiden Werten darf klein sein. Der Ausgleich soll selbst nicht auffallen, nur die ungleiche Wirkung beseitigen.</p>
 <h2>Woran Du den Verstoß erkennst</h2>
 <ul>
 <li>Ein Kartenabschnitt hat rundherum denselben Wert, und der Textblock wirkt oben und unten trotzdem zu weit von der Kante weg.</li>
@@ -246,8 +246,8 @@
  wirkt gleichmäßig                  wirkt oben und unten luftiger
 </code></pre>
 <h2>Der Ausgleichswert braucht eine eigene Stufe</h2>
-<p>Übliche Abstands-Skalen springen von 12 auf 16 und kennen den Wert dazwischen nicht. Wer ihn dann im Code von Hand setzt, hat ihn ab da an jeder Stelle einzeln stehen.</p>
-<p>Der Ausgleichswert gehört deshalb als benannte Stufe in die Skala, mit einem Namen, der sagt wofür er da ist. Sonst wird er jedes Mal neu erfunden, und beim dritten Mal ist er nicht mehr derselbe.</p>
+<p>Übliche Abstands-Skalen springen von 12 auf 16 und kennen den Wert dazwischen nicht. Setzt ihn dann jemand von Hand, steht er ab da an jeder Stelle einzeln im Code.</p>
+<p>Der Ausgleichswert gehört deshalb als benannte Stufe in die Skala, mit einem Namen, der sagt wofür er da ist. Sonst setzt ihn jeder neu, und schon nach wenigen Stellen weichen die Werte voneinander ab.</p>
 <h2>Grenzen</h2>
 <p>Der Ausgleich gilt für Flächen mit Text. Bei einem quadratischen Icon-Element ist das Quadrat das Ziel, dort wird nicht ausgeglichen.</p>
 <h2>Verwandt</h2>

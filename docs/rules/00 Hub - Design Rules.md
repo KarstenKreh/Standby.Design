@@ -62,7 +62,7 @@ Dazu sagt `applies-to`, für welche Techniken eine Regel gedacht ist. Damit läs
 | [[Layout - Eine schmale Spalte steht in der Mitte]] | universal | Schmale Spalte mittig, Zurück und Titel an ihrer Kante. Vorgabe 48rem für Formulare |
 | [[Layout - Ein Bedienelement steht bei dem, was es verändert]] | universal | Steuerung steht in der Fläche dessen, was sie verändert |
 | [[Layout - Jeder Textbehälter hält jede Textmenge aus]] | universal | Keine feste Höhe, Schrift relativ, Überlänge bricht um oder wird gekürzt |
-| [[Layout - Erst Abstand, dann Fläche, dann Linie]] | universal | Abstand gruppiert. Reicht er nicht, Fläche. Erst dann die leise Linie |
+| [[Layout - Erst Abstand, dann Fläche oder Linie]] | universal | Abstand gruppiert. Danach feine Linie für Einträge, Fläche für große Bereiche. Kräftige Linie nur zur Hervorhebung |
 | [[Layout - Jede Ansicht folgt dem Platz und bricht bei 320 Pixeln um]] | universal | Layout nach Platz, nicht Gerät. Umbruch bei 320 ohne waagerechtes Scrollen. Abstand zu Systemleisten |
 
 ## Fluss

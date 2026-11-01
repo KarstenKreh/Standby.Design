@@ -21,11 +21,11 @@ tags:
 
 ## Warum
 
-Eine semantische Farbe steht für eine Bedeutung. Ein Zehntel davon steht für gar nichts — es ist eine neue Farbe ohne Namen, ohne Definition und ohne Eintrag im System. Sie lässt sich nicht wiederverwenden, weil niemand weiß, dass es sie gibt, und sie taucht beim nächsten Mal als `/12` wieder auf.
+Eine semantische Farbe steht für eine Bedeutung. Ein Zehntel davon hat keine Bedeutung. Es ist eine neue Farbe ohne Namen, ohne Definition und ohne Eintrag im System. Sie lässt sich nicht wiederverwenden, weil niemand weiß, dass es sie gibt, und sie taucht beim nächsten Mal als `/12` wieder auf.
 
-Es geht dabei nicht um Durchsichtigkeit an sich. Ein System darf mit Glas und Schleier arbeiten, wenn das seine Handschrift ist. Es geht um die beiläufige Variante: eine Deckkraft, die an einer einzelnen Stelle gesetzt wird, weil es dort gerade passte. Der Unterschied ist, ob jemand eine Materialentscheidung getroffen hat oder eine Korrektur im Vorbeigehen.
+Durchsichtigkeit an sich ist erlaubt. Ein System darf mit Glas und Schleier arbeiten, wenn das zu seinem Stil gehört. Die Regel betrifft die beiläufige Deckkraft, die an einer einzelnen Stelle gesetzt wird, weil es dort gerade passte. Entscheidend ist, ob jemand eine Materialentscheidung getroffen hat oder im Vorbeigehen etwas korrigiert.
 
-Für den häufigsten Anlass — eine gedämpfte Variante für Chips und Badges — gibt es die gedämpften Stufen der Zustandsfarben. Für den zweithäufigsten — Hover und Gedrückt — gibt es benannte Zustandsstufen: eine Stufe heller für Hover, eine dunkler für Gedrückt, in beiden Erscheinungen gleich. Wo ein System sie nicht hat, tut es eine Helligkeitsänderung in dieselbe Richtung. Warum heller und nicht dunkler: [[Bedienung - Kurze Zustände verschieben, dauerhafte wechseln die Palette]].
+Der häufigste Anlass ist eine gedämpfte Variante für Chips und Badges. Dafür gibt es die gedämpften Stufen der Zustandsfarben. Der zweithäufigste sind Hover und Gedrückt. Dafür gibt es benannte Zustandsstufen: eine Stufe heller für Hover, eine dunkler für Gedrückt, in beiden Erscheinungen gleich. Wo ein System sie nicht hat, reicht eine Helligkeitsänderung in dieselbe Richtung. Warum heller und nicht dunkler: [[Bedienung - Kurze Zustände verschieben, dauerhafte wechseln die Palette]].
 
 ## Woran Du den Verstoß erkennst
 
@@ -49,7 +49,7 @@ falsch     bg-primary/10
 
 ## Grenzen
 
-Deckkraft auf einer **Ebene** ist etwas anderes als Deckkraft auf einer Farbe: ein ausgeblendetes Overlay, ein Bild beim Laden, ein Element im Übergang. Dort ist Deckkraft die richtige Eigenschaft, weil sie das ganze Element betrifft und nicht eine Farbe erfindet.
+Deckkraft auf einer **Ebene** ist etwas anderes als Deckkraft auf einer Farbe: ein ausgeblendetes Overlay, ein Bild beim Laden, ein Element im Übergang. Dort ist Deckkraft die richtige Eigenschaft, weil sie das ganze Element betrifft und keine neue Farbe erfindet.
 
 ## Verwandt
 

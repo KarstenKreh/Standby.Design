@@ -201,12 +201,12 @@
 </aside>
 <h2>Warum</h2>
 <p>Die 320 kommen nicht vom kleinsten Telefon. Sie kommen aus <strong>WCAG 2.1, Erfolgskriterium 1.4.10 Reflow</strong>, Stufe AA, und die Rechnung dahinter ist: 1280 Pixel bei 400 Prozent Vergrößerung ergeben ein Sichtfenster von 320 Pixeln.</p>
-<p>Der Nutzer, um den es geht, sitzt also meistens gar nicht am Telefon. Er sitzt am großen Bildschirm und hat stark vergrößert, weil er sonst nichts lesen kann. Für ihn ist ein waagerechter Schieber kein Schönheitsfehler: er muss dann bei jeder einzelnen Zeile hin und her schieben, um sie zu Ende zu lesen. Das macht niemand lange mit.</p>
-<p>Dass die Regel damit auch kleine Geräte abdeckt, ist ein Nebeneffekt und kein Grund. Der Grund altert nicht mit der nächsten Gerätegeneration.</p>
-<p>Und sie von Anfang an einzuhalten ist billiger als nachzurüsten. Beim Nachrüsten stehen die Entscheidungen schon fest — die vierspaltige Kachelreihe, die Werkzeugleiste mit acht Elementen, die Tabelle mit zwölf Spalten —, und jede davon muss einzeln aufgebrochen werden. Wer früh bei 320 prüft, trifft diese Entscheidungen gar nicht erst.</p>
+<p>Der Nutzer, um den es geht, sitzt also meistens gar nicht am Telefon. Er sitzt am großen Bildschirm und hat stark vergrößert, weil er sonst nichts lesen kann. Für ihn ist ein waagerechter Schieber mehr als ein Schönheitsfehler. Er muss bei jeder einzelnen Zeile hin und her schieben, um sie zu Ende zu lesen. Das macht niemand lange mit.</p>
+<p>Dass die Regel damit auch kleine Geräte abdeckt, ist nur ein Nebeneffekt. Der Grund ist die Vergrößerung, und der gilt auch nach der nächsten Gerätegeneration noch.</p>
+<p>Die Regel von Anfang an einzuhalten ist billiger als nachzurüsten. Beim Nachrüsten stehen die Entscheidungen schon fest, etwa die vierspaltige Kachelreihe, die Werkzeugleiste mit acht Elementen oder die Tabelle mit zwölf Spalten. Jede davon muss einzeln umgebaut werden. Wer früh bei 320 prüft, trifft diese Entscheidungen gar nicht erst.</p>
 <p>Ein Tablet im geteilten Fenster ist schmaler als ein Telefon quer. Wer das Gerät abfragt, zeigt dann das falsche Layout oder versteckt Funktionen.</p>
 <h2>Was die Regel verlangt und was nicht</h2>
-<p>Verlangt ist <strong>Benutzbarkeit</strong>, nicht Schönheit. Es darf eng aussehen. Es darf gestapelt aussehen. Es darf nach Notlösung aussehen. Was nicht sein darf: abgeschnittener Inhalt, überlappende Elemente, ein Schieber unter der ganzen Seite, unerreichbare Bedienelemente.</p>
+<p>Verlangt ist <strong>Benutzbarkeit</strong>. Schön muss die Ansicht nicht sein. Sie darf eng, gestapelt oder nach Notlösung aussehen. Nicht erlaubt sind abgeschnittener Inhalt, überlappende Elemente, ein Schieber unter der ganzen Seite, unerreichbare Bedienelemente.</p>
 <h2>Die Baseline</h2>
 <div class="table-wrap"><table>
 <thead>
@@ -261,8 +261,8 @@
 <li>JS liest <code>window.innerWidth</code>, um Komponenten zu tauschen, wo CSS reicht.</li>
 </ul>
 <h2>Grenzen</h2>
-<p>WCAG nimmt ausdrücklich aus, was zwingend zwei Dimensionen braucht: Tabellen, Landkarten, Zeitraster, Notensatz, Diagramme. Diese Inhalte dürfen scrollen. Der Schieber gehört dann aber an den Inhalt und nicht unter die Anwendung: der Nutzer soll die Tabelle schieben, nicht die Seite mitsamt Kopfbereich und Seitenleiste.</p>
-<p>Ein Werkzeug, das ohne Fläche sinnlos ist, darf schmal eine ehrliche Ersatzansicht zeigen. Der Hinweis „Diese Ansicht braucht ein größeres Fenster&quot; ist erlaubt, das stumme Abschneiden nicht.</p>
+<p>WCAG nimmt ausdrücklich aus, was zwingend zwei Dimensionen braucht: Tabellen, Landkarten, Zeitraster, Notensatz, Diagramme. Diese Inhalte dürfen scrollen. Der Schieber sitzt dann aber am Inhalt selbst. Der Nutzer schiebt nur die Tabelle, die Seite mit Kopfbereich und Seitenleiste bleibt stehen.</p>
+<p>Ein Werkzeug, das ohne Fläche sinnlos ist, darf in einem schmalen Fenster eine Ersatzansicht zeigen, die das offen sagt. Erlaubt ist der Hinweis „Diese Ansicht braucht ein größeres Fenster&quot;. Inhalt ohne Hinweis abzuschneiden ist nicht erlaubt.</p>
 <p>Ausrichtung, die für die Sache nötig ist, etwa ein Scheckscanner oder ein Klavier.</p>
 <h2>Quelle</h2>
 <p>Apple HIG › Layout („Determine layout based on size classes, not device type or orientation&quot;). WCAG 1.3.4 Orientation. Fluent 2 › Accessibility › Responsive layouts.</p>

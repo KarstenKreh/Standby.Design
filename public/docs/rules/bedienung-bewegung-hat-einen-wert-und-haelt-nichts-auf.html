@@ -200,13 +200,13 @@
 <aside class="callout callout-tip"><p class="callout-title">Regel</p><p>Gib Zustandswechseln genau eine Dauer als Token, im Korridor 100 bis 200 Millisekunden, Vorgabe 150. Animiere nur <code>transform</code> und <code>opacity</code> und nenne jede Eigenschaft einzeln. Jede neue Eingabe bricht eine laufende Bewegung ab, und was zusammengehört, bewegt sich gemeinsam. Hat der Nutzer weniger Bewegung eingestellt, wechselt alles sofort.</p>
 </aside>
 <h2>Warum</h2>
-<p>Der Korridor hat einen Grund, die Zahl darin nicht. Unter etwa 100 Millisekunden nimmt niemand mehr eine Bewegung wahr, der Wechsel liest sich als Sprung und die Rückmeldung geht verloren. Über etwa 200 wartet der Nutzer auf die Oberfläche, und das Warten fällt umso mehr auf, je öfter er den Wechsel auslöst.</p>
-<p>Innerhalb des Korridors ist die Zahl eine Frage der Handschrift. Ein ruhiges, schweres Produkt darf am oberen Ende sitzen, ein Werkzeug, das schnell wirken soll, am unteren. Diese Entscheidung nimmt die Regel niemandem ab.</p>
-<p>Hart ist etwas anderes: dass es <strong>eine</strong> Dauer gibt. Verschiedene Dauern nebeneinander lassen eine Ansicht flackern, weil mehrere Elemente in einer Reihe zu verschiedenen Zeitpunkten ankommen. Der Blick sieht dann nicht einen Wechsel, sondern drei. Und weil die Dauer als Token steht, lässt sich die Handschrift später an einer Stelle ändern statt an zweihundert.</p>
-<p>Die letzte Hälfte ist keine Höflichkeit. Für Menschen mit vestibulärer Störung löst Bewegung auf dem Bildschirm Schwindel und Übelkeit aus. Die Systemeinstellung ist ihre Bitte, und sie wird beachtet.</p>
-<p>Layout-Eigenschaften rechnen bei jedem Bild die Seite neu, ruckeln und schieben Nachbarn. <code>all</code> animiert auch, was nie gemeint war, etwa jede Farbe beim Moduswechsel.</p>
-<p>Eine Animation ist Rückmeldung, keine Wartezeit. Wer schnell klickt, darf nicht auf das Ende warten.</p>
-<p>Was sich zusammen bewegt, liest das Auge als eine Sache. Fahren Kopf und Inhalt einer Karte getrennt ein, wirkt sie wie zwei.</p>
+<p>Für den Korridor gibt es einen Grund, für die genaue Zahl darin nicht. Unter etwa 100 Millisekunden nimmt niemand mehr eine Bewegung wahr. Der Wechsel wirkt wie ein Sprung, und der Nutzer sieht keine Rückmeldung. Über etwa 200 wartet der Nutzer auf die Oberfläche, und das Warten fällt umso mehr auf, je öfter er den Wechsel auslöst.</p>
+<p>Innerhalb des Korridors hängt die Zahl vom Stil des Produkts ab. Ein ruhiges, schweres Produkt darf am oberen Ende sitzen, ein Werkzeug, das schnell wirken soll, am unteren. Diese Entscheidung nimmt die Regel niemandem ab.</p>
+<p>Hart ist, dass es <strong>eine</strong> Dauer gibt. Verschiedene Dauern nebeneinander lassen eine Ansicht flackern, weil mehrere Elemente in einer Reihe zu verschiedenen Zeitpunkten ankommen. Der Nutzer sieht dann drei Wechsel statt einem. Weil die Dauer als Token steht, lässt sich der Stil später an einer Stelle ändern statt an zweihundert.</p>
+<p>Dass bei reduzierter Bewegung alles sofort wechselt, ist Pflicht. Für Menschen mit vestibulärer Störung löst Bewegung auf dem Bildschirm Schwindel und Übelkeit aus. Mit der Systemeinstellung bitten sie um weniger Bewegung, und das Produkt hält sich daran.</p>
+<p>Layout-Eigenschaften rechnen bei jedem Bild die Seite neu, ruckeln und schieben Nachbarn. <code>all</code> animiert auch, was niemand animieren wollte, etwa jede Farbe beim Moduswechsel.</p>
+<p>Eine Animation gibt Rückmeldung und lässt niemanden warten. Wer schnell klickt, muss nicht auf ihr Ende warten.</p>
+<p>Was sich zusammen bewegt, nimmt der Nutzer als eine Sache wahr. Fahren Kopf und Inhalt einer Karte getrennt ein, wirkt sie wie zwei getrennte Teile.</p>
 <h2>Hart und weich</h2>
 <div class="table-wrap"><table>
 <thead>
@@ -253,8 +253,8 @@
 <li>Beim Öffnen eines Panels rutscht ein Element mit, das nicht dazugehört.</li>
 </ul>
 <h2>Grenzen</h2>
-<p>Größere Bewegungen sind nicht gemeint und dürfen länger dauern: ein Off-Canvas-Drawer, ein Dialog, ein Seitenwechsel. Der Korridor gilt für Wechsel am Ort — Farbe, Rand, die Position eines Schalterknopfs. Auch die längeren Bewegungen fallen bei reduzierter Bewegung weg.</p>
-<p>Legt eine Marken-Richtlinie im Projekt eine eigene Zahl fest, gilt diese. Der Vorgabewert ist dafür da, dass man ohne eine solche Richtlinie trotzdem loslegen kann, und nicht dafür, sie zu überstimmen.</p>
+<p>Größere Bewegungen sind nicht gemeint und dürfen länger dauern: ein Off-Canvas-Drawer, ein Dialog, ein Seitenwechsel. Der Korridor gilt für Wechsel am Ort, etwa Farbe, Rand oder die Position eines Schalterknopfs. Auch die längeren Bewegungen fallen bei reduzierter Bewegung weg.</p>
+<p>Legt eine Marken-Richtlinie im Projekt eine eigene Zahl fest, gilt diese. Der Vorgabewert ist dafür da, dass man ohne eine solche Richtlinie loslegen kann. Eine bestehende Richtlinie überstimmt er nicht.</p>
 <p>Farbe, Rahmen und Schatten bei Zustandswechseln, einzeln genannt und mit der Dauer von oben.</p>
 <p>Listen, deren Einträge bewusst nacheinander erscheinen, um eine Reihenfolge zu zeigen. Bei reduzierter Bewegung fällt ohnehin alles weg.</p>
 <h2>Quelle</h2>

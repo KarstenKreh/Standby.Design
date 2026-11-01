@@ -23,6 +23,9 @@ const SPACE_INDEX = path.join(STATIC_ROOT, 'space', 'index.html');
 const ROLE_INDEX = path.join(STATIC_ROOT, 'role', 'index.html');
 const MOTION_INDEX = path.join(STATIC_ROOT, 'motion', 'index.html');
 const QA_INDEX = path.join(STATIC_ROOT, 'qa', 'index.html');
+const MOVED_DOCS = {
+  '/docs/rules/layout-erst-abstand-dann-flaeche-dann-linie': '/docs/rules/layout-erst-abstand-dann-flaeche-oder-linie',
+};
 const ROOT_INDEX = path.join(STATIC_ROOT, 'index.html');
 
 const MIME_TYPES = {
@@ -331,6 +334,13 @@ const server = http.createServer((req, res) => {
 
   if (pathname === '/mcp' || pathname === '/mcp/') {
     res.writeHead(301, { Location: '/docs/mcp' });
+    res.end();
+    return;
+  }
+
+  const movedDoc = MOVED_DOCS[pathname.replace(/\/$/, '')];
+  if (movedDoc) {
+    res.writeHead(301, { Location: movedDoc });
     res.end();
     return;
   }

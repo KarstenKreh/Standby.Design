@@ -200,8 +200,8 @@
 <aside class="callout callout-tip"><p class="callout-title">Regel</p><p>Trenne bei jedem bedienbaren Element, was es tut, von dem, wie es aussieht. Es bekommt genau eine Verhaltensart: <code>pressable</code>, <code>toggleable</code>, <code>editable</code>, <code>navigable</code>, <code>readable</code>. Die Verhaltensart beschreibt nur das Verhalten. Wie das Element aussieht, ist austauschbar.</p>
 </aside>
 <h2>Warum</h2>
-<p>Ohne diese Trennung wird das Aussehen zum Verhalten. „Der Knopf ist blau&quot; wird zu „blau heißt anklickbar&quot;, und beim nächsten Umbau kippt mit der Farbe auch die Bedienlogik. Mit der Trennung kannst Du das Aussehen wechseln, ohne dass sich ändert, was das Element tut. Und Du kannst etwas Neues bauen, indem Du nur sein Verhalten benennst, statt sein Aussehen neu zu erfinden.</p>
-<p>Für einen Agenten ist die Tabelle der Verhaltensarten die Antwort auf die häufigste Frage überhaupt: was wird hier eingesetzt? Nicht „nimm einen Button&quot;, sondern „das ist ein dauerhafter Zustand, also <code>toggleable</code>, also Schalter oder Reiter&quot;.</p>
+<p>Ohne diese Trennung hängt das Verhalten am Aussehen. Aus „Der Knopf ist blau&quot; wird „blau heißt anklickbar&quot;. Ändert der nächste Umbau die Farbe, ändert sich auch die Bedienlogik. Mit der Trennung kannst Du das Aussehen wechseln, ohne dass sich ändert, was das Element tut. Und Du kannst etwas Neues bauen, indem Du nur sein Verhalten benennst, statt sein Aussehen neu zu erfinden.</p>
+<p>Ein Agent fragt am häufigsten, welches Element er hier einsetzt. Die Tabelle der Verhaltensarten beantwortet das. Statt „nimm einen Button&quot; heißt es dann „das ist ein dauerhafter Zustand, also <code>toggleable</code>, also Schalter oder Reiter&quot;.</p>
 <h2>Die fünf Verhaltensarten</h2>
 <div class="table-wrap"><table>
 <thead>
@@ -231,10 +231,10 @@
 <td>Zeigt nur an, nimmt keine Bedienung entgegen</td>
 </tr>
 </tbody></table></div>
-<p>Die Verhaltensarten entsprechen dem, was ein blinder Nutzer heute schon erlebt: der Accessibility Tree kennt Verhalten, kein Aussehen. Sie sind damit keine Wette auf eine Abstraktion, sondern die Wahrheit der Plattform.</p>
+<p>Die Verhaltensarten entsprechen dem, was ein blinder Nutzer heute schon erlebt. Der Accessibility Tree kennt Verhalten, kein Aussehen. Die Verhaltensarten bilden also ab, was die Plattform schon kennt, und sind keine ausgedachte Abstraktion.</p>
 <h2>Das Element im Code</h2>
 <p>Jede Verhaltensart hat ihr Bauteil im Code. <code>navigable</code> ist ein Link mit Adresse, <code>pressable</code> und <code>toggleable</code> sind ein <code>button</code>, <code>editable</code> ist ein Feld mit verbundener Beschriftung, <code>readable</code> ist Text. Ein Kasten mit Klick sieht für die Maus genauso aus, aber die Tastatur erreicht ihn nicht, der Screenreader erkennt ihn nicht, und ein Link lässt sich nicht in einem neuen Tab öffnen. Gibt es kein passendes Bauteil, etwa für Tabs oder eine Kombi-Box, gilt das Muster aus der ARIA APG.</p>
-<p>Eine Rolle im Code ist ein Versprechen. Wer behauptet, etwas sei ein Menü, Tabs oder ein Raster, baut auch die Tastaturbedienung dazu, sonst erwartet der Nutzer Pfeiltasten, die nichts tun. Eine Hauptnavigation ist deshalb keine Menü-Rolle, sondern eine Liste von Links.</p>
+<p>Eine Rolle im Code weckt beim Nutzer Erwartungen. Wer etwas als Menü, Tabs oder Raster auszeichnet, baut auch die Tastaturbedienung dazu. Sonst drückt der Nutzer Pfeiltasten, die nichts tun. Eine Hauptnavigation ist deshalb eine Liste von Links ohne Menü-Rolle.</p>
 <h2>Das Wörterbuch</h2>
 <p>Bekannte Paare aus Verhalten und Aussehen, die einen Namen tragen. Der Name der Zeile ist die Abkürzung für das Paar. Die Namen in der Spalte Aussehen sind die Vorgabe. Ein Projekt darf sie anders nennen.</p>
 <div class="table-wrap"><table>
@@ -311,7 +311,7 @@
 <td>Text</td>
 </tr>
 </tbody></table></div>
-<p>Chip und Badge sind verwandt, aber nicht gleich. Der Chip ist ein kleiner Umschalter, etwa ein Filter, der an oder aus ist. Das Badge hebt nur eine Information als Etikett hervor. Weil das Auge Gleiches für Gleichartiges hält, sehen die beiden nicht gleich aus: Das Badge ist schmaler und hat nur ein knappes Padding, der Chip hat die Polsterung eines Bedienelements. So sieht man vor dem Klick, was sich drücken lässt.</p>
+<p>Chip und Badge sind verwandt, aber nicht gleich. Der Chip ist ein kleiner Umschalter, etwa ein Filter, der an oder aus ist. Das Badge hebt nur eine Information als Etikett hervor. Was gleich aussieht, hält der Nutzer für gleichartig. Deshalb sehen die beiden verschieden aus. Das Badge ist schmaler und hat nur ein knappes Padding, der Chip hat die Polsterung eines Bedienelements. So sieht man vor dem Klick, was sich drücken lässt.</p>
 <h2>Woran Du den Verstoß erkennst</h2>
 <ul>
 <li>Ein Badge reagiert auf Klick. Dann ist es kein Badge, sondern ein Chip.</li>
@@ -325,8 +325,8 @@
 <li>Die Hauptnavigation hat <code>role=&quot;menu&quot;</code>, oder ein Element hat eine Rolle ohne die Tastaturbedienung dazu.</li>
 </ul>
 <h2>Grenzen</h2>
-<p>Zusammengesetzte Gebilde — Dropdown, Datepicker, Dialog — bestehen aus mehreren Elementen und bekommen keine eigene Verhaltensart. Ihr Auslöser ist <code>pressable</code>, ihre Einträge sind <code>navigable</code> oder <code>toggleable</code>.</p>
-<p>Und nicht jede Kombination ergibt Sinn. Welche verboten sind, gehört in die Grammatik des Projekts, nicht in diese Notiz.</p>
+<p>Zusammengesetzte Gebilde wie Dropdown, Datepicker oder Dialog bestehen aus mehreren Elementen und bekommen keine eigene Verhaltensart. Ihr Auslöser ist <code>pressable</code>, ihre Einträge sind <code>navigable</code> oder <code>toggleable</code>.</p>
+<p>Nicht jede Kombination ergibt Sinn. Welche verboten sind, gehört in die Grammatik des Projekts, nicht in diese Notiz.</p>
 <h2>Verwandt</h2>
 <ul>
 <li><a href="/docs/rules/bedienung-verhalten-und-aussehen-werden-nicht-in-der-ansicht-nachgebaut">Verhalten und Aussehen werden nicht in der Ansicht nachgebaut</a></li>
