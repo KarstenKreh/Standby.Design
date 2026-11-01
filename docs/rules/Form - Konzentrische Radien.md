@@ -20,9 +20,9 @@ tags:
 
 ## Warum
 
-Haben zwei Rundungen verschiedene Mittelpunkte, wird der Spalt zwischen ihnen in der Ecke breiter oder schmaler als an der geraden Kante. Das sieht man auch dann, wenn man nicht weiß warum: die Ecke wirkt gequetscht oder ausgefranst. Mit demselben Mittelpunkt bleibt der Spalt rundherum gleich breit, und die innere Fläche sitzt sauber in der äußeren.
+Haben zwei Rundungen verschiedene Mittelpunkte, wird der Spalt zwischen ihnen in der Ecke breiter oder schmaler als an der geraden Kante. Das fällt auch dem auf, der den Grund nicht kennt. Die Ecke wirkt gequetscht oder ausgefranst. Mit demselben Mittelpunkt bleibt der Spalt rundherum gleich breit, und die innere Fläche sitzt sauber in der äußeren.
 
-Der Fehler passiert fast immer dadurch, dass innen und außen derselbe Radius steht — das wirkt naheliegend, ist aber genau der Fall, in dem die Ecke am stärksten kippt.
+Fast immer entsteht der Fehler, weil innen und außen derselbe Radius steht. Das liegt nahe, doch gerade dann weicht der Spalt in der Ecke am stärksten ab.
 
 ## Woran Du den Verstoß erkennst
 
@@ -54,9 +54,9 @@ Der Fehler passiert fast immer dadurch, dass innen und außen derselbe Radius st
 
 Damit die Rechnung überhaupt aufgehen kann, muss es eine begrenzte, benannte Menge an Radien geben. Sonst entsteht mit jedem Einzelfall eine neue Rundung, und zwei Werte, die zusammengehören sollen, sind nie wieder dieselben.
 
-Der häufigste Weg, auf dem Radien an der Skala vorbeiwachsen: eine Utility-Klasse für einen mittleren Radius wird überall benutzt, ist in der Konfiguration aber gar nicht definiert und fällt auf den Standardwert des Frameworks zurück. Daneben steht eine Stufe aus dem eigenen System. Zwei Rundungen ohne gemeinsame Skala, und niemand hat je eine Entscheidung dazu getroffen.
+Meist entstehen Radien außerhalb der Skala so: Eine Utility-Klasse für einen mittleren Radius wird überall benutzt, ist in der Konfiguration aber nicht definiert. Sie fällt deshalb auf den Standardwert des Frameworks zurück. Daneben steht eine Stufe aus dem eigenen System. So gibt es zwei Rundungen ohne gemeinsame Skala, und niemand hat das je entschieden.
 
-Wie viele Stufen es gibt und ob sie mit der Verschachtelungstiefe kleiner werden, entscheidet das Projekt. Manche Systeme fahren einen einzigen Radius für alles, und das ist eine gültige Antwort.
+Wie viele Stufen es gibt und ob sie mit der Verschachtelungstiefe kleiner werden, entscheidet das Projekt. Manche Systeme nutzen einen einzigen Radius für alles. Auch das ist zulässig.
 
 ## Gleiche Zeile, gleicher Radius
 
@@ -66,7 +66,7 @@ Bedienelemente, die nebeneinander stehen, haben alle denselben Radius. Verschied
 
 Die Rechnung greift nur, wenn der Abstand **kleiner** als der Außenradius ist. Ein Element mit 16 Abstand zur Kante liegt bei einem Außenradius von 12 rechnerisch außerhalb der Rundung, die Formel ergibt einen negativen Wert. Es ist dann weit genug von der Ecke entfernt, dass Konzentrik keine Rolle mehr spielt, und nimmt einfach eine Stufe aus der Menge.
 
-Volle Rundungen bei Pills und Avataren sind keine Stufe, sondern eine eigene Form, und bleiben davon unberührt.
+Volle Rundungen bei Pills und Avataren sind eine eigene Form und keine Stufe. Für sie gilt die Rechnung nicht.
 
 ## Verwandt
 

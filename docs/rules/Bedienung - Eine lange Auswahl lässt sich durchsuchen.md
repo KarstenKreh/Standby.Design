@@ -22,7 +22,7 @@ tags:
 
 ## Warum
 
-Jede weitere Option verlängert die Entscheidung. Bei 200 Ländern sucht niemand mit den Augen, er tippt.
+Jede weitere Option macht die Entscheidung länger. Bei 200 Ländern tippt der Nutzer, statt die Liste mit den Augen abzusuchen.
 
 ## Woran Du den Verstoß erkennst
 

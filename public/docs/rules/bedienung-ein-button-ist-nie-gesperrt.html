@@ -186,10 +186,10 @@
 <aside class="callout callout-tip"><p class="callout-title">Regel</p><p>Graue keinen Button aus. Fehlt etwas, bleibt er aktiv und zeigt beim Klick, was fehlt. Steht etwas Grundsätzliches im Weg, wird er durch die Handlung ersetzt, die es löst. Gesperrt ist er nur, solange eine Anfrage läuft.</p>
 </aside>
 <h2>Warum</h2>
-<p>Ein ausgegrauter Button ist eine Sackgasse ohne Erklärung. Der Nutzer sieht, dass er nicht weiterkommt, aber nicht warum. Er sucht das Formular nach dem fehlenden Häkchen ab, oder er gibt auf.</p>
-<p>Ein aktiver Button beantwortet die Frage beim Klick. Das fehlende Feld markiert sich, die Meldung sagt, was zu tun ist, und der Fehler verschwindet, sobald das Feld stimmt. Das ist derselbe Weg wie in <a href="/docs/rules/fluss-ein-fehler-steht-dort-wo-er-entstanden-ist">Ein Fehler steht dort, wo er entstanden ist</a>.</p>
-<p>Steht kein Feld im Weg, sondern eine Grenze, etwa ein volles Kontingent oder ein fehlender Tarif, ist der gesperrte Button die falsche Handlung am richtigen Ort. „Mitglied einladen“ wird dann zu „Mehr Plätze buchen“. Der Nutzer sieht sofort, was ihn weiterbringt.</p>
-<p>Die eine Sperre, die bleibt, schützt vor doppeltem Absenden. Während die Anfrage läuft, ist ein zweiter Klick nie gewollt.</p>
+<p>Bei einem ausgegrauten Button sieht der Nutzer, dass er nicht weiterkommt, aber nicht warum. Er sucht das Formular nach dem fehlenden Häkchen ab, oder er gibt auf.</p>
+<p>Ein aktiver Button zeigt beim Klick, was fehlt. Das fehlende Feld wird markiert, die Meldung sagt, was zu tun ist, und der Fehler verschwindet, sobald das Feld stimmt. Das ist derselbe Weg wie in <a href="/docs/rules/fluss-ein-fehler-steht-dort-wo-er-entstanden-ist">Ein Fehler steht dort, wo er entstanden ist</a>.</p>
+<p>Manchmal hält eine Grenze den Nutzer auf, etwa ein volles Kontingent oder ein fehlender Tarif. Dann steht an der Stelle des Buttons die Handlung, die die Grenze aufhebt. „Mitglied einladen“ wird dann zu „Mehr Plätze buchen“. Der Nutzer sieht sofort, was ihn weiterbringt.</p>
+<p>Gesperrt wird ein Button nur, während eine Anfrage läuft. So geht nichts doppelt raus. Ein zweiter Klick ist in dieser Zeit nie gewollt.</p>
 <h2>Die Fälle</h2>
 <div class="table-wrap"><table>
 <thead>
@@ -232,7 +232,7 @@
 <td>hart</td>
 </tr>
 <tr>
-<td>Ohne Recht wird die Handlung nicht gezeigt, nicht ausgegraut</td>
+<td>Ohne Recht wird die Handlung ausgeblendet statt ausgegraut</td>
 <td>hart</td>
 </tr>
 <tr>
@@ -250,7 +250,7 @@
 </ul>
 <h2>Grenzen</h2>
 <p>Steht der Grund unmittelbar neben dem Button und ist ohne Lesen zu sehen, darf er gesperrt sein. Das Beispiel ist der Senden-Knopf neben einem leeren Chatfeld.</p>
-<p>Ein Wert, den man sehen, aber nicht ändern darf, ist kein gesperrtes Feld, sondern Text. Er steht lesbar und kopierbar da, ohne Rahmen und ohne Bedienzeichen.</p>
+<p>Einen Wert, den man sehen, aber nicht ändern darf, zeigt die Ansicht als Text statt als gesperrtes Feld. Er steht lesbar und kopierbar da, ohne Rahmen und ohne Bedienzeichen.</p>
 <p>Sperren, die sich aus dem Bild erklären, bleiben erlaubt: „Zurück“ auf der ersten Seite, „Weiter“ auf der letzten.</p>
 <h2>Quelle</h2>
 <p>Vercel Web Interface Guidelines › Forms („Don’t pre-disable submit“, „Keep submit enabled until submission starts“, „Loading buttons show spinner and keep original label“). Carbon › Patterns › Disabled states (Disabled, Read-only, Hidden).</p>

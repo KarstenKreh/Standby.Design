@@ -186,9 +186,9 @@
 <aside class="callout callout-tip"><p class="callout-title">Regel</p><p>Lege die Flächenebenen als geschlossene, benannte Menge fest. Welche Ebene ein Element bekommt, folgt seiner Rolle im Aufbau. Verschachtelung erzeugt keine neue Ebene: ein Feld in einer Liste in einer Karte liegt genauso hoch wie ein Feld, das direkt in der Karte steht.</p>
 </aside>
 <h2>Warum</h2>
-<p>Eine Ebene ist ein Signal, kein Nebenprodukt der Schachtelung. Wächst sie mit jedem Container mit, ist die Menge offen, und dann passieren zwei Dinge. Erstens ist die fünfte Ebene nicht mehr von der vierten zu unterscheiden, weil der Kontrast am Ende der Kette aufgebraucht ist. Zweitens hängt die Farbe eines Elements davon ab, wie tief es zufällig eingebaut wurde. Verschiebt jemand es eine Ebene höher, ändert es seine Farbe, ohne dass jemand eine Entscheidung getroffen hat.</p>
-<p>Umgekehrt ergibt sich daraus auch, was nicht geht: ein Element <strong>innerhalb</strong> einer Fläche bekommt nie die Farbe der Ebene darunter. Es liest sich sonst als Loch.</p>
-<p>Wie viele Ebenen es gibt, ist damit noch nicht gesagt. Das ist eine Frage des Produkts und der Handschrift, nicht der Regel.</p>
+<p>Eine Ebene ist ein bewusst gesetztes Signal. Sie entsteht nicht nebenbei aus der Schachtelung. Wächst sie mit jedem Container mit, ist die Menge offen, und dann passieren zwei Dinge. Erstens ist die fünfte Ebene nicht mehr von der vierten zu unterscheiden, weil der Kontrast am Ende der Kette aufgebraucht ist. Zweitens hängt die Farbe eines Elements davon ab, wie tief es zufällig eingebaut wurde. Baut jemand es eine Schachtelungsstufe höher ein, ändert es seine Farbe, ohne dass jemand das entschieden hat.</p>
+<p>Daraus folgt auch eine Grenze nach unten. Ein Element <strong>innerhalb</strong> einer Fläche bekommt nie die Farbe der Ebene darunter. Sonst sieht es aus wie ein Loch in der Fläche.</p>
+<p>Wie viele Ebenen es gibt, ist damit noch nicht gesagt. Das entscheidet das Produkt mit seiner Handschrift. Die Regel legt es nicht fest.</p>
 <h2>Hart und weich</h2>
 <div class="table-wrap"><table>
 <thead>
@@ -215,7 +215,7 @@
 </tr>
 </tbody></table></div>
 <h2>Ein bewährter Satz von drei</h2>
-<p>Drei tragen die meisten Anwendungen, und sie lassen sich in einem Satz benennen: die Seite, das was darauf liegt, das was man anfassen kann.</p>
+<p>Drei tragen die meisten Anwendungen, und sie lassen sich in einem Satz benennen: die Seite, das, was darauf liegt, und das, was man bedienen kann.</p>
 <pre><code>Seite            ──  die Seite selbst
   └─ Karte       ──  liegt auf der Seite
        └─ erhoben ─  liegt auf einer Karte
@@ -245,7 +245,7 @@ Seite  ░░░░░░░░░░░░░░░░░░░░       Seite 
 <p>Ein Overlay liegt über allem und hat sein eigenes Verhältnis zum Schleier darunter. Auch das ist keine weitere Stufe.</p>
 <h2>Verwandt</h2>
 <ul>
-<li><a href="/docs/rules/layout-erst-abstand-dann-flaeche-dann-linie">Erst Abstand, dann Fläche, dann Linie</a></li>
+<li><a href="/docs/rules/layout-erst-abstand-dann-flaeche-oder-linie">Erst Abstand, dann Fläche oder Linie</a></li>
 <li><a href="/docs/rules/farbe-werte-kommen-aus-tokens-nie-aus-der-hand">Werte kommen aus Tokens, nie aus der Hand</a></li>
 </ul>
 

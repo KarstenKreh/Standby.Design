@@ -1,6 +1,6 @@
 ---
 dateCreated: 2026-08-27
-description: Jede senkrechte Linie, an der etwas ausgerichtet ist, kostet den Blick einen Ankerpunkt. Je weniger davon, desto ruhiger die Ansicht.
+description: Jede senkrechte Linie, an der etwas ausgerichtet ist, ist ein weiterer Punkt, an dem der Blick ansetzen muss. Je weniger davon, desto ruhiger die Ansicht.
 type: design-rule
 scope: universal
 applies-to:
@@ -16,19 +16,19 @@ tags:
 # Weniger Kanten, ruhigere Ansicht
 
 > [!TIP] Regel
-> Richte alles an möglichst wenigen gemeinsamen Kanten aus. Jede zusätzliche Linie, an der etwas beginnt, kostet den Blick einen Ankerpunkt. Und misch innerhalb eines Blocks nicht linksbündig mit zentriert.
+> Richte alles an möglichst wenigen gemeinsamen Kanten aus. Jede zusätzliche Linie, an der etwas beginnt, ist ein weiterer Punkt, an dem der Blick ansetzen muss. Und misch innerhalb eines Blocks nicht linksbündig mit zentriert.
 
 ## Warum
 
-Der Blick sucht beim Lesen einer Ansicht nach Anhaltspunkten und findet sie an den Kanten: dort, wo mehrere Dinge gemeinsam beginnen. Zwei solche Linien liest man ohne Anstrengung. Bei sechs muss der Blick bei jedem Element neu ansetzen, und die Ansicht wirkt unruhig, ohne dass man sagen könnte woran es liegt. Man sieht die Kanten nicht, aber man spürt sie.
+Beim Lesen einer Ansicht orientiert sich der Nutzer an den Kanten, also dort, wo mehrere Dinge gemeinsam beginnen. Zwei solche Linien erfasst er ohne Anstrengung. Bei sechs muss sein Blick bei jedem Element neu ansetzen, und die Ansicht wirkt unruhig, ohne dass er sagen könnte, woran es liegt. Er sieht die Kanten nicht bewusst, merkt aber ihre Wirkung.
 
-Deshalb ist das eines der wirksamsten Mittel überhaupt: es kostet nichts. Es ändert keine Farbe, keine Größe, keinen Inhalt. Es räumt nur die Anfänge zusammen.
+Weniger Kanten sind eines der wirksamsten Mittel und kosten nichts. Farbe, Größe und Inhalt bleiben gleich. Nur die Anfänge rücken auf gemeinsame Kanten.
 
-Ausrichtung und Nähe sind dabei ein Paar. Nähe sagt, **was zusammengehört**, Ausrichtung sagt, **dass es zusammengehört**. Siehe [[Layout - Erst Abstand, dann Fläche, dann Linie]].
+Ausrichtung und Nähe sind dabei ein Paar. Nähe sagt, **was zusammengehört**, Ausrichtung sagt, **dass es zusammengehört**. Siehe [[Layout - Erst Abstand, dann Fläche oder Linie]].
 
 ## Der Kanten-Test
 
-Screenshot der Ansicht nehmen, durch jede linke Kante eine senkrechte Linie ziehen, zählen. Meistens sind es fünf oder sechs. Meistens kommt man auf zwei, ohne dass sonst etwas anders wird.
+Screenshot der Ansicht nehmen, durch jede linke Kante eine senkrechte Linie ziehen, zählen. Meistens sind es fünf oder sechs. Meistens lassen sie sich auf zwei verringern, ohne dass sich sonst etwas ändert.
 
 ```
         VORHER                              NACHHER
@@ -47,11 +47,11 @@ Screenshot der Ansicht nehmen, durch jede linke Kante eine senkrechte Linie zieh
 
 ## Zentriert ist erlaubt, gemischt nicht
 
-Ein zentrierter Block ist in Ordnung — ein Anmeldefenster, ein leerer Zustand, eine Fehlerseite. Dann ist aber **alles** darin zentriert, auch die Beschriftungen und der Knopf.
+Ein zentrierter Block ist in Ordnung, etwa ein Anmeldefenster, ein leerer Zustand oder eine Fehlerseite. Dann ist aber **alles** darin zentriert, auch die Beschriftungen und der Knopf.
 
-Der schlechte Fall ist die Mischung: drei Blöcke linksbündig und einer zentriert. Der zentrierte hat dann zwei eigene Kanten, links und rechts, die zu keiner anderen passen, und er zieht die Aufmerksamkeit auf sich, ohne dass das gemeint war.
+Schlecht ist die Mischung, etwa drei Blöcke linksbündig und einer zentriert. Der zentrierte hat dann zwei eigene Kanten, links und rechts, die zu keiner anderen passen, und er fällt auf, obwohl das nicht gewollt ist.
 
-Zentrierter Fließtext über mehr als zwei Zeilen fällt ohnehin weg: dort wandert der Zeilenanfang bei jeder Zeile, und der Blick findet ihn nicht mehr.
+Zentrierter Fließtext über mehr als zwei Zeilen ist ohnehin ausgeschlossen. Dort beginnt jede Zeile an einer anderen Stelle, und der Nutzer findet den Zeilenanfang nicht mehr.
 
 ## Icons teilen sich eine Kante
 
@@ -72,12 +72,12 @@ Bei mehrzeiligen Einträgen steht das Icon auf der ersten Zeile, nicht in der Mi
 
 ## Grenzen
 
-Zahlenspalten sind die gewollte Ausnahme: sie bekommen ihre eigene rechte Kante, weil dort die Vergleichbarkeit schwerer wiegt als eine Kante weniger.
+Zahlenspalten sind die gewollte Ausnahme. Sie bekommen ihre eigene rechte Kante, weil dort die Vergleichbarkeit wichtiger ist als eine Kante weniger.
 
-Und eine zweite Kante für Einrückungen ist normal und richtig — Aufzählungen, verschachtelte Listen, Antworten in einem Verlauf. Die Regel sagt nicht „eine Kante", sie sagt „so wenige wie möglich, und jede mit Grund".
+Eine zweite Kante für Einrückungen ist normal und richtig, etwa bei Aufzählungen, verschachtelten Listen oder Antworten in einem Verlauf. Die Regel verlangt nicht genau eine Kante. Sie verlangt „so wenige wie möglich, und jede mit Grund".
 
 ## Verwandt
 
-- [[Layout - Erst Abstand, dann Fläche, dann Linie]]
+- [[Layout - Erst Abstand, dann Fläche oder Linie]]
 - [[Typografie - Zahlenspalten stehen rechtsbündig]]
 - [[Bedienung - Die Höhe gehört der Zeile, nicht dem Element]]

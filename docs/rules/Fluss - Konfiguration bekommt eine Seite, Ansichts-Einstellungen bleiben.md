@@ -22,9 +22,9 @@ tags:
 
 Die beiden Arten unterscheiden sich darin, wann der Nutzer sie braucht. Eine Ansichts-Einstellung braucht er mitten in der Arbeit: Filter, Sortierung, Zeitraum, sichtbare Spalten, Einheit. Er sieht das Ergebnis sofort, also gehört sie dorthin, wo er hinschaut.
 
-Eine Konfiguration legt er einmal fest und ändert sie selten: einen Abgabensatz, Kontonummern, eine Schwelle. Sie wirkt auf andere Seiten und oft auf andere Nutzer. Liegt sie aufklappbar auf einer Arbeitsseite, schiebt sie beim Öffnen die Arbeit aus dem Blick. Beim nächsten Mal findet sie niemand, weil sie hinter einem Pfeil liegt statt hinter einer Adresse.
+Eine Konfiguration legt er einmal fest und ändert sie selten: einen Abgabensatz, Kontonummern, eine Schwelle. Sie wirkt auf andere Seiten und oft auf andere Nutzer. Liegt sie aufklappbar auf einer Arbeitsseite, schiebt sie beim Öffnen die Arbeit aus dem Blick. Beim nächsten Mal findet sie niemand, weil sie nur aufklappbar ist und keine Adresse hat.
 
-Das Speichern ist das sicherste Zeichen. Braucht eine Einstellung einen Speichern-Knopf, ist sie ein Formular, und ein Formular braucht eine Adresse, wie bei [[Fluss - Ein Pop-up unterbricht, es führt nicht]]. Mehrere Speichern-Knöpfe auf einer Seite werfen die Frage auf, ob der untere auch das speichert, was oben geändert wurde.
+Das Speichern ist das sicherste Zeichen. Braucht eine Einstellung einen Speichern-Knopf, ist sie ein Formular, und ein Formular braucht eine Adresse, wie bei [[Fluss - Ein Pop-up unterbricht, es führt nicht]]. Bei mehreren Speichern-Knöpfen auf einer Seite weiß der Nutzer nicht, ob der untere auch das speichert, was oben geändert wurde.
 
 ## Der Schnitt
 

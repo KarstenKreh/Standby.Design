@@ -21,11 +21,11 @@ tags:
 
 ## Warum
 
-Was nah und groß ist, trifft man schnell, auch aus Versehen. Wer zehnmal am Tag auf „Speichern“ klickt, trifft beim elften Mal den Nachbarn.
+Was nah und groß ist, trifft man schnell, auch aus Versehen. Wer zehnmal am Tag auf „Speichern“ klickt, trifft irgendwann den Knopf daneben.
 
 Wer Enter drückt, um ein Fenster wegzuklicken, soll dabei nichts löschen.
 
-Der Dialog nennt dazu den Gegenstand und die Folge, und die Knöpfe nennen die Handlung: „‚Projekt Alpha‘ löschen?“ mit „Löschen“ und „Abbrechen“. Der Nutzer soll nicht erinnern müssen, worauf er geklickt hat.
+Der Dialog nennt dazu den Gegenstand und die Folge, und die Knöpfe nennen die Handlung: „‚Projekt Alpha‘ löschen?“ mit „Löschen“ und „Abbrechen“. Der Nutzer soll sich nicht erinnern müssen, worauf er geklickt hat.
 
 ## Hart und weich
 

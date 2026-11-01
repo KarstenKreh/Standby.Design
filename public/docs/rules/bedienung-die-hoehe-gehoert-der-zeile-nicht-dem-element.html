@@ -187,15 +187,15 @@
 </aside>
 <h2>Warum</h2>
 <h3>Ein Paar hat eine gemeinsame Kante</h3>
-<p>Ein Eingabefeld mit einem Button daneben ist ein Paar. Der Button gehört zu dem Feld, er tut etwas mit dem, was darin steht. Sind beide verschieden hoch, verliert die Zeile ihre Ober- und Unterkante, der Button hängt in der Luft, und die beiden lesen sich als zwei Dinge, die zufällig nebeneinander liegen.</p>
-<p>Das ist dieselbe Mechanik wie in <a href="/docs/rules/layout-erst-abstand-dann-flaeche-dann-linie">Erst Abstand, dann Fläche, dann Linie</a>, nur auf der anderen Achse: Nähe gruppiert waagerecht, eine gemeinsame Kante gruppiert senkrecht. Beides wirkt, bevor jemand liest.</p>
+<p>Ein Eingabefeld mit einem Button daneben ist ein Paar. Der Button gehört zu dem Feld, er tut etwas mit dem, was darin steht. Sind beide verschieden hoch, hat die Zeile keine gemeinsame Ober- und Unterkante mehr. Der Button wirkt lose, und der Nutzer sieht zwei Dinge, die zufällig nebeneinander liegen.</p>
+<p>Das ist dieselbe Mechanik wie in <a href="/docs/rules/layout-erst-abstand-dann-flaeche-oder-linie">Erst Abstand, dann Fläche oder Linie</a>, nur auf der anderen Achse: Nähe gruppiert waagerecht, eine gemeinsame Kante gruppiert senkrecht. Beides wirkt, bevor jemand liest.</p>
 <h3>Warum es überhaupt mehr als eine Höhe gibt</h3>
-<p>Weil Dichte eine Eigenschaft des Kontexts ist. In einer Werkzeugleiste stehen viele Bedienelemente nebeneinander, jedes wird kurz berührt und wieder losgelassen. Dort gewinnt Kompaktheit, weil die Leiste sonst mehr Platz frisst als der Inhalt, für den sie da ist.</p>
-<p>In einem Formular tippt der Nutzer. Er hält sich dort auf, er trifft dort, er liest dort. Da gewinnen Ruhe und Trefferfläche.</p>
-<p>Das ist ein Unterschied zwischen zwei <strong>Situationen</strong>, nicht zwischen zwei Bauteilen. Ein Button ist in beiden derselbe Button.</p>
+<p>Die Dichte hängt vom Kontext ab. In einer Werkzeugleiste stehen viele Bedienelemente nebeneinander, jedes wird kurz berührt und wieder losgelassen. Dort zählt Kompaktheit, weil die Leiste sonst mehr Platz braucht als der Inhalt, für den sie da ist.</p>
+<p>In einem Formular tippt der Nutzer. Er bleibt länger dort, zielt auf Felder und liest. Da zählen Ruhe und Trefferfläche.</p>
+<p>Der Unterschied liegt in der <strong>Situation</strong>. Ein Button ist in beiden derselbe Button.</p>
 <h3>Der Sonderschalter ist das Warnzeichen</h3>
-<p>Formuliert man die Regel am Element statt an der Zeile („Buttons sind klein, Felder sind groß&quot;), braucht sie sofort eine Ausnahme: einen Schalter, der einen Button für den Einsatz neben Feldern auf Feldhöhe hebt. Und den braucht man dauernd.</p>
-<p>Eine Regel, die ständig eine Ausnahme braucht, hat die falsche Frage gestellt. Die Frage ist nicht, welche Art von Element das ist, sondern in welcher Zeile es steht.</p>
+<p>Formuliert man die Regel am Element statt an der Zeile („Buttons sind klein, Felder sind groß&quot;), braucht sie sofort eine Ausnahme: einen Schalter, der einen Button für den Einsatz neben Feldern auf Feldhöhe hebt. Diesen Schalter braucht man dann dauernd.</p>
+<p>Braucht eine Regel ständig eine Ausnahme, setzt sie an der falschen Stelle an. Entscheidend ist die Zeile, in der ein Element steht. Die Art des Elements spielt keine Rolle.</p>
 <h2>Hart und weich</h2>
 <div class="table-wrap"><table>
 <thead>
@@ -229,7 +229,7 @@
 <td>weich, Vorgabe zwei Stufen: dicht 2rem, Formular 2.5rem</td>
 </tr>
 </tbody></table></div>
-<p>Zwei Stufen reichen für die meisten Anwendungen. Wer eine dritte einführt, braucht dafür einen dritten Kontext, den er benennen kann — nicht eine Stelle, an der es gerade besser aussah.</p>
+<p>Zwei Stufen reichen für die meisten Anwendungen. Wer eine dritte einführt, muss dafür einen dritten Kontext benennen können. Eine einzelne Stelle, an der es gerade besser aussah, reicht nicht.</p>
 <h2>Woran Du den Verstoß erkennst</h2>
 <ul>
 <li>In einer Filter- oder Formularzeile stehen Feld und Button verschieden hoch.</li>
@@ -254,13 +254,13 @@
 </code></pre>
 <h2>Grenzen</h2>
 <p>Nach unten begrenzt die Trefferfläche aus <a href="/docs/rules/bedienung-klickbares-hat-eine-flaeche-und-nur-klickbares-sieht-so-aus">Klickbares hat eine Fläche, und nur Klickbares sieht so aus</a>. Auf Touch-Oberflächen ist die dichte Stufe zu klein für den Finger, sie bleibt dort Werkzeugleisten am Zeigegerät vorbehalten.</p>
-<p>Ein Element, das allein steht und in keiner Zeile sitzt, nimmt die Höhe seines Umfelds. Im Zweifel die großzügige, weil ein einzelner Knopf fast immer eine Aufgabe ist und keine Werkzeugleiste.</p>
+<p>Ein Element, das allein steht und in keiner Zeile sitzt, nimmt die Höhe seines Umfelds. Im Zweifel nimmt es die großzügige Höhe. Ein einzelner Knopf gehört fast immer zu einer Aufgabe und nicht zu einer Werkzeugleiste.</p>
 <p>Beschriftete Elemente wachsen nur in der Breite mit ihrem Inhalt. Die Höhe ändert sich nie durch den Text darin.</p>
 <p>Die Aktionszeile unter einem Formular ist eine Formularzeile. Speichern und Abbrechen nehmen die Formularhöhe, auch wenn kein Feld neben ihnen steht. Umgekehrt nimmt ein Feld in einer Werkzeugleiste, etwa die Suche, die dichte Höhe der Leiste.</p>
 <h2>Verwandt</h2>
 <ul>
 <li><a href="/docs/rules/bedienung-klickbares-hat-eine-flaeche-und-nur-klickbares-sieht-so-aus">Klickbares hat eine Fläche, und nur Klickbares sieht so aus</a></li>
-<li><a href="/docs/rules/layout-erst-abstand-dann-flaeche-dann-linie">Erst Abstand, dann Fläche, dann Linie</a></li>
+<li><a href="/docs/rules/layout-erst-abstand-dann-flaeche-oder-linie">Erst Abstand, dann Fläche oder Linie</a></li>
 <li><a href="/docs/rules/form-senkrechtes-padding-wird-optisch-ausgeglichen">Senkrechtes Padding wird optisch ausgeglichen</a></li>
 </ul>
 

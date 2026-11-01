@@ -21,7 +21,7 @@ tags:
 
 ## Warum
 
-Ohne Namen sagt der Screenreader nur „Button". Und wer per Sprache steuert, sagt, was er sieht.
+Ohne Namen sagt der Screenreader nur „Button". Wer per Sprache steuert, nennt den Text, den er sieht.
 
 Für das Design heißt das: Jeder Icon-Button braucht in der Spezifikation einen Namen, auch wenn er nie zu sehen ist. Bei einer Zeile mit Bearbeiten, Kopieren und Löschen hört der Nutzer sonst „Button, Button, Button“.
 

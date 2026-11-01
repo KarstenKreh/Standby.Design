@@ -32,7 +32,7 @@ Rechtsbündigkeit ordnet die Zahlen. Damit auch die einzelnen Stellen genau unte
 
 **Erste Stufe: Tabellenziffern.** Die meisten modernen Schriften bringen einen zweiten Ziffernsatz mit, bei dem alle Ziffern dieselbe Breite haben (`font-variant-numeric: tabular-nums`, im Schriftformat `tnum`). Das kostet keinen Schriftwechsel und reicht für die allermeisten Tabellen. Es greift allerdings nur, wenn die Schrift den Satz auch enthält.
 
-**Zweite Stufe: eine Monospace.** In stark zahlengetriebenen Anwendungen — Buchhaltung, Finanzen, Messwerte, alles Mathematische, Protokolle — ist eine Schrift mit fester Zeichenbreite die bessere Wahl. Dort steht jede Stelle exakt untereinander, auch über Spalten und Zeilen hinweg, und man kann Ziffernfolgen abzählen statt sie zu lesen. Für lange Nummern ist das der Unterschied zwischen prüfbar und nicht prüfbar.
+**Zweite Stufe: eine Monospace.** In stark zahlengetriebenen Anwendungen (Buchhaltung, Finanzen, Messwerte, alles Mathematische, Protokolle) ist eine Schrift mit fester Zeichenbreite die bessere Wahl. Dort steht jede Stelle exakt untereinander, auch über Spalten und Zeilen hinweg, und man kann Ziffernfolgen abzählen statt sie zu lesen. Erst so lassen sich lange Nummern prüfen.
 
 Solche Schriften unterscheiden außerdem Zeichen, die sonst verwechselt werden: die Null von einem großen O, die Eins von einem kleinen l und einem großen I. Viele bieten dafür eine durchgestrichene oder gepunktete Null als Schriftmerkmal (`font-variant-numeric: slashed-zero`, im Format `zero`). In technischen Zusammenhängen sollte die eingeschaltet sein.
 
@@ -62,7 +62,7 @@ Die Monospace gilt dabei für die Zahlen, nicht für die ganze Oberfläche. Besc
 
 ## Grenzen
 
-Zahlen, die keine Größe sind, folgen ihrem Inhalt: Kundennummern, Postleitzahlen, Jahreszahlen, Telefonnummern. Sie werden nicht verglichen, sondern gelesen, und stehen deshalb linksbündig wie Text.
+Zahlen, die keine Größe sind, folgen ihrem Inhalt: Kundennummern, Postleitzahlen, Jahreszahlen, Telefonnummern. Man liest sie und vergleicht sie nicht. Deshalb stehen sie linksbündig wie Text.
 
 Ein einzelnes Zahlenfeld in einem Formular ist keine Spalte. Niemand vergleicht es mit etwas, man füllt es nur aus. Es steht deshalb linksbündig wie die Felder darüber und darunter, die Einheit steht im Feld am Ende. Rechtsbündig wird ein Feld erst, wenn mehrere Zahlenfelder untereinander eine Spalte bilden, etwa in einem Planungsraster.
 

@@ -1,6 +1,6 @@
 ---
 dateCreated: 2026-10-02
-description: "Einfügen ist nie gesperrt, und ein Feld schluckt nie still Zeichen. Normalisiert wird erst beim Verlassen und sichtbar."
+description: "Einfügen ist nie gesperrt, und ein Feld entfernt nie still Zeichen. Normalisiert wird erst beim Verlassen und sichtbar."
 type: design-rule
 scope: universal
 applies-to:
@@ -20,7 +20,7 @@ tags:
 
 ## Warum
 
-Ein verschlucktes Zeichen ist ein Fehler, den der Nutzer nicht sieht. Aus eingefügtem „1.250,00 €" wird dann still „125000".
+Entfernt ein Feld still ein Zeichen, sieht der Nutzer den Fehler nicht. Aus eingefügtem „1.250,00 €" wird dann still „125000".
 
 ## Woran Du den Verstoß erkennst
 

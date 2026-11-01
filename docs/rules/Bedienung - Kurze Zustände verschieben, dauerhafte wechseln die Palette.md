@@ -1,6 +1,6 @@
 ---
 dateCreated: 2026-08-27
-description: Hover und Gedrückt bewegen sich innerhalb einer Palette. An, aktuell und ungültig wechseln die Palette. Sonst sind die beiden Fragen nicht mehr zu trennen.
+description: Hover und Gedrückt bewegen sich innerhalb einer Palette. An, aktuell und ungültig wechseln die Palette. Sonst sieht der Nutzer nicht mehr, ob er ein Element gerade berührt oder ob es an ist.
 type: design-rule
 scope: universal
 applies-to:
@@ -16,7 +16,7 @@ tags:
 # Kurze Zustände verschieben, dauerhafte wechseln die Palette
 
 > [!TIP] Regel
-> Kurzzeitige Zustände — Hover, Gedrückt — verschieben sich **innerhalb** derselben Palette: Hover eine Stufe **heller**, Gedrückt eine Stufe **dunkler**, in heller und dunkler Erscheinung gleich. Dauerhafte Zustände — an, aktuell, ungültig — **wechseln** die Palette.
+> Kurzzeitige Zustände (Hover, Gedrückt) verschieben sich **innerhalb** derselben Palette: Hover eine Stufe **heller**, Gedrückt eine Stufe **dunkler**, in heller und dunkler Erscheinung gleich. Dauerhafte Zustände (an, aktuell, ungültig) **wechseln** die Palette.
 
 ## Warum
 
@@ -26,7 +26,7 @@ Verschieben und Wechseln sind zwei verschiedene Bewegungen im Farbraum. Solange 
 
 ## Warum Hover heller wird
 
-Hover sagt: „Ich reagiere auf Dich, drück mich." Das Element kommt dem Zeiger ein Stück entgegen, und was näher am Licht ist, wird heller. Gedrückt ist das Gegenteil: das Element sinkt ein und wird dunkler.
+Hover zeigt, dass das Element reagiert und sich drücken lässt. Es hebt sich dem Zeiger ein Stück entgegen, und was näher am Licht ist, wird heller. Beim Drücken sinkt das Element ein und wird dunkler.
 
 Im Dark Mode kehrt sich das nicht um. Das Licht kommt in beiden Erscheinungen von vorn, deshalb sind auch dort höhere Ebenen heller als tiefere. Wer die Richtung mit dem Modus umdreht, lässt denselben Knopf im Hellen einsinken und im Dunkeln herauskommen.
 
@@ -34,9 +34,9 @@ Weil Hover und Gedrückt in entgegengesetzte Richtungen gehen, liegen sie zwei S
 
 ## Die Schritte sind gleichmäßig
 
-Die Abstände zwischen Ruhe, Hover und Gedrückt kommen aus derselben Skala und sind gleich groß. Werden sie pro Baustein von Hand gewählt, ist der Sprung an einer Stelle kaum zu sehen und an der nächsten zu stark. Auffallen tut das erst, wenn zwei Bausteine nebeneinander liegen, und dann ist es überall.
+Die Abstände zwischen Ruhe, Hover und Gedrückt kommen aus derselben Skala und sind gleich groß. Werden sie pro Baustein von Hand gewählt, ist der Sprung an einer Stelle kaum zu sehen und an der nächsten zu stark. Das fällt erst auf, wenn zwei Bausteine nebeneinander liegen. Dann sieht man es überall.
 
-Wie groß ein Schritt ist, hängt von der Palette des Projekts ab. Gleich groß muss er sein, nicht bestimmt groß.
+Wie groß ein Schritt ist, hängt von der Palette des Projekts ab. Die Regel legt keine Größe fest, nur dass alle Schritte gleich groß sind.
 
 ## Kein Schleier als Rückmeldung
 
@@ -64,11 +64,11 @@ An        ██   andere Palette      An        ░░  ← gleich wie Hover
 
 ## Grenzen
 
-Am Ende der Skala ist kein Platz mehr. Ein fast weißes Element kann nicht heller werden: dort geht Hover eine Stufe dunkler und Gedrückt zwei. Ein fast schwarzes kann nicht dunkler werden: dort geht Gedrückt zwei Stufen heller. Das ist die einzige Umkehr.
+Am Ende der Skala ist kein Platz mehr. Ein fast weißes Element kann nicht heller werden. Dort geht Hover eine Stufe dunkler und Gedrückt zwei. Ein fast schwarzes kann nicht dunkler werden. Dort geht Gedrückt zwei Stufen heller. Das ist die einzige Umkehr.
 
 Ein Rahmen ist keine Fläche, die sich hebt. Beim Eingabefeld wird der Rand beim Hover kräftiger, damit er sich deutlicher von der Umgebung abhebt. Die Regel oben gilt für Flächen.
 
-Ein Eingabefeld im Fehlerzustand wechselt die Palette, obwohl der Fehler vorübergehend ist. Das ist gewollt: „ungültig" ist ein dauerhafter Zustand des Feldes, solange die Eingabe nicht stimmt, und keine Rückmeldung auf eine Berührung.
+Ein Eingabefeld im Fehlerzustand wechselt die Palette, obwohl der Fehler vorübergehend ist. Das ist gewollt. „Ungültig" ist ein dauerhafter Zustand des Feldes, solange die Eingabe nicht stimmt, und keine Rückmeldung auf eine Berührung.
 
 ## Verwandt
 

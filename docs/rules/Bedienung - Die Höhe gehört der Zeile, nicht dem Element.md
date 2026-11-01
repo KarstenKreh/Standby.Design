@@ -23,23 +23,23 @@ tags:
 
 ### Ein Paar hat eine gemeinsame Kante
 
-Ein Eingabefeld mit einem Button daneben ist ein Paar. Der Button gehört zu dem Feld, er tut etwas mit dem, was darin steht. Sind beide verschieden hoch, verliert die Zeile ihre Ober- und Unterkante, der Button hängt in der Luft, und die beiden lesen sich als zwei Dinge, die zufällig nebeneinander liegen.
+Ein Eingabefeld mit einem Button daneben ist ein Paar. Der Button gehört zu dem Feld, er tut etwas mit dem, was darin steht. Sind beide verschieden hoch, hat die Zeile keine gemeinsame Ober- und Unterkante mehr. Der Button wirkt lose, und der Nutzer sieht zwei Dinge, die zufällig nebeneinander liegen.
 
-Das ist dieselbe Mechanik wie in [[Layout - Erst Abstand, dann Fläche, dann Linie]], nur auf der anderen Achse: Nähe gruppiert waagerecht, eine gemeinsame Kante gruppiert senkrecht. Beides wirkt, bevor jemand liest.
+Das ist dieselbe Mechanik wie in [[Layout - Erst Abstand, dann Fläche oder Linie]], nur auf der anderen Achse: Nähe gruppiert waagerecht, eine gemeinsame Kante gruppiert senkrecht. Beides wirkt, bevor jemand liest.
 
 ### Warum es überhaupt mehr als eine Höhe gibt
 
-Weil Dichte eine Eigenschaft des Kontexts ist. In einer Werkzeugleiste stehen viele Bedienelemente nebeneinander, jedes wird kurz berührt und wieder losgelassen. Dort gewinnt Kompaktheit, weil die Leiste sonst mehr Platz frisst als der Inhalt, für den sie da ist.
+Die Dichte hängt vom Kontext ab. In einer Werkzeugleiste stehen viele Bedienelemente nebeneinander, jedes wird kurz berührt und wieder losgelassen. Dort zählt Kompaktheit, weil die Leiste sonst mehr Platz braucht als der Inhalt, für den sie da ist.
 
-In einem Formular tippt der Nutzer. Er hält sich dort auf, er trifft dort, er liest dort. Da gewinnen Ruhe und Trefferfläche.
+In einem Formular tippt der Nutzer. Er bleibt länger dort, zielt auf Felder und liest. Da zählen Ruhe und Trefferfläche.
 
-Das ist ein Unterschied zwischen zwei **Situationen**, nicht zwischen zwei Bauteilen. Ein Button ist in beiden derselbe Button.
+Der Unterschied liegt in der **Situation**. Ein Button ist in beiden derselbe Button.
 
 ### Der Sonderschalter ist das Warnzeichen
 
-Formuliert man die Regel am Element statt an der Zeile („Buttons sind klein, Felder sind groß"), braucht sie sofort eine Ausnahme: einen Schalter, der einen Button für den Einsatz neben Feldern auf Feldhöhe hebt. Und den braucht man dauernd.
+Formuliert man die Regel am Element statt an der Zeile („Buttons sind klein, Felder sind groß"), braucht sie sofort eine Ausnahme: einen Schalter, der einen Button für den Einsatz neben Feldern auf Feldhöhe hebt. Diesen Schalter braucht man dann dauernd.
 
-Eine Regel, die ständig eine Ausnahme braucht, hat die falsche Frage gestellt. Die Frage ist nicht, welche Art von Element das ist, sondern in welcher Zeile es steht.
+Braucht eine Regel ständig eine Ausnahme, setzt sie an der falschen Stelle an. Entscheidend ist die Zeile, in der ein Element steht. Die Art des Elements spielt keine Rolle.
 
 ## Hart und weich
 
@@ -52,7 +52,7 @@ Eine Regel, die ständig eine Ausnahme braucht, hat die falsche Frage gestellt. 
 | Ein Icon-only-Element ist ein Quadrat auf der Höhe seiner Zeile | hart |
 | Wie viele Höhen es gibt und wie hoch sie sind | weich, Vorgabe zwei Stufen: dicht 2rem, Formular 2.5rem |
 
-Zwei Stufen reichen für die meisten Anwendungen. Wer eine dritte einführt, braucht dafür einen dritten Kontext, den er benennen kann — nicht eine Stelle, an der es gerade besser aussah.
+Zwei Stufen reichen für die meisten Anwendungen. Wer eine dritte einführt, muss dafür einen dritten Kontext benennen können. Eine einzelne Stelle, an der es gerade besser aussah, reicht nicht.
 
 ## Woran Du den Verstoß erkennst
 
@@ -83,7 +83,7 @@ Zwei Stufen reichen für die meisten Anwendungen. Wer eine dritte einführt, bra
 
 Nach unten begrenzt die Trefferfläche aus [[Bedienung - Klickbares hat eine Fläche, und nur Klickbares sieht so aus]]. Auf Touch-Oberflächen ist die dichte Stufe zu klein für den Finger, sie bleibt dort Werkzeugleisten am Zeigegerät vorbehalten.
 
-Ein Element, das allein steht und in keiner Zeile sitzt, nimmt die Höhe seines Umfelds. Im Zweifel die großzügige, weil ein einzelner Knopf fast immer eine Aufgabe ist und keine Werkzeugleiste.
+Ein Element, das allein steht und in keiner Zeile sitzt, nimmt die Höhe seines Umfelds. Im Zweifel nimmt es die großzügige Höhe. Ein einzelner Knopf gehört fast immer zu einer Aufgabe und nicht zu einer Werkzeugleiste.
 
 Beschriftete Elemente wachsen nur in der Breite mit ihrem Inhalt. Die Höhe ändert sich nie durch den Text darin.
 
@@ -92,5 +92,5 @@ Die Aktionszeile unter einem Formular ist eine Formularzeile. Speichern und Abbr
 ## Verwandt
 
 - [[Bedienung - Klickbares hat eine Fläche, und nur Klickbares sieht so aus]]
-- [[Layout - Erst Abstand, dann Fläche, dann Linie]]
+- [[Layout - Erst Abstand, dann Fläche oder Linie]]
 - [[Form - Senkrechtes Padding wird optisch ausgeglichen]]

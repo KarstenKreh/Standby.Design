@@ -21,11 +21,11 @@ tags:
 
 ## Warum
 
-Wenn die Karte das Padding trägt, drückt sie jeden Inhalt nach innen, ausnahmslos. Ein Bild, ein Chart oder eine Tabelle kann dann nie bis an die Kante laufen, obwohl genau das oft die richtige Darstellung wäre. Der einzige Ausweg wären negative Margins, und die sind immer ein Hinweis darauf, dass etwas eine Ebene zu hoch sitzt.
+Wenn die Karte das Padding trägt, rückt sie jeden Inhalt ohne Ausnahme nach innen. Ein Bild, ein Chart oder eine Tabelle kann dann nie bis an die Kante laufen, obwohl genau das oft die richtige Darstellung wäre. Es bliebe nur der Weg über negative Margins. Die zeigen immer, dass das Padding an einem Element zu weit außen sitzt.
 
-Liegt das Padding dagegen im Abschnitt, entscheidet jeder Abschnitt für sich: Text bekommt Abstand, ein Bild darf randlos sein, eine Tabelle darf ihre eigenen Spaltenabstände mitbringen. Der Abstand bleibt trotzdem überall gleich, weil alle Abschnitte aus denselben zwei Werten schöpfen.
+Liegt das Padding dagegen im Abschnitt, entscheidet jeder Abschnitt für sich: Text bekommt Abstand, ein Bild darf randlos sein, eine Tabelle darf ihre eigenen Spaltenabstände mitbringen. Der Abstand bleibt trotzdem überall gleich, weil alle Abschnitte dieselben zwei Werte nutzen.
 
-Die Regel nimmt der Karte nichts. Sie gibt den Abschnitten Freiheit.
+Die Karte verliert durch die Regel nichts. Die Abschnitte können dafür frei über ihr Padding entscheiden.
 
 ## Der Aufbau
 
@@ -58,15 +58,15 @@ Karte        = flex-col · Fläche · Rand · Radius · Überlauf beschnitten ·
 
 ## Wann ein Abschnitt randlos läuft
 
-Randlos ist für Inhalt, der **bis an seine eigene Kante Farbe trägt**: Bild, Chart, Tabelle, Heatmap, Landkarte, Video. Solcher Inhalt bringt seine Begrenzung selbst mit. Setzt Du ihn zusätzlich in einen Rahmen aus Hintergrundfläche, stehen zwei Kanten dicht nebeneinander, und keine der beiden wirkt gewollt. Läuft er bis an die Kante, ist die Karte selbst sein Rahmen.
+Randlos ist für Inhalt, der **bis an seine eigene Kante Farbe trägt**: Bild, Chart, Tabelle, Heatmap, Landkarte, Video. Solcher Inhalt bringt seine Begrenzung selbst mit. Setzt Du ihn zusätzlich in einen Rahmen aus Hintergrundfläche, stehen zwei Kanten dicht nebeneinander, und keine der beiden wirkt gewollt. Läuft er bis an die Kante, ist die Kante der Karte sein Rahmen.
 
 Nicht randlos läuft Inhalt, der seinen Weißraum schon mitbringt: ein freigestelltes Logo, eine Illustration auf hellem Grund, Text. Der braucht das Padding des Abschnitts.
 
-Damit die Ecke dabei sauber bleibt, muss die Karte ihren Überlauf beschneiden. Läuft ein Bild bis zur Kante und die Ecke ist trotzdem eckig, fehlt genau das.
+Damit die Ecke dabei sauber bleibt, muss die Karte ihren Überlauf beschneiden. Läuft ein Bild bis zur Kante und die Ecke ist trotzdem eckig, fehlt dieser Beschnitt.
 
 ## Padding-Werte im Abschnitt
 
-Das erste Kind ist das, was oben steht. Hat die Karte einen Kopf, ist es der Kopf. Hat sie keinen, ist es der Inhalt, und der bekommt oben Padding. Setz die Null deshalb nicht an eine bestimmte Art von Abschnitt, sondern an den Fall „Abschnitt folgt auf Abschnitt“. Dann stimmt die Regel ohne Fallunterscheidung. Die weiteren nicht, weil der untere Abstand des Vorgängers den Abstand schon liefert. Sobald Trennlinien im Spiel sind, bekommt jeder Abschnitt oben und unten Padding, sonst klebt der Inhalt an der Linie.
+Das erste Kind ist das, was oben steht. Hat die Karte einen Kopf, ist es der Kopf. Hat sie keinen, ist es der Inhalt, und der bekommt oben Padding. Setz die Null deshalb an den Fall „Abschnitt folgt auf Abschnitt“ und nicht an eine bestimmte Art von Abschnitt. Dann stimmt die Regel ohne Fallunterscheidung. Die weiteren Abschnitte bekommen oben kein Padding, weil der untere Abstand des Vorgängers den Abstand schon liefert. Sobald es Trennlinien gibt, bekommt jeder Abschnitt oben und unten Padding, sonst klebt der Inhalt an der Linie.
 
 | Fall | oben | rechts | unten | links |
 |---|---|---|---|---|
@@ -89,7 +89,7 @@ Warum senkrecht kleiner: [[Form - Senkrechtes Padding wird optisch ausgeglichen]
 ## Woran Du den Verstoß erkennst
 
 - Die Karte selbst trägt Padding oder ein Gap.
-- Ein Abschnitt setzt sein Padding mit negativen Margins wieder zurück. Das ist der sichere Beweis, dass das Padding eine Ebene zu hoch sitzt.
+- Ein Abschnitt setzt sein Padding mit negativen Margins wieder zurück. Das zeigt sicher, dass das Padding an einem Element zu weit außen sitzt.
 - Ein Bild in einer Karte hat links und rechts denselben Abstand wie der Fließtext darüber, obwohl es bis an die Kante gehört.
 - Ein Chart läuft bis zur Kante, aber die Ecke ist eckig.
 - Der Inhalt einer Karte ohne Kopf klebt an der Oberkante.
