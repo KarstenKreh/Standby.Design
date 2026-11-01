@@ -58,7 +58,7 @@ WCAG 1.4.3 Contrast (Minimum), 1.4.11 Non-text Contrast. Vercel › Design („M
 ## Verwandt
 
 - [[Zustand - Rot ist nicht ein Rot]]
-- [[Layout - Erst Abstand, dann Fläche, dann Linie]]
+- [[Layout - Erst Abstand, dann Fläche oder Linie]]
 - [[Bedienung - Kurze Zustände verschieben, dauerhafte wechseln die Palette]]
 - [[Stack - Was der Browser mitbringt, wird gestaltet oder ersetzt]]
 - [[Bedienung - Der Fokus ist sichtbar und hat immer einen Ort]]

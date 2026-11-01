@@ -43,6 +43,6 @@ Laws of UX › Law of Common Region und Law of Proximity, https://lawsofux.com/.
 
 ## Verwandt
 
-- [[Layout - Erst Abstand, dann Fläche, dann Linie]]
+- [[Layout - Erst Abstand, dann Fläche oder Linie]]
 - [[Fluss - Ein Fehler steht dort, wo er entstanden ist]]
 - [[Layout - Die Karte hat kein Padding]]

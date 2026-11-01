@@ -25,7 +25,7 @@ tags:
 
 Ein Eingabefeld mit einem Button daneben ist ein Paar. Der Button gehört zu dem Feld, er tut etwas mit dem, was darin steht. Sind beide verschieden hoch, hat die Zeile keine gemeinsame Ober- und Unterkante mehr. Der Button wirkt lose, und der Nutzer sieht zwei Dinge, die zufällig nebeneinander liegen.
 
-Das ist dieselbe Mechanik wie in [[Layout - Erst Abstand, dann Fläche, dann Linie]], nur auf der anderen Achse: Nähe gruppiert waagerecht, eine gemeinsame Kante gruppiert senkrecht. Beides wirkt, bevor jemand liest.
+Das ist dieselbe Mechanik wie in [[Layout - Erst Abstand, dann Fläche oder Linie]], nur auf der anderen Achse: Nähe gruppiert waagerecht, eine gemeinsame Kante gruppiert senkrecht. Beides wirkt, bevor jemand liest.
 
 ### Warum es überhaupt mehr als eine Höhe gibt
 
@@ -92,5 +92,5 @@ Die Aktionszeile unter einem Formular ist eine Formularzeile. Speichern und Abbr
 ## Verwandt
 
 - [[Bedienung - Klickbares hat eine Fläche, und nur Klickbares sieht so aus]]
-- [[Layout - Erst Abstand, dann Fläche, dann Linie]]
+- [[Layout - Erst Abstand, dann Fläche oder Linie]]
 - [[Form - Senkrechtes Padding wird optisch ausgeglichen]]

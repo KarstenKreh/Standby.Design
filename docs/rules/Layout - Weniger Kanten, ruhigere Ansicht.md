@@ -24,7 +24,7 @@ Beim Lesen einer Ansicht orientiert sich der Nutzer an den Kanten, also dort, wo
 
 Weniger Kanten sind eines der wirksamsten Mittel und kosten nichts. Farbe, Größe und Inhalt bleiben gleich. Nur die Anfänge rücken auf gemeinsame Kanten.
 
-Ausrichtung und Nähe sind dabei ein Paar. Nähe sagt, **was zusammengehört**, Ausrichtung sagt, **dass es zusammengehört**. Siehe [[Layout - Erst Abstand, dann Fläche, dann Linie]].
+Ausrichtung und Nähe sind dabei ein Paar. Nähe sagt, **was zusammengehört**, Ausrichtung sagt, **dass es zusammengehört**. Siehe [[Layout - Erst Abstand, dann Fläche oder Linie]].
 
 ## Der Kanten-Test
 
@@ -78,6 +78,6 @@ Eine zweite Kante für Einrückungen ist normal und richtig, etwa bei Aufzählun
 
 ## Verwandt
 
-- [[Layout - Erst Abstand, dann Fläche, dann Linie]]
+- [[Layout - Erst Abstand, dann Fläche oder Linie]]
 - [[Typografie - Zahlenspalten stehen rechtsbündig]]
 - [[Bedienung - Die Höhe gehört der Zeile, nicht dem Element]]

@@ -50,12 +50,11 @@ Das zusätzliche Padding oben ist nötig, weil der Inhalt sonst an der Linie kle
 
 ## Grenzen
 
-Die Regel sagt, wie eine Trennlinie gebaut wird, nicht wann es eine braucht. Das steht in [[Layout - Erst Abstand, dann Fläche, dann Linie]].
+Die Regel sagt, wie eine Trennlinie gebaut wird, nicht wann es eine braucht. Das steht in [[Layout - Erst Abstand, dann Fläche oder Linie]].
 
 Ein Primitive, das die Kante zeichnet, ist erlaubt, solange es die Unterkante des Abschnitts ist. Ein eigenes Kind zwischen zwei Abschnitten ist es nicht. Der Name der Hilfsklasse ändert das nicht.
 
 ## Verwandt
 
-- [[Layout - Erst Abstand, dann Fläche, dann Linie]]
+- [[Layout - Erst Abstand, dann Fläche oder Linie]]
 - [[Layout - Die Karte hat kein Padding]]
-- [[Layout - Erst Abstand, dann Fläche, dann Linie]]

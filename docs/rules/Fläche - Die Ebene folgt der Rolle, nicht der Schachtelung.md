@@ -79,5 +79,5 @@ Ein Overlay liegt über allem und hat sein eigenes Verhältnis zum Schleier daru
 
 ## Verwandt
 
-- [[Layout - Erst Abstand, dann Fläche, dann Linie]]
+- [[Layout - Erst Abstand, dann Fläche oder Linie]]
 - [[Farbe - Werte kommen aus Tokens, nie aus der Hand]]

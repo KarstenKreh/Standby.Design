@@ -56,6 +56,6 @@ Der Abstand einer Gruppe zu ihrem Umfeld ist kein Abstand zwischen Geschwistern.
 
 ## Verwandt
 
-- [[Layout - Erst Abstand, dann Fläche, dann Linie]]
+- [[Layout - Erst Abstand, dann Fläche oder Linie]]
 - [[Layout - Die Karte hat kein Padding]]
 - [[Stack - Utility-Klassen statt Inline-Styles]]
