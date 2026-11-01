@@ -21,13 +21,13 @@ tags:
 
 ## Warum
 
-Ein nackter Textlink ist auf dem Handy kaum zu treffen. Die Zeilenhöhe von Text ist keine Trefferfläche, und der Daumen ist kein Mauszeiger. Die Höhe eines Buttons in Standardgröße ist genau dafür da: sie ist die Fläche, die ein Finger sicher trifft.
+Ein nackter Textlink ist auf dem Handy kaum zu treffen. Die Zeilenhöhe von Text ist als Trefferfläche zu klein, und ein Daumen trifft ungenauer als ein Mauszeiger. Ein Button in Standardgröße ist genau so hoch, dass ein Finger ihn sicher trifft.
 
-Der zweite Grund ist Erkennbarkeit. Eine Fläche sagt „hier kannst Du drücken", bevor der Nutzer den Text gelesen hat. Ein Textlink sagt es erst danach, und in einer Fußzeile voller Text gar nicht.
+Der zweite Grund ist Erkennbarkeit. Eine Fläche zeigt, dass man hier drücken kann, bevor der Nutzer den Text gelesen hat. Ein Textlink zeigt es erst danach, in einer Fußzeile voller Text gar nicht.
 
-Der Wunsch hinter dem Textlink ist meistens „das soll unauffällig sein". Das ist ein berechtigter Wunsch, aber die Antwort darauf ist Schriftfarbe und Schriftgröße, nicht eine kleinere Fläche. Dezent heißt leise, nicht schwer zu treffen.
+Der Wunsch hinter dem Textlink ist meistens „das soll unauffällig sein". Der Wunsch ist berechtigt. Unauffällig wird ein Element über Schriftfarbe und Schriftgröße, die Fläche bleibt gleich groß. Ein dezentes Element ist leise, aber genauso leicht zu treffen.
 
-Ein toter Klick lässt den Nutzer zweifeln, ob die Seite kaputt ist. Danach traut er auch den echten Knöpfen weniger.
+Klickt der Nutzer auf etwas, das nichts tut, fragt er sich, ob die Seite kaputt ist. Danach traut er auch den echten Knöpfen weniger.
 
 ## Hart und weich
 
@@ -70,7 +70,7 @@ Ein toter Klick lässt den Nutzer zweifeln, ob die Seite kaputt ist. Danach trau
 
 ## Grenzen
 
-Die einzige Ausnahme ist ein Wort oder eine Wortgruppe **mitten im Fließtext**, etwa ein Verweis innerhalb eines Absatzes in den Rechtstexten. Dort wäre eine Fläche der Fremdkörper. Sobald der Link auf einer eigenen Zeile steht, gilt die Regel wieder.
+Die einzige Ausnahme ist ein Wort oder eine Wortgruppe **mitten im Fließtext**, etwa ein Verweis innerhalb eines Absatzes in den Rechtstexten. Dort passt eine Fläche nicht in den Text. Sobald der Link auf einer eigenen Zeile steht, gilt die Regel wieder.
 
 ## Quelle
 

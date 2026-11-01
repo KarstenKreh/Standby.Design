@@ -21,11 +21,11 @@ tags:
 
 ## Warum
 
-Eine Ebene ist ein Signal, kein Nebenprodukt der Schachtelung. Wächst sie mit jedem Container mit, ist die Menge offen, und dann passieren zwei Dinge. Erstens ist die fünfte Ebene nicht mehr von der vierten zu unterscheiden, weil der Kontrast am Ende der Kette aufgebraucht ist. Zweitens hängt die Farbe eines Elements davon ab, wie tief es zufällig eingebaut wurde. Verschiebt jemand es eine Ebene höher, ändert es seine Farbe, ohne dass jemand eine Entscheidung getroffen hat.
+Eine Ebene ist ein bewusst gesetztes Signal. Sie entsteht nicht nebenbei aus der Schachtelung. Wächst sie mit jedem Container mit, ist die Menge offen, und dann passieren zwei Dinge. Erstens ist die fünfte Ebene nicht mehr von der vierten zu unterscheiden, weil der Kontrast am Ende der Kette aufgebraucht ist. Zweitens hängt die Farbe eines Elements davon ab, wie tief es zufällig eingebaut wurde. Baut jemand es eine Schachtelungsstufe höher ein, ändert es seine Farbe, ohne dass jemand das entschieden hat.
 
-Umgekehrt ergibt sich daraus auch, was nicht geht: ein Element **innerhalb** einer Fläche bekommt nie die Farbe der Ebene darunter. Es liest sich sonst als Loch.
+Daraus folgt auch eine Grenze nach unten. Ein Element **innerhalb** einer Fläche bekommt nie die Farbe der Ebene darunter. Sonst sieht es aus wie ein Loch in der Fläche.
 
-Wie viele Ebenen es gibt, ist damit noch nicht gesagt. Das ist eine Frage des Produkts und der Handschrift, nicht der Regel.
+Wie viele Ebenen es gibt, ist damit noch nicht gesagt. Das entscheidet das Produkt mit seiner Handschrift. Die Regel legt es nicht fest.
 
 ## Hart und weich
 
@@ -38,7 +38,7 @@ Wie viele Ebenen es gibt, ist damit noch nicht gesagt. Das ist eine Frage des Pr
 
 ## Ein bewährter Satz von drei
 
-Drei tragen die meisten Anwendungen, und sie lassen sich in einem Satz benennen: die Seite, das was darauf liegt, das was man anfassen kann.
+Drei tragen die meisten Anwendungen, und sie lassen sich in einem Satz benennen: die Seite, das, was darauf liegt, und das, was man bedienen kann.
 
 ```
 Seite            ──  die Seite selbst

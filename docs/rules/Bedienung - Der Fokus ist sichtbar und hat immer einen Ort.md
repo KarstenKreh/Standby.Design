@@ -21,15 +21,15 @@ tags:
 
 ## Warum
 
-Wer mit der Tastatur bedient, sieht ohne Fokus gar nicht, wo er ist. Das betrifft nicht nur Screenreader-Nutzer, sondern jeden, der ein Formular schnell durchtabbt. Der Fokus ist die einzige Rückmeldung, die diese Nutzer bekommen.
+Wer mit der Tastatur bedient, sieht ohne Fokus gar nicht, wo er ist. Das betrifft Screenreader-Nutzer und jeden, der ein Formular schnell durchtabbt. Der Fokus ist die einzige Rückmeldung, die diese Nutzer bekommen.
 
-Die Voreinstellung des Browsers wird oft entfernt, weil sie nicht zum Rest passt, und dann bleibt nichts übrig. Der Wunsch dahinter ist berechtigt — die Antwort darauf ist ein eigener Fokus, kein fehlender.
+Oft wird der Fokus des Browsers entfernt, weil er nicht zum Rest passt. Dann bleibt gar kein Fokus übrig. Der Wunsch dahinter ist berechtigt. Die Lösung ist ein eigener Fokus statt gar keinem.
 
-Dass er das Layout nicht verschieben darf, hat einen praktischen Grund: sitzt er außerhalb des Elements, springt er in engen Reihen über die Nachbarn.
+Dass er das Layout nicht verschieben darf, hat einen praktischen Grund. Sitzt er außerhalb des Elements, springt er in engen Reihen über die Nachbarn.
 
-Ein Fokus, der hinter einer fixierten Kopf- oder Fußleiste liegt, ist so unsichtbar wie ein entfernter. Der Browser scrollt das fokussierte Element nur bis an den Rand des Fensters, und dort steht die Leiste. Der Abstand zur Leiste muss deshalb im Scrollverhalten der Seite stehen. Dasselbe gilt für Sprungziele: Springt ein Anker zu einer Überschrift, landet sie unter der Leiste, nicht dahinter.
+Einen Fokus, der hinter einer fixierten Kopf- oder Fußleiste liegt, sieht der Nutzer so wenig wie einen entfernten. Der Browser scrollt das fokussierte Element nur bis an den Rand des Fensters, und dort steht die Leiste. Der Abstand zur Leiste muss deshalb im Scrollverhalten der Seite stehen. Dasselbe gilt für Sprungziele: Springt ein Anker zu einer Überschrift, landet sie unter der Leiste, nicht dahinter.
 
-Verschwindet das fokussierte Element, springt der Fokus an den Seitenanfang. Der Nutzer verliert seinen Platz.
+Verschwindet das fokussierte Element, springt der Fokus an den Seitenanfang. Der Nutzer muss seine Stelle neu suchen.
 
 ## Hart und weich
 
@@ -51,7 +51,7 @@ Hart: jeder Wechsel hat ein Ziel. Weich: nichts.
 
 Die Regel gilt für Tastaturfokus. Ein Fokus nach einem Mausklick darf unterdrückt werden (`:focus-visible`), weil der Mausnutzer schon weiß, wo er geklickt hat.
 
-Wie der Fokus aussieht, ist eine Entscheidung des Projekts und steht dort. Ein weicher Ring auf der Kante ist eine gute Antwort, ein kräftiger Umriss mit Abstand auch — solange er die Nachbarn nicht überlagert.
+Wie der Fokus aussieht, ist eine Entscheidung des Projekts und steht dort. Ein weicher Ring auf der Kante ist eine gute Antwort, ein kräftiger Umriss mit Abstand auch, solange er die Nachbarn nicht überlagert.
 
 Nicht-modale Hinweise wie Kurzmeldungen ziehen den Fokus nicht.
 

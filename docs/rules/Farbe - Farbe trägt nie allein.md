@@ -22,11 +22,11 @@ tags:
 
 ## Warum
 
-Rund jeder zwölfte Mann sieht Rot und Grün nicht auseinander. Für ihn ist ein aktiver Tab, der sich nur durch die Textfarbe auszeichnet, kein aktiver Tab, sondern einer von fünf gleichen. Dasselbe gilt bei starkem Sonnenlicht, auf schlecht kalibrierten Bildschirmen und bei jedem, der die Ansicht nur kurz überfliegt.
+Rund jeder zwölfte Mann sieht Rot und Grün nicht auseinander. Hebt sich ein aktiver Tab nur durch die Textfarbe ab, kann dieser Mann ihn nicht von den vier anderen Tabs unterscheiden. Dasselbe gilt bei starkem Sonnenlicht, auf schlecht kalibrierten Bildschirmen und bei jedem, der die Ansicht nur kurz überfliegt.
 
 Das zweite Zeichen kostet nichts. Es ist ohnehin da, sobald das Element sauber gebaut ist: der Knopf des Switch steht rechts, unter dem Tab liegt ein Strich, vor dem Chip sitzt ein Punkt. Der Fehler entsteht nur, wenn ein Zustand nachträglich „schnell über die Farbe" gelöst wird.
 
-Für einen von zwölf Männern sehen Rot und Grün gleich aus. Eine Legende nur aus Farbfeldern ist für ihn leer.
+Für einen von zwölf Männern sehen Rot und Grün gleich aus. In einer Legende nur aus Farbfeldern kann er keine Reihe zuordnen.
 
 ## Die Zeichen je Element
 

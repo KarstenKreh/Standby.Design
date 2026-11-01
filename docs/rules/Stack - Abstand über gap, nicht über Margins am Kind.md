@@ -1,6 +1,6 @@
 ---
 dateCreated: 2026-08-27
-description: Der Abstand gehört dem Container, nicht dem Kind. Flex und gap statt Margins oder space-y.
+description: Den Abstand zwischen Geschwistern setzt der Container, mit Flex und gap statt Margins oder space-y.
 type: design-rule
 scope: stack
 applies-to:
@@ -21,9 +21,9 @@ tags:
 
 ## Warum
 
-Ein Abstand ist eine Eigenschaft der Beziehung zwischen zwei Elementen, nicht eines einzelnen. Trägt das Kind den Abstand, bringt es ihn überall mit hin — auch dorthin, wo er nicht hingehört. Und das letzte Kind bringt einen Abstand nach unten mit, den niemand wollte, also wird er mit `last:mb-0` wieder abgeräumt. Damit steht die Regel an zwei Stellen.
+Ein Abstand beschreibt die Beziehung zwischen zwei Elementen. Er gehört zu keinem der beiden allein. Trägt das Kind den Abstand, bringt es ihn überall mit hin, auch dorthin, wo er nicht passt. Das letzte Kind hat dann einen ungewollten Abstand nach unten, den jemand mit `last:mb-0` wieder entfernt. Damit steht die Regel an zwei Stellen.
 
-`gap` löst das an einer Stelle: der Container sagt, wie weit seine Kinder auseinanderstehen. Kein letztes Kind, kein Zurücksetzen, keine zusammenfallenden Margins.
+`gap` löst das an einer Stelle: der Container sagt, wie weit seine Kinder auseinanderstehen. Das letzte Kind braucht keine Sonderbehandlung, nichts wird zurückgesetzt, und keine Margins fallen zusammen.
 
 Die Hilfsklasse `space-y` löst dasselbe Problem, aber über Margins an allen Kindern außer dem ersten. Sie bricht, sobald ein Kind bedingt gerendert wird oder ein Fragment dazwischenliegt, und sie funktioniert in React Native nicht.
 

@@ -20,7 +20,7 @@ tags:
 
 ## Warum
 
-Das Auge ordnet einen Knopf der Fläche zu, in der er steht. Steht „Speichern“ oben im Seitenkopf, fragt sich der Nutzer, ob es die Karte unten speichert oder die ganze Seite.
+Der Nutzer ordnet einen Knopf der Fläche zu, in der er steht. Steht „Speichern“ oben im Seitenkopf, fragt sich der Nutzer, ob es die Karte unten speichert oder die ganze Seite.
 
 ## Woran Du den Verstoß erkennst
 

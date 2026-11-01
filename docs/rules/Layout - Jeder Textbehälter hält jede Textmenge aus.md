@@ -39,7 +39,7 @@ Hart: jeder Text hat ein Verhalten für Überlänge. Weich: welches. Vorgabe: Fl
 - `overflow: hidden` mit fester Höhe.
 - Flex-Kind mit Text ohne `min-w-0`.
 - `truncate` ohne Weg zum vollen Text.
-- Lange URL oder E-Mail ohne `break-words` sprengt die Karte.
+- Lange URL oder E-Mail ohne `break-words` läuft über die Karte hinaus.
 
 ## Grenzen
 

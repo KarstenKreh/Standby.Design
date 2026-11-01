@@ -17,11 +17,11 @@ Layout · https://standby.design/docs/rules/layout-die-karte-hat-kein-padding
 
 ### Warum
 
-Wenn die Karte das Padding trägt, drückt sie jeden Inhalt nach innen, ausnahmslos. Ein Bild, ein Chart oder eine Tabelle kann dann nie bis an die Kante laufen, obwohl genau das oft die richtige Darstellung wäre. Der einzige Ausweg wären negative Margins, und die sind immer ein Hinweis darauf, dass etwas eine Ebene zu hoch sitzt.
+Wenn die Karte das Padding trägt, rückt sie jeden Inhalt ohne Ausnahme nach innen. Ein Bild, ein Chart oder eine Tabelle kann dann nie bis an die Kante laufen, obwohl genau das oft die richtige Darstellung wäre. Es bliebe nur der Weg über negative Margins. Die zeigen immer, dass das Padding an einem Element zu weit außen sitzt.
 
-Liegt das Padding dagegen im Abschnitt, entscheidet jeder Abschnitt für sich: Text bekommt Abstand, ein Bild darf randlos sein, eine Tabelle darf ihre eigenen Spaltenabstände mitbringen. Der Abstand bleibt trotzdem überall gleich, weil alle Abschnitte aus denselben zwei Werten schöpfen.
+Liegt das Padding dagegen im Abschnitt, entscheidet jeder Abschnitt für sich: Text bekommt Abstand, ein Bild darf randlos sein, eine Tabelle darf ihre eigenen Spaltenabstände mitbringen. Der Abstand bleibt trotzdem überall gleich, weil alle Abschnitte dieselben zwei Werte nutzen.
 
-Die Regel nimmt der Karte nichts. Sie gibt den Abschnitten Freiheit.
+Die Karte verliert durch die Regel nichts. Die Abschnitte können dafür frei über ihr Padding entscheiden.
 
 ### Der Aufbau
 
@@ -54,15 +54,15 @@ Karte        = flex-col · Fläche · Rand · Radius · Überlauf beschnitten ·
 
 ### Wann ein Abschnitt randlos läuft
 
-Randlos ist für Inhalt, der **bis an seine eigene Kante Farbe trägt**: Bild, Chart, Tabelle, Heatmap, Landkarte, Video. Solcher Inhalt bringt seine Begrenzung selbst mit. Setzt Du ihn zusätzlich in einen Rahmen aus Hintergrundfläche, stehen zwei Kanten dicht nebeneinander, und keine der beiden wirkt gewollt. Läuft er bis an die Kante, ist die Karte selbst sein Rahmen.
+Randlos ist für Inhalt, der **bis an seine eigene Kante Farbe trägt**: Bild, Chart, Tabelle, Heatmap, Landkarte, Video. Solcher Inhalt bringt seine Begrenzung selbst mit. Setzt Du ihn zusätzlich in einen Rahmen aus Hintergrundfläche, stehen zwei Kanten dicht nebeneinander, und keine der beiden wirkt gewollt. Läuft er bis an die Kante, ist die Kante der Karte sein Rahmen.
 
 Nicht randlos läuft Inhalt, der seinen Weißraum schon mitbringt: ein freigestelltes Logo, eine Illustration auf hellem Grund, Text. Der braucht das Padding des Abschnitts.
 
-Damit die Ecke dabei sauber bleibt, muss die Karte ihren Überlauf beschneiden. Läuft ein Bild bis zur Kante und die Ecke ist trotzdem eckig, fehlt genau das.
+Damit die Ecke dabei sauber bleibt, muss die Karte ihren Überlauf beschneiden. Läuft ein Bild bis zur Kante und die Ecke ist trotzdem eckig, fehlt dieser Beschnitt.
 
 ### Padding-Werte im Abschnitt
 
-Das erste Kind ist das, was oben steht. Hat die Karte einen Kopf, ist es der Kopf. Hat sie keinen, ist es der Inhalt, und der bekommt oben Padding. Setz die Null deshalb nicht an eine bestimmte Art von Abschnitt, sondern an den Fall „Abschnitt folgt auf Abschnitt“. Dann stimmt die Regel ohne Fallunterscheidung. Die weiteren nicht, weil der untere Abstand des Vorgängers den Abstand schon liefert. Sobald Trennlinien im Spiel sind, bekommt jeder Abschnitt oben und unten Padding, sonst klebt der Inhalt an der Linie.
+Das erste Kind ist das, was oben steht. Hat die Karte einen Kopf, ist es der Kopf. Hat sie keinen, ist es der Inhalt, und der bekommt oben Padding. Setz die Null deshalb an den Fall „Abschnitt folgt auf Abschnitt“ und nicht an eine bestimmte Art von Abschnitt. Dann stimmt die Regel ohne Fallunterscheidung. Die weiteren Abschnitte bekommen oben kein Padding, weil der untere Abstand des Vorgängers den Abstand schon liefert. Sobald es Trennlinien gibt, bekommt jeder Abschnitt oben und unten Padding, sonst klebt der Inhalt an der Linie.
 
 | Fall | oben | rechts | unten | links |
 |---|---|---|---|---|
@@ -85,7 +85,7 @@ Warum senkrecht kleiner: Senkrechtes Padding wird optisch ausgeglichen.
 ### Woran Du den Verstoß erkennst
 
 - Die Karte selbst trägt Padding oder ein Gap.
-- Ein Abschnitt setzt sein Padding mit negativen Margins wieder zurück. Das ist der sichere Beweis, dass das Padding eine Ebene zu hoch sitzt.
+- Ein Abschnitt setzt sein Padding mit negativen Margins wieder zurück. Das zeigt sicher, dass das Padding an einem Element zu weit außen sitzt.
 - Ein Bild in einer Karte hat links und rechts denselben Abstand wie der Fließtext darüber, obwohl es bis an die Kante gehört.
 - Ein Chart läuft bis zur Kante, aber die Ecke ist eckig.
 - Der Inhalt einer Karte ohne Kopf klebt an der Oberkante.
@@ -108,11 +108,11 @@ Layout · https://standby.design/docs/rules/layout-der-divider-ist-die-unterkant
 **Geltung:** universal · web, react-native
 
 > **Regel**
-> Baue Trennlinien nie als eigenes Element. Die Linie ist die untere Kante eines Abschnitts, sie läuft von Kartenkante zu Kartenkante, und der letzte Abschnitt bekommt keine. Sobald Linien im Spiel sind, bekommt jeder Abschnitt oben und unten Padding.
+> Baue Trennlinien nie als eigenes Element. Die Linie ist die untere Kante eines Abschnitts, sie läuft von Kartenkante zu Kartenkante, und der letzte Abschnitt bekommt keine. Sobald es Linien gibt, bekommt jeder Abschnitt oben und unten Padding.
 
 ### Warum
 
-Eine Trennlinie als eigenes Element ist ein Kind ohne Inhalt. Sie muss von Hand an die richtige Stelle gesetzt werden, sie wird beim Umsortieren vergessen, und am Ende steht eine Linie unter dem letzten Abschnitt oder es stehen zwei Linien direkt übereinander. Als Kante des Abschnitts kann das nicht passieren: wer den Abschnitt verschiebt, verschiebt die Linie mit, und die Regel „letzter bekommt keine" ist eine einzige Bedingung statt einer Entscheidung pro Einsatzort.
+Eine Trennlinie als eigenes Element ist ein Kind ohne Inhalt. Sie muss von Hand an die richtige Stelle gesetzt werden, sie wird beim Umsortieren vergessen, und am Ende steht eine Linie unter dem letzten Abschnitt oder es stehen zwei Linien direkt übereinander. Ist die Linie die Kante des Abschnitts, kann das nicht passieren. Wer den Abschnitt verschiebt, verschiebt die Linie mit. Die Regel „letzter bekommt keine" ist dann eine einzige Bedingung statt einer Entscheidung pro Einsatzort.
 
 Das zusätzliche Padding oben ist nötig, weil der Inhalt sonst an der Linie klebt. Ohne Linie liefert der untere Abstand des Vorgängers den Abstand schon.
 
@@ -159,19 +159,19 @@ Layout · https://standby.design/docs/rules/layout-weniger-kanten-ruhigere-ansic
 **Geltung:** universal · web, react-native
 
 > **Regel**
-> Richte alles an möglichst wenigen gemeinsamen Kanten aus. Jede zusätzliche Linie, an der etwas beginnt, kostet den Blick einen Ankerpunkt. Und misch innerhalb eines Blocks nicht linksbündig mit zentriert.
+> Richte alles an möglichst wenigen gemeinsamen Kanten aus. Jede zusätzliche Linie, an der etwas beginnt, ist ein weiterer Punkt, an dem der Blick ansetzen muss. Und misch innerhalb eines Blocks nicht linksbündig mit zentriert.
 
 ### Warum
 
-Der Blick sucht beim Lesen einer Ansicht nach Anhaltspunkten und findet sie an den Kanten: dort, wo mehrere Dinge gemeinsam beginnen. Zwei solche Linien liest man ohne Anstrengung. Bei sechs muss der Blick bei jedem Element neu ansetzen, und die Ansicht wirkt unruhig, ohne dass man sagen könnte woran es liegt. Man sieht die Kanten nicht, aber man spürt sie.
+Beim Lesen einer Ansicht orientiert sich der Nutzer an den Kanten, also dort, wo mehrere Dinge gemeinsam beginnen. Zwei solche Linien erfasst er ohne Anstrengung. Bei sechs muss sein Blick bei jedem Element neu ansetzen, und die Ansicht wirkt unruhig, ohne dass er sagen könnte, woran es liegt. Er sieht die Kanten nicht bewusst, merkt aber ihre Wirkung.
 
-Deshalb ist das eines der wirksamsten Mittel überhaupt: es kostet nichts. Es ändert keine Farbe, keine Größe, keinen Inhalt. Es räumt nur die Anfänge zusammen.
+Weniger Kanten sind eines der wirksamsten Mittel und kosten nichts. Farbe, Größe und Inhalt bleiben gleich. Nur die Anfänge rücken auf gemeinsame Kanten.
 
 Ausrichtung und Nähe sind dabei ein Paar. Nähe sagt, **was zusammengehört**, Ausrichtung sagt, **dass es zusammengehört**. Siehe Erst Abstand, dann Fläche, dann Linie.
 
 ### Der Kanten-Test
 
-Screenshot der Ansicht nehmen, durch jede linke Kante eine senkrechte Linie ziehen, zählen. Meistens sind es fünf oder sechs. Meistens kommt man auf zwei, ohne dass sonst etwas anders wird.
+Screenshot der Ansicht nehmen, durch jede linke Kante eine senkrechte Linie ziehen, zählen. Meistens sind es fünf oder sechs. Meistens lassen sie sich auf zwei verringern, ohne dass sich sonst etwas ändert.
 
 ```
         VORHER                              NACHHER
@@ -190,11 +190,11 @@ Screenshot der Ansicht nehmen, durch jede linke Kante eine senkrechte Linie zieh
 
 ### Zentriert ist erlaubt, gemischt nicht
 
-Ein zentrierter Block ist in Ordnung — ein Anmeldefenster, ein leerer Zustand, eine Fehlerseite. Dann ist aber **alles** darin zentriert, auch die Beschriftungen und der Knopf.
+Ein zentrierter Block ist in Ordnung, etwa ein Anmeldefenster, ein leerer Zustand oder eine Fehlerseite. Dann ist aber **alles** darin zentriert, auch die Beschriftungen und der Knopf.
 
-Der schlechte Fall ist die Mischung: drei Blöcke linksbündig und einer zentriert. Der zentrierte hat dann zwei eigene Kanten, links und rechts, die zu keiner anderen passen, und er zieht die Aufmerksamkeit auf sich, ohne dass das gemeint war.
+Schlecht ist die Mischung, etwa drei Blöcke linksbündig und einer zentriert. Der zentrierte hat dann zwei eigene Kanten, links und rechts, die zu keiner anderen passen, und er fällt auf, obwohl das nicht gewollt ist.
 
-Zentrierter Fließtext über mehr als zwei Zeilen fällt ohnehin weg: dort wandert der Zeilenanfang bei jeder Zeile, und der Blick findet ihn nicht mehr.
+Zentrierter Fließtext über mehr als zwei Zeilen ist ohnehin ausgeschlossen. Dort beginnt jede Zeile an einer anderen Stelle, und der Nutzer findet den Zeilenanfang nicht mehr.
 
 ### Icons teilen sich eine Kante
 
@@ -215,9 +215,9 @@ Bei mehrzeiligen Einträgen steht das Icon auf der ersten Zeile, nicht in der Mi
 
 ### Grenzen
 
-Zahlenspalten sind die gewollte Ausnahme: sie bekommen ihre eigene rechte Kante, weil dort die Vergleichbarkeit schwerer wiegt als eine Kante weniger.
+Zahlenspalten sind die gewollte Ausnahme. Sie bekommen ihre eigene rechte Kante, weil dort die Vergleichbarkeit wichtiger ist als eine Kante weniger.
 
-Und eine zweite Kante für Einrückungen ist normal und richtig — Aufzählungen, verschachtelte Listen, Antworten in einem Verlauf. Die Regel sagt nicht „eine Kante", sie sagt „so wenige wie möglich, und jede mit Grund".
+Eine zweite Kante für Einrückungen ist normal und richtig, etwa bei Aufzählungen, verschachtelten Listen oder Antworten in einem Verlauf. Die Regel verlangt nicht genau eine Kante. Sie verlangt „so wenige wie möglich, und jede mit Grund".
 
 ### Verwandt
 
@@ -306,7 +306,7 @@ Layout · https://standby.design/docs/rules/layout-eine-schmale-spalte-steht-in-
 
 Der Nutzer sitzt mittig vor seinem Bildschirm, und sein Blick landet zuerst in der Mitte. Auf einem breiten Bildschirm liegt eine linksbündige Spalte am Rand seines Blickfelds, und er muss zum Lesen nach links schauen, während in der Mitte nichts steht.
 
-Dazu bleibt rechts eine leere Fläche, die wie fehlender Inhalt aussieht. Auf breiten Bildschirmen wird sie größer als die Spalte selbst. In der Mitte liest sich dieselbe Leere als Rand, und die Lesebreite bleibt gleich.
+Dazu bleibt rechts eine leere Fläche, die wie fehlender Inhalt aussieht. Auf breiten Bildschirmen wird sie größer als die Spalte selbst. Steht die Spalte in der Mitte, wirkt dieselbe leere Fläche als Rand, und die Lesebreite bleibt gleich.
 
 Steht der Zurück-Knopf dagegen an der Seitenkante und das Formular in der Mitte, entstehen zwei Kanten ohne Bezug. Der Knopf gehört zur Spalte, also steht er an ihrer Kante.
 
@@ -358,7 +358,7 @@ Layout · https://standby.design/docs/rules/layout-ein-bedienelement-steht-bei-d
 
 ### Warum
 
-Das Auge ordnet einen Knopf der Fläche zu, in der er steht. Steht „Speichern“ oben im Seitenkopf, fragt sich der Nutzer, ob es die Karte unten speichert oder die ganze Seite.
+Der Nutzer ordnet einen Knopf der Fläche zu, in der er steht. Steht „Speichern“ oben im Seitenkopf, fragt sich der Nutzer, ob es die Karte unten speichert oder die ganze Seite.
 
 ### Woran Du den Verstoß erkennst
 
@@ -414,7 +414,7 @@ Hart: jeder Text hat ein Verhalten für Überlänge. Weich: welches. Vorgabe: Fl
 - `overflow: hidden` mit fester Höhe.
 - Flex-Kind mit Text ohne `min-w-0`.
 - `truncate` ohne Weg zum vollen Text.
-- Lange URL oder E-Mail ohne `break-words` sprengt die Karte.
+- Lange URL oder E-Mail ohne `break-words` läuft über die Karte hinaus.
 
 ### Grenzen
 
@@ -446,15 +446,15 @@ Layout · https://standby.design/docs/rules/layout-erst-abstand-dann-flaeche-dan
 
 ### Warum
 
-Abstand ist die stärkste Gruppierung, die es gibt, und sie kostet nichts. Der Blick fasst zusammen, was dicht steht, noch bevor er liest. Eine Linie behauptet dasselbe noch einmal, fügt aber ein sichtbares Element hinzu. Bei Titel, Chart und Button trennt der Abstand schon deutlich genug, und jede zusätzliche Linie ist nur Rauschen.
+Abstand gruppiert am stärksten und kostet nichts. Was dicht steht, sieht der Nutzer als Gruppe, noch bevor er liest. Eine Linie zeigt dieselbe Gruppierung noch einmal, fügt aber ein sichtbares Element hinzu. Bei Titel, Chart und Button trennt der Abstand schon deutlich genug, und jede zusätzliche Linie lenkt nur ab.
 
-Der praktische Test: Nimm die Linien testweise heraus. Ist die Gruppierung danach immer noch klar, waren sie überflüssig. Fällt der Aufbau auseinander, waren die Abstände zu gleichförmig — dann ist die Abstandsstaffelung das eigentliche Problem, nicht die fehlende Linie.
+Zum Prüfen nimm die Linien testweise heraus. Ist die Gruppierung danach immer noch klar, waren sie überflüssig. Ist der Aufbau ohne sie nicht mehr zu erkennen, waren die Abstände zu gleichförmig. Dann musst Du die Abstände staffeln, eine Linie löst das Problem nicht.
 
-Eine Linie hat eine Aufgabe: trennen. Sie soll nicht selbst gesehen werden. Trotzdem ist sie das lauteste Mittel, das dafür zur Verfügung steht, und das einzige, das dem Bild etwas hinzufügt. Abstand und Flächenwechsel trennen genauso zuverlässig, ohne dass ein Element mehr auf dem Schirm liegt.
+Eine Linie soll nur trennen und nicht selbst auffallen. Trotzdem fällt sie von allen Mitteln zum Trennen am stärksten auf, und als einziges fügt sie dem Bild etwas hinzu. Abstand und Flächenwechsel trennen genauso zuverlässig, ohne zusätzliches Element.
 
-Zieht man jede Trennung als Linie, entsteht ein Gitter aus Rahmen, das lauter ist als der Inhalt darin. Und wenn die kräftige Stärke überall steht, hebt sie nichts mehr hervor. Sie ist dann keine Aussage mehr, sondern Tapete.
+Ist jede Trennung eine Linie, entsteht ein Gitter aus Rahmen, das mehr auffällt als der Inhalt darin. Steht die kräftige Stärke überall, hebt sie nichts mehr hervor.
 
-Es gibt gute Systeme ganz ohne Linien, die allein mit Fläche, Abstand und Erhebung arbeiten. Das ist keine Abweichung von der Regel, sondern ihre konsequenteste Anwendung.
+Es gibt gute Systeme ganz ohne Linien, die allein mit Fläche, Abstand und Erhebung arbeiten. Sie wenden die Regel am konsequentesten an.
 
 ### Die Rangfolge
 
@@ -465,11 +465,11 @@ Bevor Du eine Linie setzt, geh die Liste von oben durch:
 3. **Linie** — wenn der Platz für Abstand fehlt und ein Flächenwechsel zu schwer wäre
 4. **Erhebung** — Schatten und Licht, wenn etwas wirklich über dem Übrigen liegt
 
-Die meisten Linien im Bestand sind übersprungene Schritte 1 und 2.
+Die meisten bestehenden Linien stehen dort, wo Schritt 1 und 2 übersprungen wurden.
 
 ### Hart und weich
 
-Zwei Einträge stehen weiter auseinander als zwei Zeilen innerhalb eines Eintrags. Sonst liest der Blick mehrzeilige Einträge als eine Textwand und findet den Anfang des nächsten nicht.
+Zwei Einträge stehen weiter auseinander als zwei Zeilen innerhalb eines Eintrags. Sonst liest der Nutzer mehrzeilige Einträge als einen einzigen Block und findet den Anfang des nächsten nicht.
 
 Messbar wird das über den Durchschuss, also Zeilenhöhe minus Schriftgröße. Bei 14 Pixel Schrift und Zeilenhöhe 1,5 sind das 7 Pixel. Der Abstand zwischen zwei Einträgen liegt dann bei mindestens 14 Pixel, als Vorgabe die nächste Stufe der Abstandsskala.
 
@@ -515,11 +515,11 @@ Messbar wird das über den Durchschuss, also Zeilenhöhe minus Schriftgröße. B
 
 ### Grenzen
 
-Bei einer langen Liste gleichrangiger Zeilen — Buchungen, Positionen, Kontakte — hilft die Linie wirklich, weil der Abstand zwischen zwei Zeilen dort aus Platzgründen klein bleiben muss. Das ist der Fall, für den die Trennlinie gedacht ist.
+Bei einer langen Liste gleichrangiger Zeilen (Buchungen, Positionen, Kontakte) hilft die Linie wirklich, weil der Abstand zwischen zwei Zeilen dort aus Platzgründen klein bleiben muss. Das ist der Fall, für den die Trennlinie gedacht ist.
 
-Bei dichten Listen und Tabellen kann der Abstand zwischen zwei Zeilen aus Platzgründen nicht groß genug werden. Dort verdient sich die Linie ihren Platz, und dort ist sie auch ohne schlechtes Gewissen richtig.
+Bei dichten Listen und Tabellen kann der Abstand zwischen zwei Zeilen aus Platzgründen nicht groß genug werden. Dort ist die Linie berechtigt und richtig.
 
-Wenn ein Projekt nur eine einzige Linienstärke kennt, ist die Unterscheidung zwischen leise und kräftig gegenstandslos. Dann bleibt von der Regel nur die Rangfolge, und die reicht.
+Wenn ein Projekt nur eine einzige Linienstärke kennt, ist die Unterscheidung zwischen leise und kräftig gegenstandslos. Dann gilt von der Regel nur die Rangfolge. Das reicht.
 
 ### Verwandt
 
@@ -540,17 +540,17 @@ Layout · https://standby.design/docs/rules/layout-jede-ansicht-folgt-dem-platz-
 
 Die 320 kommen nicht vom kleinsten Telefon. Sie kommen aus **WCAG 2.1, Erfolgskriterium 1.4.10 Reflow**, Stufe AA, und die Rechnung dahinter ist: 1280 Pixel bei 400 Prozent Vergrößerung ergeben ein Sichtfenster von 320 Pixeln.
 
-Der Nutzer, um den es geht, sitzt also meistens gar nicht am Telefon. Er sitzt am großen Bildschirm und hat stark vergrößert, weil er sonst nichts lesen kann. Für ihn ist ein waagerechter Schieber kein Schönheitsfehler: er muss dann bei jeder einzelnen Zeile hin und her schieben, um sie zu Ende zu lesen. Das macht niemand lange mit.
+Der Nutzer, um den es geht, sitzt also meistens gar nicht am Telefon. Er sitzt am großen Bildschirm und hat stark vergrößert, weil er sonst nichts lesen kann. Für ihn ist ein waagerechter Schieber mehr als ein Schönheitsfehler. Er muss bei jeder einzelnen Zeile hin und her schieben, um sie zu Ende zu lesen. Das macht niemand lange mit.
 
-Dass die Regel damit auch kleine Geräte abdeckt, ist ein Nebeneffekt und kein Grund. Der Grund altert nicht mit der nächsten Gerätegeneration.
+Dass die Regel damit auch kleine Geräte abdeckt, ist nur ein Nebeneffekt. Der Grund ist die Vergrößerung, und der gilt auch nach der nächsten Gerätegeneration noch.
 
-Und sie von Anfang an einzuhalten ist billiger als nachzurüsten. Beim Nachrüsten stehen die Entscheidungen schon fest — die vierspaltige Kachelreihe, die Werkzeugleiste mit acht Elementen, die Tabelle mit zwölf Spalten —, und jede davon muss einzeln aufgebrochen werden. Wer früh bei 320 prüft, trifft diese Entscheidungen gar nicht erst.
+Die Regel von Anfang an einzuhalten ist billiger als nachzurüsten. Beim Nachrüsten stehen die Entscheidungen schon fest, etwa die vierspaltige Kachelreihe, die Werkzeugleiste mit acht Elementen oder die Tabelle mit zwölf Spalten. Jede davon muss einzeln umgebaut werden. Wer früh bei 320 prüft, trifft diese Entscheidungen gar nicht erst.
 
 Ein Tablet im geteilten Fenster ist schmaler als ein Telefon quer. Wer das Gerät abfragt, zeigt dann das falsche Layout oder versteckt Funktionen.
 
 ### Was die Regel verlangt und was nicht
 
-Verlangt ist **Benutzbarkeit**, nicht Schönheit. Es darf eng aussehen. Es darf gestapelt aussehen. Es darf nach Notlösung aussehen. Was nicht sein darf: abgeschnittener Inhalt, überlappende Elemente, ein Schieber unter der ganzen Seite, unerreichbare Bedienelemente.
+Verlangt ist **Benutzbarkeit**. Schön muss die Ansicht nicht sein. Sie darf eng, gestapelt oder nach Notlösung aussehen. Nicht erlaubt sind abgeschnittener Inhalt, überlappende Elemente, ein Schieber unter der ganzen Seite, unerreichbare Bedienelemente.
 
 ### Die Baseline
 
@@ -584,9 +584,9 @@ Hart.
 
 ### Grenzen
 
-WCAG nimmt ausdrücklich aus, was zwingend zwei Dimensionen braucht: Tabellen, Landkarten, Zeitraster, Notensatz, Diagramme. Diese Inhalte dürfen scrollen. Der Schieber gehört dann aber an den Inhalt und nicht unter die Anwendung: der Nutzer soll die Tabelle schieben, nicht die Seite mitsamt Kopfbereich und Seitenleiste.
+WCAG nimmt ausdrücklich aus, was zwingend zwei Dimensionen braucht: Tabellen, Landkarten, Zeitraster, Notensatz, Diagramme. Diese Inhalte dürfen scrollen. Der Schieber sitzt dann aber am Inhalt selbst. Der Nutzer schiebt nur die Tabelle, die Seite mit Kopfbereich und Seitenleiste bleibt stehen.
 
-Ein Werkzeug, das ohne Fläche sinnlos ist, darf schmal eine ehrliche Ersatzansicht zeigen. Der Hinweis „Diese Ansicht braucht ein größeres Fenster" ist erlaubt, das stumme Abschneiden nicht.
+Ein Werkzeug, das ohne Fläche sinnlos ist, darf in einem schmalen Fenster eine Ersatzansicht zeigen, die das offen sagt. Erlaubt ist der Hinweis „Diese Ansicht braucht ein größeres Fenster". Inhalt ohne Hinweis abzuschneiden ist nicht erlaubt.
 
 Ausrichtung, die für die Sache nötig ist, etwa ein Scheckscanner oder ein Klavier.
 
@@ -614,37 +614,37 @@ Fluss · https://standby.design/docs/rules/fluss-ein-pop-up-unterbricht-es-fuehr
 
 #### Ein Pop-up gehört dem System, nicht dem Nutzer
 
-Das ist der Kern, und alles Weitere folgt daraus. Ein Pop-up ist eine Unterbrechung, und unterbrechen darf nur, wer etwas zu sagen hat, das nicht warten kann. Es ist das Werkzeug, mit dem die Anwendung den Nutzer anspricht.
+Alles Weitere folgt aus diesem Punkt. Ein Pop-up unterbricht den Nutzer. Das darf die Anwendung nur, wenn sie ihm etwas sagen muss, das nicht warten kann. Mit einem Pop-up spricht die Anwendung den Nutzer an.
 
-Ein Formular ist das Gegenteil. Da spricht nicht die Anwendung, da arbeitet der Nutzer. Es ist keine Unterbrechung, sondern das, weswegen er gekommen ist.
+Bei einem Formular ist es umgekehrt. Dort arbeitet der Nutzer. Das Formular unterbricht ihn nicht, er ist dafür gekommen.
 
-Ein Formular in einem Pop-up hat deshalb nicht die falsche Größe, sondern die falsche Richtung. Es benutzt das Werkzeug für das Anhalten, um jemanden weitergehen zu lassen. „Verlassen ohne zu speichern?" ist richtig herum: die Anwendung sagt etwas, der Nutzer antwortet, es ist vorbei. „Kontakt anlegen" ist verkehrt herum.
+Ein Formular im Pop-up ist deshalb auch dann falsch, wenn das Pop-up größer wird, denn die Richtung stimmt nicht. Ein Pop-up hält den Nutzer an, im Formular soll er aber weiterarbeiten. Bei „Verlassen ohne zu speichern?" stimmt die Richtung. Die Anwendung sagt etwas, der Nutzer antwortet, und das Pop-up ist zu. Bei „Kontakt anlegen" stimmt sie nicht.
 
 #### Ein Pop-up verspricht Kürze und bricht das Versprechen
 
-Wer alles andere wegnimmt, geht einen Handel ein: das hier ist gleich vorbei. Ein Formular hält die Anwendung stattdessen minutenlang fest.
+Ein Pop-up verdeckt alles andere. Damit verspricht es, dass es gleich wieder vorbei ist. Ein Formular hält die Anwendung aber minutenlang fest.
 
-Der Preis dafür ist konkreter, als er klingt. Was der Nutzer beim Ausfüllen braucht, liegt fast immer hinter dem Pop-up: die Liste, aus der er kommt, der Wert in der Tabelle daneben, der Name, den er gerade nachsehen wollte. **Er sieht es. Er kann es nicht anfassen.** Das Pop-up zeigt ihm den Zusammenhang und verbietet ihn gleichzeitig. Bei einem Hinweis stört das nicht, bei einer Aufgabe ist es genau das Falsche.
+Das hat eine konkrete Folge. Was der Nutzer beim Ausfüllen braucht, liegt fast immer hinter dem Pop-up: die Liste, aus der er kommt, der Wert in der Tabelle daneben, der Name, den er gerade nachsehen wollte. **Er sieht es, kann es aber nicht bedienen.** Das Pop-up zeigt ihm den Zusammenhang und sperrt ihn zugleich. Bei einem Hinweis stört das nicht. Bei einer Aufgabe hindert es ihn an der Arbeit.
 
 #### Das Pop-up erzeugt seine eigene Nachfrage
 
-Der beste Beweis, dass ein Formular dort nicht hingehört, liefert das Muster selbst. Ein Formular im Pop-up braucht eine Warnung beim Schließen, denn die Eingaben verschwinden mit dem Fenster. Also legt man ein zweites Pop-up darüber: „Änderungen verwerfen?"
+Dass ein Formular dort nicht hingehört, zeigt das Muster selbst. Ein Formular im Pop-up braucht eine Warnung beim Schließen, denn die Eingaben verschwinden mit dem Fenster. Also legt man ein zweites Pop-up darüber: „Änderungen verwerfen?"
 
-Das Muster braucht sich selbst, um den Schaden zu heilen, den es selbst anrichtet. Bei einem Screen stellt sich die Frage gar nicht erst so scharf, weil er einen Ort hat, an den man zurückkommt.
+Das Pop-up braucht also ein zweites Pop-up, um ein Problem aufzufangen, das es selbst verursacht. Bei einem Screen ist die Frage weniger dringend, weil der Nutzer an diesen Ort zurückkommen kann.
 
 #### Tiefe hat keine Anzeige
 
-Jede andere Form von Navigation zeigt dem Nutzer, wo er ist: ein Pfad, ein Zurück, ein aktiver Reiter. Für gestapelte Fenster gibt es das nicht. Nirgends auf dem Bildschirm steht, dass man drei Ebenen tief steckt.
+Jede andere Form von Navigation zeigt dem Nutzer, wo er ist: ein Pfad, ein Zurück, ein aktiver Reiter. Für gestapelte Fenster gibt es das nicht. Nirgends auf dem Bildschirm steht, dass man im dritten gestapelten Fenster ist.
 
-Deshalb hat Deine Frage keine gute Antwort: **ich bin in Fenster 3 und muss zurück nach Fenster 1.** Was passiert mit Fenster 2? Was mit dem, was in Fenster 3 schon eingegeben wurde? Was macht der Zurück-Knopf des Geräts? Das Problem ist nicht, dass sich das schwer bauen lässt. Das Problem ist, dass es dem Nutzer nicht gezeigt werden kann, weil es keine Darstellung für Tiefe gibt.
+Deshalb hat Deine Frage keine gute Antwort: **ich bin in Fenster 3 und muss zurück nach Fenster 1.** Was passiert mit Fenster 2? Was mit dem, was in Fenster 3 schon eingegeben wurde? Was macht der Zurück-Knopf des Geräts? Das Problem liegt nicht darin, dass sich das schwer bauen lässt. Die Anwendung kann es dem Nutzer nicht zeigen, weil es keine Darstellung für Tiefe gibt.
 
 #### Ein Screen hat eine Adresse, ein Pop-up nicht
 
-Alles, woran jemand länger als einen Moment arbeitet, muss adressierbar sein: verlinkbar, nach einem Absturz wiederherstellbar, im Verlauf auffindbar, an einen Kollegen schickbar. Ein Formular im Pop-up kann nichts davon. Es existiert nur, solange niemand danebentippt.
+Alles, woran jemand länger als einen Moment arbeitet, muss adressierbar sein: verlinkbar, nach einem Absturz wiederherstellbar, im Verlauf auffindbar, an einen Kollegen schickbar. Ein Formular im Pop-up kann nichts davon. Es ist weg, sobald jemand danebentippt.
 
 #### Verschachtelte Pop-ups sind eine Sackgasse für die Tastatur
 
-Ein Pop-up muss den Fokus einsperren, sonst tabbt man hinter das Fenster. Liegt eines im anderen, liegen zwei Fallen ineinander. Wer nicht mit der Maus arbeitet, findet aus so einer Verschachtelung schwer wieder heraus. Für ein einzelnes „Ja oder Nein" ist die Falle harmlos, für ein Formular ist sie es nicht.
+Ein Pop-up muss den Fokus einsperren, sonst tabbt man hinter das Fenster. Liegt eines im anderen, ist der Fokus doppelt eingesperrt. Wer nicht mit der Maus arbeitet, findet aus so einer Verschachtelung schwer wieder heraus. Bei einem einzelnen „Ja oder Nein" schadet das nicht. Bei einem Formular schon.
 
 ### Der Test
 
@@ -653,7 +653,7 @@ Zwei Fragen, in dieser Reihenfolge:
 1. **Braucht es mehr als eine Eingabe?** Dann ist es ein Screen.
 2. **Geht es um mehr als einen konkreten Hinweis?** Dann ist es ein Screen.
 
-Bleibt beides „nein", darf es ein Pop-up sein. Der Test ist die praktische Fassung der Richtungsfrage von oben: eine einzelne Antwort gibt der Nutzer der Anwendung, ab der zweiten arbeitet er. Er ist bewusst scharf, weil die Grauzone genau der Ort ist, an dem die Fenster anfangen sich zu stapeln.
+Bleibt beides „nein", darf es ein Pop-up sein. Der Test setzt die Richtungsfrage von oben praktisch um. Mit einer einzelnen Eingabe antwortet der Nutzer der Anwendung. Ab der zweiten arbeitet er. Der Test ist bewusst streng, weil sich gerade in Grenzfällen die Fenster zu stapeln beginnen.
 
 ### Was ein Pop-up darf
 
@@ -663,7 +663,7 @@ Bleibt beides „nein", darf es ein Pop-up sein. Der Test ist die praktische Fas
 
 In allen drei Fällen redet die Anwendung, und der Nutzer antwortet mit einem Wort.
 
-Solange ein Pop-up offen ist, ist alles dahinter still: Die Seite scrollt nicht mit, und weder Tab noch Screenreader erreichen etwas dahinter. Sonst bedient der Nutzer eine Seite, die er nicht sieht.
+Solange ein Pop-up offen ist, reagiert nichts dahinter. Die Seite scrollt nicht mit, und weder Tab noch Screenreader erreichen etwas dahinter. Sonst bedient der Nutzer eine Seite, die er nicht sieht.
 
 ### Woran Du den Verstoß erkennst
 
@@ -709,9 +709,9 @@ Nicht jedes Ding, das über dem Inhalt liegt, ist ein Pop-up im Sinne dieser Reg
 - Datums- und Zeitauswahl an einem Feld
 - Kurzmeldung, die von selbst geht und nichts blockiert
 
-Sie unterbrechen nicht, sie erweitern das Element darunter. Der Unterschied ist nicht die Technik, sondern die Richtung: sie tun, was der Nutzer gerade will, statt ihn anzuhalten.
+Sie unterbrechen nicht, sie erweitern das Element darunter. Entscheidend ist die Richtung, die Technik ist dafür egal. Sie tun, was der Nutzer gerade will, und halten ihn nicht an.
 
-Ein Panel, das von der Seite oder von unten einfährt, ist kein Schlupfloch. Steht ein Formular darin, gilt die Regel genauso: es hat keine Adresse und stapelt genauso.
+Ein Panel, das von der Seite oder von unten einfährt, ist keine Ausnahme. Steht ein Formular darin, gilt die Regel genauso. Es hat keine Adresse und lässt sich genauso stapeln.
 
 ### Verwandt
 
@@ -730,13 +730,13 @@ Fluss · https://standby.design/docs/rules/fluss-leer-ist-ein-zustand-keine-luec
 
 ### Warum
 
-Vor einer leeren Fläche kann der Nutzer drei Dinge vermuten: es lädt noch, es ist etwas kaputt, oder es gibt wirklich nichts. Er hat keine Möglichkeit zu unterscheiden, und alle drei führen zu verschiedenem Verhalten — warten, neu laden, weitermachen. Ohne Antwort wählt er falsch.
+Vor einer leeren Fläche kann der Nutzer drei Dinge vermuten: es lädt noch, es ist etwas kaputt, oder es gibt wirklich nichts. Er kann die drei nicht unterscheiden, und jeder Fall verlangt etwas anderes: warten, neu laden oder weitermachen. Ohne Antwort wählt er falsch.
 
-Dazu kommt: der leere Zustand ist bei jedem neuen Nutzer der **erste** Zustand. Er sieht ihn, bevor er irgendetwas anderes sieht. Eine Anwendung, deren erster Eindruck eine unbeschriebene Fläche ist, wirkt nicht aufgeräumt, sondern unfertig.
+Außerdem ist der leere Zustand bei jedem neuen Nutzer der **erste** Zustand. Er sieht ihn, bevor er irgendetwas anderes sieht. Zeigt eine Anwendung als Erstes eine unbeschriebene Fläche, wirkt sie unfertig statt aufgeräumt.
 
 ### Drei Sorten leer, drei Antworten
 
-Der häufigste Fehler ist nicht der fehlende leere Zustand, sondern derselbe Text für alle drei Fälle.
+Der häufigste Fehler ist derselbe Text für alle drei Fälle. Er kommt öfter vor als ein fehlender leerer Zustand.
 
 | Fall | Was der Nutzer wissen muss | Ton |
 |---|---|---|
@@ -744,12 +744,12 @@ Der häufigste Fehler ist nicht der fehlende leere Zustand, sondern derselbe Tex
 | **Nichts gefunden** | Wonach gesucht wurde, und wie er die Suche lockert | sachlich, mit Weg zurück |
 | **Nichts mehr offen** | Dass er fertig ist | bestätigend, ohne Aktion |
 
-„Keine Daten vorhanden" beantwortet keinen der drei Fälle. Beim dritten ist es sogar falsch: dort ist leer das gute Ergebnis, und der Text sollte das sagen statt einen Mangel zu melden.
+„Keine Daten vorhanden" beantwortet keinen der drei Fälle. Beim dritten ist der Text sogar falsch. Dort ist leer das gute Ergebnis, und der Text sollte das sagen statt einen Mangel zu melden.
 
 ### Was ein leerer Zustand tut
 
 - Er nennt den Grund in einem Satz.
-- Er bietet den nächsten Schritt an, wenn es einen gibt — und nur einen.
+- Er bietet den nächsten Schritt an, wenn es einen gibt, und zwar nur einen.
 - Er steht an derselben Stelle, an der später der Inhalt steht, und verschiebt das Layout nicht.
 - Er bleibt im Verhältnis. Eine große Illustration für eine leere Liste in einer Karte ist mehr Aufwand als der Inhalt, den sie ersetzt.
 
@@ -763,7 +763,7 @@ Der häufigste Fehler ist nicht der fehlende leere Zustand, sondern derselbe Tex
 
 ### Grenzen
 
-Nicht jede leere Fläche braucht Text. Eine Spalte in einer Tabelle, ein einzelnes Feld, ein Diagrammabschnitt ohne Wert — dort reicht ein Strich oder ein Zeichen für „kein Wert", siehe Eine Bedeutung, überall gleich. Die Regel gilt für Bereiche, die als Ganzes leer sind.
+Nicht jede leere Fläche braucht Text. Bei einer Spalte in einer Tabelle, einem einzelnen Feld oder einem Diagrammabschnitt ohne Wert reicht ein Strich oder ein Zeichen für „kein Wert", siehe Eine Bedeutung, überall gleich. Die Regel gilt für Bereiche, die als Ganzes leer sind.
 
 ### Verwandt
 
@@ -784,15 +784,15 @@ Fluss · https://standby.design/docs/rules/fluss-der-platz-ist-da-bevor-die-date
 
 #### Nichts darf springen
 
-Trifft der Inhalt ein und schiebt alles darunter nach unten, verliert der Nutzer seine Stelle. Schlimmer: er hat vielleicht schon gezielt und drückt jetzt auf etwas anderes, als er treffen wollte. Das ist kein Schönheitsfehler, das ist eine Fehlbedienung, die die Oberfläche verursacht hat.
+Trifft der Inhalt ein und schiebt alles darunter nach unten, verliert der Nutzer seine Stelle. Hat er schon gezielt, drückt er jetzt vielleicht auf etwas anderes, als er treffen wollte. Dann hat die Oberfläche eine Fehlbedienung verursacht, und das wiegt schwerer als ein Schönheitsfehler.
 
-Deshalb wird der Platz vorher belegt, in der Form, die der Inhalt haben wird. Ein Platzhalter, der die Umrisse des echten Aufbaus zeigt, tut zwei Dinge auf einmal: er hält den Platz und er sagt schon, was kommt.
+Deshalb wird der Platz vorher belegt, in der Form, die der Inhalt haben wird. Ein Platzhalter, der die Umrisse des echten Aufbaus zeigt, hält den Platz und zeigt schon, was kommt.
 
 #### Ein Zeichen, das sofort wieder geht, stört mehr als die Wartezeit
 
-Unter etwa einer Zehntelsekunde wirkt eine Reaktion unmittelbar, da braucht es gar keine Rückmeldung. Bis etwa einer Sekunde bleibt der Gedanke des Nutzers zusammenhängend, er wartet, ohne abzuschweifen. Erst darüber verliert er den Faden und braucht etwas, das ihn hält.
+Unter etwa einer Zehntelsekunde wirkt eine Reaktion unmittelbar, da braucht es gar keine Rückmeldung. Bis etwa einer Sekunde bleibt der Gedanke des Nutzers zusammenhängend, er wartet, ohne abzuschweifen. Erst darüber verliert er den Faden und braucht eine Rückmeldung.
 
-Ein Ladezeichen, das aufblitzt und sofort verschwindet, macht die Oberfläche deshalb nicht hilfreicher, sondern unruhiger. Es meldet ein Problem, das es nicht gab.
+Ein Ladezeichen, das aufblitzt und sofort verschwindet, hilft deshalb nicht weiter und macht die Oberfläche unruhiger. Es meldet ein Problem, das es nicht gab.
 
 #### Der Nutzer wartet auf einen Teil, nicht auf alles
 
@@ -809,7 +809,7 @@ Lädt ein Bereich, wird auch nur dieser Bereich als ladend gezeigt. Eine ganze S
 
 Die Zahlen sind eine Vorgabe. Hart ist die Staffelung: erst nichts, dann Form, dann Auskunft.
 
-Ist ein Ladehinweis einmal erschienen, bleibt er eine Mindestzeit stehen. Kommt die Antwort kurz nach der Schwelle, blitzt er sonst für ein paar Millisekunden auf, genau das Flackern, das die Schwelle verhindern soll.
+Ist ein Ladehinweis einmal erschienen, bleibt er eine Mindestzeit stehen. Kommt die Antwort kurz nach der Schwelle, blitzt er sonst für ein paar Millisekunden auf. Genau dieses Flackern soll die Schwelle verhindern.
 
 | | Status |
 |---|---|
@@ -832,7 +832,7 @@ Ist ein Ladehinweis einmal erschienen, bleibt er eine Mindestzeit stehen. Kommt 
 
 Beim ersten Start einer Anwendung, wenn noch gar keine Form bekannt ist, ist ein einfacher Ladehinweis in Ordnung. Die Regel greift dort, wo der Aufbau schon feststeht und nur die Daten fehlen.
 
-Ein Vorgang, den der Nutzer selbst ausgelöst hat und dessen Ergebnis er abwartet — ein Export, eine Zahlung —, darf ihn festhalten. Er muss dann aber wissen, woran er ist.
+Ein Vorgang, den der Nutzer selbst ausgelöst hat und dessen Ergebnis er abwartet (etwa ein Export oder eine Zahlung), darf ihn festhalten. Er muss dann aber wissen, woran er ist.
 
 ### Verwandt
 
@@ -924,7 +924,7 @@ Fluss · https://standby.design/docs/rules/fluss-eine-zeitgrenze-warnt-vorher
 
 ### Warum
 
-Wer langsam tippt oder kurz weg ist, verliert sonst seine Arbeit an eine Uhr, die er nicht sieht.
+Wer langsam tippt oder kurz weg ist, verliert sonst seine Arbeit, weil eine Frist abläuft, die er nicht sieht.
 
 ### Woran Du den Verstoß erkennst
 
@@ -1038,9 +1038,9 @@ Fluss · https://standby.design/docs/rules/fluss-konfiguration-bekommt-eine-seit
 
 Die beiden Arten unterscheiden sich darin, wann der Nutzer sie braucht. Eine Ansichts-Einstellung braucht er mitten in der Arbeit: Filter, Sortierung, Zeitraum, sichtbare Spalten, Einheit. Er sieht das Ergebnis sofort, also gehört sie dorthin, wo er hinschaut.
 
-Eine Konfiguration legt er einmal fest und ändert sie selten: einen Abgabensatz, Kontonummern, eine Schwelle. Sie wirkt auf andere Seiten und oft auf andere Nutzer. Liegt sie aufklappbar auf einer Arbeitsseite, schiebt sie beim Öffnen die Arbeit aus dem Blick. Beim nächsten Mal findet sie niemand, weil sie hinter einem Pfeil liegt statt hinter einer Adresse.
+Eine Konfiguration legt er einmal fest und ändert sie selten: einen Abgabensatz, Kontonummern, eine Schwelle. Sie wirkt auf andere Seiten und oft auf andere Nutzer. Liegt sie aufklappbar auf einer Arbeitsseite, schiebt sie beim Öffnen die Arbeit aus dem Blick. Beim nächsten Mal findet sie niemand, weil sie nur aufklappbar ist und keine Adresse hat.
 
-Das Speichern ist das sicherste Zeichen. Braucht eine Einstellung einen Speichern-Knopf, ist sie ein Formular, und ein Formular braucht eine Adresse, wie bei Ein Pop-up unterbricht, es führt nicht. Mehrere Speichern-Knöpfe auf einer Seite werfen die Frage auf, ob der untere auch das speichert, was oben geändert wurde.
+Das Speichern ist das sicherste Zeichen. Braucht eine Einstellung einen Speichern-Knopf, ist sie ein Formular, und ein Formular braucht eine Adresse, wie bei Ein Pop-up unterbricht, es führt nicht. Bei mehreren Speichern-Knöpfen auf einer Seite weiß der Nutzer nicht, ob der untere auch das speichert, was oben geändert wurde.
 
 ### Der Schnitt
 
@@ -1133,13 +1133,13 @@ Fluss · https://standby.design/docs/rules/fluss-ein-fehler-steht-dort-wo-er-ent
 
 ### Warum
 
-Ein Fehler ist eine Anweisung, keine Meldung. Der Nutzer will nicht wissen, was das System nicht konnte, sondern was er jetzt macht. „Ungültiges Format" sagt ihm nichts. „Bitte im Format TT.MM.JJJJ eingeben" sagt ihm alles.
+Eine Fehlermeldung sagt dem Nutzer, was er jetzt tun soll. Was das System nicht konnte, hilft ihm dabei nicht. „Ungültiges Format" sagt ihm nicht, was er ändern soll. „Bitte im Format TT.MM.JJJJ eingeben" sagt es ihm.
 
-Deshalb muss er auch dort stehen, wo gehandelt wird. Steht der Fehler weit weg von dem Feld, das er betrifft, muss der Nutzer die Verbindung selbst herstellen — bei drei Fehlern in einem Formular ist das eine Suchaufgabe.
+Deshalb steht der Fehler dort, wo der Nutzer handelt. Steht er weit weg von dem Feld, das er betrifft, muss der Nutzer die Verbindung selbst herstellen. Bei drei Fehlern in einem Formular muss er dann suchen.
 
-Und das Wichtigste, das am häufigsten verletzt wird: **die Eingaben bleiben.** Ein Fehler, der das Formular leert, bestraft den Nutzer für einen Tippfehler. Nach dem zweiten Mal macht er nicht weiter.
+**Die Eingaben bleiben stehen.** Das ist der wichtigste Punkt, und er wird am häufigsten verletzt. Leert ein Fehler das Formular, muss der Nutzer wegen eines Tippfehlers alles neu eingeben. Nach dem zweiten Mal macht er nicht weiter.
 
-Sonst erfährt ein Screenreader-Nutzer nie, dass gespeichert wurde oder dass es keine Treffer gibt.
+Ohne Live-Bereich erfährt ein Screenreader-Nutzer nie, dass gespeichert wurde oder dass es keine Treffer gibt.
 
 ### Wann der Fehler kommt
 
@@ -1157,11 +1157,11 @@ Das Feld nimmt dabei jede Eingabe an, siehe Was der Nutzer tippt oder einfügt, 
 | Etwas ist außerhalb des Blicks passiert | Kurzmeldung |
 | Der Nutzer ist im Begriff, etwas zu verlieren | Pop-up, siehe Ein Pop-up unterbricht, es führt nicht |
 
-Kein Pop-up für Eingabefehler. Das Pop-up nimmt genau das Formular weg, in dem der Nutzer den Fehler beheben soll.
+Kein Pop-up für Eingabefehler. Das Pop-up verdeckt genau das Formular, in dem der Nutzer den Fehler beheben soll.
 
 ### Kurzmeldungen
 
-Eine Kurzmeldung (Toast) ist ein gutes Werkzeug, wenn sie das Richtige tut: bestätigen, dass etwas passiert ist, dessen Ergebnis man gerade nicht sieht. Gespeichert, verschickt, in den Papierkorb gelegt.
+Eine Kurzmeldung (Toast) eignet sich, um zu bestätigen, dass etwas passiert ist, dessen Ergebnis man gerade nicht sieht. Gespeichert, verschickt, in den Papierkorb gelegt.
 
 Dafür gelten drei Bedingungen:
 
@@ -1169,9 +1169,9 @@ Dafür gelten drei Bedingungen:
 - Sie ist nie der einzige Ort einer wichtigen Information. Was der Nutzer später noch braucht, gehört an eine bleibende Stelle.
 - Sie erscheint nicht für einen Fehler, den man an einem Feld beheben kann. Der gehört ans Feld.
 
-Ist eine Handlung rückgängig zu machen, gehört das Angebot dazu in die Kurzmeldung („Gelöscht — rückgängig"). Das ist ihr stärkster Einsatz, weil sie damit eine Bestätigung vorher überflüssig macht.
+Ist eine Handlung rückgängig zu machen, gehört das Angebot dazu in die Kurzmeldung („Gelöscht — rückgängig"). So nützt sie am meisten, weil dann keine Bestätigungsfrage vorher nötig ist.
 
-Eine Kurzmeldung mit Handlung bleibt stehen, solange der Mauszeiger auf ihr liegt oder sie den Fokus hat, und sie ist per Tastatur erreichbar. Sonst ist das Angebot weg, bevor ein langsamer Nutzer es greifen kann.
+Eine Kurzmeldung mit Handlung bleibt stehen, solange der Mauszeiger auf ihr liegt oder sie den Fokus hat, und sie ist per Tastatur erreichbar. Sonst ist das Angebot weg, bevor ein langsamer Nutzer es nutzen kann.
 
 ### Was in einer Meldung steht
 
@@ -1201,7 +1201,7 @@ Hart. Weich: `polite` oder `assertive`. Vorgabe `polite`.
 
 ### Grenzen
 
-Fehler, die die ganze Anwendung betreffen — keine Verbindung, abgelaufene Anmeldung —, gehören an eine Stelle, die über allem liegt. Sie betreffen kein einzelnes Feld, und der Nutzer muss sie sehen, bevor er weitertippt.
+Fehler, die die ganze Anwendung betreffen (etwa keine Verbindung oder eine abgelaufene Anmeldung), gehören an eine Stelle, die über allem liegt. Sie betreffen kein einzelnes Feld, und der Nutzer muss sie sehen, bevor er weitertippt.
 
 Fehler, die nach Der Fokus ist sichtbar und hat immer einen Ort ohnehin den Fokus bekommen.
 
@@ -1228,9 +1228,9 @@ Form · https://standby.design/docs/rules/form-konzentrische-radien
 
 ### Warum
 
-Haben zwei Rundungen verschiedene Mittelpunkte, wird der Spalt zwischen ihnen in der Ecke breiter oder schmaler als an der geraden Kante. Das sieht man auch dann, wenn man nicht weiß warum: die Ecke wirkt gequetscht oder ausgefranst. Mit demselben Mittelpunkt bleibt der Spalt rundherum gleich breit, und die innere Fläche sitzt sauber in der äußeren.
+Haben zwei Rundungen verschiedene Mittelpunkte, wird der Spalt zwischen ihnen in der Ecke breiter oder schmaler als an der geraden Kante. Das fällt auch dem auf, der den Grund nicht kennt. Die Ecke wirkt gequetscht oder ausgefranst. Mit demselben Mittelpunkt bleibt der Spalt rundherum gleich breit, und die innere Fläche sitzt sauber in der äußeren.
 
-Der Fehler passiert fast immer dadurch, dass innen und außen derselbe Radius steht — das wirkt naheliegend, ist aber genau der Fall, in dem die Ecke am stärksten kippt.
+Fast immer entsteht der Fehler, weil innen und außen derselbe Radius steht. Das liegt nahe, doch gerade dann weicht der Spalt in der Ecke am stärksten ab.
 
 ### Woran Du den Verstoß erkennst
 
@@ -1262,9 +1262,9 @@ Der Fehler passiert fast immer dadurch, dass innen und außen derselbe Radius st
 
 Damit die Rechnung überhaupt aufgehen kann, muss es eine begrenzte, benannte Menge an Radien geben. Sonst entsteht mit jedem Einzelfall eine neue Rundung, und zwei Werte, die zusammengehören sollen, sind nie wieder dieselben.
 
-Der häufigste Weg, auf dem Radien an der Skala vorbeiwachsen: eine Utility-Klasse für einen mittleren Radius wird überall benutzt, ist in der Konfiguration aber gar nicht definiert und fällt auf den Standardwert des Frameworks zurück. Daneben steht eine Stufe aus dem eigenen System. Zwei Rundungen ohne gemeinsame Skala, und niemand hat je eine Entscheidung dazu getroffen.
+Meist entstehen Radien außerhalb der Skala so: Eine Utility-Klasse für einen mittleren Radius wird überall benutzt, ist in der Konfiguration aber nicht definiert. Sie fällt deshalb auf den Standardwert des Frameworks zurück. Daneben steht eine Stufe aus dem eigenen System. So gibt es zwei Rundungen ohne gemeinsame Skala, und niemand hat das je entschieden.
 
-Wie viele Stufen es gibt und ob sie mit der Verschachtelungstiefe kleiner werden, entscheidet das Projekt. Manche Systeme fahren einen einzigen Radius für alles, und das ist eine gültige Antwort.
+Wie viele Stufen es gibt und ob sie mit der Verschachtelungstiefe kleiner werden, entscheidet das Projekt. Manche Systeme nutzen einen einzigen Radius für alles. Auch das ist zulässig.
 
 ### Gleiche Zeile, gleicher Radius
 
@@ -1274,7 +1274,7 @@ Bedienelemente, die nebeneinander stehen, haben alle denselben Radius. Verschied
 
 Die Rechnung greift nur, wenn der Abstand **kleiner** als der Außenradius ist. Ein Element mit 16 Abstand zur Kante liegt bei einem Außenradius von 12 rechnerisch außerhalb der Rundung, die Formel ergibt einen negativen Wert. Es ist dann weit genug von der Ecke entfernt, dass Konzentrik keine Rolle mehr spielt, und nimmt einfach eine Stufe aus der Menge.
 
-Volle Rundungen bei Pills und Avataren sind keine Stufe, sondern eine eigene Form, und bleiben davon unberührt.
+Volle Rundungen bei Pills und Avataren sind eine eigene Form und keine Stufe. Für sie gilt die Rechnung nicht.
 
 ### Verwandt
 
@@ -1288,15 +1288,15 @@ Form · https://standby.design/docs/rules/form-senkrechtes-padding-wird-optisch-
 **Geltung:** universal · web, react-native · **Vorgabe:** 14 senkrecht gegen 16 waagerecht
 
 > **Regel**
-> Setze das senkrechte Padding eine Spur kleiner als das waagerechte, wenn es rundherum gleich aussehen soll. Gleich gemessen ist nicht gleich gesehen.
+> Setze das senkrechte Padding eine Spur kleiner als das waagerechte, wenn es rundherum gleich aussehen soll. Gleiche Werte sehen nicht gleich aus.
 
 ### Warum
 
-Senkrechter Weißraum wirkt größer als waagerechter desselben Maßes. Setzt Du rundherum denselben Wert, sieht die Fläche oben und unten luftiger aus als an den Seiten, obwohl das Lineal etwas anderes sagt. Die kleine Absenkung gleicht das aus.
+Senkrechter Weißraum wirkt größer als waagerechter desselben Maßes. Setzt Du rundherum denselben Wert, sieht die Fläche oben und unten luftiger aus als an den Seiten, obwohl die Werte gleich sind. Die kleine Absenkung gleicht das aus.
 
-Das ist keine Frage des Geschmacks, sondern Wahrnehmung, und sie ist in der Gestaltung seit langem bekannt. Derselbe Effekt eine Ebene tiefer: ein waagerechter Strich wirkt dicker als ein senkrechter gleicher Breite. Schriftgestalter ziehen die Waagerechten in einem Buchstaben deshalb dünner als die Senkrechten, sonst wirkt das Zeichen kopflastig. Wer es misst, findet den Unterschied. Wer es liest, sieht ihn nicht — und genau das ist das Ziel.
+Das liegt an der Wahrnehmung, mit Geschmack hat es nichts zu tun. In der Gestaltung ist der Effekt seit langem bekannt. Er zeigt sich auch im Kleinen. Ein waagerechter Strich wirkt dicker als ein senkrechter gleicher Breite. Schriftgestalter ziehen die Waagerechten in einem Buchstaben deshalb dünner als die Senkrechten, sonst wirkt das Zeichen kopflastig. Wer nachmisst, findet den Unterschied. Beim Lesen sieht man ihn nicht, und das ist so gewollt.
 
-Es ist derselbe Gedanke wie bei optischer statt mathematischer Zentrierung: das Auge entscheidet, nicht das Maßband.
+Es ist derselbe Gedanke wie bei optischer statt mathematischer Zentrierung. Maßgeblich ist, was das Auge sieht.
 
 ### Hart und weich
 
@@ -1306,7 +1306,7 @@ Es ist derselbe Gedanke wie bei optischer statt mathematischer Zentrierung: das 
 | Der Ausgleichswert ist eine benannte Stufe der Skala, kein Wert in der Ansicht | hart |
 | Um wie viel kleiner | weich, Vorgabe 14 gegen 16, also etwa ein Achtel |
 
-Der Abstand zwischen den beiden Werten darf klein sein. Er soll nicht auffallen, er soll die Auffälligkeit beseitigen.
+Der Abstand zwischen den beiden Werten darf klein sein. Der Ausgleich soll selbst nicht auffallen, nur die ungleiche Wirkung beseitigen.
 
 ### Woran Du den Verstoß erkennst
 
@@ -1333,9 +1333,9 @@ Der Abstand zwischen den beiden Werten darf klein sein. Er soll nicht auffallen,
 
 ### Der Ausgleichswert braucht eine eigene Stufe
 
-Übliche Abstands-Skalen springen von 12 auf 16 und kennen den Wert dazwischen nicht. Wer ihn dann im Code von Hand setzt, hat ihn ab da an jeder Stelle einzeln stehen.
+Übliche Abstands-Skalen springen von 12 auf 16 und kennen den Wert dazwischen nicht. Setzt ihn dann jemand von Hand, steht er ab da an jeder Stelle einzeln im Code.
 
-Der Ausgleichswert gehört deshalb als benannte Stufe in die Skala, mit einem Namen, der sagt wofür er da ist. Sonst wird er jedes Mal neu erfunden, und beim dritten Mal ist er nicht mehr derselbe.
+Der Ausgleichswert gehört deshalb als benannte Stufe in die Skala, mit einem Namen, der sagt wofür er da ist. Sonst setzt ihn jeder neu, und schon nach wenigen Stellen weichen die Werte voneinander ab.
 
 ### Grenzen
 
@@ -1357,11 +1357,11 @@ Fläche · https://standby.design/docs/rules/flaeche-die-ebene-folgt-der-rolle-n
 
 ### Warum
 
-Eine Ebene ist ein Signal, kein Nebenprodukt der Schachtelung. Wächst sie mit jedem Container mit, ist die Menge offen, und dann passieren zwei Dinge. Erstens ist die fünfte Ebene nicht mehr von der vierten zu unterscheiden, weil der Kontrast am Ende der Kette aufgebraucht ist. Zweitens hängt die Farbe eines Elements davon ab, wie tief es zufällig eingebaut wurde. Verschiebt jemand es eine Ebene höher, ändert es seine Farbe, ohne dass jemand eine Entscheidung getroffen hat.
+Eine Ebene ist ein bewusst gesetztes Signal. Sie entsteht nicht nebenbei aus der Schachtelung. Wächst sie mit jedem Container mit, ist die Menge offen, und dann passieren zwei Dinge. Erstens ist die fünfte Ebene nicht mehr von der vierten zu unterscheiden, weil der Kontrast am Ende der Kette aufgebraucht ist. Zweitens hängt die Farbe eines Elements davon ab, wie tief es zufällig eingebaut wurde. Baut jemand es eine Schachtelungsstufe höher ein, ändert es seine Farbe, ohne dass jemand das entschieden hat.
 
-Umgekehrt ergibt sich daraus auch, was nicht geht: ein Element **innerhalb** einer Fläche bekommt nie die Farbe der Ebene darunter. Es liest sich sonst als Loch.
+Daraus folgt auch eine Grenze nach unten. Ein Element **innerhalb** einer Fläche bekommt nie die Farbe der Ebene darunter. Sonst sieht es aus wie ein Loch in der Fläche.
 
-Wie viele Ebenen es gibt, ist damit noch nicht gesagt. Das ist eine Frage des Produkts und der Handschrift, nicht der Regel.
+Wie viele Ebenen es gibt, ist damit noch nicht gesagt. Das entscheidet das Produkt mit seiner Handschrift. Die Regel legt es nicht fest.
 
 ### Hart und weich
 
@@ -1374,7 +1374,7 @@ Wie viele Ebenen es gibt, ist damit noch nicht gesagt. Das ist eine Frage des Pr
 
 ### Ein bewährter Satz von drei
 
-Drei tragen die meisten Anwendungen, und sie lassen sich in einem Satz benennen: die Seite, das was darauf liegt, das was man anfassen kann.
+Drei tragen die meisten Anwendungen, und sie lassen sich in einem Satz benennen: die Seite, das, was darauf liegt, und das, was man bedienen kann.
 
 ```
 Seite            ──  die Seite selbst
@@ -1429,9 +1429,9 @@ Bedienung · https://standby.design/docs/rules/bedienung-verhalten-und-aussehen-
 
 ### Warum
 
-Ohne diese Trennung wird das Aussehen zum Verhalten. „Der Knopf ist blau" wird zu „blau heißt anklickbar", und beim nächsten Umbau kippt mit der Farbe auch die Bedienlogik. Mit der Trennung kannst Du das Aussehen wechseln, ohne dass sich ändert, was das Element tut. Und Du kannst etwas Neues bauen, indem Du nur sein Verhalten benennst, statt sein Aussehen neu zu erfinden.
+Ohne diese Trennung hängt das Verhalten am Aussehen. Aus „Der Knopf ist blau" wird „blau heißt anklickbar". Ändert der nächste Umbau die Farbe, ändert sich auch die Bedienlogik. Mit der Trennung kannst Du das Aussehen wechseln, ohne dass sich ändert, was das Element tut. Und Du kannst etwas Neues bauen, indem Du nur sein Verhalten benennst, statt sein Aussehen neu zu erfinden.
 
-Für einen Agenten ist die Tabelle der Verhaltensarten die Antwort auf die häufigste Frage überhaupt: was wird hier eingesetzt? Nicht „nimm einen Button", sondern „das ist ein dauerhafter Zustand, also `toggleable`, also Schalter oder Reiter".
+Ein Agent fragt am häufigsten, welches Element er hier einsetzt. Die Tabelle der Verhaltensarten beantwortet das. Statt „nimm einen Button" heißt es dann „das ist ein dauerhafter Zustand, also `toggleable`, also Schalter oder Reiter".
 
 ### Die fünf Verhaltensarten
 
@@ -1443,13 +1443,13 @@ Für einen Agenten ist die Tabelle der Verhaltensarten die Antwort auf die häuf
 | `navigable` | Bringt den Nutzer an eine andere Stelle |
 | `readable` | Zeigt nur an, nimmt keine Bedienung entgegen |
 
-Die Verhaltensarten entsprechen dem, was ein blinder Nutzer heute schon erlebt: der Accessibility Tree kennt Verhalten, kein Aussehen. Sie sind damit keine Wette auf eine Abstraktion, sondern die Wahrheit der Plattform.
+Die Verhaltensarten entsprechen dem, was ein blinder Nutzer heute schon erlebt. Der Accessibility Tree kennt Verhalten, kein Aussehen. Die Verhaltensarten bilden also ab, was die Plattform schon kennt, und sind keine ausgedachte Abstraktion.
 
 ### Das Element im Code
 
 Jede Verhaltensart hat ihr Bauteil im Code. `navigable` ist ein Link mit Adresse, `pressable` und `toggleable` sind ein `button`, `editable` ist ein Feld mit verbundener Beschriftung, `readable` ist Text. Ein Kasten mit Klick sieht für die Maus genauso aus, aber die Tastatur erreicht ihn nicht, der Screenreader erkennt ihn nicht, und ein Link lässt sich nicht in einem neuen Tab öffnen. Gibt es kein passendes Bauteil, etwa für Tabs oder eine Kombi-Box, gilt das Muster aus der ARIA APG.
 
-Eine Rolle im Code ist ein Versprechen. Wer behauptet, etwas sei ein Menü, Tabs oder ein Raster, baut auch die Tastaturbedienung dazu, sonst erwartet der Nutzer Pfeiltasten, die nichts tun. Eine Hauptnavigation ist deshalb keine Menü-Rolle, sondern eine Liste von Links.
+Eine Rolle im Code weckt beim Nutzer Erwartungen. Wer etwas als Menü, Tabs oder Raster auszeichnet, baut auch die Tastaturbedienung dazu. Sonst drückt der Nutzer Pfeiltasten, die nichts tun. Eine Hauptnavigation ist deshalb eine Liste von Links ohne Menü-Rolle.
 
 ### Das Wörterbuch
 
@@ -1467,7 +1467,7 @@ Bekannte Paare aus Verhalten und Aussehen, die einen Namen tragen. Der Name der 
 | Fließtext-Link | navigable | text | verdickte Unterstreichung | `a` mit `href` |
 | Badge | readable | badge | — | Text |
 
-Chip und Badge sind verwandt, aber nicht gleich. Der Chip ist ein kleiner Umschalter, etwa ein Filter, der an oder aus ist. Das Badge hebt nur eine Information als Etikett hervor. Weil das Auge Gleiches für Gleichartiges hält, sehen die beiden nicht gleich aus: Das Badge ist schmaler und hat nur ein knappes Padding, der Chip hat die Polsterung eines Bedienelements. So sieht man vor dem Klick, was sich drücken lässt.
+Chip und Badge sind verwandt, aber nicht gleich. Der Chip ist ein kleiner Umschalter, etwa ein Filter, der an oder aus ist. Das Badge hebt nur eine Information als Etikett hervor. Was gleich aussieht, hält der Nutzer für gleichartig. Deshalb sehen die beiden verschieden aus. Das Badge ist schmaler und hat nur ein knappes Padding, der Chip hat die Polsterung eines Bedienelements. So sieht man vor dem Klick, was sich drücken lässt.
 
 ### Woran Du den Verstoß erkennst
 
@@ -1483,9 +1483,9 @@ Chip und Badge sind verwandt, aber nicht gleich. Der Chip ist ein kleiner Umscha
 
 ### Grenzen
 
-Zusammengesetzte Gebilde — Dropdown, Datepicker, Dialog — bestehen aus mehreren Elementen und bekommen keine eigene Verhaltensart. Ihr Auslöser ist `pressable`, ihre Einträge sind `navigable` oder `toggleable`.
+Zusammengesetzte Gebilde wie Dropdown, Datepicker oder Dialog bestehen aus mehreren Elementen und bekommen keine eigene Verhaltensart. Ihr Auslöser ist `pressable`, ihre Einträge sind `navigable` oder `toggleable`.
 
-Und nicht jede Kombination ergibt Sinn. Welche verboten sind, gehört in die Grammatik des Projekts, nicht in diese Notiz.
+Nicht jede Kombination ergibt Sinn. Welche verboten sind, gehört in die Grammatik des Projekts, nicht in diese Notiz.
 
 ### Verwandt
 
@@ -1506,13 +1506,13 @@ Bedienung · https://standby.design/docs/rules/bedienung-verhalten-und-aussehen-
 
 ### Warum
 
-Was in der Ansicht steht, bekommt die nächste Änderung nicht mit. Es ist nicht auffindbar, weil niemand weiß, dass es existiert, und es ist nicht zählbar, weil es keinen Namen hat.
+Was in der Ansicht steht, bleibt bei der nächsten Änderung, wie es war. Niemand findet es, weil niemand weiß, dass es existiert. Niemand kann es zählen, weil es keinen Namen hat.
 
-In einer gewachsenen Anwendung findet man dafür schnell mehrere hundert Stellen: die Karte gibt es gar nicht als benanntes Aussehen, sondern als Hunderte handgebauter Flächen mit uneinheitlichem Radius und Padding. Jede einzelne war zum Zeitpunkt ihrer Entstehung richtig. Zusammen ergeben sie kein System mehr, sondern mehrere hundert Meinungen darüber, wie eine Karte aussieht.
+In einer gewachsenen Anwendung findet man schnell mehrere hundert solcher Stellen. Die Karte gibt es dann nicht als benanntes Aussehen, nur als Hunderte handgebauter Flächen mit uneinheitlichem Radius und Padding. Jede einzelne war richtig, als sie entstand. Zusammen ergeben sie kein System mehr. Jede Stelle legt anders fest, wie eine Karte aussieht.
 
-Beim Verhalten ist es dasselbe, nur unsichtbarer. Schreibt eine Ansicht ihren eigenen Hover, hat sie das Drücken neu gebaut — mit eigener Dauer, eigener Stufe und eigener Richtung. Ändert sich die Regel im System, ändert sich diese Stelle nicht mit, und niemand merkt es, weil sie ja aussieht wie vorher.
+Beim Verhalten ist es dasselbe, nur schwerer zu sehen. Schreibt eine Ansicht ihren eigenen Hover, hat sie das Drücken neu gebaut, mit eigener Dauer, Stufe und Richtung. Ändert sich die Regel im System, ändert sich diese Stelle nicht mit. Niemand merkt es, weil sie aussieht wie vorher.
 
-Der Nachbau passiert selten aus Absicht. Er passiert, weil das vorhandene Aussehen eine Kleinigkeit nicht kann. Genau dann ist der richtige Schritt, dieses Aussehen zu erweitern oder ein neues zu benennen — nicht, es in der Ansicht zu umgehen. Sonst gibt es die Kleinigkeit ab jetzt zweimal.
+Selten baut jemand absichtlich nach. Meist kann das vorhandene Aussehen eine Kleinigkeit nicht. Dann erweitert er dieses Aussehen oder benennt ein neues. Umgeht er es in der Ansicht, gibt es die Kleinigkeit ab jetzt zweimal.
 
 ### Woran Du den Verstoß erkennst
 
@@ -1542,7 +1542,7 @@ Ein häufiger Name wie Button ist in Ordnung. Er ist die Abkürzung für ein bek
 
 ### Grenzen
 
-Eine Anordnung, die es genau einmal gibt — eine bestimmte Kachel, ein bestimmtes Kopfelement —, gehört in den Bereichsordner ihres Themas. Das ist kein Verstoß: sie setzt vorhandene Elemente zusammen. Sie legt kein neues Verhalten und kein neues Aussehen fest.
+Eine Anordnung, die es genau einmal gibt, etwa eine bestimmte Kachel oder ein bestimmtes Kopfelement, gehört in den Bereichsordner ihres Themas. Das ist kein Verstoß. Sie setzt vorhandene Elemente zusammen. Sie legt kein neues Verhalten und kein neues Aussehen fest.
 
 ### Verwandt
 
@@ -1563,23 +1563,23 @@ Bedienung · https://standby.design/docs/rules/bedienung-die-hoehe-gehoert-der-z
 
 #### Ein Paar hat eine gemeinsame Kante
 
-Ein Eingabefeld mit einem Button daneben ist ein Paar. Der Button gehört zu dem Feld, er tut etwas mit dem, was darin steht. Sind beide verschieden hoch, verliert die Zeile ihre Ober- und Unterkante, der Button hängt in der Luft, und die beiden lesen sich als zwei Dinge, die zufällig nebeneinander liegen.
+Ein Eingabefeld mit einem Button daneben ist ein Paar. Der Button gehört zu dem Feld, er tut etwas mit dem, was darin steht. Sind beide verschieden hoch, hat die Zeile keine gemeinsame Ober- und Unterkante mehr. Der Button wirkt lose, und der Nutzer sieht zwei Dinge, die zufällig nebeneinander liegen.
 
 Das ist dieselbe Mechanik wie in Erst Abstand, dann Fläche, dann Linie, nur auf der anderen Achse: Nähe gruppiert waagerecht, eine gemeinsame Kante gruppiert senkrecht. Beides wirkt, bevor jemand liest.
 
 #### Warum es überhaupt mehr als eine Höhe gibt
 
-Weil Dichte eine Eigenschaft des Kontexts ist. In einer Werkzeugleiste stehen viele Bedienelemente nebeneinander, jedes wird kurz berührt und wieder losgelassen. Dort gewinnt Kompaktheit, weil die Leiste sonst mehr Platz frisst als der Inhalt, für den sie da ist.
+Die Dichte hängt vom Kontext ab. In einer Werkzeugleiste stehen viele Bedienelemente nebeneinander, jedes wird kurz berührt und wieder losgelassen. Dort zählt Kompaktheit, weil die Leiste sonst mehr Platz braucht als der Inhalt, für den sie da ist.
 
-In einem Formular tippt der Nutzer. Er hält sich dort auf, er trifft dort, er liest dort. Da gewinnen Ruhe und Trefferfläche.
+In einem Formular tippt der Nutzer. Er bleibt länger dort, zielt auf Felder und liest. Da zählen Ruhe und Trefferfläche.
 
-Das ist ein Unterschied zwischen zwei **Situationen**, nicht zwischen zwei Bauteilen. Ein Button ist in beiden derselbe Button.
+Der Unterschied liegt in der **Situation**. Ein Button ist in beiden derselbe Button.
 
 #### Der Sonderschalter ist das Warnzeichen
 
-Formuliert man die Regel am Element statt an der Zeile („Buttons sind klein, Felder sind groß"), braucht sie sofort eine Ausnahme: einen Schalter, der einen Button für den Einsatz neben Feldern auf Feldhöhe hebt. Und den braucht man dauernd.
+Formuliert man die Regel am Element statt an der Zeile („Buttons sind klein, Felder sind groß"), braucht sie sofort eine Ausnahme: einen Schalter, der einen Button für den Einsatz neben Feldern auf Feldhöhe hebt. Diesen Schalter braucht man dann dauernd.
 
-Eine Regel, die ständig eine Ausnahme braucht, hat die falsche Frage gestellt. Die Frage ist nicht, welche Art von Element das ist, sondern in welcher Zeile es steht.
+Braucht eine Regel ständig eine Ausnahme, setzt sie an der falschen Stelle an. Entscheidend ist die Zeile, in der ein Element steht. Die Art des Elements spielt keine Rolle.
 
 ### Hart und weich
 
@@ -1592,7 +1592,7 @@ Eine Regel, die ständig eine Ausnahme braucht, hat die falsche Frage gestellt. 
 | Ein Icon-only-Element ist ein Quadrat auf der Höhe seiner Zeile | hart |
 | Wie viele Höhen es gibt und wie hoch sie sind | weich, Vorgabe zwei Stufen: dicht 2rem, Formular 2.5rem |
 
-Zwei Stufen reichen für die meisten Anwendungen. Wer eine dritte einführt, braucht dafür einen dritten Kontext, den er benennen kann — nicht eine Stelle, an der es gerade besser aussah.
+Zwei Stufen reichen für die meisten Anwendungen. Wer eine dritte einführt, muss dafür einen dritten Kontext benennen können. Eine einzelne Stelle, an der es gerade besser aussah, reicht nicht.
 
 ### Woran Du den Verstoß erkennst
 
@@ -1623,7 +1623,7 @@ Zwei Stufen reichen für die meisten Anwendungen. Wer eine dritte einführt, bra
 
 Nach unten begrenzt die Trefferfläche aus Klickbares hat eine Fläche, und nur Klickbares sieht so aus. Auf Touch-Oberflächen ist die dichte Stufe zu klein für den Finger, sie bleibt dort Werkzeugleisten am Zeigegerät vorbehalten.
 
-Ein Element, das allein steht und in keiner Zeile sitzt, nimmt die Höhe seines Umfelds. Im Zweifel die großzügige, weil ein einzelner Knopf fast immer eine Aufgabe ist und keine Werkzeugleiste.
+Ein Element, das allein steht und in keiner Zeile sitzt, nimmt die Höhe seines Umfelds. Im Zweifel nimmt es die großzügige Höhe. Ein einzelner Knopf gehört fast immer zu einer Aufgabe und nicht zu einer Werkzeugleiste.
 
 Beschriftete Elemente wachsen nur in der Breite mit ihrem Inhalt. Die Höhe ändert sich nie durch den Text darin.
 
@@ -1642,7 +1642,7 @@ Bedienung · https://standby.design/docs/rules/bedienung-kurze-zustaende-verschi
 **Geltung:** universal · web, react-native
 
 > **Regel**
-> Kurzzeitige Zustände — Hover, Gedrückt — verschieben sich **innerhalb** derselben Palette: Hover eine Stufe **heller**, Gedrückt eine Stufe **dunkler**, in heller und dunkler Erscheinung gleich. Dauerhafte Zustände — an, aktuell, ungültig — **wechseln** die Palette.
+> Kurzzeitige Zustände (Hover, Gedrückt) verschieben sich **innerhalb** derselben Palette: Hover eine Stufe **heller**, Gedrückt eine Stufe **dunkler**, in heller und dunkler Erscheinung gleich. Dauerhafte Zustände (an, aktuell, ungültig) **wechseln** die Palette.
 
 ### Warum
 
@@ -1652,7 +1652,7 @@ Verschieben und Wechseln sind zwei verschiedene Bewegungen im Farbraum. Solange 
 
 ### Warum Hover heller wird
 
-Hover sagt: „Ich reagiere auf Dich, drück mich." Das Element kommt dem Zeiger ein Stück entgegen, und was näher am Licht ist, wird heller. Gedrückt ist das Gegenteil: das Element sinkt ein und wird dunkler.
+Hover zeigt, dass das Element reagiert und sich drücken lässt. Es hebt sich dem Zeiger ein Stück entgegen, und was näher am Licht ist, wird heller. Beim Drücken sinkt das Element ein und wird dunkler.
 
 Im Dark Mode kehrt sich das nicht um. Das Licht kommt in beiden Erscheinungen von vorn, deshalb sind auch dort höhere Ebenen heller als tiefere. Wer die Richtung mit dem Modus umdreht, lässt denselben Knopf im Hellen einsinken und im Dunkeln herauskommen.
 
@@ -1660,9 +1660,9 @@ Weil Hover und Gedrückt in entgegengesetzte Richtungen gehen, liegen sie zwei S
 
 ### Die Schritte sind gleichmäßig
 
-Die Abstände zwischen Ruhe, Hover und Gedrückt kommen aus derselben Skala und sind gleich groß. Werden sie pro Baustein von Hand gewählt, ist der Sprung an einer Stelle kaum zu sehen und an der nächsten zu stark. Auffallen tut das erst, wenn zwei Bausteine nebeneinander liegen, und dann ist es überall.
+Die Abstände zwischen Ruhe, Hover und Gedrückt kommen aus derselben Skala und sind gleich groß. Werden sie pro Baustein von Hand gewählt, ist der Sprung an einer Stelle kaum zu sehen und an der nächsten zu stark. Das fällt erst auf, wenn zwei Bausteine nebeneinander liegen. Dann sieht man es überall.
 
-Wie groß ein Schritt ist, hängt von der Palette des Projekts ab. Gleich groß muss er sein, nicht bestimmt groß.
+Wie groß ein Schritt ist, hängt von der Palette des Projekts ab. Die Regel legt keine Größe fest, nur dass alle Schritte gleich groß sind.
 
 ### Kein Schleier als Rückmeldung
 
@@ -1690,11 +1690,11 @@ An        ██   andere Palette      An        ░░  ← gleich wie Hover
 
 ### Grenzen
 
-Am Ende der Skala ist kein Platz mehr. Ein fast weißes Element kann nicht heller werden: dort geht Hover eine Stufe dunkler und Gedrückt zwei. Ein fast schwarzes kann nicht dunkler werden: dort geht Gedrückt zwei Stufen heller. Das ist die einzige Umkehr.
+Am Ende der Skala ist kein Platz mehr. Ein fast weißes Element kann nicht heller werden. Dort geht Hover eine Stufe dunkler und Gedrückt zwei. Ein fast schwarzes kann nicht dunkler werden. Dort geht Gedrückt zwei Stufen heller. Das ist die einzige Umkehr.
 
 Ein Rahmen ist keine Fläche, die sich hebt. Beim Eingabefeld wird der Rand beim Hover kräftiger, damit er sich deutlicher von der Umgebung abhebt. Die Regel oben gilt für Flächen.
 
-Ein Eingabefeld im Fehlerzustand wechselt die Palette, obwohl der Fehler vorübergehend ist. Das ist gewollt: „ungültig" ist ein dauerhafter Zustand des Feldes, solange die Eingabe nicht stimmt, und keine Rückmeldung auf eine Berührung.
+Ein Eingabefeld im Fehlerzustand wechselt die Palette, obwohl der Fehler vorübergehend ist. Das ist gewollt. „Ungültig" ist ein dauerhafter Zustand des Feldes, solange die Eingabe nicht stimmt, und keine Rückmeldung auf eine Berührung.
 
 ### Verwandt
 
@@ -1821,9 +1821,9 @@ Bedienung · https://standby.design/docs/rules/bedienung-gewicht-ist-ein-budget-
 
 ### Warum
 
-Gewicht ist ein Budget. Jeder laute Button macht den wichtigen leiser, und eine Ansicht mit drei gefüllten Buttons sagt dem Nutzer nicht mehr, wo es weitergeht.
+Gewicht ist ein Budget. Jeder laute Button macht den wichtigen leiser. Stehen drei gefüllte Buttons in einer Ansicht, erkennt der Nutzer nicht mehr, wo es weitergeht.
 
-Eine Beschriftung wie „Keine Änderungen“ macht aus dem Knopf eine Anzeige. Der Nutzer kann nicht vorhersagen, was ein Klick auslöst. Wechselt die Beschriftung mit dem Zustand, springt außerdem die Breite des Knopfes.
+Mit einer Beschriftung wie „Keine Änderungen“ zeigt der Knopf einen Zustand an. Der Nutzer kann nicht vorhersagen, was ein Klick auslöst. Wechselt die Beschriftung mit dem Zustand, springt außerdem die Breite des Knopfes.
 
 „Speichern“ allein reicht, solange die Seite nur einen Gegenstand hat. Gibt es mehrere, nennt der Knopf seinen: „Fehlzeiten speichern“. Eine Menge darf dabei stehen, weil sie den Umfang der Handlung beschreibt: „3 Monate speichern“.
 
@@ -1876,13 +1876,13 @@ Bedienung · https://standby.design/docs/rules/bedienung-ein-button-ist-nie-gesp
 
 ### Warum
 
-Ein ausgegrauter Button ist eine Sackgasse ohne Erklärung. Der Nutzer sieht, dass er nicht weiterkommt, aber nicht warum. Er sucht das Formular nach dem fehlenden Häkchen ab, oder er gibt auf.
+Bei einem ausgegrauten Button sieht der Nutzer, dass er nicht weiterkommt, aber nicht warum. Er sucht das Formular nach dem fehlenden Häkchen ab, oder er gibt auf.
 
-Ein aktiver Button beantwortet die Frage beim Klick. Das fehlende Feld markiert sich, die Meldung sagt, was zu tun ist, und der Fehler verschwindet, sobald das Feld stimmt. Das ist derselbe Weg wie in Ein Fehler steht dort, wo er entstanden ist.
+Ein aktiver Button zeigt beim Klick, was fehlt. Das fehlende Feld wird markiert, die Meldung sagt, was zu tun ist, und der Fehler verschwindet, sobald das Feld stimmt. Das ist derselbe Weg wie in Ein Fehler steht dort, wo er entstanden ist.
 
-Steht kein Feld im Weg, sondern eine Grenze, etwa ein volles Kontingent oder ein fehlender Tarif, ist der gesperrte Button die falsche Handlung am richtigen Ort. „Mitglied einladen“ wird dann zu „Mehr Plätze buchen“. Der Nutzer sieht sofort, was ihn weiterbringt.
+Manchmal hält eine Grenze den Nutzer auf, etwa ein volles Kontingent oder ein fehlender Tarif. Dann steht an der Stelle des Buttons die Handlung, die die Grenze aufhebt. „Mitglied einladen“ wird dann zu „Mehr Plätze buchen“. Der Nutzer sieht sofort, was ihn weiterbringt.
 
-Die eine Sperre, die bleibt, schützt vor doppeltem Absenden. Während die Anfrage läuft, ist ein zweiter Klick nie gewollt.
+Gesperrt wird ein Button nur, während eine Anfrage läuft. So geht nichts doppelt raus. Ein zweiter Klick ist in dieser Zeit nie gewollt.
 
 ### Die Fälle
 
@@ -1899,7 +1899,7 @@ Die eine Sperre, die bleibt, schützt vor doppeltem Absenden. Während die Anfra
 |---|---|
 | Kein Button ist gesperrt, außer während einer Anfrage | hart |
 | Beim Klick auf einen unvollständigen Stand zeigt die Ansicht, was fehlt | hart |
-| Ohne Recht wird die Handlung nicht gezeigt, nicht ausgegraut | hart |
+| Ohne Recht wird die Handlung ausgeblendet statt ausgegraut | hart |
 | Wie der Fehler erscheint | weich, Vorgabe am Feld nach Ein Fehler steht dort, wo er entstanden ist |
 
 ### Woran Du den Verstoß erkennst
@@ -1914,7 +1914,7 @@ Die eine Sperre, die bleibt, schützt vor doppeltem Absenden. Während die Anfra
 
 Steht der Grund unmittelbar neben dem Button und ist ohne Lesen zu sehen, darf er gesperrt sein. Das Beispiel ist der Senden-Knopf neben einem leeren Chatfeld.
 
-Ein Wert, den man sehen, aber nicht ändern darf, ist kein gesperrtes Feld, sondern Text. Er steht lesbar und kopierbar da, ohne Rahmen und ohne Bedienzeichen.
+Einen Wert, den man sehen, aber nicht ändern darf, zeigt die Ansicht als Text statt als gesperrtes Feld. Er steht lesbar und kopierbar da, ohne Rahmen und ohne Bedienzeichen.
 
 Sperren, die sich aus dem Bild erklären, bleiben erlaubt: „Zurück“ auf der ersten Seite, „Weiter“ auf der letzten.
 
@@ -1939,7 +1939,7 @@ Bedienung · https://standby.design/docs/rules/bedienung-eine-lange-auswahl-laes
 
 ### Warum
 
-Jede weitere Option verlängert die Entscheidung. Bei 200 Ländern sucht niemand mit den Augen, er tippt.
+Jede weitere Option macht die Entscheidung länger. Bei 200 Ländern tippt der Nutzer, statt die Liste mit den Augen abzusuchen.
 
 ### Woran Du den Verstoß erkennst
 
@@ -1975,9 +1975,9 @@ Bedienung · https://standby.design/docs/rules/bedienung-jede-geste-hat-einen-zw
 
 ### Warum
 
-Nicht jeder kann ziehen oder präzise wischen. Und keine Geste ist sichtbar.
+Nicht jeder kann ziehen oder präzise wischen. Außerdem sieht man keiner Geste an, dass es sie gibt.
 
-Nachgebaut wird nicht die Geste, sondern das Ergebnis. Eine Liste, die man per Ziehen sortiert, bekommt „Nach oben“ und „Nach unten“ im Menü der Zeile. Was man per Wischen löscht, lässt sich auch im Menü löschen. Ein Regler reagiert auf Pfeiltasten. Eine Funktion, die auf Schütteln reagiert, lässt sich abschalten.
+Der zweite Weg liefert das Ergebnis der Geste. Eine Liste, die man per Ziehen sortiert, bekommt „Nach oben“ und „Nach unten“ im Menü der Zeile. Was man per Wischen löscht, lässt sich auch im Menü löschen. Ein Regler reagiert auf Pfeiltasten. Eine Funktion, die auf Schütteln reagiert, lässt sich abschalten.
 
 ### Woran Du den Verstoß erkennst
 
@@ -2015,19 +2015,19 @@ Bedienung · https://standby.design/docs/rules/bedienung-bewegung-hat-einen-wert
 
 ### Warum
 
-Der Korridor hat einen Grund, die Zahl darin nicht. Unter etwa 100 Millisekunden nimmt niemand mehr eine Bewegung wahr, der Wechsel liest sich als Sprung und die Rückmeldung geht verloren. Über etwa 200 wartet der Nutzer auf die Oberfläche, und das Warten fällt umso mehr auf, je öfter er den Wechsel auslöst.
+Für den Korridor gibt es einen Grund, für die genaue Zahl darin nicht. Unter etwa 100 Millisekunden nimmt niemand mehr eine Bewegung wahr. Der Wechsel wirkt wie ein Sprung, und der Nutzer sieht keine Rückmeldung. Über etwa 200 wartet der Nutzer auf die Oberfläche, und das Warten fällt umso mehr auf, je öfter er den Wechsel auslöst.
 
-Innerhalb des Korridors ist die Zahl eine Frage der Handschrift. Ein ruhiges, schweres Produkt darf am oberen Ende sitzen, ein Werkzeug, das schnell wirken soll, am unteren. Diese Entscheidung nimmt die Regel niemandem ab.
+Innerhalb des Korridors hängt die Zahl vom Stil des Produkts ab. Ein ruhiges, schweres Produkt darf am oberen Ende sitzen, ein Werkzeug, das schnell wirken soll, am unteren. Diese Entscheidung nimmt die Regel niemandem ab.
 
-Hart ist etwas anderes: dass es **eine** Dauer gibt. Verschiedene Dauern nebeneinander lassen eine Ansicht flackern, weil mehrere Elemente in einer Reihe zu verschiedenen Zeitpunkten ankommen. Der Blick sieht dann nicht einen Wechsel, sondern drei. Und weil die Dauer als Token steht, lässt sich die Handschrift später an einer Stelle ändern statt an zweihundert.
+Hart ist, dass es **eine** Dauer gibt. Verschiedene Dauern nebeneinander lassen eine Ansicht flackern, weil mehrere Elemente in einer Reihe zu verschiedenen Zeitpunkten ankommen. Der Nutzer sieht dann drei Wechsel statt einem. Weil die Dauer als Token steht, lässt sich der Stil später an einer Stelle ändern statt an zweihundert.
 
-Die letzte Hälfte ist keine Höflichkeit. Für Menschen mit vestibulärer Störung löst Bewegung auf dem Bildschirm Schwindel und Übelkeit aus. Die Systemeinstellung ist ihre Bitte, und sie wird beachtet.
+Dass bei reduzierter Bewegung alles sofort wechselt, ist Pflicht. Für Menschen mit vestibulärer Störung löst Bewegung auf dem Bildschirm Schwindel und Übelkeit aus. Mit der Systemeinstellung bitten sie um weniger Bewegung, und das Produkt hält sich daran.
 
-Layout-Eigenschaften rechnen bei jedem Bild die Seite neu, ruckeln und schieben Nachbarn. `all` animiert auch, was nie gemeint war, etwa jede Farbe beim Moduswechsel.
+Layout-Eigenschaften rechnen bei jedem Bild die Seite neu, ruckeln und schieben Nachbarn. `all` animiert auch, was niemand animieren wollte, etwa jede Farbe beim Moduswechsel.
 
-Eine Animation ist Rückmeldung, keine Wartezeit. Wer schnell klickt, darf nicht auf das Ende warten.
+Eine Animation gibt Rückmeldung und lässt niemanden warten. Wer schnell klickt, muss nicht auf ihr Ende warten.
 
-Was sich zusammen bewegt, liest das Auge als eine Sache. Fahren Kopf und Inhalt einer Karte getrennt ein, wirkt sie wie zwei.
+Was sich zusammen bewegt, nimmt der Nutzer als eine Sache wahr. Fahren Kopf und Inhalt einer Karte getrennt ein, wirkt sie wie zwei getrennte Teile.
 
 ### Hart und weich
 
@@ -2057,9 +2057,9 @@ Was sich zusammen bewegt, liest das Auge als eine Sache. Fahren Kopf und Inhalt 
 
 ### Grenzen
 
-Größere Bewegungen sind nicht gemeint und dürfen länger dauern: ein Off-Canvas-Drawer, ein Dialog, ein Seitenwechsel. Der Korridor gilt für Wechsel am Ort — Farbe, Rand, die Position eines Schalterknopfs. Auch die längeren Bewegungen fallen bei reduzierter Bewegung weg.
+Größere Bewegungen sind nicht gemeint und dürfen länger dauern: ein Off-Canvas-Drawer, ein Dialog, ein Seitenwechsel. Der Korridor gilt für Wechsel am Ort, etwa Farbe, Rand oder die Position eines Schalterknopfs. Auch die längeren Bewegungen fallen bei reduzierter Bewegung weg.
 
-Legt eine Marken-Richtlinie im Projekt eine eigene Zahl fest, gilt diese. Der Vorgabewert ist dafür da, dass man ohne eine solche Richtlinie trotzdem loslegen kann, und nicht dafür, sie zu überstimmen.
+Legt eine Marken-Richtlinie im Projekt eine eigene Zahl fest, gilt diese. Der Vorgabewert ist dafür da, dass man ohne eine solche Richtlinie loslegen kann. Eine bestehende Richtlinie überstimmt er nicht.
 
 Farbe, Rahmen und Schatten bei Zustandswechseln, einzeln genannt und mit der Dauer von oben.
 
@@ -2093,7 +2093,7 @@ Wer per Sprache diktiert oder sich vertippt, löst sonst Handlungen aus, die er 
 
 Das Auge folgt dem Bild, die Tab-Taste und der Screenreader folgen dem Code. Solange beides gleich ist, merkt niemand etwas. Weichen sie ab, springt der Fokus quer über den Schirm.
 
-Ein typischer Fall: Am Desktop steht „Abbrechen“ links und „Speichern“ rechts, am Handy soll „Speichern“ oben stehen. Steht „Speichern“ dafür im Code zuerst und dreht CSS die Reihenfolge am Desktop um, landet der erste Tab rechts und der zweite links. Optisch fällt das nie auf, beim Bedienen sofort.
+Ein typischer Fall: Am Desktop steht „Abbrechen“ links und „Speichern“ rechts, am Handy soll „Speichern“ oben stehen. Steht „Speichern“ dafür im Code zuerst und dreht CSS die Reihenfolge am Desktop um, landet der erste Tab rechts und der zweite links. Beim Ansehen fällt das nicht auf. Wer mit der Tastatur bedient, merkt es sofort.
 
 ### Hart und weich
 
@@ -2119,7 +2119,7 @@ Bewegungen, deren Weg selbst die Eingabe ist, etwa Freihandzeichnen.
 
 Kürzel, die nur gelten, solange das Element den Fokus hat, etwa Pfeiltasten in einer Liste.
 
-Rein dekorative Elemente ohne Text und ohne Bedienung. Braucht ein kleiner Schirm eine andere Reihenfolge, wird sie dort im Code anders gebaut, nicht per CSS umgedreht.
+Rein dekorative Elemente ohne Text und ohne Bedienung. Braucht ein kleiner Schirm eine andere Reihenfolge, wird sie dort im Code anders gebaut. CSS dreht sie nicht um.
 
 ### Quelle
 
@@ -2141,15 +2141,15 @@ Bedienung · https://standby.design/docs/rules/bedienung-der-fokus-ist-sichtbar-
 
 ### Warum
 
-Wer mit der Tastatur bedient, sieht ohne Fokus gar nicht, wo er ist. Das betrifft nicht nur Screenreader-Nutzer, sondern jeden, der ein Formular schnell durchtabbt. Der Fokus ist die einzige Rückmeldung, die diese Nutzer bekommen.
+Wer mit der Tastatur bedient, sieht ohne Fokus gar nicht, wo er ist. Das betrifft Screenreader-Nutzer und jeden, der ein Formular schnell durchtabbt. Der Fokus ist die einzige Rückmeldung, die diese Nutzer bekommen.
 
-Die Voreinstellung des Browsers wird oft entfernt, weil sie nicht zum Rest passt, und dann bleibt nichts übrig. Der Wunsch dahinter ist berechtigt — die Antwort darauf ist ein eigener Fokus, kein fehlender.
+Oft wird der Fokus des Browsers entfernt, weil er nicht zum Rest passt. Dann bleibt gar kein Fokus übrig. Der Wunsch dahinter ist berechtigt. Die Lösung ist ein eigener Fokus statt gar keinem.
 
-Dass er das Layout nicht verschieben darf, hat einen praktischen Grund: sitzt er außerhalb des Elements, springt er in engen Reihen über die Nachbarn.
+Dass er das Layout nicht verschieben darf, hat einen praktischen Grund. Sitzt er außerhalb des Elements, springt er in engen Reihen über die Nachbarn.
 
-Ein Fokus, der hinter einer fixierten Kopf- oder Fußleiste liegt, ist so unsichtbar wie ein entfernter. Der Browser scrollt das fokussierte Element nur bis an den Rand des Fensters, und dort steht die Leiste. Der Abstand zur Leiste muss deshalb im Scrollverhalten der Seite stehen. Dasselbe gilt für Sprungziele: Springt ein Anker zu einer Überschrift, landet sie unter der Leiste, nicht dahinter.
+Einen Fokus, der hinter einer fixierten Kopf- oder Fußleiste liegt, sieht der Nutzer so wenig wie einen entfernten. Der Browser scrollt das fokussierte Element nur bis an den Rand des Fensters, und dort steht die Leiste. Der Abstand zur Leiste muss deshalb im Scrollverhalten der Seite stehen. Dasselbe gilt für Sprungziele: Springt ein Anker zu einer Überschrift, landet sie unter der Leiste, nicht dahinter.
 
-Verschwindet das fokussierte Element, springt der Fokus an den Seitenanfang. Der Nutzer verliert seinen Platz.
+Verschwindet das fokussierte Element, springt der Fokus an den Seitenanfang. Der Nutzer muss seine Stelle neu suchen.
 
 ### Hart und weich
 
@@ -2171,7 +2171,7 @@ Hart: jeder Wechsel hat ein Ziel. Weich: nichts.
 
 Die Regel gilt für Tastaturfokus. Ein Fokus nach einem Mausklick darf unterdrückt werden (`:focus-visible`), weil der Mausnutzer schon weiß, wo er geklickt hat.
 
-Wie der Fokus aussieht, ist eine Entscheidung des Projekts und steht dort. Ein weicher Ring auf der Kante ist eine gute Antwort, ein kräftiger Umriss mit Abstand auch — solange er die Nachbarn nicht überlagert.
+Wie der Fokus aussieht, ist eine Entscheidung des Projekts und steht dort. Ein weicher Ring auf der Kante ist eine gute Antwort, ein kräftiger Umriss mit Abstand auch, solange er die Nachbarn nicht überlagert.
 
 Nicht-modale Hinweise wie Kurzmeldungen ziehen den Fokus nicht.
 
@@ -2199,7 +2199,7 @@ Bedienung · https://standby.design/docs/rules/bedienung-name-und-zustand-stehen
 
 ### Warum
 
-Ohne Namen sagt der Screenreader nur „Button". Und wer per Sprache steuert, sagt, was er sieht.
+Ohne Namen sagt der Screenreader nur „Button". Wer per Sprache steuert, nennt den Text, den er sieht.
 
 Für das Design heißt das: Jeder Icon-Button braucht in der Spezifikation einen Namen, auch wenn er nie zu sehen ist. Bei einer Zeile mit Bearbeiten, Kopieren und Löschen hört der Nutzer sonst „Button, Button, Button“.
 
@@ -2249,11 +2249,11 @@ Bedienung · https://standby.design/docs/rules/bedienung-zerstoerendes-trifft-ma
 
 ### Warum
 
-Was nah und groß ist, trifft man schnell, auch aus Versehen. Wer zehnmal am Tag auf „Speichern“ klickt, trifft beim elften Mal den Nachbarn.
+Was nah und groß ist, trifft man schnell, auch aus Versehen. Wer zehnmal am Tag auf „Speichern“ klickt, trifft irgendwann den Knopf daneben.
 
 Wer Enter drückt, um ein Fenster wegzuklicken, soll dabei nichts löschen.
 
-Der Dialog nennt dazu den Gegenstand und die Folge, und die Knöpfe nennen die Handlung: „‚Projekt Alpha‘ löschen?“ mit „Löschen“ und „Abbrechen“. Der Nutzer soll nicht erinnern müssen, worauf er geklickt hat.
+Der Dialog nennt dazu den Gegenstand und die Folge, und die Knöpfe nennen die Handlung: „‚Projekt Alpha‘ löschen?“ mit „Löschen“ und „Abbrechen“. Der Nutzer soll sich nicht erinnern müssen, worauf er geklickt hat.
 
 ### Hart und weich
 
@@ -2299,13 +2299,13 @@ Bedienung · https://standby.design/docs/rules/bedienung-klickbares-hat-eine-fla
 
 ### Warum
 
-Ein nackter Textlink ist auf dem Handy kaum zu treffen. Die Zeilenhöhe von Text ist keine Trefferfläche, und der Daumen ist kein Mauszeiger. Die Höhe eines Buttons in Standardgröße ist genau dafür da: sie ist die Fläche, die ein Finger sicher trifft.
+Ein nackter Textlink ist auf dem Handy kaum zu treffen. Die Zeilenhöhe von Text ist als Trefferfläche zu klein, und ein Daumen trifft ungenauer als ein Mauszeiger. Ein Button in Standardgröße ist genau so hoch, dass ein Finger ihn sicher trifft.
 
-Der zweite Grund ist Erkennbarkeit. Eine Fläche sagt „hier kannst Du drücken", bevor der Nutzer den Text gelesen hat. Ein Textlink sagt es erst danach, und in einer Fußzeile voller Text gar nicht.
+Der zweite Grund ist Erkennbarkeit. Eine Fläche zeigt, dass man hier drücken kann, bevor der Nutzer den Text gelesen hat. Ein Textlink zeigt es erst danach, in einer Fußzeile voller Text gar nicht.
 
-Der Wunsch hinter dem Textlink ist meistens „das soll unauffällig sein". Das ist ein berechtigter Wunsch, aber die Antwort darauf ist Schriftfarbe und Schriftgröße, nicht eine kleinere Fläche. Dezent heißt leise, nicht schwer zu treffen.
+Der Wunsch hinter dem Textlink ist meistens „das soll unauffällig sein". Der Wunsch ist berechtigt. Unauffällig wird ein Element über Schriftfarbe und Schriftgröße, die Fläche bleibt gleich groß. Ein dezentes Element ist leise, aber genauso leicht zu treffen.
 
-Ein toter Klick lässt den Nutzer zweifeln, ob die Seite kaputt ist. Danach traut er auch den echten Knöpfen weniger.
+Klickt der Nutzer auf etwas, das nichts tut, fragt er sich, ob die Seite kaputt ist. Danach traut er auch den echten Knöpfen weniger.
 
 ### Hart und weich
 
@@ -2348,7 +2348,7 @@ Ein toter Klick lässt den Nutzer zweifeln, ob die Seite kaputt ist. Danach trau
 
 ### Grenzen
 
-Die einzige Ausnahme ist ein Wort oder eine Wortgruppe **mitten im Fließtext**, etwa ein Verweis innerhalb eines Absatzes in den Rechtstexten. Dort wäre eine Fläche der Fremdkörper. Sobald der Link auf einer eigenen Zeile steht, gilt die Regel wieder.
+Die einzige Ausnahme ist ein Wort oder eine Wortgruppe **mitten im Fließtext**, etwa ein Verweis innerhalb eines Absatzes in den Rechtstexten. Dort passt eine Fläche nicht in den Text. Sobald der Link auf einer eigenen Zeile steht, gilt die Regel wieder.
 
 ### Quelle
 
@@ -2372,7 +2372,7 @@ Formular · https://standby.design/docs/rules/formular-was-der-nutzer-tippt-oder
 
 ### Warum
 
-Ein verschlucktes Zeichen ist ein Fehler, den der Nutzer nicht sieht. Aus eingefügtem „1.250,00 €" wird dann still „125000".
+Entfernt ein Feld still ein Zeichen, sieht der Nutzer den Fehler nicht. Aus eingefügtem „1.250,00 €" wird dann still „125000".
 
 ### Woran Du den Verstoß erkennst
 
@@ -2410,11 +2410,11 @@ Formular · https://standby.design/docs/rules/formular-was-ein-feld-beschreibt-s
 
 ### Warum
 
-Ein Icon außerhalb des Rahmens liest sich als eigenes Element. Der Blick muss raten, ob es ein Knopf ist, eine Überschrift oder Schmuck. Im Rahmen gehört es zum Feld, weil der Rahmen die Gruppe ist.
+Ein Icon außerhalb des Rahmens liest sich als eigenes Element. Der Nutzer muss raten, ob es ein Knopf ist, eine Überschrift oder Schmuck. Im Rahmen gehört es zum Feld, weil der Rahmen die Gruppe ist.
 
 Die Einheit im Feld spart Arbeit an zwei Stellen. Der Nutzer tippt nur die Zahl und sieht trotzdem, was sie meint. Und niemand tippt das Euro-Zeichen mit, das die Prüfung danach wieder herausrechnen muss.
 
-Die feste Stelle zählt genauso. Ein Icon, das hinter dem Text herläuft, wandert mit jeder Eingabe und bildet in einer Reihe von Feldern keine gemeinsame Kante. So baut es das native Datumsfeld mancher Browser.
+Die feste Stelle zählt genauso. Ein Icon direkt hinter dem Text verschiebt sich mit jeder Eingabe und bildet in einer Reihe von Feldern keine gemeinsame Kante. So baut es das native Datumsfeld mancher Browser.
 
 ### Hart und weich
 
@@ -2511,11 +2511,11 @@ Formular · https://standby.design/docs/rules/formular-der-nutzer-tippt-nur-was-
 
 ### Warum
 
-Jedes Feld kostet den Nutzer Zeit und ist eine Fehlerquelle. Was das System selbst weiß, muss es selbst tragen.
+Jedes Feld kostet den Nutzer Zeit und ist eine Fehlerquelle. Was das System selbst weiß, füllt es selbst aus.
 
 Browser, Passwortmanager und Handytastatur helfen nur, wenn sie den Zweck kennen.
 
-Dazu gehört das Gegenteil: Wo die Hilfe stört, bleibt sie aus. Bei E-Mail, Codes und Nutzernamen ist die Rechtschreibprüfung aus, und Felder ohne Anmeldung, etwa die Suche, rufen keinen Passwortmanager auf. Einmalcodes tragen `autocomplete="one-time-code"`, dann bietet das Handy den Code aus der SMS an.
+Umgekehrt bleibt die Hilfe aus, wo sie stört. Bei E-Mail, Codes und Nutzernamen ist die Rechtschreibprüfung aus, und Felder ohne Anmeldung, etwa die Suche, rufen keinen Passwortmanager auf. Einmalcodes tragen `autocomplete="one-time-code"`, dann bietet das Handy den Code aus der SMS an.
 
 ### Hart und weich
 
@@ -2560,7 +2560,7 @@ Inhalt · https://standby.design/docs/rules/inhalt-lange-zeichenketten-stehen-in
 
 ### Warum
 
-22 Zeichen am Stück kann niemand vergleichen oder abtippen. In Vierergruppen findet das Auge seinen Platz wieder.
+22 Zeichen am Stück kann niemand vergleichen oder abtippen. In Vierergruppen findet der Nutzer die Stelle wieder, an der er war.
 
 ### Woran Du den Verstoß erkennst
 
@@ -2647,9 +2647,9 @@ Inhalt · https://standby.design/docs/rules/inhalt-alles-hat-eine-textfassung
 
 ### Warum
 
-Ohne Text liest der Screenreader den Dateinamen vor oder gar nichts. Mit Text bei einem Schmuckbild hört der Nutzer Rauschen.
+Ohne Text liest der Screenreader den Dateinamen vor oder gar nichts. Hat ein Schmuckbild einen Text, hört der Nutzer etwas, das ihm nichts sagt.
 
-Ein leeres `alt=""` ist dabei kein Versehen, sondern der Standard in HTML: Es sagt dem Screenreader „überspringen“. Fehlt das `alt` ganz, liest er stattdessen den Dateinamen vor. Schmuck ist ein Bild ohne Information, etwa ein Hintergrundmuster oder eine Deko-Illustration.
+Ein leeres `alt=""` ist dabei Absicht und in HTML der Standard. Es sagt dem Screenreader „überspringen“. Fehlt das `alt` ganz, liest er stattdessen den Dateinamen vor. Schmuck ist ein Bild ohne Information, etwa ein Hintergrundmuster oder eine Deko-Illustration.
 
 Text in einem Bild lässt sich nicht vergrößern, nicht übersetzen, nicht kopieren und nicht vorlesen.
 
@@ -2702,7 +2702,7 @@ Inhalt · https://standby.design/docs/rules/inhalt-zahlen-daten-und-betraege-fol
 
 ### Warum
 
-„1.250“ heißt in Deutschland tausendzweihundertfünfzig und in den USA eins Komma zwei fünf. „03/04/2026“ ist der 3. April oder der 4. März. Eine falsch gelesene Zahl fällt nicht als Fehler auf. Sie wird geglaubt.
+„1.250“ heißt in Deutschland tausendzweihundertfünfzig und in den USA eins Komma zwei fünf. „03/04/2026“ ist der 3. April oder der 4. März. Eine falsch gelesene Zahl fällt nicht als Fehler auf. Der Nutzer hält sie für richtig.
 
 Die Zeichen dafür sind für jeden Sprachraum gepflegt: Dezimalzeichen, Tausendertrennung, Stellung des Währungszeichens, Reihenfolge im Datum, 12 oder 24 Stunden. Die Quelle ist Unicode CLDR. `Intl` im Browser, ICU, Android und iOS lesen daraus. Ein selbst gebautes Muster kennt nur die Sprachräume, an die sein Autor gedacht hat. Beispiele für die Zahl 1234567,5, den Betrag 1234,50 € und den 19. Oktober 2026:
 
@@ -2714,7 +2714,7 @@ Die Zeichen dafür sind für jeden Sprachraum gepflegt: Dezimalzeichen, Tausende
 | fr-FR | 1 234 567,5 | 1 234,50 € | 19/10/2026 |
 | en-IN | 12,34,567.5 | €1,234.50 | 19/10/2026 |
 
-Die Tabelle ist kein Nachschlagewerk. Das ist CLDR.
+Die Tabelle zeigt nur Beispiele. Nachschlagen musst Du in CLDR.
 
 ### Was CLDR offen lässt
 
@@ -2789,7 +2789,7 @@ Zustand · https://standby.design/docs/rules/zustand-rot-ist-nicht-ein-rot
 **Geltung:** universal · web, react-native
 
 > **Regel**
-> Lege für jede Zustandsbedeutung — Fehler, Warnung, Erfolg, Hinweis — mehrere Werte fest, nicht einen. Welcher gilt, entscheidet der Untergrund, auf dem die Farbe landet.
+> Lege für jede Zustandsbedeutung (Fehler, Warnung, Erfolg, Hinweis) mehrere Werte fest, nicht einen. Welcher gilt, entscheidet der Untergrund, auf dem die Farbe landet.
 
 ### Warum
 
@@ -2808,11 +2808,11 @@ Nimm ein einziges Rot und lass es drei Aufgaben erledigen:
    ▸ Text darauf                 → helle Gegenfarbe
 ```
 
-Aufgabe 1 verlangt viel Kontrast, Aufgabe 2 verlangt in derselben Zeile wenig **und** viel. Ein einziger Wert kann das nicht. Nimmt man ihn trotzdem, ist entweder der Text nicht zu lesen oder die Fläche zu laut — meistens beides an verschiedenen Stellen.
+Aufgabe 1 verlangt viel Kontrast, Aufgabe 2 verlangt in derselben Zeile wenig **und** viel. Ein einziger Wert kann das nicht. Nimmt man ihn trotzdem, ist entweder der Text nicht zu lesen oder die Fläche zu auffällig, meistens beides an verschiedenen Stellen.
 
-Das ist derselbe Gedanke wie bei heller und dunkler Erscheinung: dieselbe Bedeutung, verschiedene Werte, je nach Umgebung. Nur läuft die Unterscheidung hier nicht über den Modus, sondern über den Untergrund.
+Das ist derselbe Gedanke wie bei heller und dunkler Erscheinung: dieselbe Bedeutung, verschiedene Werte, je nach Umgebung. Hier hängen die Werte aber vom Untergrund ab statt vom Modus.
 
-Fehlt diese Familie, wird pro Einsatzort geraten. Man landet bei Konstruktionen wie „die Grundfarbe mit zehn Prozent Deckkraft als Fläche und dieselbe Grundfarbe als Text darauf". Bei Rot sieht das gerade noch brauchbar aus, bei Gelb nicht mehr, und in der hellen Erscheinung bei keinem von beiden.
+Fehlt diese Familie, rät jeder pro Einsatzort einen Wert. Heraus kommen Konstruktionen wie „die Grundfarbe mit zehn Prozent Deckkraft als Fläche und dieselbe Grundfarbe als Text darauf". Bei Rot sieht das gerade noch brauchbar aus, bei Gelb nicht mehr, und in der hellen Erscheinung bei keinem von beiden.
 
 ### Was eine Familie abdecken muss
 
@@ -2822,27 +2822,27 @@ Fehlt diese Familie, wird pro Einsatzort geraten. Man landet bei Konstruktionen 
 | Ruhige Fläche, etwa Badge oder Chip | ein zurückgenommener Wert **plus** die dazu passende Schriftfarbe |
 | Voll eingefärbte Fläche | der kräftige Wert **plus** eine Gegenfarbe für den Text darauf |
 
-Wie die Werte heißen und wie viele es genau sind, entscheidet das Projekt. Dass es mehr als einen braucht, entscheidet der Kontrast.
+Wie die Werte heißen und wie viele es genau sind, entscheidet das Projekt. Dass es mehr als einen braucht, folgt aus dem Kontrast.
 
 ### Woran Du den Verstoß erkennst
 
 - Ein Badge wird aus der Grundfarbe mit Deckkraft und derselben Grundfarbe als Text gebaut.
 - Ein voll eingefärbter Knopf hat weißen Text statt der zugehörigen Gegenfarbe.
-- Dieselbe Zustandsfarbe steht einmal als Fläche und einmal als Fließtext, und beim Text muss man die Augen zusammenkneifen.
+- Dieselbe Zustandsfarbe steht einmal als Fläche und einmal als Fließtext, und der Text ist schwer zu lesen.
 - Ein Zustand ist in einer Erscheinung gut lesbar und in der anderen nicht.
 
 ### Zustandsfarben neben Markenfarben
 
-**Empfehlung, keine Vorschrift:** Grün und Rot möglichst nicht auch als Marken- oder Strukturfarbe einsetzen. Sonst kann der Nutzer nicht mehr unterscheiden, ob eine grüne Fläche etwas bedeutet oder nur zur Marke gehört — und wenn er das einmal falsch gelernt hat, übersieht er später die Fläche, die wirklich etwas bedeutet.
+**Empfehlung, keine Vorschrift:** Grün und Rot möglichst nicht auch als Marken- oder Strukturfarbe einsetzen. Sonst kann der Nutzer nicht mehr unterscheiden, ob eine grüne Fläche etwas bedeutet oder nur zur Marke gehört. Hat er das einmal falsch gelernt, übersieht er später die Fläche, die wirklich etwas bedeutet.
 
-Ist die Marke nun einmal grün oder rot, ist das kein Grund, sie zu ändern. Dann braucht es zwei Dinge:
+Ist die Marke grün oder rot, ist das kein Grund, sie zu ändern. Dann braucht es zwei Dinge:
 
-- Die Zustandsfarben liegen sichtbar neben der Markenfarbe, nicht auf ihr. Ein anderer Farbton, eine andere Sättigung, irgendetwas, das den Unterschied trägt.
-- Der Zustand hängt nicht an der Farbe allein. Ein Zeichen, ein Wort oder ein Symbol trägt die Bedeutung mit, siehe Farbe trägt nie allein. Das ist ohnehin schon Pflicht, hier wird es nur besonders wichtig.
+- Die Zustandsfarben unterscheiden sich sichtbar von der Markenfarbe. Den Unterschied macht ein anderer Farbton, eine andere Sättigung oder ein anderes Merkmal.
+- Der Zustand hängt nicht an der Farbe allein. Ein Zeichen, ein Wort oder ein Symbol trägt die Bedeutung mit, siehe Farbe trägt nie allein. Das ist ohnehin Pflicht, hier aber besonders wichtig.
 
 ### Grenzen
 
-Auf einer Marketing- oder Titelseite mit eigener Haut gilt das nicht, dort regiert die Marke. Die Regel gilt für die Anwendung, in der Farbe eine Aussage über Daten ist.
+Auf einer Marketing- oder Titelseite mit eigener Haut gilt das nicht, dort hat die Marke Vorrang. Die Regel gilt für die Anwendung, in der Farbe eine Aussage über Daten ist.
 
 ### Verwandt
 
@@ -2867,9 +2867,9 @@ Bekannte Zeichen behalten dabei die Bedeutung, die sie außerhalb des Produkts h
 
 Dasselbe gilt für den Weg zur Hilfe. Er muss nicht auf jeder Seite stehen, ein Platz im Profil reicht. Aber wo es ihn gibt, steht er immer an derselben Stelle.
 
-Farbe ist eine Aussage über Daten. Steht derselbe Wert auf einer Seite in Gelb und auf der anderen in Grün, widerspricht sich die Oberfläche selbst. Der Nutzer merkt das, auch wenn er es nicht benennen kann, und er lernt daraus das Falsche: der Farbe nicht zu trauen. Danach nützt sie nirgends mehr etwas, auch dort nicht, wo sie stimmt.
+Farbe ist eine Aussage über Daten. Steht derselbe Wert auf einer Seite in Gelb und auf der anderen in Grün, widerspricht sich die Oberfläche selbst. Der Nutzer merkt das, auch wenn er es nicht benennen kann. Er lernt daraus, der Farbe nicht zu trauen. Danach hilft sie ihm nirgends mehr, auch dort nicht, wo sie stimmt.
 
-Das passiert nicht aus Nachlässigkeit, sondern weil jede Stelle ihre Grenze einzeln setzt. Jede für sich ist plausibel gewählt, und zusammen ergeben sie vier verschiedene Skalen im selben Produkt.
+Das passiert auch bei sorgfältiger Arbeit, weil jede Stelle ihre Grenze einzeln setzt. Jede Grenze ist für sich plausibel gewählt. Zusammen ergeben sie vier verschiedene Skalen im selben Produkt.
 
 Die Regel greift überall, wo eine Zahl in einen Zustand übersetzt wird: Speicherplatz, der knapp wird. Passwortstärke. Akkustand. Lagerbestand. Temperatur, Luftqualität, Lieferzeit. Ein Fortschritt, der „hinter Plan" heißt. Sobald es eine Grenze gibt, ab der etwas anders aussieht, gilt sie.
 
@@ -2877,17 +2877,17 @@ Die Regel greift überall, wo eine Zahl in einen Zustand übersetzt wird: Speich
 
 Fehlt der Wert, ist der Zustand neutral und die Anzeige bleibt grau. Es wird nichts angenommen.
 
-Wer bei fehlendem Wert Grün zeigt, behauptet „alles in Ordnung", obwohl niemand nachgesehen hat. Das ist die gefährlichste Falschaussage, weil sie beruhigt. Wer Rot zeigt, löst einen Alarm ohne Anlass aus, und nach dem dritten Mal glaubt niemand mehr an die roten Felder. Grau ist die ehrliche Antwort: es liegt nichts vor.
+Wer bei fehlendem Wert Grün zeigt, sagt dem Nutzer „alles in Ordnung", obwohl niemand nachgesehen hat. Diese falsche Aussage ist die gefährlichste, weil sie den Nutzer beruhigt. Wer Rot zeigt, löst einen Alarm ohne Anlass aus, und nach dem dritten Mal glaubt niemand mehr an die roten Felder. Grau sagt, was stimmt: Es liegt nichts vor.
 
-Die Regel hat eine unbequeme Seite. Eine frisch eingerichtete Ansicht sieht dadurch grau und leer aus. Das ist der richtige Eindruck. Der Weg zu einer bunten Ansicht führt über Daten, nicht über Annahmen.
+Die Regel hat einen Nachteil. Eine frisch eingerichtete Ansicht sieht dadurch grau und leer aus. Das ist der richtige Eindruck. Farbig wird die Ansicht erst durch Daten. Annahmen färben nichts ein.
 
-**Sonderfall Zähler.** Bei einem Zähler für etwas, das es nicht geben sollte — offene Fehler, fehlende Belege, ungelesene Warnungen — ist die Null nicht grün, sondern grau. Grün hieße „geprüft und in Ordnung". Grau heißt „hier ist nichts", und das ist der ehrlichere Satz.
+**Sonderfall Zähler.** Bei einem Zähler für etwas, das es nicht geben sollte (offene Fehler, fehlende Belege, ungelesene Warnungen), ist die Null grau. Grün hieße „geprüft und in Ordnung". Grau heißt „hier ist nichts", und genau das stimmt.
 
 ### Wo die Grenzen herkommen
 
-Die Zahlen selbst sind eine fachliche Festlegung, keine Gestaltungsfrage. Wo die Grenze zwischen mittel und schlecht liegt, entscheidet nicht der Designer, sondern wer für die Zahl fachlich einsteht.
+Die Zahlen selbst sind eine fachliche Festlegung, keine Gestaltungsfrage. Wo die Grenze zwischen mittel und schlecht liegt, entscheidet, wer für die Zahl fachlich einsteht. Der Designer entscheidet das nicht.
 
-Getrennt davon steht die Übersetzung in das, was man sieht. Wer die Grenzen ändert, ändert sie an einer Stelle, ohne dass sich das Aussehen bewegt. Wer das Aussehen ändert, fasst die Grenzen nicht an.
+Davon getrennt ist festgelegt, wie ein Zustand aussieht. Wer die Grenzen ändert, ändert sie an einer Stelle, ohne dass sich das Aussehen bewegt. Wer das Aussehen ändert, fasst die Grenzen nicht an.
 
 ### Hart und weich
 
@@ -2911,9 +2911,9 @@ Hart: eins zu eins. Weich: welche Wörter und Icons. Das legt das Projekt fest.
 
 Handlungen, die wirklich verschieden sind, etwa aus einer Liste entfernen und endgültig löschen. Die heißen bewusst verschieden.
 
-Eine Kennzahl mit fachlich eigenen Grenzen — eine gesetzliche Quote, ein vertraglicher Schwellwert — bekommt ihre Werte natürlich von dort. Sie geht trotzdem durch dieselbe Übersetzung, damit der Weg von der Zahl zur Farbe an einer Stelle bleibt.
+Eine Kennzahl mit fachlich eigenen Grenzen (eine gesetzliche Quote, ein vertraglicher Schwellwert) bekommt ihre Werte von dort. Sie geht trotzdem durch dieselbe Übersetzung, damit der Weg von der Zahl zur Farbe an einer Stelle bleibt.
 
-Ein leerer Zustand darf erklären, warum nichts da ist, und einen Weg anbieten („Noch keine Buchungen — Import starten"). Neutral heißt grau, nicht wortlos.
+Ein leerer Zustand darf erklären, warum nichts da ist, und einen Weg anbieten („Noch keine Buchungen — Import starten"). Neutral bezieht sich nur auf die Farbe. Ein erklärender Text gehört trotzdem dazu.
 
 ### Quelle
 
@@ -3008,7 +3008,7 @@ Rechtsbündigkeit ordnet die Zahlen. Damit auch die einzelnen Stellen genau unte
 
 **Erste Stufe: Tabellenziffern.** Die meisten modernen Schriften bringen einen zweiten Ziffernsatz mit, bei dem alle Ziffern dieselbe Breite haben (`font-variant-numeric: tabular-nums`, im Schriftformat `tnum`). Das kostet keinen Schriftwechsel und reicht für die allermeisten Tabellen. Es greift allerdings nur, wenn die Schrift den Satz auch enthält.
 
-**Zweite Stufe: eine Monospace.** In stark zahlengetriebenen Anwendungen — Buchhaltung, Finanzen, Messwerte, alles Mathematische, Protokolle — ist eine Schrift mit fester Zeichenbreite die bessere Wahl. Dort steht jede Stelle exakt untereinander, auch über Spalten und Zeilen hinweg, und man kann Ziffernfolgen abzählen statt sie zu lesen. Für lange Nummern ist das der Unterschied zwischen prüfbar und nicht prüfbar.
+**Zweite Stufe: eine Monospace.** In stark zahlengetriebenen Anwendungen (Buchhaltung, Finanzen, Messwerte, alles Mathematische, Protokolle) ist eine Schrift mit fester Zeichenbreite die bessere Wahl. Dort steht jede Stelle exakt untereinander, auch über Spalten und Zeilen hinweg, und man kann Ziffernfolgen abzählen statt sie zu lesen. Erst so lassen sich lange Nummern prüfen.
 
 Solche Schriften unterscheiden außerdem Zeichen, die sonst verwechselt werden: die Null von einem großen O, die Eins von einem kleinen l und einem großen I. Viele bieten dafür eine durchgestrichene oder gepunktete Null als Schriftmerkmal (`font-variant-numeric: slashed-zero`, im Format `zero`). In technischen Zusammenhängen sollte die eingeschaltet sein.
 
@@ -3038,7 +3038,7 @@ Die Monospace gilt dabei für die Zahlen, nicht für die ganze Oberfläche. Besc
 
 ### Grenzen
 
-Zahlen, die keine Größe sind, folgen ihrem Inhalt: Kundennummern, Postleitzahlen, Jahreszahlen, Telefonnummern. Sie werden nicht verglichen, sondern gelesen, und stehen deshalb linksbündig wie Text.
+Zahlen, die keine Größe sind, folgen ihrem Inhalt: Kundennummern, Postleitzahlen, Jahreszahlen, Telefonnummern. Man liest sie und vergleicht sie nicht. Deshalb stehen sie linksbündig wie Text.
 
 Ein einzelnes Zahlenfeld in einem Formular ist keine Spalte. Niemand vergleicht es mit etwas, man füllt es nur aus. Es steht deshalb linksbündig wie die Felder darüber und darunter, die Einheit steht im Feld am Ende. Rechtsbündig wird ein Feld erst, wenn mehrere Zahlenfelder untereinander eine Spalte bilden, etwa in einem Planungsraster.
 
@@ -3059,7 +3059,7 @@ Typografie · https://standby.design/docs/rules/typografie-icons-sind-auf-die-sc
 
 Ein Icon in einer Beschriftung wird als Teil derselben Zeile gelesen, in einem Zug mit dem Wort daneben. Was für den Buchstaben gilt, gilt deshalb auch für das Icon.
 
-Der Punkt, an dem fast alle Systeme scheitern, ist der Abstand. Ein Icon aus drei senkrechten Punkten lässt an seiner rechten Kante Luft, ein gefülltes Quadrat nicht. Bei gleichem gemessenem Abstand wirkt das erste weiter vom Wort entfernt.
+Am Abstand scheitern fast alle Systeme. Ein Icon aus drei senkrechten Punkten lässt an seiner rechten Kante Luft, ein gefülltes Quadrat nicht. Bei gleichem gemessenem Abstand wirkt das erste weiter vom Wort entfernt.
 
 ```
         Beide Abstände sind gemessen gleich groß.
@@ -3069,7 +3069,7 @@ Der Punkt, an dem fast alle Systeme scheitern, ist der Abstand. Ein Icon aus dre
         wirkt zu weit              wirkt richtig
 ```
 
-**Der Ausgleich gehört ins Icon, nicht in die Zeile.** Jedes Icon bringt seinen eigenen Seitenabstand mit, so wie jede Glyphe ihre Vor- und Nachbreite hat. Ein einziger `gap` für alle Icons löst ein optisches Problem mit einer Konstante.
+**Der Ausgleich gehört ins Icon, nicht in die Zeile.** Jedes Icon bringt seinen eigenen Seitenabstand mit, so wie jede Glyphe ihre Vor- und Nachbreite hat. Ein einziger `gap` für alle Icons setzt überall denselben Wert und gleicht den optischen Unterschied deshalb nicht aus.
 
 Dasselbe gilt für Gewicht und Größe: ein Icon neben halbfettem Text soll halbfett wirken, seine Größe kommt aus der Typo-Skala, und bei vergrößerter Systemschrift wächst es mit.
 
@@ -3077,21 +3077,21 @@ Dasselbe gilt für Gewicht und Größe: ein Icon neben halbfettem Text soll halb
 
 Beide haben gute Gründe. Die Regel entscheidet den Weg nicht, sie sagt, was am Ende stimmen muss.
 
-**Variante 1 — Icons als Schriftzeichen.** Vorbild SF Symbols. Der Vorteil liegt nicht in der Sorgfalt der Gestalter, sondern im Format: **der optische Ausgleich ist nicht optional.** Man kann keine Glyphe zeichnen, ohne ihre Seitenbreiten festzulegen. Grundlinie, Gewichtsstufen und das Mitwachsen kommen aus dem Format, nicht aus Disziplin.
+**Variante 1: Icons als Schriftzeichen.** Vorbild SF Symbols. Der Vorteil kommt aus dem Format, unabhängig von der Sorgfalt der Gestalter: **Der optische Ausgleich ist Pflicht.** Man kann keine Glyphe zeichnen, ohne ihre Seitenbreiten festzulegen. Auch Grundlinie, Gewichtsstufen und das Mitwachsen liefert das Format, ohne dass jemand darauf achten muss.
 
-Der Preis ist der fehlende Rückfall. Ist die Schrift nicht da, ist nichts da, denn kein Ersatzzeichen bedeutet irgendetwas. Bei Apple fällt das nicht auf, weil die Schrift zum System gehört. Eine frei ausgelieferte Anwendung hat diese Garantie nicht. Dazu: nur eine Farbe in einfachen Formaten, Vorlesen als Zeichen, unsauberes Rendern in kleinen Graden. Und SF Symbols ist auf Apple-Plattformen beschränkt.
+Der Preis ist der fehlende Rückfall. Lädt die Schrift nicht, fehlen alle Icons, denn kein Ersatzzeichen hat eine Bedeutung. Bei Apple fällt das nicht auf, weil die Schrift zum System gehört. Eine frei ausgelieferte Anwendung hat diese Garantie nicht. Dazu: nur eine Farbe in einfachen Formaten, Vorlesen als Zeichen, unsauberes Rendern in kleinen Graden. Und SF Symbols ist auf Apple-Plattformen beschränkt.
 
-**Variante 2 — Icons als SVG-Set.** Der Vorteil ist Sicherheit: entweder da oder nicht, kein Zwischenzustand mit falschen Zeichen. Mehrfarbig möglich, überall lauffähig.
+**Variante 2: Icons als SVG-Set.** Der Vorteil ist Sicherheit: Ein Icon ist entweder da oder nicht, falsche Zeichen erscheinen nie. Mehrfarbig möglich, überall lauffähig.
 
-Der Preis ist, dass alles Freiwillige auch freiwillig bleibt. Wer diesen Weg geht, muss die Arbeit bewusst leisten: Seitenabstand je Icon statt ein `gap` für alle, Strichstärken je Gewichtsstufe, Größen an der Typo-Skala, Abstände in `em`.
+Der Preis: Das Format erzwingt nichts davon. Wer diesen Weg geht, muss die Arbeit bewusst leisten: Seitenabstand je Icon statt ein `gap` für alle, Strichstärken je Gewichtsstufe, Größen an der Typo-Skala, Abstände in `em`.
 
 ### Einschätzung
 
 **Gestalterisch ist Variante 1 überlegen**, weil sie erzwingt, was die Regel verlangt, und zwar für jedes einzelne Icon.
 
-**Variante 2 ist die sichere Wahl und eine Übergangslösung.** Sie ist heute für die meisten Projekte richtig, weil es außerhalb von Apple kaum Icon-Schriften gibt, die das Handwerk wirklich machen.
+**Variante 2 ist die sichere Wahl und eine Übergangslösung.** Sie ist heute für die meisten Projekte richtig, weil es außerhalb von Apple kaum Icon-Schriften gibt, die handwerklich sauber gemacht sind.
 
-Icons setzen sich langfristig als Schrift durch. Wer heute Variante 2 fährt, baut sie deshalb so, dass der Wechsel möglich bleibt: Größen an der Typo-Skala führen, Abstände je Icon pflegen. Dann ist der Umstieg ein Austausch der Quelle und kein Umbau der Oberfläche.
+Icons setzen sich langfristig als Schrift durch. Wer heute Variante 2 nutzt, baut sie deshalb so, dass der Wechsel möglich bleibt: Größen an der Typo-Skala führen, Abstände je Icon pflegen. Dann tauscht man beim Umstieg nur die Quelle aus und muss die Oberfläche nicht umbauen.
 
 ### Woran Du den Verstoß erkennst
 
@@ -3104,13 +3104,13 @@ Icons setzen sich langfristig als Schrift durch. Wer heute Variante 2 fährt, ba
 
 ### Grenzen
 
-Ein Icon-only-Bedienelement ist kein Schriftzeichen, sondern eine Trefferfläche. Es braucht die Box auf der Höhe seiner Zeile, siehe Die Höhe gehört der Zeile, nicht dem Element. Die Regel gilt für Icons neben Text.
+Ein Icon-only-Bedienelement ist eine Trefferfläche und wird nicht wie ein Schriftzeichen behandelt. Es braucht die Box auf der Höhe seiner Zeile, siehe Die Höhe gehört der Zeile, nicht dem Element. Die Regel gilt für Icons neben Text.
 
 Marken-Logos, Zahlungsanbieter-Zeichen und Länderflaggen sind keine Icons in diesem Sinne.
 
 ### Offen
 
-Ein eigenes Icon-Set als variable Schrift wäre außerhalb von Apple der einzige Weg zu Variante 1. Eigenes Vorhaben, kein Nebenbei-Schritt. Zu klären wäre vor allem der Rückfall, wenn die Schrift nicht lädt.
+Ein eigenes Icon-Set als variable Schrift wäre außerhalb von Apple der einzige Weg zu Variante 1. Das ist ein eigenes Vorhaben und nichts für nebenbei. Zu klären wäre vor allem der Rückfall, wenn die Schrift nicht lädt.
 
 ### Verwandt
 
@@ -3165,11 +3165,11 @@ Farbe · https://standby.design/docs/rules/farbe-werte-kommen-aus-tokens-nie-aus
 
 ### Warum
 
-Ein von Hand gesetzter Wert ist eine stille Abzweigung. Er ändert sich nicht mit, wenn das System sich ändert, und er lässt sich nicht finden, weil niemand weiß, dass es ihn gibt. Nach einem halben Jahr stehen im Repo drei Grautöne, die alle „das Grau der Kante" sein wollen, und keiner davon ist es.
+Ein von Hand gesetzter Wert hängt nicht am System. Er ändert sich nicht mit, wenn das System sich ändert, und er lässt sich nicht finden, weil niemand weiß, dass es ihn gibt. Nach einem halben Jahr stehen im Repo drei Grautöne, die alle „das Grau der Kante" sein sollen, und keiner davon stimmt mit dem Token überein.
 
-Bei Farben kommt der zweite Modus dazu. Ein Hex-Wert kennt nur eine Erscheinung. Der Nutzer, der auf Hell umschaltet, bekommt ihn unverändert, und die Ansicht bricht an genau dieser Stelle.
+Bei Farben kommt der zweite Modus dazu. Ein Hex-Wert kennt nur eine Erscheinung. Der Nutzer, der auf Hell umschaltet, bekommt ihn unverändert, und an genau dieser Stelle passt die Ansicht nicht mehr.
 
-Deshalb ist der Token-Export der Ausgangspunkt und nicht eine Annäherung daran. Wer feinjustieren will, justiert im Generator und exportiert neu.
+Deshalb ist der Token-Export der Ausgangspunkt. Die Ansicht übernimmt ihn und baut ihn nicht ungefähr nach. Wer feinjustieren will, justiert im Generator und exportiert neu.
 
 ### Woran Du den Verstoß erkennst
 
@@ -3194,19 +3194,19 @@ Alles andere geht über Tokens.
 
 ### Zwei Sorten Token, und eine dritte
 
-Neben den rohen Werten (Primitives) und der Bedeutung (Semantics) gibt es eine dritte Sorte: **Material**. Sie sagt, woraus eine Fläche gemacht ist — gebürstetes Metall, Licht von hinten, Körnung.
+Neben den rohen Werten (Primitives) und der Bedeutung (Semantics) gibt es eine dritte Sorte: **Material**. Sie sagt, woraus eine Fläche gemacht ist, etwa gebürstetes Metall, Licht von hinten oder Körnung.
 
 Die Erkennungsregel: Lässt sich das Token mit „das heißt Gefahr, Erfolg, inaktiv" beschreiben, ist es semantisch. Lässt es sich nur mit „so sieht die Oberfläche aus" beschreiben, ist es Material.
 
-Material trägt **keinen** Zustand. Ein Panel ist in jedem Zustand aus demselben Material, nur das Licht dahinter wechselt die Farbe. Und Material wird nicht nach Bauteil benannt: sobald ein zweites Bauteil dasselbe Material nutzt, lügt der Name.
+Material trägt **keinen** Zustand. Ein Panel ist in jedem Zustand aus demselben Material, nur das Licht dahinter wechselt die Farbe. Material wird auch nicht nach Bauteil benannt. Sobald ein zweites Bauteil dasselbe Material nutzt, stimmt der Name nicht mehr.
 
-**Auch Durchsichtigkeit ist Material.** Ein System darf mit Glas, Schleier und Weichzeichner arbeiten, das ist eine gestalterische Entscheidung wie jede andere. Sie wird dann aber als Material benannt und für jede Erscheinung definiert, in der sie vorkommt. Was nicht geht, ist die beiläufige Variante: eine Deckkraft, die an einer einzelnen Stelle gesetzt wird, weil die Fläche dort gerade zu hell war. Das ist keine Materialentscheidung, sondern eine Korrektur im Vorbeigehen, und sie hinterlässt eine Stufe, die im System keinen Namen hat.
+**Auch Durchsichtigkeit ist Material.** Ein System darf mit Glas, Schleier und Weichzeichner arbeiten, das ist eine gestalterische Entscheidung wie jede andere. Sie wird dann aber als Material benannt und für jede Erscheinung definiert, in der sie vorkommt. Nicht erlaubt ist eine Deckkraft, die an einer einzelnen Stelle gesetzt wird, weil die Fläche dort gerade zu hell war. Das ist eine Korrektur im Vorbeigehen und keine Materialentscheidung. Sie hinterlässt eine Stufe, die im System keinen Namen hat.
 
-Wer durchsichtig baut, übernimmt zusätzlich eine Pflicht: der Kontrast von Text auf so einer Fläche hängt davon ab, was zufällig darunter liegt. Er muss trotzdem in jedem Fall reichen, üblicherweise über eine gedeckte Grundschicht unter dem Glas.
+Wer durchsichtig baut, muss zusätzlich auf den Kontrast achten. Der Kontrast von Text auf so einer Fläche hängt davon ab, was zufällig darunter liegt. Er muss trotzdem in jedem Fall reichen, üblicherweise über eine gedeckte Grundschicht unter dem Glas.
 
 ### Grenzen
 
-Ein Wert, den es im System noch nicht gibt, wird nicht heimlich in der Ansicht gesetzt, sondern als neue Stufe in die Skala aufgenommen. Der Ausgleichswert 14 aus Senkrechtes Padding wird optisch ausgeglichen ist genau so ein Fall.
+Ein Wert, den es im System noch nicht gibt, kommt als neue Stufe in die Skala. Er wird nicht direkt in der Ansicht gesetzt. Der Ausgleichswert 14 aus Senkrechtes Padding wird optisch ausgeglichen ist so ein Fall.
 
 ### Verwandt
 
@@ -3224,29 +3224,29 @@ Farbe · https://standby.design/docs/rules/farbe-hell-und-dunkel-sind-zwei-entwu
 
 ### Warum
 
-Die Wahl gehört dem Nutzer. Manche sehen auf hellem Grund besser, manche auf dunklem, manche wechseln mit der Tageszeit, und für manche ist es eine Frage der Verträglichkeit und nicht des Geschmacks. Ein Produkt, das eine Erscheinung erzwingt, entscheidet über den Körper von jemandem, den es nicht kennt.
+Die Wahl gehört dem Nutzer. Manche sehen auf hellem Grund besser, manche auf dunklem, manche wechseln mit der Tageszeit, und manche vertragen eine der beiden schlecht. Für sie ist es keine Geschmacksfrage. Erzwingt ein Produkt eine Erscheinung, entscheidet es für Menschen, deren Bedürfnisse es nicht kennt.
 
-Und die zweite Erscheinung ist keine Rechenaufgabe. Auf dunklem Grund verhält sich Wahrnehmung anders, in mindestens drei Punkten:
+Die zweite Erscheinung lässt sich auch nicht aus der ersten errechnen. Auf dunklem Grund verhält sich die Wahrnehmung in mindestens drei Punkten anders.
 
 **Helle Schrift auf dunklem Grund leuchtet aus.** Die Buchstaben wirken fetter und die Innenräume enger als dieselbe Schrift dunkel auf hell. Ein Schnitt, der hell gut sitzt, wirkt dunkel oft zu schwer.
 
 **Gesättigte Farben flimmern auf Dunkel.** Ein kräftiges Blau, das auf Weiß ruhig liegt, vibriert auf Schwarz und ist anstrengend zu lesen. Auf Dunkel gehören dieselben Farben heller und weniger gesättigt.
 
-**Schatten brauchen auf Dunkel eine andere Gewichtung.** Sie funktionieren dort, aber der Unterschied zwischen einer dunklen Fläche und einem dunklen Schatten ist klein. Derselbe Schatten, der hell deutlich trägt, ist dunkel praktisch unsichtbar. Auf Dunkel muss er also deutlich stärker ausfallen, und meist kommt die Helligkeit der Fläche als zweites Mittel dazu: was höher liegt, ist zusätzlich heller. Schatten-Token brauchen deshalb eigene Werte je Erscheinung, genau wie Farben.
+**Schatten brauchen auf Dunkel eine andere Gewichtung.** Sie funktionieren dort, aber der Unterschied zwischen einer dunklen Fläche und einem dunklen Schatten ist klein. Derselbe Schatten, der auf Hell deutlich zu sehen ist, ist auf Dunkel praktisch unsichtbar. Auf Dunkel muss er also deutlich stärker ausfallen, und meist kommt die Helligkeit der Fläche als zweites Mittel dazu: was höher liegt, ist zusätzlich heller. Schatten-Token brauchen deshalb eigene Werte je Erscheinung, genau wie Farben.
 
-Dazu kommt das Nüchterne: ein Kontrastverhältnis, das hell besteht, kann dunkel durchfallen und umgekehrt. Prüfen muss man beide, einzeln.
+Außerdem kann ein Kontrastverhältnis, das hell besteht, dunkel durchfallen und umgekehrt. Deshalb prüft man beide Erscheinungen einzeln.
 
 ### Kein reines Schwarz gegen reines Weiß
 
-Weiße Schrift auf schwarzem Grund ist der höchstmögliche Kontrast, und genau deshalb unangenehm: die Schrift blüht aus, die Augen ermüden schnell, und Menschen mit Astigmatismus lesen es kaum. Ein sehr dunkles Grau als Grund und ein leicht abgesenktes Weiß als Schrift lesen sich deutlich ruhiger.
+Weiße Schrift auf schwarzem Grund ist der höchstmögliche Kontrast. Gerade deshalb ist sie unangenehm. Die Schrift überstrahlt, die Augen ermüden schnell, und Menschen mit Astigmatismus können sie kaum lesen. Ein sehr dunkles Grau als Grund und ein leicht abgesenktes Weiß als Schrift lesen sich deutlich ruhiger.
 
 Mehr Kontrast ist ab einem Punkt nicht mehr besser. Der Mindestwert ist eine Untergrenze, kein Ziel.
 
 ### Wer entscheidet
 
-Voreingestellt gilt, was der Nutzer im Betriebssystem eingestellt hat. Das ist bereits seine Antwort auf die Frage, man muss sie nicht noch einmal stellen.
+Voreingestellt gilt, was der Nutzer im Betriebssystem eingestellt hat. Damit hat er die Frage schon beantwortet, und das Produkt stellt sie nicht noch einmal.
 
-Bietet das Produkt zusätzlich einen eigenen Schalter, überschreibt dieser die Systemeinstellung und bleibt erhalten. Er hat drei Stellungen, nicht zwei: hell, dunkel, dem System folgen.
+Bietet das Produkt zusätzlich einen eigenen Schalter, überschreibt dieser die Systemeinstellung und bleibt erhalten. Er hat drei Stellungen: hell, dunkel und dem System folgen.
 
 ### Woran Du den Verstoß erkennst
 
@@ -3259,7 +3259,7 @@ Bietet das Produkt zusätzlich einen eigenen Schalter, überschreibt dieser die 
 
 ### Grenzen
 
-Ein Produkt darf sich bewusst auf eine Erscheinung festlegen. Dann gilt die Regel nicht — aber es sollte eine Entscheidung sein, die jemand getroffen hat, und kein Zustand, der entstanden ist, weil niemand an die zweite gedacht hat.
+Ein Produkt darf sich bewusst auf eine Erscheinung festlegen. Dann gilt die Regel nicht. Diese Festlegung sollte aber jemand bewusst getroffen haben. Sie sollte nicht dadurch entstehen, dass niemand an die zweite Erscheinung gedacht hat.
 
 Marketing- und Titelseiten mit eigener Haut können bei einer Erscheinung bleiben, auch wenn die Anwendung dahinter beide kann.
 
@@ -3282,9 +3282,9 @@ Farbe · https://standby.design/docs/rules/farbe-kontrast-hat-eine-untergrenze
 
 Darunter kann ein Teil der Nutzer den Text nicht lesen oder das Feld nicht finden, egal wie stimmig es aussieht.
 
-Die Untergrenze gilt in jedem Zustand, nicht nur in Ruhe: auch bei Hover, Gedrückt und Fokus, und in beiden Modi. Wird ein dunkler Knopf im Hellen beim Hover heller (siehe Kurze Zustände verschieben, dauerhafte wechseln die Palette), darf seine Beschriftung trotzdem nicht unter 4,5:1 fallen.
+Die Untergrenze gilt in jedem Zustand, also auch bei Hover, Gedrückt und Fokus, und in beiden Modi. Wird ein dunkler Knopf im Hellen beim Hover heller (siehe Kurze Zustände verschieben, dauerhafte wechseln die Palette), darf seine Beschriftung trotzdem nicht unter 4,5:1 fallen.
 
-Wer schlecht sieht, stellt das System auf hohen Kontrast. Dann verschwinden Hintergrundfarben und Schatten, und was nur über sie gebaut ist, ist weg.
+Wer schlecht sieht, stellt das System auf hohen Kontrast. Dann verschwinden Hintergrundfarben und Schatten. Was nur durch sie erkennbar war, sieht er nicht mehr.
 
 ### Hart und weich
 
@@ -3335,11 +3335,11 @@ Farbe · https://standby.design/docs/rules/farbe-farbe-traegt-nie-allein
 
 ### Warum
 
-Rund jeder zwölfte Mann sieht Rot und Grün nicht auseinander. Für ihn ist ein aktiver Tab, der sich nur durch die Textfarbe auszeichnet, kein aktiver Tab, sondern einer von fünf gleichen. Dasselbe gilt bei starkem Sonnenlicht, auf schlecht kalibrierten Bildschirmen und bei jedem, der die Ansicht nur kurz überfliegt.
+Rund jeder zwölfte Mann sieht Rot und Grün nicht auseinander. Hebt sich ein aktiver Tab nur durch die Textfarbe ab, kann dieser Mann ihn nicht von den vier anderen Tabs unterscheiden. Dasselbe gilt bei starkem Sonnenlicht, auf schlecht kalibrierten Bildschirmen und bei jedem, der die Ansicht nur kurz überfliegt.
 
 Das zweite Zeichen kostet nichts. Es ist ohnehin da, sobald das Element sauber gebaut ist: der Knopf des Switch steht rechts, unter dem Tab liegt ein Strich, vor dem Chip sitzt ein Punkt. Der Fehler entsteht nur, wenn ein Zustand nachträglich „schnell über die Farbe" gelöst wird.
 
-Für einen von zwölf Männern sehen Rot und Grün gleich aus. Eine Legende nur aus Farbfeldern ist für ihn leer.
+Für einen von zwölf Männern sehen Rot und Grün gleich aus. In einer Legende nur aus Farbfeldern kann er keine Reihe zuordnen.
 
 ### Die Zeichen je Element
 
@@ -3398,9 +3398,9 @@ Stack · https://standby.design/docs/rules/stack-utility-klassen-statt-inline-st
 
 ### Warum
 
-Ein Inline-Style ist der bequemste Weg an allen Regeln vorbei. Er kennt keine Tokens, keine Breakpoints, keinen hellen Modus und keine Zustände. Er gewinnt außerdem gegen jede Klasse, sodass eine spätere Korrektur über das System nicht mehr greift — die Stelle ist tot für jede Änderung, die nicht genau dort ansetzt.
+Mit einem Inline-Style umgeht man am bequemsten alle Regeln. Er kennt keine Tokens, keine Breakpoints, keinen hellen Modus und keine Zustände. Er hat außerdem Vorrang vor jeder Klasse. Eine spätere Korrektur über das System greift dort deshalb nicht mehr. Die Stelle ändert sich nur noch, wenn jemand genau dort ansetzt.
 
-Utility-Klassen sind dagegen durchsuchbar. Man findet alle Stellen mit einem bestimmten Abstand, kann sie zählen und in einem Zug umstellen. Das ist der Unterschied zwischen einem System und einer Sammlung von Einzelfällen.
+Utility-Klassen sind dagegen durchsuchbar. Man findet alle Stellen mit einem bestimmten Abstand, kann sie zählen und in einem Zug umstellen. So lässt sich die Gestaltung als System pflegen. Inline-Styles bleiben eine Sammlung von Einzelfällen.
 
 ### Woran Du den Verstoß erkennst
 
@@ -3424,7 +3424,7 @@ Utility-Klassen sind dagegen durchsuchbar. Man findet alle Stellen mit einem bes
 
 ### Grenzen
 
-Werte, die zur Laufzeit berechnet werden — die Breite eines Balkens aus einem Prozentwert, eine Position aus einer Messung —, gehören in einen Style. Sie sind Daten, keine Gestaltung. Alles andere daneben bleibt in Klassen.
+Manche Werte werden erst zur Laufzeit berechnet, etwa die Breite eines Balkens aus einem Prozentwert oder eine Position aus einer Messung. Sie gehören in einen Style. Sie sind Daten, keine Gestaltung. Alles andere daneben bleibt in Klassen.
 
 ### Verwandt
 
@@ -3443,9 +3443,9 @@ Stack · https://standby.design/docs/rules/stack-abstand-ueber-gap-nicht-ueber-m
 
 ### Warum
 
-Ein Abstand ist eine Eigenschaft der Beziehung zwischen zwei Elementen, nicht eines einzelnen. Trägt das Kind den Abstand, bringt es ihn überall mit hin — auch dorthin, wo er nicht hingehört. Und das letzte Kind bringt einen Abstand nach unten mit, den niemand wollte, also wird er mit `last:mb-0` wieder abgeräumt. Damit steht die Regel an zwei Stellen.
+Ein Abstand beschreibt die Beziehung zwischen zwei Elementen. Er gehört zu keinem der beiden allein. Trägt das Kind den Abstand, bringt es ihn überall mit hin, auch dorthin, wo er nicht passt. Das letzte Kind hat dann einen ungewollten Abstand nach unten, den jemand mit `last:mb-0` wieder entfernt. Damit steht die Regel an zwei Stellen.
 
-`gap` löst das an einer Stelle: der Container sagt, wie weit seine Kinder auseinanderstehen. Kein letztes Kind, kein Zurücksetzen, keine zusammenfallenden Margins.
+`gap` löst das an einer Stelle: der Container sagt, wie weit seine Kinder auseinanderstehen. Das letzte Kind braucht keine Sonderbehandlung, nichts wird zurückgesetzt, und keine Margins fallen zusammen.
 
 Die Hilfsklasse `space-y` löst dasselbe Problem, aber über Margins an allen Kindern außer dem ersten. Sie bricht, sobald ein Kind bedingt gerendert wird oder ein Fragment dazwischenliegt, und sie funktioniert in React Native nicht.
 
@@ -3493,11 +3493,11 @@ Stack · https://standby.design/docs/rules/stack-keine-deckkraft-modifier-auf-se
 
 ### Warum
 
-Eine semantische Farbe steht für eine Bedeutung. Ein Zehntel davon steht für gar nichts — es ist eine neue Farbe ohne Namen, ohne Definition und ohne Eintrag im System. Sie lässt sich nicht wiederverwenden, weil niemand weiß, dass es sie gibt, und sie taucht beim nächsten Mal als `/12` wieder auf.
+Eine semantische Farbe steht für eine Bedeutung. Ein Zehntel davon hat keine Bedeutung. Es ist eine neue Farbe ohne Namen, ohne Definition und ohne Eintrag im System. Sie lässt sich nicht wiederverwenden, weil niemand weiß, dass es sie gibt, und sie taucht beim nächsten Mal als `/12` wieder auf.
 
-Es geht dabei nicht um Durchsichtigkeit an sich. Ein System darf mit Glas und Schleier arbeiten, wenn das seine Handschrift ist. Es geht um die beiläufige Variante: eine Deckkraft, die an einer einzelnen Stelle gesetzt wird, weil es dort gerade passte. Der Unterschied ist, ob jemand eine Materialentscheidung getroffen hat oder eine Korrektur im Vorbeigehen.
+Durchsichtigkeit an sich ist erlaubt. Ein System darf mit Glas und Schleier arbeiten, wenn das zu seinem Stil gehört. Die Regel betrifft die beiläufige Deckkraft, die an einer einzelnen Stelle gesetzt wird, weil es dort gerade passte. Entscheidend ist, ob jemand eine Materialentscheidung getroffen hat oder im Vorbeigehen etwas korrigiert.
 
-Für den häufigsten Anlass — eine gedämpfte Variante für Chips und Badges — gibt es die gedämpften Stufen der Zustandsfarben. Für den zweithäufigsten — Hover und Gedrückt — gibt es benannte Zustandsstufen: eine Stufe heller für Hover, eine dunkler für Gedrückt, in beiden Erscheinungen gleich. Wo ein System sie nicht hat, tut es eine Helligkeitsänderung in dieselbe Richtung. Warum heller und nicht dunkler: Kurze Zustände verschieben, dauerhafte wechseln die Palette.
+Der häufigste Anlass ist eine gedämpfte Variante für Chips und Badges. Dafür gibt es die gedämpften Stufen der Zustandsfarben. Der zweithäufigste sind Hover und Gedrückt. Dafür gibt es benannte Zustandsstufen: eine Stufe heller für Hover, eine dunkler für Gedrückt, in beiden Erscheinungen gleich. Wo ein System sie nicht hat, reicht eine Helligkeitsänderung in dieselbe Richtung. Warum heller und nicht dunkler: Kurze Zustände verschieben, dauerhafte wechseln die Palette.
 
 ### Woran Du den Verstoß erkennst
 
@@ -3521,7 +3521,7 @@ falsch     bg-primary/10
 
 ### Grenzen
 
-Deckkraft auf einer **Ebene** ist etwas anderes als Deckkraft auf einer Farbe: ein ausgeblendetes Overlay, ein Bild beim Laden, ein Element im Übergang. Dort ist Deckkraft die richtige Eigenschaft, weil sie das ganze Element betrifft und nicht eine Farbe erfindet.
+Deckkraft auf einer **Ebene** ist etwas anderes als Deckkraft auf einer Farbe: ein ausgeblendetes Overlay, ein Bild beim Laden, ein Element im Übergang. Dort ist Deckkraft die richtige Eigenschaft, weil sie das ganze Element betrifft und keine neue Farbe erfindet.
 
 ### Verwandt
 
@@ -3541,7 +3541,7 @@ Stack · https://standby.design/docs/rules/stack-was-der-browser-mitbringt-wird-
 
 Native Teile bringen die Gestaltung des Betriebssystems mit: eigene Icons, eigene Strichstärken, eigene Farben. Neben den eigenen Elementen wirken sie wie aus einem fremden Set. Das ist derselbe Bruch wie zwei Icon-Pakete in einem Projekt.
 
-Dazu ändern sie sich mit Browser und Systemsprache. Ein natives Datumsfeld zeigt in einem englisch eingestellten Browser mm/dd/yyyy, auch wenn die Anwendung Deutsch spricht. Viele lassen sich im Dunkelmodus nicht einfärben.
+Dazu ändern sie sich mit Browser und Systemsprache. Ein natives Datumsfeld zeigt in einem englisch eingestellten Browser mm/dd/yyyy, auch wenn die Anwendung auf Deutsch eingestellt ist. Viele lassen sich im Dunkelmodus nicht einfärben.
 
 Ohne die Angabe zeichnet der Browser Scrollbalken, Auswahllisten und Autofill hell, auch auf einer dunklen Seite.
 

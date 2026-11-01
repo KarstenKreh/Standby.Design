@@ -20,7 +20,7 @@ tags:
 
 ## Warum
 
-22 Zeichen am Stück kann niemand vergleichen oder abtippen. In Vierergruppen findet das Auge seinen Platz wieder.
+22 Zeichen am Stück kann niemand vergleichen oder abtippen. In Vierergruppen findet der Nutzer die Stelle wieder, an der er war.
 
 ## Woran Du den Verstoß erkennst
 

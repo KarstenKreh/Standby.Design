@@ -4,13 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Kurze Zustände verschieben, dauerhafte wechseln die Palette — Design Rules — standby.design</title>
-  <meta name="description" content="Hover und Gedrückt bewegen sich innerhalb einer Palette. An, aktuell und ungültig wechseln die Palette. Sonst sind die beiden Fragen nicht mehr zu trennen." />
+  <meta name="description" content="Hover und Gedrückt bewegen sich innerhalb einer Palette. An, aktuell und ungültig wechseln die Palette. Sonst sieht der Nutzer nicht mehr, ob er ein Element gerade berührt oder ob es an ist." />
   <link rel="canonical" href="https://standby.design/docs/rules/bedienung-kurze-zustaende-verschieben-dauerhafte-wechseln-die-palette" />
   <link rel="alternate" type="text/markdown" href="https://standby.design/docs/rules.md" title="Design Rules (Markdown)" />
 
   <meta property="og:type" content="article" />
   <meta property="og:title" content="Kurze Zustände verschieben, dauerhafte wechseln die Palette — Design Rules — standby.design" />
-  <meta property="og:description" content="Hover und Gedrückt bewegen sich innerhalb einer Palette. An, aktuell und ungültig wechseln die Palette. Sonst sind die beiden Fragen nicht mehr zu trennen." />
+  <meta property="og:description" content="Hover und Gedrückt bewegen sich innerhalb einer Palette. An, aktuell und ungültig wechseln die Palette. Sonst sieht der Nutzer nicht mehr, ob er ein Element gerade berührt oder ob es an ist." />
   <meta property="og:url" content="https://standby.design/docs/rules/bedienung-kurze-zustaende-verschieben-dauerhafte-wechseln-die-palette" />
   <meta property="og:site_name" content="standby.design" />
   <meta property="og:image" content="https://standby.design/og-image?tool=github" />
@@ -183,18 +183,18 @@
     <h1>Kurze Zustände verschieben, dauerhafte wechseln die Palette</h1>
     <dl class="rule-meta"><div><dt>Geltung</dt><dd>universal · web, react-native</dd></div></dl>
 
-<aside class="callout callout-tip"><p class="callout-title">Regel</p><p>Kurzzeitige Zustände — Hover, Gedrückt — verschieben sich <strong>innerhalb</strong> derselben Palette: Hover eine Stufe <strong>heller</strong>, Gedrückt eine Stufe <strong>dunkler</strong>, in heller und dunkler Erscheinung gleich. Dauerhafte Zustände — an, aktuell, ungültig — <strong>wechseln</strong> die Palette.</p>
+<aside class="callout callout-tip"><p class="callout-title">Regel</p><p>Kurzzeitige Zustände (Hover, Gedrückt) verschieben sich <strong>innerhalb</strong> derselben Palette: Hover eine Stufe <strong>heller</strong>, Gedrückt eine Stufe <strong>dunkler</strong>, in heller und dunkler Erscheinung gleich. Dauerhafte Zustände (an, aktuell, ungültig) <strong>wechseln</strong> die Palette.</p>
 </aside>
 <h2>Warum</h2>
 <p>Der Nutzer muss zwei Fragen gleichzeitig beantworten können: „berühre ich das gerade?&quot; und „ist das an?&quot;. Werden beide mit demselben Mittel beantwortet, sind sie nicht mehr zu trennen. Ein Element unter dem Mauszeiger sieht dann aus wie ein eingeschaltetes, und ein eingeschaltetes wie eines, das gerade berührt wird.</p>
 <p>Verschieben und Wechseln sind zwei verschiedene Bewegungen im Farbraum. Solange kurze Zustände nur verschieben und dauerhafte wechseln, bleiben die beiden Fragen getrennt, ohne dass der Nutzer es lernen muss.</p>
 <h2>Warum Hover heller wird</h2>
-<p>Hover sagt: „Ich reagiere auf Dich, drück mich.&quot; Das Element kommt dem Zeiger ein Stück entgegen, und was näher am Licht ist, wird heller. Gedrückt ist das Gegenteil: das Element sinkt ein und wird dunkler.</p>
+<p>Hover zeigt, dass das Element reagiert und sich drücken lässt. Es hebt sich dem Zeiger ein Stück entgegen, und was näher am Licht ist, wird heller. Beim Drücken sinkt das Element ein und wird dunkler.</p>
 <p>Im Dark Mode kehrt sich das nicht um. Das Licht kommt in beiden Erscheinungen von vorn, deshalb sind auch dort höhere Ebenen heller als tiefere. Wer die Richtung mit dem Modus umdreht, lässt denselben Knopf im Hellen einsinken und im Dunkeln herauskommen.</p>
 <p>Weil Hover und Gedrückt in entgegengesetzte Richtungen gehen, liegen sie zwei Schritte auseinander. Der Nutzer verwechselt sie nie, und keiner von beiden landet wieder auf der Farbe des Ruhezustands.</p>
 <h2>Die Schritte sind gleichmäßig</h2>
-<p>Die Abstände zwischen Ruhe, Hover und Gedrückt kommen aus derselben Skala und sind gleich groß. Werden sie pro Baustein von Hand gewählt, ist der Sprung an einer Stelle kaum zu sehen und an der nächsten zu stark. Auffallen tut das erst, wenn zwei Bausteine nebeneinander liegen, und dann ist es überall.</p>
-<p>Wie groß ein Schritt ist, hängt von der Palette des Projekts ab. Gleich groß muss er sein, nicht bestimmt groß.</p>
+<p>Die Abstände zwischen Ruhe, Hover und Gedrückt kommen aus derselben Skala und sind gleich groß. Werden sie pro Baustein von Hand gewählt, ist der Sprung an einer Stelle kaum zu sehen und an der nächsten zu stark. Das fällt erst auf, wenn zwei Bausteine nebeneinander liegen. Dann sieht man es überall.</p>
+<p>Wie groß ein Schritt ist, hängt von der Palette des Projekts ab. Die Regel legt keine Größe fest, nur dass alle Schritte gleich groß sind.</p>
 <h2>Kein Schleier als Rückmeldung</h2>
 <p>Ein durchscheinender Schleier ist auf dunklem Grund ein großer Schritt und auf hellem fast keiner. Dieselbe Rückmeldung wirkt in zwei Erscheinungen unterschiedlich stark, und in einer davon fehlt sie praktisch ganz. Zustände kommen deshalb aus benannten Farbwerten, nicht aus Deckkraft.</p>
 <h2>Woran Du den Verstoß erkennst</h2>
@@ -215,9 +215,9 @@ Gedrückt  ▓▓   ein Schritt dunkler Gedrückt  ░░  ← heller als Ruhe
 An        ██   andere Palette      An        ░░  ← gleich wie Hover
 </code></pre>
 <h2>Grenzen</h2>
-<p>Am Ende der Skala ist kein Platz mehr. Ein fast weißes Element kann nicht heller werden: dort geht Hover eine Stufe dunkler und Gedrückt zwei. Ein fast schwarzes kann nicht dunkler werden: dort geht Gedrückt zwei Stufen heller. Das ist die einzige Umkehr.</p>
+<p>Am Ende der Skala ist kein Platz mehr. Ein fast weißes Element kann nicht heller werden. Dort geht Hover eine Stufe dunkler und Gedrückt zwei. Ein fast schwarzes kann nicht dunkler werden. Dort geht Gedrückt zwei Stufen heller. Das ist die einzige Umkehr.</p>
 <p>Ein Rahmen ist keine Fläche, die sich hebt. Beim Eingabefeld wird der Rand beim Hover kräftiger, damit er sich deutlicher von der Umgebung abhebt. Die Regel oben gilt für Flächen.</p>
-<p>Ein Eingabefeld im Fehlerzustand wechselt die Palette, obwohl der Fehler vorübergehend ist. Das ist gewollt: „ungültig&quot; ist ein dauerhafter Zustand des Feldes, solange die Eingabe nicht stimmt, und keine Rückmeldung auf eine Berührung.</p>
+<p>Ein Eingabefeld im Fehlerzustand wechselt die Palette, obwohl der Fehler vorübergehend ist. Das ist gewollt. „Ungültig&quot; ist ein dauerhafter Zustand des Feldes, solange die Eingabe nicht stimmt, und keine Rückmeldung auf eine Berührung.</p>
 <h2>Verwandt</h2>
 <ul>
 <li><a href="/docs/rules/farbe-farbe-traegt-nie-allein">Farbe trägt nie allein</a></li>

@@ -4,13 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Was der Nutzer tippt oder einfügt, kommt an — Design Rules — standby.design</title>
-  <meta name="description" content="Einfügen ist nie gesperrt, und ein Feld schluckt nie still Zeichen. Normalisiert wird erst beim Verlassen und sichtbar." />
+  <meta name="description" content="Einfügen ist nie gesperrt, und ein Feld entfernt nie still Zeichen. Normalisiert wird erst beim Verlassen und sichtbar." />
   <link rel="canonical" href="https://standby.design/docs/rules/formular-was-der-nutzer-tippt-oder-einfuegt-kommt-an" />
   <link rel="alternate" type="text/markdown" href="https://standby.design/docs/rules.md" title="Design Rules (Markdown)" />
 
   <meta property="og:type" content="article" />
   <meta property="og:title" content="Was der Nutzer tippt oder einfügt, kommt an — Design Rules — standby.design" />
-  <meta property="og:description" content="Einfügen ist nie gesperrt, und ein Feld schluckt nie still Zeichen. Normalisiert wird erst beim Verlassen und sichtbar." />
+  <meta property="og:description" content="Einfügen ist nie gesperrt, und ein Feld entfernt nie still Zeichen. Normalisiert wird erst beim Verlassen und sichtbar." />
   <meta property="og:url" content="https://standby.design/docs/rules/formular-was-der-nutzer-tippt-oder-einfuegt-kommt-an" />
   <meta property="og:site_name" content="standby.design" />
   <meta property="og:image" content="https://standby.design/og-image?tool=github" />
@@ -186,7 +186,7 @@
 <aside class="callout callout-tip"><p class="callout-title">Regel</p><p>Sperr nie das Einfügen und verändere eine Eingabe nie stillschweigend.</p>
 </aside>
 <h2>Warum</h2>
-<p>Ein verschlucktes Zeichen ist ein Fehler, den der Nutzer nicht sieht. Aus eingefügtem „1.250,00 €&quot; wird dann still „125000&quot;.</p>
+<p>Entfernt ein Feld still ein Zeichen, sieht der Nutzer den Fehler nicht. Aus eingefügtem „1.250,00 €&quot; wird dann still „125000&quot;.</p>
 <h2>Woran Du den Verstoß erkennst</h2>
 <ul>
 <li><code>onPaste</code> mit <code>preventDefault()</code>.</li>

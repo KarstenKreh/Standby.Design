@@ -186,7 +186,7 @@
 <aside class="callout callout-tip"><p class="callout-title">Regel</p><p>Formatiere Zahlen, Beträge, Daten, Uhrzeiten und Einheiten mit den Mustern aus Unicode CLDR, im Sprachraum aus der Einstellung. Bau keine eigenen Muster und speichere jeden Wert neutral.</p>
 </aside>
 <h2>Warum</h2>
-<p>„1.250“ heißt in Deutschland tausendzweihundertfünfzig und in den USA eins Komma zwei fünf. „03/04/2026“ ist der 3. April oder der 4. März. Eine falsch gelesene Zahl fällt nicht als Fehler auf. Sie wird geglaubt.</p>
+<p>„1.250“ heißt in Deutschland tausendzweihundertfünfzig und in den USA eins Komma zwei fünf. „03/04/2026“ ist der 3. April oder der 4. März. Eine falsch gelesene Zahl fällt nicht als Fehler auf. Der Nutzer hält sie für richtig.</p>
 <p>Die Zeichen dafür sind für jeden Sprachraum gepflegt: Dezimalzeichen, Tausendertrennung, Stellung des Währungszeichens, Reihenfolge im Datum, 12 oder 24 Stunden. Die Quelle ist Unicode CLDR. <code>Intl</code> im Browser, ICU, Android und iOS lesen daraus. Ein selbst gebautes Muster kennt nur die Sprachräume, an die sein Autor gedacht hat. Beispiele für die Zahl 1234567,5, den Betrag 1234,50 € und den 19. Oktober 2026:</p>
 <div class="table-wrap"><table>
 <thead>
@@ -228,7 +228,7 @@
 <td>19/10/2026</td>
 </tr>
 </tbody></table></div>
-<p>Die Tabelle ist kein Nachschlagewerk. Das ist CLDR.</p>
+<p>Die Tabelle zeigt nur Beispiele. Nachschlagen musst Du in CLDR.</p>
 <h2>Was CLDR offen lässt</h2>
 <p>CLDR sagt, mit welchem Zeichen formatiert wird. Wann und wie viel, entscheidet die Ansicht:</p>
 <ul>

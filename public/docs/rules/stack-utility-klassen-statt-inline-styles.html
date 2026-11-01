@@ -4,13 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Utility-Klassen statt Inline-Styles — Design Rules — standby.design</title>
-  <meta name="description" content="Gestaltung läuft über Utility-Klassen. Inline-Styles und Style-Objekte sind ein Ausstieg aus dem Design-System." />
+  <meta name="description" content="Gestaltung läuft über Utility-Klassen. Inline-Styles und Style-Objekte umgehen das Design-System." />
   <link rel="canonical" href="https://standby.design/docs/rules/stack-utility-klassen-statt-inline-styles" />
   <link rel="alternate" type="text/markdown" href="https://standby.design/docs/rules.md" title="Design Rules (Markdown)" />
 
   <meta property="og:type" content="article" />
   <meta property="og:title" content="Utility-Klassen statt Inline-Styles — Design Rules — standby.design" />
-  <meta property="og:description" content="Gestaltung läuft über Utility-Klassen. Inline-Styles und Style-Objekte sind ein Ausstieg aus dem Design-System." />
+  <meta property="og:description" content="Gestaltung läuft über Utility-Klassen. Inline-Styles und Style-Objekte umgehen das Design-System." />
   <meta property="og:url" content="https://standby.design/docs/rules/stack-utility-klassen-statt-inline-styles" />
   <meta property="og:site_name" content="standby.design" />
   <meta property="og:image" content="https://standby.design/og-image?tool=github" />
@@ -186,8 +186,8 @@
 <aside class="callout callout-tip"><p class="callout-title">Regel</p><p>Setze jede Gestaltung über Utility-Klassen. Keine Inline-Styles, keine Style-Objekte.</p>
 </aside>
 <h2>Warum</h2>
-<p>Ein Inline-Style ist der bequemste Weg an allen Regeln vorbei. Er kennt keine Tokens, keine Breakpoints, keinen hellen Modus und keine Zustände. Er gewinnt außerdem gegen jede Klasse, sodass eine spätere Korrektur über das System nicht mehr greift — die Stelle ist tot für jede Änderung, die nicht genau dort ansetzt.</p>
-<p>Utility-Klassen sind dagegen durchsuchbar. Man findet alle Stellen mit einem bestimmten Abstand, kann sie zählen und in einem Zug umstellen. Das ist der Unterschied zwischen einem System und einer Sammlung von Einzelfällen.</p>
+<p>Mit einem Inline-Style umgeht man am bequemsten alle Regeln. Er kennt keine Tokens, keine Breakpoints, keinen hellen Modus und keine Zustände. Er hat außerdem Vorrang vor jeder Klasse. Eine spätere Korrektur über das System greift dort deshalb nicht mehr. Die Stelle ändert sich nur noch, wenn jemand genau dort ansetzt.</p>
+<p>Utility-Klassen sind dagegen durchsuchbar. Man findet alle Stellen mit einem bestimmten Abstand, kann sie zählen und in einem Zug umstellen. So lässt sich die Gestaltung als System pflegen. Inline-Styles bleiben eine Sammlung von Einzelfällen.</p>
 <h2>Woran Du den Verstoß erkennst</h2>
 <ul>
 <li><code>style={{ … }}</code> in einer Komponente.</li>
@@ -206,7 +206,7 @@
 &lt;/View&gt;
 </code></pre>
 <h2>Grenzen</h2>
-<p>Werte, die zur Laufzeit berechnet werden — die Breite eines Balkens aus einem Prozentwert, eine Position aus einer Messung —, gehören in einen Style. Sie sind Daten, keine Gestaltung. Alles andere daneben bleibt in Klassen.</p>
+<p>Manche Werte werden erst zur Laufzeit berechnet, etwa die Breite eines Balkens aus einem Prozentwert oder eine Position aus einer Messung. Sie gehören in einen Style. Sie sind Daten, keine Gestaltung. Alles andere daneben bleibt in Klassen.</p>
 <h2>Verwandt</h2>
 <ul>
 <li><a href="/docs/rules/farbe-werte-kommen-aus-tokens-nie-aus-der-hand">Werte kommen aus Tokens, nie aus der Hand</a></li>

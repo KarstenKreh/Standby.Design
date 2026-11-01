@@ -4,13 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Abstand über gap, nicht über Margins am Kind — Design Rules — standby.design</title>
-  <meta name="description" content="Der Abstand gehört dem Container, nicht dem Kind. Flex und gap statt Margins oder space-y." />
+  <meta name="description" content="Den Abstand zwischen Geschwistern setzt der Container, mit Flex und gap statt Margins oder space-y." />
   <link rel="canonical" href="https://standby.design/docs/rules/stack-abstand-ueber-gap-nicht-ueber-margins-am-kind" />
   <link rel="alternate" type="text/markdown" href="https://standby.design/docs/rules.md" title="Design Rules (Markdown)" />
 
   <meta property="og:type" content="article" />
   <meta property="og:title" content="Abstand über gap, nicht über Margins am Kind — Design Rules — standby.design" />
-  <meta property="og:description" content="Der Abstand gehört dem Container, nicht dem Kind. Flex und gap statt Margins oder space-y." />
+  <meta property="og:description" content="Den Abstand zwischen Geschwistern setzt der Container, mit Flex und gap statt Margins oder space-y." />
   <meta property="og:url" content="https://standby.design/docs/rules/stack-abstand-ueber-gap-nicht-ueber-margins-am-kind" />
   <meta property="og:site_name" content="standby.design" />
   <meta property="og:image" content="https://standby.design/og-image?tool=github" />
@@ -186,8 +186,8 @@
 <aside class="callout callout-tip"><p class="callout-title">Regel</p><p>Setze Abstände zwischen Geschwistern über <code>flex</code> und <code>gap</code> am Container. Keine Margins am Kind, kein <code>space-y</code>.</p>
 </aside>
 <h2>Warum</h2>
-<p>Ein Abstand ist eine Eigenschaft der Beziehung zwischen zwei Elementen, nicht eines einzelnen. Trägt das Kind den Abstand, bringt es ihn überall mit hin — auch dorthin, wo er nicht hingehört. Und das letzte Kind bringt einen Abstand nach unten mit, den niemand wollte, also wird er mit <code>last:mb-0</code> wieder abgeräumt. Damit steht die Regel an zwei Stellen.</p>
-<p><code>gap</code> löst das an einer Stelle: der Container sagt, wie weit seine Kinder auseinanderstehen. Kein letztes Kind, kein Zurücksetzen, keine zusammenfallenden Margins.</p>
+<p>Ein Abstand beschreibt die Beziehung zwischen zwei Elementen. Er gehört zu keinem der beiden allein. Trägt das Kind den Abstand, bringt es ihn überall mit hin, auch dorthin, wo er nicht passt. Das letzte Kind hat dann einen ungewollten Abstand nach unten, den jemand mit <code>last:mb-0</code> wieder entfernt. Damit steht die Regel an zwei Stellen.</p>
+<p><code>gap</code> löst das an einer Stelle: der Container sagt, wie weit seine Kinder auseinanderstehen. Das letzte Kind braucht keine Sonderbehandlung, nichts wird zurückgesetzt, und keine Margins fallen zusammen.</p>
 <p>Die Hilfsklasse <code>space-y</code> löst dasselbe Problem, aber über Margins an allen Kindern außer dem ersten. Sie bricht, sobald ein Kind bedingt gerendert wird oder ein Fragment dazwischenliegt, und sie funktioniert in React Native nicht.</p>
 <h2>Woran Du den Verstoß erkennst</h2>
 <ul>

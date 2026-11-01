@@ -23,17 +23,17 @@ tags:
 
 Die 320 kommen nicht vom kleinsten Telefon. Sie kommen aus **WCAG 2.1, Erfolgskriterium 1.4.10 Reflow**, Stufe AA, und die Rechnung dahinter ist: 1280 Pixel bei 400 Prozent Vergrößerung ergeben ein Sichtfenster von 320 Pixeln.
 
-Der Nutzer, um den es geht, sitzt also meistens gar nicht am Telefon. Er sitzt am großen Bildschirm und hat stark vergrößert, weil er sonst nichts lesen kann. Für ihn ist ein waagerechter Schieber kein Schönheitsfehler: er muss dann bei jeder einzelnen Zeile hin und her schieben, um sie zu Ende zu lesen. Das macht niemand lange mit.
+Der Nutzer, um den es geht, sitzt also meistens gar nicht am Telefon. Er sitzt am großen Bildschirm und hat stark vergrößert, weil er sonst nichts lesen kann. Für ihn ist ein waagerechter Schieber mehr als ein Schönheitsfehler. Er muss bei jeder einzelnen Zeile hin und her schieben, um sie zu Ende zu lesen. Das macht niemand lange mit.
 
-Dass die Regel damit auch kleine Geräte abdeckt, ist ein Nebeneffekt und kein Grund. Der Grund altert nicht mit der nächsten Gerätegeneration.
+Dass die Regel damit auch kleine Geräte abdeckt, ist nur ein Nebeneffekt. Der Grund ist die Vergrößerung, und der gilt auch nach der nächsten Gerätegeneration noch.
 
-Und sie von Anfang an einzuhalten ist billiger als nachzurüsten. Beim Nachrüsten stehen die Entscheidungen schon fest — die vierspaltige Kachelreihe, die Werkzeugleiste mit acht Elementen, die Tabelle mit zwölf Spalten —, und jede davon muss einzeln aufgebrochen werden. Wer früh bei 320 prüft, trifft diese Entscheidungen gar nicht erst.
+Die Regel von Anfang an einzuhalten ist billiger als nachzurüsten. Beim Nachrüsten stehen die Entscheidungen schon fest, etwa die vierspaltige Kachelreihe, die Werkzeugleiste mit acht Elementen oder die Tabelle mit zwölf Spalten. Jede davon muss einzeln umgebaut werden. Wer früh bei 320 prüft, trifft diese Entscheidungen gar nicht erst.
 
 Ein Tablet im geteilten Fenster ist schmaler als ein Telefon quer. Wer das Gerät abfragt, zeigt dann das falsche Layout oder versteckt Funktionen.
 
 ## Was die Regel verlangt und was nicht
 
-Verlangt ist **Benutzbarkeit**, nicht Schönheit. Es darf eng aussehen. Es darf gestapelt aussehen. Es darf nach Notlösung aussehen. Was nicht sein darf: abgeschnittener Inhalt, überlappende Elemente, ein Schieber unter der ganzen Seite, unerreichbare Bedienelemente.
+Verlangt ist **Benutzbarkeit**. Schön muss die Ansicht nicht sein. Sie darf eng, gestapelt oder nach Notlösung aussehen. Nicht erlaubt sind abgeschnittener Inhalt, überlappende Elemente, ein Schieber unter der ganzen Seite, unerreichbare Bedienelemente.
 
 ## Die Baseline
 
@@ -67,9 +67,9 @@ Hart.
 
 ## Grenzen
 
-WCAG nimmt ausdrücklich aus, was zwingend zwei Dimensionen braucht: Tabellen, Landkarten, Zeitraster, Notensatz, Diagramme. Diese Inhalte dürfen scrollen. Der Schieber gehört dann aber an den Inhalt und nicht unter die Anwendung: der Nutzer soll die Tabelle schieben, nicht die Seite mitsamt Kopfbereich und Seitenleiste.
+WCAG nimmt ausdrücklich aus, was zwingend zwei Dimensionen braucht: Tabellen, Landkarten, Zeitraster, Notensatz, Diagramme. Diese Inhalte dürfen scrollen. Der Schieber sitzt dann aber am Inhalt selbst. Der Nutzer schiebt nur die Tabelle, die Seite mit Kopfbereich und Seitenleiste bleibt stehen.
 
-Ein Werkzeug, das ohne Fläche sinnlos ist, darf schmal eine ehrliche Ersatzansicht zeigen. Der Hinweis „Diese Ansicht braucht ein größeres Fenster" ist erlaubt, das stumme Abschneiden nicht.
+Ein Werkzeug, das ohne Fläche sinnlos ist, darf in einem schmalen Fenster eine Ersatzansicht zeigen, die das offen sagt. Erlaubt ist der Hinweis „Diese Ansicht braucht ein größeres Fenster". Inhalt ohne Hinweis abzuschneiden ist nicht erlaubt.
 
 Ausrichtung, die für die Sache nötig ist, etwa ein Scheckscanner oder ein Klavier.
 
