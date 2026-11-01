@@ -51,6 +51,14 @@ describe('--hook', () => {
     assert.equal(result.status, 0, result.stderr);
   });
 
+  it('finds a multi-line edit in a file with Windows line endings', () => {
+    const file = path.join(project, 'src', 'crlf.tsx');
+    const edit = 'export const Tidy = () => (\n  <div className="flex gap-2" />\n);';
+    writeFileSync(file, `${legacy}${edit}\n`.replace(/\n/g, '\r\n'));
+    const result = runHook({ tool_name: 'Edit', tool_input: { file_path: file, old_string: 'x', new_string: edit } });
+    assert.equal(result.status, 0, result.stderr);
+  });
+
   it('checks the whole file when the edit cannot be located', () => {
     const result = runHook({ tool_name: 'Edit', tool_input: { file_path: path.join(project, 'src', 'view.tsx'), old_string: 'x', new_string: 'not in the file' } });
     assert.equal(result.status, 2);

@@ -70,7 +70,9 @@ async function readStdin() {
   return Buffer.concat(chunks).toString('utf8');
 }
 
-function lineRangeOf(content, snippet) {
+function lineRangeOf(rawContent, rawSnippet) {
+  const content = rawContent.replace(/\r\n/g, '\n');
+  const snippet = rawSnippet?.replace(/\r\n/g, '\n');
   const index = snippet ? content.indexOf(snippet) : -1;
   if (index === -1) return null;
   const start = content.slice(0, index).split('\n').length;

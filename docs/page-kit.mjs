@@ -15,14 +15,15 @@ const CALLOUT_LABELS = {
 };
 
 const FOOTER_LINKS = [
-  ['/', 'Home'],
   ['/docs/mcp', 'MCP Server'],
   ['/docs/rules', 'Design Rules'],
   ['/docs/lint', 'Design Lint'],
   ['/docs/research', 'Research'],
-  ['/impressum.html', 'Impressum'],
-  ['/datenschutz.html', 'Datenschutz'],
+  ['/impressum.html', 'Imprint'],
+  ['/privacy.html', 'Privacy'],
 ];
+
+const PIRATE_PATH = 'M8.2 12.1c-.3.2-.5.6-.4.9c0 .7.7 1.2 1.3 1.2s1.2-.5 1.2-1.2q-.9-.6-2.1-.9M22 11l1-4s-2 0-5-2s-3-4-6-4s-3 2-6 4s-5 2-5 2l1 4h.1c-.1.3-.1.7-.1 1c0 3.5 1.8 6.6 4.5 8.4l-.5.9c6.4 4.1 12 0 12 0l-.5-.9c2.7-1.8 4.5-4.9 4.5-8.4zM11.3 4.5L9.9 3.1l.7-.7L12 3.8l1.4-1.4l.7.7l-1.4 1.4l1.4 1.4l-.7.7L12 5.2l-1.4 1.4l-.7-.7zm-2 4c1-.3 2-.5 2.7-.5c2.2 0 5.9 1.6 7.8 2.4c.1.3.1.6.1.9zm4.3 10.6c-.7.4-1.4.7-2.2.8c-.5-.4-.5-1.2 0-1.6c.4-.4 1.3-.6 1.8-.1c.3.1.4.6.4.9m6.4-5.7c-.5 2.1-1.8 4-3.5 5.2L15 16H9l-1.5 2.6C5.4 17.2 4 14.8 4 12c0-.5.1-1 .2-1.5c.5-.2 1.1-.5 1.8-.8l7.1 1.9V14c0 .5.4 1 1 1h2c.5 0 1-.4 1-1v-1.4z';
 
 export function slugify(name) {
   return name
@@ -328,14 +329,28 @@ const STYLES = `
     .rule-meta dt { color: var(--muted-foreground); }
     .rule-meta dd { color: var(--foreground); }
     .agent-hint { font-size: 0.875rem; }
+    .site-footer {
+      margin-top: 4rem;
+      font-size: var(--text-caption);
+      color: var(--muted-foreground);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    .site-footer .pirate-line {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 0.25rem 0 1.75rem;
+      font-size: 0.875rem;
+    }
+    .site-footer svg { width: 1.8em; height: 1.8em; }
     .legal-links {
       display: flex;
       justify-content: center;
       flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-top: 3.5rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid var(--border);
+      gap: 0.25rem;
     }
     .legal-links a {
       padding: 0.6rem 1rem;
@@ -350,7 +365,7 @@ const STYLES = `
 export function renderPage({ section, title, description, url, back, eyebrow, lead, meta, content }) {
   const pageTitle = url === section.url ? `${section.name} — standby.design` : `${title} — ${section.name} — standby.design`;
   const fullUrl = `${SITE}${url}`;
-  const footer = FOOTER_LINKS.map(([href, label]) => `      <a href="${href}">${label}</a>`).join('\n');
+  const footer = FOOTER_LINKS.map(([href, label]) => `        <a href="${href}">${label}</a>`).join('\n');
   return `<!DOCTYPE html>
 <html lang="de">
 <head>
@@ -383,9 +398,15 @@ ${eyebrow ? `    <p class="eyebrow">${escapeHtml(eyebrow)}</p>\n` : ''}    <h1>$
 ${lead ? `    <p class="lead">${escapeHtml(lead)}</p>\n` : ''}${meta ? `    ${meta}\n` : ''}
 ${content}
 
-    <nav class="legal-links">
+    <footer class="site-footer">
+      <div class="pirate-line">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="${PIRATE_PATH}"/></svg>
+        No copyright — take what you need, make it yours.
+      </div>
+      <nav class="legal-links">
 ${footer}
-    </nav>
+      </nav>
+    </footer>
   </main>
 </body>
 </html>
