@@ -231,33 +231,33 @@ Layout · https://standby.design/docs/rules/layout-die-titel-bilden-eine-glieder
 **Geltung:** universal · web, react-native
 
 > **Regel**
-> Behandle die Titel einer Ansicht wie ein Inhaltsverzeichnis. Ebene 1 ist der Seitentitel und steht genau einmal da. Jede weitere Ebene liegt in einem Abschnitt der Ebene darüber, und von oben nach unten gelesen geben die Titel den Ablauf der Seite wieder. Kein Titel kommt zweimal vor, auch nicht in einer anderen Größe. Jede Ebene hebt sich sichtbar von der darunter ab, und ein Titel hebt sich genauso von seinen Einträgen ab. Der Titel im Browser-Tab nennt die aktuelle Ansicht.
+> Behandle die Titel einer Ansicht wie ein Inhaltsverzeichnis. Titelstufe 1 ist der Seitentitel und steht genau einmal da. Jede weitere Titelstufe liegt in einem Abschnitt der Titelstufe darüber, und von oben nach unten gelesen geben die Titel den Ablauf der Seite wieder. Kein Titel kommt zweimal vor, auch nicht in einer anderen Größe. Jede Titelstufe hebt sich sichtbar von der darunter ab, und ein Titel hebt sich genauso von seinen Einträgen ab. Der Titel im Browser-Tab nennt die aktuelle Ansicht.
 
 ### Warum
 
 Die Größe eines Titels sagt, wie viel er umfasst. Der Seitentitel umfasst alles, ein Abschnittstitel nur seinen Abschnitt. Liest Du nur die Titel von oben nach unten, kennst Du den Aufbau der Seite, bevor Du ein Feld gelesen hast.
 
-Steht derselbe Titel zweimal da, einmal groß im Kopf und einmal kleiner über dem Formular, behauptet die Seite zwei Ebenen für eine Sache. Der Blick liest dasselbe zweimal und fragt sich, ob es zwei Dinge sind. Ändert später jemand nur einen der beiden, weiß niemand mehr, wie die Seite heißt.
+Steht derselbe Titel zweimal da, einmal groß im Kopf und einmal kleiner über dem Formular, zeigt die Seite zwei Titelstufen für eine Sache. Der Nutzer liest dasselbe zweimal und fragt sich, ob es zwei Dinge sind. Ändert später jemand nur einen der beiden, weiß niemand mehr, wie die Seite heißt.
 
-Screenreader lesen dieselbe Gliederung vor. Wer von Überschrift zu Überschrift springt, hört die Struktur, nicht das Aussehen. Ein doppelter Titel oder eine übersprungene Ebene ist dort ein Fehler in der Navigation.
+Screenreader lesen dieselbe Gliederung vor. Wer von Überschrift zu Überschrift springt, hört nur die Struktur. Ein doppelter Titel oder eine übersprungene Titelstufe ist dort ein Fehler in der Navigation.
 
 ### Jede Stufe ist sichtbar
 
-Die Gliederung muss man auch sehen. Jede Ebene unterscheidet sich von der darunter durch Größe, Gewicht oder beides. Titelstufen dürfen beide Mittel zusammen nutzen, anders als Kennzahlen in Betone mit einem Mittel, nicht mit zweien. Das gilt auch für die unterste Stufe: Ein Titel über einer Liste hebt sich von ihren Einträgen ab. Hat er dieselbe Größe und dasselbe Gewicht, liest er sich als erster Eintrag. Ein zusätzliches Icon oder eine Einrückung ersetzt Größe und Gewicht nicht, sie fügen nur eine Kante hinzu.
+Die Gliederung muss man auch sehen. Jede Titelstufe unterscheidet sich von der darunter durch Größe, Gewicht oder beides. Titelstufen dürfen beide Mittel zusammen nutzen, anders als Kennzahlen in Betone mit einem Mittel, nicht mit zweien. Das gilt auch für die unterste Stufe: Ein Titel über einer Liste hebt sich von ihren Einträgen ab. Hat er dieselbe Größe und dasselbe Gewicht, liest er sich als erster Eintrag. Ein zusätzliches Icon oder eine Einrückung ersetzt Größe und Gewicht nicht. Beides fügt nur eine Kante hinzu.
 
 ### Hart und weich
 
 | | Status |
 |---|---|
-| Genau ein Titel der Ebene 1 pro Ansicht | hart |
+| Genau ein Titel in Titelstufe 1 pro Ansicht | hart |
 | Jeder Titel steht einmal da | hart |
-| Die Ebenen folgen der Schachtelung, keine wird übersprungen | hart |
+| Die Titelstufen folgen der Schachtelung, keine wird übersprungen | hart |
 | Ein Titel steht vor seinem Inhalt, die Reihenfolge ist die Lesereihenfolge | hart |
-| Jede Ebene hebt sich von der darunter und von ihren Einträgen über Größe, Gewicht oder beides ab | hart |
+| Jede Titelstufe hebt sich von der darunter und von ihren Einträgen über Größe, Gewicht oder beides ab | hart |
 | Der Titel im Browser-Tab nennt die aktuelle Ansicht | hart |
-| Ob Ebene 1 im Kopf der Anwendung oder in der Ansicht steht | weich, das Projekt entscheidet einmal für alle Ansichten |
-| Wie viele Ebenen | weich, Vorgabe höchstens drei in einer Ansicht |
-| Welche Mittel eine Ebene nutzt | weich, Größe, Gewicht oder beides |
+| Ob Titelstufe 1 im Kopf der Anwendung oder in der Ansicht steht | weich, das Projekt entscheidet einmal für alle Ansichten |
+| Wie viele Titelstufen | weich, Vorgabe höchstens drei in einer Ansicht |
+| Welche Mittel eine Titelstufe nutzt | weich, Größe, Gewicht oder beides |
 | Aufbau des Tab-Titels | weich, Vorgabe „Ansicht · Produkt“ |
 
 ### Woran Du den Verstoß erkennst
@@ -265,7 +265,7 @@ Die Gliederung muss man auch sehen. Jede Ebene unterscheidet sich von der darunt
 - Kopfleiste und erste Überschrift der Ansicht nennen dasselbe.
 - Eine Karte direkt unter dem Titel trägt ihn noch einmal als Kopf.
 - Titel und Untertitel sagen dasselbe mit anderen Worten.
-- Auf einen Titel der Ebene 1 folgt direkt einer der Ebene 3.
+- Auf einen Titel in Titelstufe 1 folgt direkt einer in Titelstufe 3.
 - Ein Titel ist nur über Größe und Gewicht gesetzt, ohne Überschriften-Element.
 - Ein Titel hat dieselbe Größe und dasselbe Gewicht wie die Einträge darunter.
 - Ein Titel hebt sich nur über ein zweites Icon oder eine Einrückung ab.
@@ -278,19 +278,20 @@ Die Gliederung muss man auch sehen. Jede Ebene unterscheidet sich von der darunt
 
   1 Stammdaten bearbeiten             1 Stammdaten bearbeiten
     2 Anstellung                      1 Stammdaten bearbeiten   ← doppelt
-    2 Daten                               3 Anstellung          ← Ebene 2 fehlt
+    2 Daten                               3 Anstellung          ← Titelstufe 2 fehlt
     2 Gehalt und Abfindung              2 Daten
 ```
 
 ### Grenzen
 
-Ein Abschnittstitel darf ein Wort mit dem Seitentitel teilen. Ein Pfad im Kopf der Anwendung („Bereich › Objekt“) ist Navigation und kein Titel. Dann trägt die Ansicht den Namen des Objekts als Ebene 1.
+Ein Abschnittstitel darf ein Wort mit dem Seitentitel teilen. Ein Pfad im Kopf der Anwendung („Bereich › Objekt“) ist Navigation und kein Titel. Dann trägt die Ansicht den Namen des Objekts als Titelstufe 1.
 
-Druckansichten und Exporte brauchen Ebene 1 im Dokument, weil dort der Kopf der Anwendung fehlt.
+Druckansichten und Exporte brauchen Titelstufe 1 im Dokument, weil dort der Kopf der Anwendung fehlt.
 
 ### Verwandt
 
 - Betone mit einem Mittel, nicht mit zweien
+- Jeder Textstil hat eine Rolle
 
 ## Eine schmale Spalte steht in der Mitte
 
@@ -2942,11 +2943,11 @@ Typografie · https://standby.design/docs/rules/typografie-betone-mit-einem-mitt
 
 ### Warum
 
-Größe und Gewicht sagen dasselbe: schau hierhin. Setzt Du beides zugleich ein, verstärken sie sich nicht, sie verstopfen sich. Eine große Zahl im fetten Schnitt wirkt nicht wichtiger, nur schwer — die Innenräume der 8, der 0 und der 6 laufen zu, und die Ziffern rücken zusammen. Auf großen Graden ist genau das der sichtbarste Nebeneffekt von Fettung.
+Größe und Gewicht lenken beide den Blick auf eine Stelle. Setzt Du beides zugleich ein, wird die Betonung nicht stärker. Eine große Zahl im fetten Schnitt wirkt nur schwerer. Die Innenräume der 8, der 0 und der 6 laufen zu, und die Ziffern rücken zusammen. Auf großen Graden ist genau das der sichtbarste Nebeneffekt von Fettung.
 
 Eine kleine Überschrift hat das umgekehrte Problem. Sie kann sich über die Größe kaum vom Fließtext lösen, weil der Unterschied zu klein wäre, um zu wirken. Dort ist das Gewicht das richtige Mittel.
 
-Daraus folgt die Aufteilung von selbst: klein und schwer für Überschriften, groß und normal für Kennzahlen. Beides betont gleich stark, nur mit verschiedenen Mitteln.
+Daraus folgt die Aufteilung: klein und schwer für Überschriften, groß und normal für Kennzahlen. Beides betont gleich stark, nur mit verschiedenen Mitteln.
 
 Ein häufiger Widerspruch löst sich damit auf. Ein Token-Export nennt für Zahlen oft ein leichteres Gewicht als für Überschriften. Das ist kein Fehler im Export, das ist diese Unterscheidung.
 
@@ -2981,7 +2982,7 @@ Ein häufiger Widerspruch löst sich damit auf. Ein Token-Export nennt für Zahl
 
 Eine Zahl im Fließtext ist keine alleinstehende Zahl und folgt dem Text.
 
-Titelstufen dürfen Größe und Gewicht zusammen nutzen. Dort geht es nicht um Betonung eines Wertes, sondern darum, dass jede Ebene der Gliederung sichtbar ist. Das regelt Die Titel bilden eine Gliederung.
+Titelstufen dürfen Größe und Gewicht zusammen nutzen. Dort betonen sie keinen Wert. Sie machen jede Titelstufe der Gliederung sichtbar. Das regelt Die Titel bilden eine Gliederung.
 
 Marketing- und Titelseiten dürfen mit ihren eigenen Display-Stufen arbeiten. Dort ist Schrift Bild, und ein Bild darf laut sein.
 
@@ -2990,6 +2991,7 @@ Marketing- und Titelseiten dürfen mit ihren eigenen Display-Stufen arbeiten. Do
 - Zahlenspalten stehen rechtsbündig
 - Die Titel bilden eine Gliederung
 - Werte kommen aus Tokens, nie aus der Hand
+- Jeder Textstil hat eine Rolle
 
 ## Zahlenspalten stehen rechtsbündig
 
@@ -3159,6 +3161,86 @@ WCAG 1.4.8 Visual Presentation (AAA, „width is no more than 80 characters"). V
 
 - Jeder Textbehälter hält jede Textmenge aus
 - Weniger Kanten, ruhigere Ansicht
+
+## Jeder Textstil hat eine Rolle
+
+Typografie · https://standby.design/docs/rules/typografie-jeder-textstil-hat-eine-rolle
+
+**Geltung:** universal · web, react-native · **Korridor:** 4-7 Textstile pro Ansicht · **Vorgabe:** 5
+
+> **Regel**
+> Gib jedem Textstil einer Ansicht eine Rolle, etwa Titelstufe 1, Fließtext, Beschriftung, Kennzahl oder Meta. Zwei Stile ohne verschiedene Rolle sind einer zu viel. Zwei Stile unterscheiden sich deutlich: mindestens zwei Stufen der Skala auseinander oder durch ein anderes Mittel. Eine Familie neben der Textschrift trägt genau eine Rolle.
+
+### Begriffe
+
+- **Textstil:** die Kombination aus Größe, Schnitt, Farbe und Schreibweise, so wie sie im Bild ankommt.
+- **Rolle:** die Aufgabe eines Textstils in der Ansicht. Titelstufe 1 bis 3, Fließtext, Beschriftung, Kennzahl, Meta.
+- **Stufe:** ein Schritt der Typo-Skala.
+- **Familie:** die Schriftart, etwa eine Grotesk oder eine Display-Schrift.
+
+Rolle heißt hier dasselbe wie bei Flächen und Bedienelementen in Body, Role und Skin: Was ein Element tut, bestimmt, wie es aussieht. Ein Textstil ist die Skin einer Text-Rolle.
+
+### Warum
+
+Ein eigener Textstil sagt: Dieser Text ist eine andere Sorte als der daneben. Das Auge ordnet Texte nach ihrem Stil, bevor es sie liest. Gibt es mehr Stile als Sorten, ordnet es falsch. Zwei Beschriftungen in leicht verschiedenen Größen wirken wie zwei verschiedene Dinge, obwohl sie dasselbe sind. Die Ansicht wirkt unruhig, und man sieht nicht sofort, warum.
+
+Eine feste Höchstzahl hilft dagegen nur zum Teil. Ein Formular braucht weniger Stile als eine Übersicht mit Kennzahlen, und eine Zahl, die für jede Ansicht passt, gibt es nicht. Deshalb leitet die Regel die Zahl aus zwei Bedingungen ab. Jeder Stil braucht eine Rolle, die man benennen kann. Damit folgt die Zahl dem Inhalt. Und jeder Stil muss sich deutlich vom nächsten abheben. Damit ist die Zahl begrenzt, weil die Skala nur so viele deutlich verschiedene Stufen hat.
+
+Eine Stufe Abstand reicht dafür nicht. Benachbarte Stufen liegen so dicht, dass das Auge sie nebeneinander als fast gleich liest. Das wirkt wie ein Versehen. Zwei Stufen Abstand oder ein zusätzliches Mittel wie Gewicht, Farbe oder Versalien zeigen, dass der Unterschied gewollt ist.
+
+Eine Display- oder Zierschrift hat einen eigenen Charakter. Steht sie an mehreren Rollen, fällt sie nicht mehr auf, und jede dieser Rollen wirkt stärker betont, als sie sein soll. Eine ruhige Grotesk kann viele Rollen tragen, weil sie wenig auffällt.
+
+### Hart und weich
+
+| | Status |
+|---|---|
+| Jeder Textstil hat eine benannte Rolle | hart |
+| Zwei Stile liegen mindestens zwei Stufen auseinander oder unterscheiden sich in einem weiteren Mittel | hart |
+| Eine Familie neben der Textschrift trägt genau eine Rolle | hart |
+| Die Rollen stehen als Tokens oder Klassen, eine Ansicht setzt Rollen statt Größen | hart |
+| Anzahl der Textstile pro Ansicht | weich, Korridor 4-7, Vorgabe 5 |
+| Welche Rollen ein Projekt hat | weich, Vorgabe Titelstufe 1-3, Fließtext, Beschriftung, Kennzahl, Meta |
+
+### Woran Du den Verstoß erkennst
+
+- Im gerenderten Screen gibt es mehr verschiedene Kombinationen aus Größe, Schnitt, Farbe und Schreibweise als benannte Rollen.
+- Zwei Texte unterscheiden sich nur um eine Stufe der Skala und sonst in nichts.
+- Eine Display-Schrift erscheint an mehr als einer Rolle, etwa am Seitentitel und an Beschriftungen.
+- Ein Textstil kommt nur an einer einzigen Stelle vor.
+- Eine Ansicht setzt Größe, Gewicht und Farbe einzeln, statt eine Rolle zu nehmen.
+
+### Richtig / falsch
+
+```
+        RICHTIG                             FALSCH
+
+  Übersicht              Titelstufe 1   Übersicht              text-2xl bold
+  Umsatz                 Beschriftung   Umsatz                 text-sm medium
+  14,2 Mio. €            Kennzahl       14,2 Mio. €            text-3xl bold
+  seit Januar            Meta           seit Januar            text-xs muted
+                                        Stand 31.10.           text-[13px] muted  ← keine Rolle
+  Letzte Buchungen       Titelstufe 2   Letzte Buchungen       text-xl bold       ← eine Stufe unter 2xl
+  Miete Oktober  1.200   Fließtext      Miete Oktober  1.200   text-base
+                                        Details anzeigen       text-sm primary    ← zweite Beschriftung
+
+  6 Stile, 6 Rollen                     8 Stile, 6 Rollen
+```
+
+### Grenzen
+
+Marketing- und Titelseiten dürfen eigene Display-Stufen haben. Dort wirkt die Schrift als Bild, siehe Betone mit einem Mittel, nicht mit zweien.
+
+Dichte Tabellen haben eigene Rollen für Kopf und Zellen. Sie zählen als Rollen wie alle anderen, auch wenn sie nur in der Tabelle vorkommen.
+
+Ein Stil, der nur einmal vorkommt, ist kein Verstoß, wenn seine Rolle nur einmal gebraucht wird. Das ist meist Titelstufe 1.
+
+Die Farbe eines Zustands, etwa Rot für einen Fehler, ist kein eigener Textstil. Sie gehört zur Rolle des Textes, der den Zustand trägt. Dasselbe gilt für einen Link im Fließtext. Er gehört zur Rolle seines Absatzes.
+
+### Verwandt
+
+- Die Titel bilden eine Gliederung
+- Betone mit einem Mittel, nicht mit zweien
+- Werte kommen aus Tokens, nie aus der Hand
 
 ## Werte kommen aus Tokens, nie aus der Hand
 

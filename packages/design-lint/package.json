@@ -1,0 +1,47 @@
+{
+  "name": "standby-design-lint",
+  "version": "0.1.0",
+  "description": "Enforces the standby.design design rules in code: an ESLint plugin, a CLI and a Claude Code hook that report violations with the rule and the fix.",
+  "license": "MIT",
+  "type": "module",
+  "homepage": "https://standby.design/docs/lint",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KarstenKreh/Standby.Design.git",
+    "directory": "packages/design-lint"
+  },
+  "bin": {
+    "standby-design-lint": "./bin/standby-design-lint.js"
+  },
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "files": [
+    "bin",
+    "src",
+    "skills",
+    "README.md"
+  ],
+  "engines": {
+    "node": "^20.19.0 || ^22.13.0 || >=24"
+  },
+  "scripts": {
+    "test": "node --test test/"
+  },
+  "dependencies": {
+    "@typescript-eslint/parser": "^8.72.1",
+    "eslint": "^10.14.0",
+    "typescript": "~5.9"
+  },
+  "devDependencies": {
+    "playwright": "^1.64.1"
+  },
+  "peerDependencies": {
+    "playwright": ">=1.49"
+  },
+  "peerDependenciesMeta": {
+    "playwright": {
+      "optional": true
+    }
+  }
+}

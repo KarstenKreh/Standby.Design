@@ -2,7 +2,7 @@
  * Code export generators for the type scale.
  */
 
-import { customScale, traditionalScale, resolveMobileRatio, DEFAULT_TRADITIONAL, DEFAULT_TRADITIONAL_MOBILE, type ComputedLevel } from './scale';
+import { customScale, traditionalScale, resolveMobileRatio, DEFAULT_TRADITIONAL, DEFAULT_TRADITIONAL_MOBILE, LEVEL_LABELS, type ComputedLevel } from './scale';
 import { applyTypography } from './typography';
 import { fontFamily, buildFontshareEmbed } from './fontshare';
 import type { UrlState as TypeState } from './url-state/type';
@@ -17,6 +17,52 @@ export interface TypeExportOptions {
 }
 
 type ExportOptions = TypeExportOptions;
+
+export interface TextRole {
+  role: string;
+  name: string;
+  level: ComputedLevel['level'];
+  font: 'heading' | 'body';
+  weight?: number;
+  tabularNumbers?: boolean;
+}
+
+export const TEXT_ROLES: TextRole[] = [
+  { role: 'title-1', name: 'Titelstufe 1', level: 'h1', font: 'heading' },
+  { role: 'title-2', name: 'Titelstufe 2', level: 'h3', font: 'heading' },
+  { role: 'title-3', name: 'Titelstufe 3', level: 'h5', font: 'heading' },
+  { role: 'figure', name: 'Kennzahl', level: 'h2', font: 'body', weight: 400, tabularNumbers: true },
+  { role: 'body', name: 'Fließtext', level: 'body-m', font: 'body', weight: 400 },
+  { role: 'label', name: 'Beschriftung', level: 'body-s', font: 'body', weight: 500 },
+  { role: 'meta', name: 'Meta', level: 'caption', font: 'body', weight: 400 },
+];
+
+export function availableTextRoles(levels: ComputedLevel[]): TextRole[] {
+  const present = new Set(levels.map((l) => l.level));
+  return TEXT_ROLES.filter((r) => present.has(r.level));
+}
+
+function roleDeclarations(r: TextRole): string[] {
+  const declarations = [
+    `font-family: var(--font-${r.font});`,
+    `font-size: var(--text-${r.level});`,
+    `line-height: var(--leading-${r.level});`,
+    `letter-spacing: var(--tracking-${r.level});`,
+    `font-weight: ${r.weight ?? 'var(--font-weight-heading)'};`,
+  ];
+  if (r.tabularNumbers) declarations.push('font-variant-numeric: tabular-nums;');
+  return declarations;
+}
+
+function roleRules(levels: ComputedLevel[], selector: (role: string) => string): string {
+  let css = `\n/* Text roles: set text through a role, not through single sizes */\n`;
+  for (const r of availableTextRoles(levels)) {
+    css += `${selector(r.role)} {\n`;
+    for (const d of roleDeclarations(r)) css += `  ${d}\n`;
+    css += `}\n`;
+  }
+  return css;
+}
 
 export function computeTypeScale(state: TypeState): ComputedLevel[] {
   const levels = state.scaleMode === 'traditional'
@@ -66,6 +112,21 @@ export function typeDesignTokens(opts: TypeExportOptions): Record<string, unknow
       },
     };
   }
+  const textRole: Record<string, unknown> = {};
+  for (const r of availableTextRoles(opts.levels)) {
+    const l = opts.levels.find((x) => x.level === r.level)!;
+    textRole[r.role] = {
+      $type: 'typography',
+      $description: r.name,
+      $value: {
+        fontFamily: r.font === 'heading' ? headingFF : bodyFF,
+        fontSize: l.clampValue,
+        fontWeight: r.weight ?? opts.headingWeight,
+        lineHeight: l.lineHeight,
+        letterSpacing: `${l.letterSpacing}em`,
+      },
+    };
+  }
   return {
     font: {
       heading: { $type: 'fontFamily', $value: headingFF },
@@ -73,6 +134,7 @@ export function typeDesignTokens(opts: TypeExportOptions): Record<string, unknow
       mono: { $type: 'fontFamily', $value: fontFamily(opts.monoFont) },
     },
     typography,
+    textRole,
   };
 }
 
@@ -117,6 +179,7 @@ export function generateCssExport(opts: ExportOptions): string {
   }
 
   css += `}\n`;
+  css += roleRules(levels, (role) => `.text-role-${role}`);
   return css;
 }
 
@@ -155,6 +218,7 @@ export function generateTailwindV4Export(opts: ExportOptions): string {
   }
 
   css += `}\n`;
+  css += roleRules(levels, (role) => `@utility text-role-${role}`);
   return css;
 }
 
@@ -196,6 +260,18 @@ export function generateLlmBriefing(opts: ExportOptions): string {
   md += `|-------|-------|\n`;
   for (const l of levels) {
     md += `| ${l.label} | ${l.letterSpacing}em |\n`;
+  }
+
+  const roles = availableTextRoles(levels);
+  if (roles.length) {
+    md += `\n## Text Roles\n\n`;
+    md += `Every text style in a view has a role. Set text through the role class, not through single sizes or weights.\n\n`;
+    md += `| Role | Class | Level | Font | Weight |\n`;
+    md += `|------|-------|-------|------|--------|\n`;
+    for (const r of roles) {
+      md += `| ${r.name} | \`text-role-${r.role}\` | ${LEVEL_LABELS[r.level]} | ${r.font} | ${r.weight ?? opts.headingWeight} |\n`;
+    }
+    md += `\nA view uses 4 to 7 text styles, 5 by default. Meta text takes the muted foreground color from the color tokens. Rule: standby.design/docs/rules/typografie-jeder-textstil-hat-eine-rolle\n`;
   }
 
   md += `\n## Usage\n\n`;

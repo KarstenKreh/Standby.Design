@@ -1,3 +1,12 @@
+const FOOTER_LINKS: [string, string][] = [
+  ['/docs/mcp', 'MCP Server'],
+  ['/docs/rules', 'Design Rules'],
+  ['/docs/lint', 'Design Lint'],
+  ['/docs/research', 'Research'],
+  ['/impressum.html', 'Imprint'],
+  ['/privacy.html', 'Privacy'],
+];
+
 export function PirateFooter() {
   return (
     <footer className="flex flex-col items-center gap-1 py-8 text-caption text-muted-foreground">
@@ -11,10 +20,12 @@ export function PirateFooter() {
         </svg>
         No copyright — take what you need, make it yours.
       </div>
-      <div className="flex items-center justify-center gap-1">
-        <a href="/impressum.html" className="px-4 py-2.5 rounded-lg hover:text-foreground hover:bg-card transition-colors">Imprint</a>
-        <a href="/privacy.html" className="px-4 py-2.5 rounded-lg hover:text-foreground hover:bg-card transition-colors">Privacy</a>
-      </div>
+      <nav className="flex flex-wrap items-center justify-center gap-1">
+        {FOOTER_LINKS.map(([href, label]) => (
+          // eslint-disable-next-line standby/no-state-classes-in-views -- PirateFooter is the shared footer component of all tool apps
+          <a key={href} href={href} className="px-4 py-2.5 rounded-lg hover:text-foreground hover:bg-card transition-colors">{label}</a>
+        ))}
+      </nav>
     </footer>
   );
 }

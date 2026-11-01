@@ -50,6 +50,58 @@ exports[`generateCssExport > snapshot stability 1`] = `
   --tracking-body-s: 0.01em;
   --tracking-caption: 0.01em;
 }
+
+/* Text roles: set text through a role, not through single sizes */
+.text-role-title-1 {
+  font-family: var(--font-heading);
+  font-size: var(--text-h1);
+  line-height: var(--leading-h1);
+  letter-spacing: var(--tracking-h1);
+  font-weight: var(--font-weight-heading);
+}
+.text-role-title-2 {
+  font-family: var(--font-heading);
+  font-size: var(--text-h3);
+  line-height: var(--leading-h3);
+  letter-spacing: var(--tracking-h3);
+  font-weight: var(--font-weight-heading);
+}
+.text-role-title-3 {
+  font-family: var(--font-heading);
+  font-size: var(--text-h5);
+  line-height: var(--leading-h5);
+  letter-spacing: var(--tracking-h5);
+  font-weight: var(--font-weight-heading);
+}
+.text-role-figure {
+  font-family: var(--font-body);
+  font-size: var(--text-h2);
+  line-height: var(--leading-h2);
+  letter-spacing: var(--tracking-h2);
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+}
+.text-role-body {
+  font-family: var(--font-body);
+  font-size: var(--text-body-m);
+  line-height: var(--leading-body-m);
+  letter-spacing: var(--tracking-body-m);
+  font-weight: 400;
+}
+.text-role-label {
+  font-family: var(--font-body);
+  font-size: var(--text-body-s);
+  line-height: var(--leading-body-s);
+  letter-spacing: var(--tracking-body-s);
+  font-weight: 500;
+}
+.text-role-meta {
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+  letter-spacing: var(--tracking-caption);
+  font-weight: 400;
+}
 "
 `;
 
@@ -96,6 +148,58 @@ exports[`generateTailwindV4Export > snapshot stability 1`] = `
   --tracking-body-m: 0em;
   --tracking-body-s: 0.01em;
   --tracking-caption: 0.01em;
+}
+
+/* Text roles: set text through a role, not through single sizes */
+@utility text-role-title-1 {
+  font-family: var(--font-heading);
+  font-size: var(--text-h1);
+  line-height: var(--leading-h1);
+  letter-spacing: var(--tracking-h1);
+  font-weight: var(--font-weight-heading);
+}
+@utility text-role-title-2 {
+  font-family: var(--font-heading);
+  font-size: var(--text-h3);
+  line-height: var(--leading-h3);
+  letter-spacing: var(--tracking-h3);
+  font-weight: var(--font-weight-heading);
+}
+@utility text-role-title-3 {
+  font-family: var(--font-heading);
+  font-size: var(--text-h5);
+  line-height: var(--leading-h5);
+  letter-spacing: var(--tracking-h5);
+  font-weight: var(--font-weight-heading);
+}
+@utility text-role-figure {
+  font-family: var(--font-body);
+  font-size: var(--text-h2);
+  line-height: var(--leading-h2);
+  letter-spacing: var(--tracking-h2);
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+}
+@utility text-role-body {
+  font-family: var(--font-body);
+  font-size: var(--text-body-m);
+  line-height: var(--leading-body-m);
+  letter-spacing: var(--tracking-body-m);
+  font-weight: 400;
+}
+@utility text-role-label {
+  font-family: var(--font-body);
+  font-size: var(--text-body-s);
+  line-height: var(--leading-body-s);
+  letter-spacing: var(--tracking-body-s);
+  font-weight: 500;
+}
+@utility text-role-meta {
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+  letter-spacing: var(--tracking-caption);
+  font-weight: 400;
 }
 "
 `;

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Design Lint — standby.design</title>
+  <meta name="description" content="standby-design-lint checks code against the standby.design design rules. A Claude Code hook, a pre-commit hook and a CI check report each violation with the fix and the rule. Free, MIT, runs locally." />
+  <link rel="canonical" href="https://standby.design/docs/lint" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Design Lint — standby.design" />
+  <meta property="og:description" content="Checks code against the standby.design design rules and tells the agent the violation, the fix and the rule. Free, runs locally." />
+  <meta property="og:url" content="https://standby.design/docs/lint" />
+  <meta property="og:site_name" content="standby.design" />
+  <meta property="og:image" content="https://standby.design/og-image?tool=github" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://standby.design/og-image?tool=github" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "standby-design-lint",
+    "url": "https://standby.design/docs/lint",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Any",
+    "description": "ESLint plugin and CLI that check code against the standby.design design rules. A Claude Code hook, a pre-commit hook and a CI workflow report each violation with the fix and a link to the rule.",
+    "downloadUrl": "https://www.npmjs.com/package/standby-design-lint",
+    "codeRepository": "https://github.com/KarstenKreh/Standby.Design/tree/master/packages/design-lint",
+    "license": "https://opensource.org/licenses/MIT",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23111'/%3E%3Ccircle cx='16' cy='16' r='6' fill='none' stroke='%234a7aaa' stroke-width='2'/%3E%3C/svg%3E">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@1,2&f[]=jet-brains-mono@1,2&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --font-heading: 'Satoshi', sans-serif;
+      --font-body: 'Satoshi', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --text-h3: clamp(1.9344rem, 0.2719vw + 1.8707rem, 2.197rem);
+      --text-h5: clamp(1.246rem, 0.0559vw + 1.2329rem, 1.3rem);
+      --text-body-s: 1rem;
+      --text-caption: 0.7692rem;
+      --leading-h3: 1.2;
+      --leading-h5: 1.3;
+      --leading-body-s: 1.5;
+      --tracking-h3: -0.01em;
+      --tracking-body-s: 0.01em;
+      --background: oklch(0.145 0 0);
+      --foreground: oklch(0.985 0 0);
+      --card: oklch(0.205 0 0);
+      --muted-foreground: oklch(0.708 0 0);
+      --border: oklch(1 0 0 / 10%);
+      --emphasis: oklch(0.78 0.1 230);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: var(--font-body);
+      font-size: var(--text-body-s);
+      line-height: var(--leading-body-s);
+      letter-spacing: var(--tracking-body-s);
+      background: var(--background);
+      color: var(--foreground);
+      padding: 2rem 1.5rem 3rem;
+    }
+    main { max-width: 720px; margin: 0 auto; }
+    .back {
+      display: inline-block;
+      padding: 0.5rem 0.75rem;
+      margin: 0 0 2rem -0.75rem;
+      border-radius: 8px;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      transition: color 0.2s, background 0.2s;
+    }
+    .back:hover { color: var(--foreground); background: var(--card); }
+    h1 {
+      font-family: var(--font-heading);
+      font-size: var(--text-h3);
+      font-weight: 700;
+      line-height: var(--leading-h3);
+      letter-spacing: var(--tracking-h3);
+      margin-bottom: 0.4em;
+    }
+    h2 {
+      font-family: var(--font-heading);
+      font-size: var(--text-h5);
+      font-weight: 700;
+      line-height: var(--leading-h5);
+      margin-top: 2.25em;
+      margin-bottom: 0.5em;
+    }
+    h3 {
+      font-family: var(--font-heading);
+      font-size: var(--text-body-s);
+      font-weight: 700;
+      margin-top: 1.5em;
+      margin-bottom: 0.4em;
+    }
+    p, li { color: var(--muted-foreground); margin-bottom: 0.75em; }
+    strong { color: var(--foreground); font-weight: 500; }
+    ul, ol { padding-left: 1.25rem; margin-bottom: 0.75em; }
+    a { color: var(--emphasis); }
+    code { font-family: var(--font-mono); font-size: 0.9em; }
+    pre {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      line-height: 1.6;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.9rem 1rem;
+      margin-bottom: 1rem;
+      overflow-x: auto;
+      white-space: pre;
+    }
+    pre code { font-size: inherit; color: var(--foreground); }
+    .lead { font-size: 1.125rem; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1rem;
+    }
+    th, td {
+      text-align: left;
+      vertical-align: top;
+      padding: 0.6rem 0.75rem 0.6rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    th { color: var(--foreground); font-weight: 500; }
+    td { color: var(--muted-foreground); }
+    td:first-child { white-space: nowrap; }
+    td code { color: var(--foreground); }
+    blockquote {
+      border-left: 2px solid var(--border);
+      padding-left: 1rem;
+      margin-bottom: 0.9rem;
+    }
+    blockquote p { margin-bottom: 0; }
+    .site-footer {
+      margin-top: 4rem;
+      font-size: var(--text-caption);
+      color: var(--muted-foreground);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    .site-footer .pirate-line {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 0.25rem 0 1.75rem;
+      font-size: 0.875rem;
+    }
+    .site-footer svg { width: 1.8em; height: 1.8em; }
+    .legal-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.25rem;
+    }
+    .legal-links a {
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      transition: color 0.2s, background 0.2s;
+    }
+    .legal-links a:hover { color: var(--foreground); background: var(--card); }
+    @media (max-width: 560px) {
+      thead { display: none; }
+      table, tbody, tr, td { display: block; }
+      tr { padding: 0.6rem 0; border-bottom: 1px solid var(--border); }
+      td { padding: 0; border-bottom: 0; }
+      td:first-child { margin-bottom: 0.2rem; }
+    }
+  </style>
+  <script defer src="https://umami.standby.design/script.js" data-website-id="255e8c46-9a39-4cc8-ba66-5cb4fc53b91e"></script>
+</head>
+<body>
+  <main>
+    <a class="back" href="/">&larr; standby.design</a>
+
+    <h1>Design Lint</h1>
+    <p class="lead">Rules written as text do not stop an agent from breaking them. standby-design-lint checks the code against the <a href="/docs/rules">standby.design design rules</a>. Each message names the violation, the fix and the rule, so the agent can correct it right away.</p>
+    <p>Free and open source (MIT). It runs on your machine and in your own CI.</p>
+
+    <h2>Set up and update</h2>
+    <p>Run this in the root folder of the project, where <code>package.json</code> is. It needs Node 20.19 or newer.</p>
+    <pre><code>npx standby-design-lint@latest init</code></pre>
+    <p>The command installs the package as a dev dependency and sets up these parts:</p>
+    <ul>
+      <li>a Claude Code hook in <code>.claude/settings.json</code></li>
+      <li>a pre-commit hook, in <code>.husky/</code> if the project uses husky, otherwise in the git hooks folder</li>
+      <li>the CI workflow <code>.github/workflows/design-lint.yml</code>, if the project has a <code>.github</code> folder</li>
+      <li>the review skill in <code>.claude/skills/design-review</code></li>
+      <li>a short rules block in <code>AGENTS.md</code> and <code>CLAUDE.md</code></li>
+      <li>the <code>standbyDesignLint</code> settings in <code>package.json</code></li>
+      <li><code>.design-review/</code> in <code>.gitignore</code></li>
+    </ul>
+    <p>Run the same command again to update. It never adds an entry twice. Hooks from other tools and your own text in <code>CLAUDE.md</code> and <code>AGENTS.md</code> stay as they are. The workflow file and the skill are written anew on each run, so local changes to these two files are lost.</p>
+    <p>With the <a href="/docs/mcp">standby.design MCP server</a> connected, you can tell the agent &ldquo;Get the latest standby update&rdquo; (German: &bdquo;Hol Dir das Update&ldquo;). The agent calls the tool <code>update_project</code>, which returns the steps. Then it runs <code>init</code>.</p>
+    <p>GitHub only accepts the workflow file from a token with the <code>workflow</code> scope. If the push is rejected, run this and push again:</p>
+    <pre><code>gh auth refresh -s workflow</code></pre>
+
+    <h2>How strict</h2>
+    <table>
+      <thead>
+        <tr><th>Stage</th><th>When</th><th>What happens</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Claude Code hook</td><td>After each edit</td><td>Checks the lines the agent just wrote. The agent gets the violations back and fixes them in the same session.</td></tr>
+        <tr><td>Pre-commit</td><td>Before each commit</td><td>Checks the staged lines and prints a warning. The commit goes through.</td></tr>
+        <tr><td>Pull request</td><td>On each pull request</td><td>Checks the lines added since the target branch. New violations fail the check.</td></tr>
+        <tr><td>Visual review</td><td>Once per finished screen</td><td>Takes screenshots, counts text styles and hands both to a fresh review subagent.</td></tr>
+      </tbody>
+    </table>
+    <p>The hook, the pre-commit hook and the CI check only look at new or changed lines. A project with existing violations does not turn red all at once. When the agent writes a whole file, the hook checks the whole file. To list every violation in a folder, run <code>npx standby-design-lint src</code>.</p>
+
+    <h2>What it checks</h2>
+    <p>Eight lint rules. Each one enforces a design rule and links to its page. The rule pages are in German. In ESLint the rule ids carry the prefix <code>standby/</code>.</p>
+    <table>
+      <thead>
+        <tr><th>Rule</th><th>Finds</th><th>Design rule</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>no-raw-values</code></td><td>Colors, sizes and fonts set by hand, Tailwind palette colors: <code>bg-[#fff]</code>, <code>p-[13px]</code>, <code>bg-blue-500</code></td><td><a href="/docs/rules/farbe-werte-kommen-aus-tokens-nie-aus-der-hand">&bdquo;Werte kommen aus Tokens, nie aus der Hand&ldquo;</a></td></tr>
+        <tr><td><code>no-inline-style</code></td><td>Fixed values in inline styles: <code>style={{ padding: 16 }}</code>, <code>StyleSheet.create</code></td><td><a href="/docs/rules/stack-utility-klassen-statt-inline-styles">&bdquo;Utility-Klassen statt Inline-Styles&ldquo;</a></td></tr>
+        <tr><td><code>no-state-classes-in-views</code></td><td>Hover, focus and active styles outside the component folder: <code>hover:bg-muted</code></td><td><a href="/docs/rules/bedienung-verhalten-und-aussehen-werden-nicht-in-der-ansicht-nachgebaut">&bdquo;Verhalten und Aussehen werden nicht in der Ansicht nachgebaut&ldquo;</a></td></tr>
+        <tr><td><code>no-transition-all</code></td><td>Transitions on every property: <code>transition-all</code>, <code>transition: all</code></td><td><a href="/docs/rules/bedienung-bewegung-hat-einen-wert-und-haelt-nichts-auf">&bdquo;Bewegung hat einen Wert und h&auml;lt nichts auf&ldquo;</a></td></tr>
+        <tr><td><code>no-opacity-on-semantic-colors</code></td><td>Opacity modifiers on semantic colors: <code>bg-primary/10</code></td><td><a href="/docs/rules/stack-keine-deckkraft-modifier-auf-semantischen-farben">&bdquo;Keine Deckkraft-Modifier auf semantischen Farben&ldquo;</a></td></tr>
+        <tr><td><code>no-space-utilities</code></td><td>Spacing through margins on the children: <code>space-y-4</code>, <code>last:mb-0</code></td><td><a href="/docs/rules/stack-abstand-ueber-gap-nicht-ueber-margins-am-kind">&bdquo;Abstand &uuml;ber gap, nicht &uuml;ber Margins am Kind&ldquo;</a></td></tr>
+        <tr><td><code>no-disabled-by-validity</code></td><td>Buttons locked until a form is valid: <code>disabled={!isValid}</code></td><td><a href="/docs/rules/bedienung-ein-button-ist-nie-gesperrt">&bdquo;Ein Button ist nie gesperrt&ldquo;</a></td></tr>
+        <tr><td><code>no-click-on-non-interactive</code></td><td>Click handlers on elements that are not controls: <code>&lt;div onClick&gt;</code></td><td><a href="/docs/rules/bedienung-name-und-zustand-stehen-im-code">&bdquo;Name und Zustand stehen im Code&ldquo;</a></td></tr>
+      </tbody>
+    </table>
+    <p>The lint checks <code>.js</code>, <code>.jsx</code>, <code>.ts</code>, <code>.tsx</code> and <code>.mjs</code> files. It finds classes in the attributes <code>className</code>, <code>class</code> and <code>tw</code>, and in the helpers <code>cn()</code>, <code>clsx()</code>, <code>classnames()</code>, <code>cx()</code>, <code>cva()</code>, <code>twMerge()</code>, <code>twJoin()</code> and <code>tv()</code>. The messages are in German.</p>
+
+    <h2>Exceptions</h2>
+    <p>Some hits are on purpose, for example a brand color fixed by the logo guideline. Put an ESLint disable comment with a reason on the line before:</p>
+    <pre><code>const logo = cn(
+  // eslint-disable-next-line standby/no-raw-values -- brand color from the logo guideline
+  'bg-[#ff2d9c]',
+);</code></pre>
+    <p>Between JSX elements, use the block form <code>{/* eslint-disable-next-line &hellip; -- reason */}</code>. The reason after <code>--</code> tells the next reader why the rule does not apply here. The comment covers the next line only. A comment that suppresses nothing counts as a violation and fails the pull request check.</p>
+    <p>If the project runs its own ESLint, add <code>recommended()</code> to its config (see Settings). Otherwise that ESLint reports the disable comment as an unknown rule.</p>
+
+    <h2>Visual review</h2>
+    <p>The lint reads code line by line. Some rules only show in the rendered screen. The review command needs Playwright once:</p>
+    <pre><code>npm i -D playwright &amp;&amp; npx playwright install --only-shell chromium
+npx standby-design-lint review http://localhost:5173/settings</code></pre>
+    <p>It saves full-page screenshots at 1280 and 375 pixels wide and a <code>report.md</code> in <code>.design-review/&lt;screen&gt;/</code>. The report counts the text styles on the screen. A text style is one combination of font, size, weight, color and letter case. The review checks the count against the rule <a href="/docs/rules/typografie-jeder-textstil-hat-eine-rolle">&bdquo;Jeder Textstil hat eine Rolle&ldquo;</a>. The rule allows 4 to 7 styles per view. The default is 5. More than 7 is a violation, more than 5 a hint.</p>
+    <p>The report also flags font sizes outside the type scale of the tokens and styles without a role while other styles have one. It flags two styles one scale step apart that differ in nothing else, and a second font family that carries more than one role.</p>
+    <p>Before the agent reports a screen as done, it follows the Claude Code skill <code>design-review</code>. The agent starts a fresh subagent that does not know how the screen was built. The subagent gets the screenshots, the report and a checklist and returns at most ten findings. The agent fixes them and runs the review once more. After two rounds it stops and shows you what is still open, with the screenshot.</p>
+
+    <h2>Text roles</h2>
+    <p>The review finds the role of a text through the class <code>text-role-&lt;role&gt;</code> or the attribute <code>data-text-role</code>. The classes come from the export of the <a href="/type">Type tool</a>, as CSS classes, Tailwind v4 <code>@utility</code> rules and design tokens.</p>
+    <table>
+      <thead>
+        <tr><th>Role</th><th>Class</th><th>Type level</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Title 1</td><td><code>text-role-title-1</code></td><td><code>h1</code></td></tr>
+        <tr><td>Title 2</td><td><code>text-role-title-2</code></td><td><code>h3</code></td></tr>
+        <tr><td>Title 3</td><td><code>text-role-title-3</code></td><td><code>h5</code></td></tr>
+        <tr><td>Figure</td><td><code>text-role-figure</code></td><td><code>h2</code>, regular weight, tabular numbers</td></tr>
+        <tr><td>Body</td><td><code>text-role-body</code></td><td><code>body-m</code></td></tr>
+        <tr><td>Label</td><td><code>text-role-label</code></td><td><code>body-s</code>, weight 500</td></tr>
+        <tr><td>Meta</td><td><code>text-role-meta</code></td><td><code>caption</code></td></tr>
+      </tbody>
+    </table>
+    <p>The three title levels sit two steps apart on the type scale.</p>
+
+    <h2>Settings</h2>
+    <p><code>init</code> adds this block if <code>package.json</code> has none. A second run keeps your settings. All keys are optional, the <code>ignores</code> entry is an example.</p>
+    <pre><code>"standbyDesignLint": {
+  "componentPaths": ["/components/ui/"],
+  "allowedColors": [],
+  "ignores": ["src/legacy/**"]
+}</code></pre>
+    <ul>
+      <li><code>componentPaths</code> lists the folders of the base components. Hover and focus styles are allowed only there.</li>
+      <li><code>allowedColors</code> lists Tailwind palette colors you allow, for example <code>"white"</code>.</li>
+      <li><code>ignores</code> lists glob patterns the lint skips. <code>node_modules</code>, <code>dist</code>, <code>build</code>, <code>.next</code>, <code>coverage</code> and <code>*.d.ts</code> files are always skipped.</li>
+    </ul>
+    <p>If the project already has an ESLint config, add the rules there:</p>
+    <pre><code>import { recommended } from 'standby-design-lint';
+export default [recommended({ componentPaths: ['/components/ui/'] })];</code></pre>
+
+    <h2>Other agents</h2>
+    <p>The hook runs only in Claude Code. Cursor, Codex and other agents read the rules block in <code>AGENTS.md</code>. Their violations show up in the pre-commit warning and fail the pull request check. They can run the review command directly. If the project has no <code>CLAUDE.md</code>, <code>init</code> creates one that imports <code>AGENTS.md</code>.</p>
+
+    <h2>Privacy</h2>
+    <p>The lint and <code>init</code> run locally and send no code or project data anywhere. The only network access of <code>init</code> is the package download from npm. The review opens the URL you pass in a local browser.</p>
+
+    <h2>Links</h2>
+    <ul>
+      <li>npm: <a href="https://www.npmjs.com/package/standby-design-lint">standby-design-lint</a></li>
+      <li>Source: <a href="https://github.com/KarstenKreh/Standby.Design/tree/master/packages/design-lint">GitHub</a></li>
+      <li>Design rules: <a href="/docs/rules">/docs/rules</a> (German, also as <a href="/docs/rules.md">Markdown</a>)</li>
+      <li>MCP server: <a href="/docs/mcp">/docs/mcp</a></li>
+      <li>For agents: <a href="/llms.txt">llms.txt</a></li>
+      <li>Issues and questions: <a href="https://github.com/KarstenKreh/Standby.Design/issues">GitHub issues</a></li>
+    </ul>
+
+    <footer class="site-footer">
+      <div class="pirate-line">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8.2 12.1c-.3.2-.5.6-.4.9c0 .7.7 1.2 1.3 1.2s1.2-.5 1.2-1.2q-.9-.6-2.1-.9M22 11l1-4s-2 0-5-2s-3-4-6-4s-3 2-6 4s-5 2-5 2l1 4h.1c-.1.3-.1.7-.1 1c0 3.5 1.8 6.6 4.5 8.4l-.5.9c6.4 4.1 12 0 12 0l-.5-.9c2.7-1.8 4.5-4.9 4.5-8.4zM11.3 4.5L9.9 3.1l.7-.7L12 3.8l1.4-1.4l.7.7l-1.4 1.4l1.4 1.4l-.7.7L12 5.2l-1.4 1.4l-.7-.7zm-2 4c1-.3 2-.5 2.7-.5c2.2 0 5.9 1.6 7.8 2.4c.1.3.1.6.1.9zm4.3 10.6c-.7.4-1.4.7-2.2.8c-.5-.4-.5-1.2 0-1.6c.4-.4 1.3-.6 1.8-.1c.3.1.4.6.4.9m6.4-5.7c-.5 2.1-1.8 4-3.5 5.2L15 16H9l-1.5 2.6C5.4 17.2 4 14.8 4 12c0-.5.1-1 .2-1.5c.5-.2 1.1-.5 1.8-.8l7.1 1.9V14c0 .5.4 1 1 1h2c.5 0 1-.4 1-1v-1.4z"/></svg>
+        No copyright — take what you need, make it yours.
+      </div>
+      <nav class="legal-links">
+        <a href="/docs/mcp">MCP Server</a>
+        <a href="/docs/rules">Design Rules</a>
+        <a href="/docs/lint">Design Lint</a>
+        <a href="/docs/research">Research</a>
+        <a href="/impressum.html">Imprint</a>
+        <a href="/privacy.html">Privacy</a>
+      </nav>
+    </footer>
+  </main>
+</body>
+</html>

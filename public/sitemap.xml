@@ -41,6 +41,10 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://standby.design/docs/lint</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://standby.design/docs/rules</loc>
     <priority>0.8</priority>
   </url>
@@ -282,6 +286,10 @@
   </url>
   <url>
     <loc>https://standby.design/docs/rules/typografie-icons-sind-auf-die-schrift-abgestimmt</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://standby.design/docs/rules/typografie-jeder-textstil-hat-eine-rolle</loc>
     <priority>0.6</priority>
   </url>
   <url>
