@@ -1,6 +1,6 @@
 # Inventar der Design-Regeln für design-lint
 
-Aus den 62 Regelnotizen in `docs/rules/` sind 369 Merkmale ("Woran Du den Verstoß erkennst") nach Prüfart und Werkzeug eingeordnet.
+Aus den 62 Regelnotizen in `docs/rules/` sind 370 Merkmale ("Woran Du den Verstoß erkennst") nach Prüfart und Werkzeug eingeordnet.
 
 Umgesetzt sind die acht Regeln mit dem Präfix `standby/` (Lint, siehe README) und `count-text-styles` (DOM, `standby-design-lint review`). Alles mit `neu:` ist ein Vorschlag, `review-checklist` deckt der Skill `design-review` ab.
 
@@ -8,8 +8,8 @@ Umgesetzt sind die acht Regeln mit dem Präfix `standby/` (Lint, siehe README) u
 |---|---|---|
 | Lint | 113 | 38 |
 | DOM | 105 | 40 |
-| Visuell | 151 | 46 |
-| Summe | 369 | 62 |
+| Visuell | 152 | 46 |
+| Summe | 370 | 62 |
 
 Eine Regel zählt in jeder Prüfart, in der sie mindestens ein Merkmal hat, deshalb ergibt die Spalte "Anzahl Regeln" mehr als die Gesamtzahl.
 
@@ -456,15 +456,16 @@ Eine Regel zählt in jeder Prüfart, in der sie mindestens ein Merkmal hat, desh
 | Eine schmale Spalte steht in der Mitte | Layout | Eine Spalte hat eine maximale Breite, aber keinen automatischen Rand links und rechts. | DOM | dom: centered-column |
 | Eine schmale Spalte steht in der Mitte | Layout | Zurück steht links an der Seite, das Formular darunter in der Mitte. | Visuell | review-checklist |
 | Eine schmale Spalte steht in der Mitte | Layout | Die leere Fläche rechts ist breiter als der Inhalt. | DOM | dom: centered-column |
-| Erst Abstand, dann Fläche, dann Linie | Layout | Zwischen jedem Abschnitt einer Karte sitzt eine Linie, unabhängig vom Inhalt. | Visuell | review-checklist |
-| Erst Abstand, dann Fläche, dann Linie | Layout | Alle Abstände in einer Ansicht sind gleich groß, und die Struktur entsteht nur aus Linien und Rahmen. | Visuell | review-checklist |
-| Erst Abstand, dann Fläche, dann Linie | Layout | Ein Formular trennt jedes einzelne Feld mit einer Linie, statt zusammengehörige Felder als Block zu setzen. | Visuell | review-checklist |
-| Erst Abstand, dann Fläche, dann Linie | Layout | Mehrzeilige Einträge einer Liste stehen so dicht wie ihre eigenen Zeilen. | Visuell | review-checklist |
-| Erst Abstand, dann Fläche, dann Linie | Layout | Jede Fläche auf der Seite hat eine sichtbare Umrandung. | Visuell | review-checklist |
-| Erst Abstand, dann Fläche, dann Linie | Layout | Die kräftige Stärke kommt so oft vor, dass sie nichts mehr hervorhebt. | Visuell | review-checklist |
-| Erst Abstand, dann Fläche, dann Linie | Layout | Eine Linie trennt Dinge, die schon durch Abstand getrennt sind. | Visuell | review-checklist |
-| Erst Abstand, dann Fläche, dann Linie | Layout | Eine Linie wird pro Stelle als Hex- oder Grauwert gesetzt. | Lint | standby/no-raw-values |
-| Erst Abstand, dann Fläche, dann Linie | Layout | Es gibt drei oder vier Linienstärken, und niemand kann sagen, wann welche gilt. | DOM | dom: count-border-widths |
+| Erst Abstand, dann Fläche oder Linie | Layout | Zwischen jedem Abschnitt einer Karte sitzt eine Linie, unabhängig vom Inhalt. | Visuell | review-checklist |
+| Erst Abstand, dann Fläche oder Linie | Layout | Alle Abstände in einer Ansicht sind gleich groß, und die Struktur entsteht nur aus Linien und Rahmen. | Visuell | review-checklist |
+| Erst Abstand, dann Fläche oder Linie | Layout | Ein Formular trennt jedes einzelne Feld mit einer Linie, statt zusammengehörige Felder als Block zu setzen. | Visuell | review-checklist |
+| Erst Abstand, dann Fläche oder Linie | Layout | Mehrzeilige Einträge einer Liste stehen so dicht wie ihre eigenen Zeilen. | Visuell | review-checklist |
+| Erst Abstand, dann Fläche oder Linie | Layout | Jede Fläche auf der Seite hat eine sichtbare Umrandung. | Visuell | review-checklist |
+| Erst Abstand, dann Fläche oder Linie | Layout | Jeder Eintrag einer Liste steht auf einer eigenen getönten Fläche. | Visuell | review-checklist |
+| Erst Abstand, dann Fläche oder Linie | Layout | Die kräftige Stärke kommt so oft vor, dass sie nichts mehr hervorhebt. | Visuell | review-checklist |
+| Erst Abstand, dann Fläche oder Linie | Layout | Eine Linie trennt Dinge, die schon durch Abstand getrennt sind. | Visuell | review-checklist |
+| Erst Abstand, dann Fläche oder Linie | Layout | Eine Linie wird pro Stelle als Hex- oder Grauwert gesetzt. | Lint | standby/no-raw-values |
+| Erst Abstand, dann Fläche oder Linie | Layout | Es gibt drei oder vier Linienstärken, und niemand kann sagen, wann welche gilt. | DOM | dom: count-border-widths |
 | Jede Ansicht folgt dem Platz und bricht bei 320 Pixeln um | Layout | Bei 320 Pixeln erscheint ein waagerechter Schieber unter der ganzen Seite statt unter dem breiten Element. | DOM | dom: no-horizontal-overflow-320 |
 | Jede Ansicht folgt dem Platz und bricht bei 320 Pixeln um | Layout | Eine Filter- oder Buttonzeile schiebt sich aus dem Bild, weil der Umbruch fehlt. | DOM | dom: no-horizontal-overflow-320 |
 | Jede Ansicht folgt dem Platz und bricht bei 320 Pixeln um | Layout | Ein Overlay steht bündig an den Bildschirmkanten oder ist höher als das Fenster und nicht scrollbar. | DOM | dom: overlay-fits-viewport |

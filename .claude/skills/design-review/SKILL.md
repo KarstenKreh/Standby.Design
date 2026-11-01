@@ -26,7 +26,7 @@ Der Lint-Hook prüft beim Schreiben, was im Code steht. Dieses Review prüft, wa
 2. **Textstile** ([Jeder Textstil hat eine Rolle](https://standby.design/docs/rules/typografie-jeder-textstil-hat-eine-rolle)): Befunde aus `report.md` übernehmen. Dazu: Gibt es Stile, die gleich aussehen sollen, aber leicht verschieden sind?
 3. **Titel** ([Die Titel bilden eine Gliederung](https://standby.design/docs/rules/layout-die-titel-bilden-eine-gliederung)): Genau ein Titel in Titelstufe 1? Steht ein Titel doppelt, etwa im Kopf und über der Karte? Hebt sich jede Titelstufe sichtbar ab?
 4. **Gewicht** ([Ein Primary pro Ansicht](https://standby.design/docs/rules/bedienung-gewicht-ist-ein-budget-ein-primary-pro-ansicht)): Wie viele gefüllte Haupt-Buttons sind sichtbar? Mehr als einer ist ein Befund.
-5. **Abstand vor Linie** ([Erst Abstand, dann Fläche, dann Linie](https://standby.design/docs/rules/layout-erst-abstand-dann-flaeche-dann-linie)): Gibt es Linien oder Rahmen, wo Abstand allein gruppieren würde? Karten in Karten?
+5. **Abstand vor Linie** ([Erst Abstand, dann Fläche oder Linie](https://standby.design/docs/rules/layout-erst-abstand-dann-flaeche-oder-linie)): Gibt es Linien oder Rahmen, wo Abstand allein gruppieren würde? Karten in Karten?
 6. **Schmale Breite** ([Jede Ansicht folgt dem Platz](https://standby.design/docs/rules/layout-jede-ansicht-folgt-dem-platz-und-bricht-bei-320-pixeln-um)): Ist bei 375 Pixeln etwas abgeschnitten, überlappt oder nur waagerecht scrollbar?
 7. **Farbe** ([Farbe trägt nie allein](https://standby.design/docs/rules/farbe-farbe-traegt-nie-allein)): Wird ein Zustand nur über Farbe gezeigt?
 
