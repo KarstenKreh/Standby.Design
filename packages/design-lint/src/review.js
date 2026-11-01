@@ -8,7 +8,7 @@ async function loadPlaywright() {
   try {
     return await import('playwright');
   } catch {
-    throw new Error('Playwright fehlt. Einmal ausführen: npm i -D playwright && npx playwright install chromium');
+    throw new Error('Playwright fehlt. Einmal ausführen: npm i -D playwright && npx playwright install --only-shell chromium');
   }
 }
 

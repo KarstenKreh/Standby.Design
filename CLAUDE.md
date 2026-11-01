@@ -4,7 +4,7 @@ Operational knowledge for agents working in this repo. Architecture lives in
 CONTEXT.md, product strategy in STRATEGY.md — read those for the what; this
 file is the how-to-not-get-stuck.
 
-## npm publish (standby-design-mcp)
+## npm publish (standby-design-mcp, standby-design-lint)
 
 - The npm account uses **passkey 2FA — there are no TOTP codes**. npm's
   browser auth flow requires a real TTY; from an agent session shell,
@@ -13,7 +13,7 @@ file is the how-to-not-get-stuck.
   open a visible window on the user's desktop:
 
   ```powershell
-  Start-Process powershell -ArgumentList '-NoExit','-Command','Set-Location "C:\Users\karst\Documents\Repositories\Solopreneur\Standby.Design\packages\mcp-server"; npm publish'
+  Start-Process powershell -ArgumentList '-NoExit','-Command','Set-Location "C:\Users\karst\repositories\Solopreneur\standby.design\packages\mcp-server"; npm publish'
   ```
 
   The browser opens, the user confirms the passkey. If they check
@@ -30,6 +30,11 @@ file is the how-to-not-get-stuck.
   (device flow, user confirms code) then `mcp-publisher publish`. Binary:
   GitHub releases of `modelcontextprotocol/registry`
   (`mcp-publisher_windows_amd64.tar.gz`). Registry description max 100 chars.
+- `standby-design-lint` is published the same way, with `Set-Location` on
+  `...\packages\design-lint` (first publish: `npm publish --access public`).
+  Its version lives only in `packages/design-lint/package.json`; the plugin
+  meta reads it from there. Publish it before deploying the site or the MCP
+  server, both point to it.
 
 ## Deploys (website + remote MCP server)
 
@@ -79,7 +84,8 @@ file is the how-to-not-get-stuck.
   (`.claude/settings.json`) lints every edited line, `.githooks/pre-commit`
   the staged lines and only warns (activate once with
   `git config core.hooksPath .githooks`), CI the lines of a PR and fails.
-  Other projects get all of it with `npx standby-design-lint@latest init`. Run `npm install` in `packages/design-lint` first.
+  Other projects get all of it with `npx standby-design-lint@latest init`.
+  Run `npm install` in `packages/design-lint` first.
   Existing violations in the apps are known; they only show up when a line
   is touched.
 - Verify MCP server changes with `npm run smoke` (end-to-end stdio test);

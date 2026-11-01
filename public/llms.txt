@@ -20,8 +20,8 @@ If a user asks you to build a design system with standby.design:
      (Streamable HTTP — usable from any remote-capable MCP client)
    - Local stdio: `npx -y standby-design-mcp`
    - Claude Code: `claude mcp add standby-design -- npx -y standby-design-mcp`
-2. **Always give the returned URL to the user.** Every tool's first response
-   line is the canonical share link (`https://standby.design/system#...`).
+2. **Always give the returned URL to the user.** The first response line of
+   every generate_* tool and export_design_system is the canonical share link (`https://standby.design/system#...`).
    The link IS the deliverable: it opens the complete design system with a
    live preview, and every value can be fine-tuned there. The full
    configuration lives in the URL hash — no accounts, no server-side storage.
@@ -44,7 +44,8 @@ If a user asks you to build a design system with standby.design:
 - Docs (install for Claude, Cursor and other clients): https://standby.design/docs/mcp
 - Tools: generate_color_palette, generate_type_scale, generate_shape_tokens,
   generate_icon_tokens, generate_space_tokens, generate_motion_tokens,
-  get_design_system, export_design_system, list_fonts, get_design_rules
+  get_design_system, export_design_system, list_fonts, get_design_rules,
+  update_project (steps to set up or update the design lint in a project)
 - npm: https://www.npmjs.com/package/standby-design-mcp
 - Source: https://github.com/KarstenKreh/Standby.Design/tree/master/packages/mcp-server
 
@@ -52,10 +53,10 @@ If a user asks you to build a design system with standby.design:
 
 - Overview: https://standby.design/docs/rules
 - All rules in one Markdown file: https://standby.design/docs/rules.md
-- What: about 30 universal rules for building UI with the tokens — layout, flow
-  (empty, loading, error), shape, surfaces, interaction states, typography,
-  color, and Tailwind/React Native stack rules. The generators deliver the
-  values; the rules say how to use them.
+- What: 63 rules for building UI with the tokens: layout, flow (empty,
+  loading, error), shape, surfaces, interaction states, typography and color.
+  59 are universal, 4 are stack rules for Tailwind and React Native. The
+  generators deliver the values; the rules say how to use them.
 - Each rule states the rule, why it holds, how to detect a violation in code,
   a right/wrong example, and its limits. Rules with a number separate the hard
   invariant from a soft default ("Korridor" = allowed range, "Vorgabe" =
@@ -63,6 +64,70 @@ If a user asks you to build a design system with standby.design:
 - Via MCP: `get_design_rules` returns one line per rule, or the full text for a
   category or a list of rule slugs. Every LLM briefing export links the rules.
 - Language: German.
+
+## Design lint
+
+- Page: https://standby.design/docs/lint
+- What: the npm package `standby-design-lint` checks code against the design
+  rules with eight ESLint rules. Each message names the violation, the fix and
+  the rule page. Messages and rule pages are in German. The rule ids:
+  - `standby/no-raw-values`: colors, sizes and fonts set by hand, Tailwind
+    palette colors
+  - `standby/no-inline-style`: fixed values in inline styles
+  - `standby/no-state-classes-in-views`: hover, focus and active classes
+    outside the component folder
+  - `standby/no-transition-all`: `transition-all`, `transition: all`
+  - `standby/no-opacity-on-semantic-colors`: opacity modifiers like
+    `bg-primary/10`
+  - `standby/no-space-utilities`: `space-*` utilities and `last:mb-0`
+  - `standby/no-disabled-by-validity`: `disabled={!isValid}` on buttons
+  - `standby/no-click-on-non-interactive`: `onClick` on `div` or `span`
+- Setup and update, run in the project root (needs a package.json, Node 20.19
+  or newer): `npx standby-design-lint@latest init`. The command installs the
+  package as a dev dependency and sets up:
+  - a Claude Code hook in `.claude/settings.json`
+  - a pre-commit hook in `.husky/` if the project uses husky, otherwise in the
+    git hooks folder
+  - the CI workflow `.github/workflows/design-lint.yml`, only if the project
+    has a `.github` folder
+  - the skill `.claude/skills/design-review`
+  - a rules block in `AGENTS.md` and `CLAUDE.md`
+  - the `standbyDesignLint` settings in `package.json`
+  - `.design-review/` in `.gitignore`
+  Running it again only updates and never duplicates entries. Hooks from other
+  tools and your own text in CLAUDE.md and AGENTS.md stay.
+- Strictness per stage:
+  - Claude Code hook: reports violations in edited lines to the agent right
+    after each edit. The agent fixes them in the same session.
+  - Pre-commit: only warns (`--warn`). The commit goes through.
+  - CI workflow: fails a pull request with new violations.
+  Only new or changed lines are checked, so projects with existing violations
+  do not turn red.
+- The hook works in Claude Code only. Cursor, Codex and other agents are
+  covered by pre-commit, CI and the rules block in AGENTS.md.
+- Update through the MCP server: tell the agent "Get the latest standby
+  update" (German: "Hol Dir das Update"). It calls `update_project`, which
+  returns the steps, and runs init.
+- Exceptions: write an ESLint disable comment with a reason on the line before
+  the violation, for example
+  `// eslint-disable-next-line standby/no-raw-values -- brand color from the logo guideline`.
+  Use the id of the rule that reports.
+- Text roles: each text gets one role. The role sets font, size, weight and
+  line height. `title-1` (h1),
+  `title-2` (h3), `title-3` (h5), `figure` (h2, regular weight, tabular
+  numbers), `body` (body-m), `label` (body-s, weight 500), `meta` (caption).
+  The classes `text-role-<role>` come from the Type export as a CSS class, a
+  Tailwind v4 `@utility` or design tokens. Titles sit two scale steps apart.
+- Visual review: `npx standby-design-lint review <url>` takes screenshots at
+  1280 and 375 px and counts the text styles on the screen. The corridor is 4
+  to 7 text styles, the default is 5. It needs Playwright:
+  `npm i -D playwright && npx playwright install --only-shell chromium`. The
+  skill `design-review` runs the review, starts a fresh review subagent and
+  fixes the findings, in at most two rounds.
+- Everything runs locally. The lint and init send no code or project data.
+  The only network access is the package download from npm.
+- npm: https://www.npmjs.com/package/standby-design-lint
+- Source: https://github.com/KarstenKreh/Standby.Design/tree/master/packages/design-lint
 
 ## Research
 

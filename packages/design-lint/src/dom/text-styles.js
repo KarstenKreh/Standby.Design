@@ -56,6 +56,12 @@ export function analyzeTextStyles(options = {}) {
     return null;
   }
 
+  function isLinkInRunningText(element) {
+    const parent = element.parentElement;
+    if (element.tagName !== 'A' || !parent) return false;
+    return [...parent.childNodes].some((node) => node.nodeType === Node.TEXT_NODE && node.textContent.trim());
+  }
+
   const styles = new Map();
   const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
   const seen = new Set();
@@ -71,7 +77,7 @@ export function analyzeTextStyles(options = {}) {
       family: computed.fontFamily.split(',')[0].replace(/["']/g, '').trim(),
       size: Math.round(parseFloat(computed.fontSize) * 10) / 10,
       weight: computed.fontWeight,
-      color: computed.color,
+      color: isLinkInRunningText(element) ? getComputedStyle(element.parentElement).color : computed.color,
       transform: computed.textTransform === 'none' ? 'normal' : computed.textTransform,
     };
     const key = `${style.family} · ${style.size}px · ${style.weight} · ${style.color} · ${style.transform}`;

@@ -141,15 +141,12 @@ function withBlock(content) {
 
 function ensureAgentInstructions(root) {
   const agents = path.join(root, 'AGENTS.md');
-  const importsAgents = (file) => existsSync(agents) && readFileSync(file, 'utf8').split(/\r?\n/).includes('@AGENTS.md');
-  const files = [path.join(root, 'CLAUDE.md'), agents].filter((file) => existsSync(file) && !(file !== agents && importsAgents(file)));
-  if (files.length === 0) {
-    return [
-      ['AGENTS.md', writeIfChanged(path.join(root, 'AGENTS.md'), withBlock(''))],
-      ['CLAUDE.md', writeIfChanged(path.join(root, 'CLAUDE.md'), '@AGENTS.md\n')],
-    ];
-  }
-  return files.map((file) => [path.basename(file), writeIfChanged(file, withBlock(readFileSync(file, 'utf8')))]);
+  const claude = path.join(root, 'CLAUDE.md');
+  const readOrEmpty = (file) => (existsSync(file) ? readFileSync(file, 'utf8') : '');
+  const steps = [['AGENTS.md', writeIfChanged(agents, withBlock(readOrEmpty(agents)))]];
+  if (!existsSync(claude)) return [...steps, ['CLAUDE.md', writeIfChanged(claude, '@AGENTS.md\n')]];
+  if (readOrEmpty(claude).split(/\r?\n/).includes('@AGENTS.md')) return [...steps, ['CLAUDE.md', 'unverändert']];
+  return [...steps, ['CLAUDE.md', writeIfChanged(claude, withBlock(readOrEmpty(claude)))]];
 }
 
 function ensureGitignore(root) {

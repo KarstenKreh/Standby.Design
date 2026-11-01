@@ -14,6 +14,8 @@ tags:
 > [!SUMMARY] Was ist das?
 > Das qualitative Gegenstück zum Token-Generator. Der Generator liefert die messbaren Werte: Farben, Skalen, Radien, Schatten. Diese Sammlung liefert die Regeln, die man nicht exportieren kann: welches Verhalten wofür, wie eine Karte innen aufgebaut ist, wie Elemente gruppiert werden, wann Farbe etwas bedeuten darf. Zielgruppe sind Agenten, die Layouts bauen, und Menschen, die deren Ergebnis prüfen.
 
+Wie die Regeln im Code geprüft werden, steht unter [standby.design/docs/lint](https://standby.design/docs/lint).
+
 ---
 
 ## Wie eine Regel aufgebaut ist

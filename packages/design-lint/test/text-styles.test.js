@@ -39,6 +39,12 @@ describe('analyzeTextStyles', { skip: chromium ? false : 'playwright not install
     assert.deepEqual(report.findings.filter((finding) => finding.severity === 'error'), []);
   });
 
+  it('counts a link in running text as part of its paragraph, a standalone link on its own', async () => {
+    const report = await analyze('inline-links.html');
+    assert.equal(report.count, 2);
+    assert.deepEqual(report.styles.map((style) => style.count).sort(), [1, 4]);
+  });
+
   it('reports too many styles, neighbouring steps and a display family on several roles', async () => {
     const report = await analyze('crowded.html');
     const errors = report.findings.filter((finding) => finding.severity === 'error').map((finding) => finding.text);

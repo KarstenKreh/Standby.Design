@@ -215,13 +215,14 @@
         <tr><td><code>export_design_system</code></td><td>Exports the code: CSS custom properties, Tailwind v4, W3C design tokens, LLM briefing, font embed.</td></tr>
         <tr><td><code>list_fonts</code></td><td>Lists the Fontshare fonts available for <code>generate_type_scale</code>.</td></tr>
         <tr><td><code>get_design_rules</code></td><td>Returns the <a href="/docs/rules">design rules</a> for building UI with the tokens: layout, states, shape, typography and color. One line per rule, or the full text for a category or single rules.</td></tr>
+        <tr><td><code>update_project</code></td><td>Returns the steps to set up or update the <a href="/docs/lint">code checks for the design rules</a> in a project: Claude Code hook, pre-commit, CI and review skill.</td></tr>
       </tbody>
     </table>
     <p>All tools are read-only and deterministic: the same input always produces the same tokens.</p>
 
     <h2>How it works</h2>
     <ol>
-      <li><strong>The link is the result.</strong> Every tool returns a share link like <code>https://standby.design/system#…</code>. It holds the complete configuration, so there is nothing stored on a server.</li>
+      <li><strong>The link is the result.</strong> Every <code>generate_*</code> tool returns a share link like <code>https://standby.design/system#…</code>. It holds the complete configuration, so there is nothing stored on a server.</li>
       <li><strong>Tools chain.</strong> Each <code>generate_*</code> tool accepts the link from the previous call and only changes its own part. Color, then type, then spacing, shape and icons add up to one system.</li>
       <li><strong>Export at the end.</strong> <code>export_design_system</code> turns the link into CSS, a Tailwind v4 theme or design tokens, ready to paste into the project.</li>
     </ol>
@@ -231,6 +232,7 @@
     <blockquote><p>Generate a color palette from #FF2D9C with vibrant surfaces and lime, cyan and violet accents, then make the shapes neobrutalist.</p></blockquote>
     <blockquote><p>Here is our design system link: https://standby.design/system#… Export it as CSS custom properties and explain the semantic tokens.</p></blockquote>
     <blockquote><p>Make the typography bigger and switch the headings to Clash Display, keep everything else.</p></blockquote>
+    <blockquote><p>Get the latest standby update for this project.</p></blockquote>
 
     <h2>Privacy</h2>
     <p>The server collects nothing. Inputs are design parameters (colors, ratios, sizes), never personal data. Both the npm package and the hosted endpoint compute each request and forget it. Details in the <a href="/privacy.html">privacy policy</a>.</p>
@@ -242,6 +244,7 @@
       <li>Source: <a href="https://github.com/KarstenKreh/Standby.Design/tree/master/packages/mcp-server">GitHub</a></li>
       <li>For agents: <a href="/llms.txt">llms.txt</a></li>
       <li>Design rules for building with the tokens: <a href="/docs/rules">/docs/rules</a> (German, also as <a href="/docs/rules.md">Markdown</a>)</li>
+      <li>Check the rules in code: <a href="/docs/lint">/docs/lint</a></li>
       <li>Research behind the tools: <a href="/docs/research">/docs/research</a> (German, also as <a href="/docs/research.md">Markdown</a>)</li>
       <li>Issues and questions: <a href="https://github.com/KarstenKreh/Standby.Design/issues">GitHub issues</a></li>
     </ul>
@@ -249,6 +252,7 @@
     <nav class="legal-links">
       <a href="/">Home</a>
       <a href="/docs/rules">Design Rules</a>
+      <a href="/docs/lint">Design Lint</a>
       <a href="/docs/research">Research</a>
       <a href="/impressum.html">Imprint</a>
       <a href="/privacy.html">Privacy</a>

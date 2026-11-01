@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import tsParser from '@typescript-eslint/parser';
 import noRawValues from './rules/no-raw-values.js';
 import noInlineStyle from './rules/no-inline-style.js';
@@ -19,7 +20,8 @@ export const rules = {
   'no-click-on-non-interactive': noClickOnNonInteractive,
 };
 
-const plugin = { meta: { name: 'standby-design-lint', version: '0.1.0' }, rules };
+const { version } = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
+const plugin = { meta: { name: 'standby-design-lint', version }, rules };
 
 export const SOURCE_FILES = ['**/*.jsx', '**/*.tsx', '**/*.js', '**/*.ts', '**/*.mjs'];
 

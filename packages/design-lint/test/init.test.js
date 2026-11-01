@@ -74,7 +74,7 @@ describe('init', () => {
 
     const claude = read(project, 'CLAUDE.md');
     assert.match(claude, /^# App\n\nEigene Notizen\.\n\n<!-- standby-design-lint:start -->/);
-    assert.equal(existsSync(path.join(project, 'AGENTS.md')), false);
+    assert.match(read(project, 'AGENTS.md'), /<!-- standby-design-lint:start -->/);
 
     const hook = read(project, '.git/hooks/pre-commit');
     assert.equal(hook, '#!/bin/sh\nnpm test\nnpx --no-install standby-design-lint --staged --warn\n');

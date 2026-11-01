@@ -18,6 +18,7 @@ const FOOTER_LINKS = [
   ['/', 'Home'],
   ['/docs/mcp', 'MCP Server'],
   ['/docs/rules', 'Design Rules'],
+  ['/docs/lint', 'Design Lint'],
   ['/docs/research', 'Research'],
   ['/impressum.html', 'Impressum'],
   ['/datenschutz.html', 'Datenschutz'],

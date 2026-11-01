@@ -3228,7 +3228,7 @@ Dichte Tabellen haben eigene Rollen für Kopf und Zellen. Sie zählen als Rollen
 
 Ein Stil, der nur einmal vorkommt, ist kein Verstoß, wenn seine Rolle nur einmal gebraucht wird. Das ist meist Titelstufe 1.
 
-Die Farbe eines Zustands, etwa Rot für einen Fehler, ist kein eigener Textstil. Sie gehört zur Rolle des Textes, der den Zustand trägt.
+Die Farbe eines Zustands, etwa Rot für einen Fehler, ist kein eigener Textstil. Sie gehört zur Rolle des Textes, der den Zustand trägt. Dasselbe gilt für einen Link im Fließtext. Er gehört zur Rolle seines Absatzes.
 
 ### Verwandt
 
