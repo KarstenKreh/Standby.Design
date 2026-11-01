@@ -5,17 +5,20 @@ import { ESLint } from 'eslint';
 import { recommended } from './index.js';
 import { addedLines } from './git-diff.js';
 import { reviewScreen } from './review.js';
+import { initProject, formatInitReport } from './init.js';
 
 const LINTABLE = /\.(?:jsx|tsx|js|ts|mjs)$/;
 const HOOK_MESSAGE_LIMIT = 20;
 const DEFAULT_IGNORES = ['**/node_modules/**', '**/dist/**', '**/build/**', '**/.next/**', '**/coverage/**', '**/*.d.ts'];
 const USAGE = `standby-design-lint: prüft Code gegen die Design-Regeln von standby.design
 
+  standby-design-lint init       richtet Hook, Pre-Commit, CI, Skill und Agenten-Anweisung ein oder aktualisiert sie
   standby-design-lint [Pfade…]   prüft Dateien oder Ordner (Vorgabe: src)
   standby-design-lint --staged   prüft nur die Zeilen, die für den Commit vorgemerkt sind (Pre-Commit)
   standby-design-lint --since <ref>  prüft nur die Zeilen, die seit <ref> dazukamen (CI, z. B. origin/main)
   standby-design-lint review <url>  Screenshots (1280 und 375 px) und Textstil-Zählung eines Screens
   standby-design-lint --hook     liest ein Claude-Code-Hook-Ereignis von stdin und prüft die bearbeitete Datei
+  --warn                         meldet Verstöße, endet aber mit Exit-Code 0 (für den Pre-Commit)
 
 Einstellungen stehen in package.json unter "standbyDesignLint":
   { "componentPaths": ["/components/ui/"], "allowedColors": [], "ignores": [] }`;
@@ -111,30 +114,31 @@ async function runHook() {
   return 2;
 }
 
-async function runFiles(patterns) {
+async function runFiles(patterns, { warn }) {
   const { root, settings } = findSettings(process.cwd());
   const linter = createLinter(root, settings);
   const targets = patterns.length ? patterns : ['src'];
   const results = await linter.lintFiles(targets.map((target) => path.resolve(target)));
-  return report(results, root, `Keine Verstöße in ${results.length} Dateien.`);
+  return report(results, `Keine Verstöße in ${results.length} Dateien.`, { warn });
 }
 
-function report(results, root, emptyText) {
+function report(results, emptyText, { warn = false } = {}) {
   const problems = countProblems(results);
   if (problems === 0) {
     process.stdout.write(`${emptyText}\n`);
     return 0;
   }
   const files = results.filter((result) => result.messages.length).length;
-  process.stdout.write(`${formatResults(results).join('\n')}\n\n${problems} Verstöße in ${files} Dateien.\n`);
-  return 1;
+  const note = warn ? ' Der Commit läuft trotzdem, im Pull Request blockieren sie.' : '';
+  process.stdout.write(`${formatResults(results).join('\n')}\n\n${problems} Verstöße in ${files} Dateien.${note}\n`);
+  return warn ? 0 : 1;
 }
 
 function stagedContent(filePath) {
   return execFileSync('git', ['show', `:./${path.basename(filePath)}`], { cwd: path.dirname(filePath), encoding: 'utf8' });
 }
 
-async function runChanged({ staged, base }) {
+async function runChanged({ staged, base, warn }) {
   const { root, settings } = findSettings(process.cwd());
   const linter = createLinter(root, settings);
   const changed = addedLines(process.cwd(), { staged, base });
@@ -144,7 +148,7 @@ async function runChanged({ staged, base }) {
     const linted = staged ? await linter.lintText(stagedContent(filePath), { filePath }) : await linter.lintFiles([filePath]);
     results.push(...linted.map((result) => keepLines(result, ranges)));
   }
-  return report(results, root, `Keine Verstöße in den geänderten Zeilen (${results.length} Dateien).`);
+  return report(results, `Keine Verstöße in den geänderten Zeilen (${results.length} Dateien).`, { warn });
 }
 
 async function runReview(argv) {
@@ -170,8 +174,13 @@ export async function main(argv) {
   }
   if (argv.includes('--hook')) return runHook();
   if (argv[0] === 'review') return runReview(argv.slice(1));
-  if (argv.includes('--staged')) return runChanged({ staged: true });
+  if (argv[0] === 'init') {
+    process.stdout.write(`${formatInitReport(initProject(process.cwd(), { install: !argv.includes('--no-install') }))}\n`);
+    return 0;
+  }
+  const warn = argv.includes('--warn');
+  if (argv.includes('--staged')) return runChanged({ staged: true, warn });
   const base = optionValue(argv, '--since');
-  if (base) return runChanged({ base });
-  return runFiles(argv.filter((arg) => !arg.startsWith('--')));
+  if (base) return runChanged({ base, warn });
+  return runFiles(argv.filter((arg) => !arg.startsWith('--')), { warn });
 }

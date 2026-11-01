@@ -77,8 +77,9 @@ file is the how-to-not-get-stuck.
   that the diff only adds the new pages.
 - `packages/design-lint` enforces the design rules: a Claude Code hook
   (`.claude/settings.json`) lints every edited line, `.githooks/pre-commit`
-  the staged lines (activate once with `git config core.hooksPath .githooks`),
-  CI the lines of a PR. Run `npm install` in `packages/design-lint` first.
+  the staged lines and only warns (activate once with
+  `git config core.hooksPath .githooks`), CI the lines of a PR and fails.
+  Other projects get all of it with `npx standby-design-lint@latest init`. Run `npm install` in `packages/design-lint` first.
   Existing violations in the apps are known; they only show up when a line
   is touched.
 - Verify MCP server changes with `npm run smoke` (end-to-end stdio test);

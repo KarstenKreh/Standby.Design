@@ -28,11 +28,17 @@ Hook, Pre-Commit und CI prüfen nur neue oder geänderte Zeilen. Ein bestehendes
 
 Klassen werden in `className`, `class` und in `cn()`, `clsx()`, `cva()`, `twMerge()`, `tv()` erkannt. Welche Merkmale der Regeln sich wie prüfen lassen, steht in [INVENTORY.md](INVENTORY.md).
 
-## Einrichten
+## Einrichten und aktualisieren
+
+Im Wurzelordner des Projekts:
 
 ```sh
-npm i -D standby-design-lint
+npx standby-design-lint@latest init
 ```
+
+Der Befehl installiert das Paket und richtet alles ein, was unten einzeln beschrieben ist: Claude-Code-Hook, Pre-Commit (warnt nur), CI-Workflow (blockiert neue Verstöße im Pull Request), den Skill `design-review`, einen kurzen Regelblock in `CLAUDE.md` oder `AGENTS.md` und die Einstellungen in `package.json`. Ein zweiter Lauf aktualisiert alles auf die neueste Version und legt nichts doppelt an. Fremde Hooks und eigener Text bleiben stehen.
+
+Mit dem MCP-Server von standby.design reicht dem Agenten ein Satz wie „Hol Dir das Update“: Das Tool `update_project` nennt ihm die Schritte.
 
 Einstellungen in `package.json`, alle optional:
 
@@ -59,10 +65,10 @@ Einstellungen in `package.json`, alle optional:
 }
 ```
 
-**Pre-Commit**, etwa mit `simple-git-hooks` oder `husky`:
+**Pre-Commit**, etwa mit `simple-git-hooks` oder `husky`. `--warn` meldet, hält den Commit aber nicht auf:
 
 ```sh
-npx standby-design-lint --staged
+npx standby-design-lint --staged --warn
 ```
 
 **CI**, im Pull Request:
@@ -85,7 +91,7 @@ npm i -D playwright && npx playwright install --only-shell chromium
 npx standby-design-lint review http://localhost:5173/settings
 ```
 
-Legt Screenshots bei 1280 und 375 Pixeln und `report.md` unter `.design-review/` ab. Der Bericht zählt die Textstile (Größe, Schnitt, Farbe, Schreibweise) und prüft sie gegen [Jeder Textstil hat eine Rolle](https://standby.design/docs/rules/typografie-jeder-textstil-hat-eine-rolle). Rollen erkennt er an `data-text-role="meta"` oder an Klassen `text-role-meta`.
+Legt Screenshots bei 1280 und 375 Pixeln und `report.md` unter `.design-review/` ab. Der Bericht zählt die Textstile (Größe, Schnitt, Farbe, Schreibweise) und prüft sie gegen [Jeder Textstil hat eine Rolle](https://standby.design/docs/rules/typografie-jeder-textstil-hat-eine-rolle). Rollen erkennt er an `data-text-role="meta"` oder an Klassen `text-role-meta`. Die Klassen liefert der Type-Export von standby.design: `text-role-title-1` bis `-3`, `-figure`, `-body`, `-label`, `-meta`.
 
 Der Skill in [skills/design-review/SKILL.md](skills/design-review/SKILL.md) führt den Agenten durch das Review: Screenshots, frischer Subagent mit Prüfliste, Befunde beheben. Kopieren nach `.claude/skills/design-review/SKILL.md`.
 

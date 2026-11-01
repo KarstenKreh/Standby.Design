@@ -50,7 +50,38 @@ const HEADER = [
   'The rule texts are in German. Each full rule explains the rule (Regel), why it holds (Warum), how to spot a violation in code (Woran Du den Verstoß erkennst), a right/wrong example and its limits (Grenzen). "Korridor" is the allowed range of a soft value, "Vorgabe" is its default until the project defines its own value — prefer the project\'s tokens over the default.',
 ].join('\n\n');
 
+export const PROJECT_SETUP_GUIDE = [
+  '# Set up or update standby.design rule enforcement in this project',
+  '',
+  'Run these steps in the root folder of the project (where package.json is), then report the summary to the user.',
+  '',
+  '1. Run `npx standby-design-lint@latest init`. It installs or updates the package and sets up, or updates in place:',
+  '   - a Claude Code hook in `.claude/settings.json` that lints every edited line against the rules,',
+  '   - a pre-commit hook that warns about new violations (husky if present, otherwise the git hooks folder),',
+  '   - a CI workflow `.github/workflows/design-lint.yml` that fails a pull request with new violations,',
+  '   - the skill `.claude/skills/design-review` for a visual review of a finished screen,',
+  '   - a short rules block in `CLAUDE.md` / `AGENTS.md`, and `standbyDesignLint` settings in package.json.',
+  '   Running it again only updates; it never duplicates entries.',
+  '2. Check `standbyDesignLint.componentPaths` in package.json: it must list the folder of the project\'s base components (default `/components/ui/`). Hover and focus styles are only allowed there.',
+  '3. Commit the changed files. If GitHub rejects the push because of the workflow file, the token lacks the `workflow` scope: ask the user to run `gh auth refresh -s workflow`.',
+  '4. Existing violations stay untouched; only new or changed lines are checked. To see all of them: `npx standby-design-lint src`.',
+  '',
+  'No package.json (not a JavaScript project): skip step 1 to 4. The rules still apply through get_design_rules.',
+  'The rule texts come from this MCP server. A locally installed server (npx standby-design-mcp) loads a new version after the client restarts; mcp.standby.design is always current.',
+].join('\n');
+
 export function registerRuleTools(server: McpServer) {
+  server.registerTool(
+    'update_project',
+    {
+      title: 'Set up or update rule enforcement in a project',
+      description: 'Returns the steps to install or update the standby.design rule enforcement (lint hook, pre-commit, CI, review skill, agent instructions) in the current project. Call this when the user asks to get the latest standby.design rules or update, e.g. "Hol Dir das Update", "update standby", "set up the design rules here".',
+      inputSchema: {},
+      annotations: { readOnlyHint: true, openWorldHint: false },
+    },
+    async () => textResult(PROJECT_SETUP_GUIDE)
+  );
+
   server.registerTool(
     'get_design_rules',
     {
