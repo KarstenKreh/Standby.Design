@@ -196,6 +196,7 @@
     <ul>
       <li>a Claude Code hook in <code>.claude/settings.json</code></li>
       <li>a pre-commit hook, in <code>.husky/</code> if the project uses husky, otherwise in the git hooks folder</li>
+      <li>a <code>prepare</code> script in <code>package.json</code>, so every <code>npm install</code> sets up the pre-commit hook for teammates, too</li>
       <li>the CI workflow <code>.github/workflows/design-lint.yml</code>, if the project has a <code>.github</code> folder</li>
       <li>the review skill in <code>.claude/skills/design-review</code></li>
       <li>a short rules block in <code>AGENTS.md</code> and <code>CLAUDE.md</code></li>

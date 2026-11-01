@@ -22,6 +22,7 @@ The command installs the package as a dev dependency and sets up the following:
 
 - A Claude Code hook in `.claude/settings.json`.
 - A pre-commit hook that warns and never blocks.
+- A `prepare` script in `package.json`, so every `npm install` sets up the pre-commit hook. Teammates get it without running `init`.
 - A CI workflow `.github/workflows/design-lint.yml` that fails a pull request with new violations.
 - The skill `design-review` in `.claude/skills/design-review/`.
 - A short rules block in `AGENTS.md` and `CLAUDE.md`.
@@ -34,6 +35,7 @@ Run the same command again to update everything to the latest version. It never 
 
 - `init` uses the package manager of the project (npm, pnpm, yarn or bun). `--no-install` skips the install.
 - The pre-commit hook goes into `.husky/pre-commit` if the project uses husky. Otherwise it goes into the Git hooks folder. Without a Git repository, `init` skips it.
+- The Git hooks folder is not part of the repository. That is why `init` adds `standby-design-lint hooks || exit 0` as `prepare` script, which npm, pnpm, yarn and bun run after each install. An existing `prepare` script stays and runs first. If the package is missing, for example in a production install without dev dependencies, the install still succeeds. With husky, `init` adds no `prepare` script, because `.husky/` is already in the repository.
 - The CI workflow is only created if the project has a `.github` folder. If GitHub rejects the push because of the workflow file, run `gh auth refresh -s workflow`.
 - The rules block always goes into `AGENTS.md`, which Cursor, Codex and others read. If `CLAUDE.md` is missing, `init` creates one that imports `AGENTS.md` with `@AGENTS.md`. If `CLAUDE.md` exists and does not import `AGENTS.md`, it gets the block too.
 
@@ -228,6 +230,7 @@ The three titles sit two steps apart on the type scale.
 | Command | What it does |
 |---|---|
 | `standby-design-lint init` | Sets up or updates hook, pre-commit, CI, skill and agent instructions. |
+| `standby-design-lint hooks` | Sets up only the pre-commit hook. The `prepare` script runs it on each install. |
 | `standby-design-lint [paths…]` | Checks files or folders. The default is `src`. |
 | `standby-design-lint --staged` | Checks only the staged lines (pre-commit). |
 | `standby-design-lint --since <ref>` | Checks only the lines added since `<ref>`, for example `origin/main` (CI). |

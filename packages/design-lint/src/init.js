@@ -7,6 +7,7 @@ const PACKAGE = 'standby-design-lint';
 const PACKAGE_ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const HOOK_COMMAND = `npx --no-install ${PACKAGE} --hook`;
 const PRE_COMMIT_LINE = `npx --no-install ${PACKAGE} --staged --warn`;
+const PREPARE_COMMAND = `${PACKAGE} hooks || exit 0`;
 const BLOCK_START = '<!-- standby-design-lint:start -->';
 const BLOCK_END = '<!-- standby-design-lint:end -->';
 const AGENT_BLOCK = `${BLOCK_START}
@@ -103,6 +104,26 @@ function ensurePreCommit(root) {
   return { file, status };
 }
 
+export function installHooks(root) {
+  const preCommit = ensurePreCommit(root);
+  return { ...preCommit, file: preCommit.file && path.relative(root, preCommit.file).replace(/\\/g, '/') };
+}
+
+function prepareScript(existing) {
+  if (!existing?.trim()) return PREPARE_COMMAND;
+  return `${existing} && (${PREPARE_COMMAND})`;
+}
+
+function ensurePrepareScript(root) {
+  if (existsSync(path.join(root, '.husky'))) return 'übersprungen, husky liegt schon im Repo';
+  const file = path.join(root, 'package.json');
+  const manifest = readJson(file, null);
+  const existing = manifest.scripts?.prepare;
+  if (existing?.includes(`${PACKAGE} hooks`)) return 'unverändert';
+  manifest.scripts = { ...manifest.scripts, prepare: prepareScript(existing) };
+  return writeIfChanged(file, `${JSON.stringify(manifest, null, indentOf(file))}\n`);
+}
+
 function installedRange(root) {
   const manifest = readJson(path.join(root, 'package.json'), {});
   return manifest.devDependencies?.[PACKAGE] ?? manifest.dependencies?.[PACKAGE] ?? 'latest';
@@ -165,8 +186,9 @@ export function initProject(root, { install = true } = {}) {
   steps.push(['Einstellungen in package.json', ensureSettings(root)]);
   steps.push(['Claude-Code-Hook in .claude/settings.json', ensureClaudeHook(root)]);
   steps.push(['Skill .claude/skills/design-review', ensureSkill(root)]);
-  const preCommit = ensurePreCommit(root);
-  steps.push([`Pre-Commit${preCommit.file ? ` (${path.relative(root, preCommit.file).replace(/\\/g, '/')})` : ''}, warnt nur`, preCommit.status]);
+  const preCommit = installHooks(root);
+  steps.push([`Pre-Commit${preCommit.file ? ` (${preCommit.file})` : ''}, warnt nur`, preCommit.status]);
+  steps.push(['prepare-Skript in package.json, richtet den Pre-Commit bei jedem npm install ein', ensurePrepareScript(root)]);
   steps.push(['CI .github/workflows/design-lint.yml, blockiert neue Verstöße im PR', ensureWorkflow(root)]);
   for (const [name, status] of ensureAgentInstructions(root)) steps.push([`Agenten-Anweisung ${name}`, status]);
   steps.push(['.gitignore (.design-review/)', ensureGitignore(root)]);
