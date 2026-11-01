@@ -394,7 +394,6 @@ export function SurfacePanel({
                 className="relative min-h-20 overflow-hidden"
                 style={{
                   backgroundColor: card.bg,
-                  border: bw ? `${bw}px solid ${borderMutedHex}` : 'none',
                   borderRadius: br,
                 }}
               >
