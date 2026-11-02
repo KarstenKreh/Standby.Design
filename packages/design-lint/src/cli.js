@@ -1,11 +1,9 @@
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
-import { ESLint } from 'eslint';
-import { recommended } from './index.js';
 import { addedLines } from './git-diff.js';
 import { reviewScreen } from './review.js';
-import { initProject, formatInitReport, installHooks } from './init.js';
+import { ESLINT_PACKAGES, initProject, formatInitReport, installHooks } from './init.js';
 
 const LINTABLE = /\.(?:jsx|tsx|js|ts|mjs)$/;
 const HOOK_MESSAGE_LIMIT = 20;
@@ -38,7 +36,22 @@ export function findSettings(startDir) {
   }
 }
 
-export function createLinter(root, settings) {
+export const SETUP_ERROR = 'STANDBY_SETUP';
+
+async function loadEslint() {
+  try {
+    const [{ ESLint }, { recommended }] = await Promise.all([import('eslint'), import('./index.js')]);
+    return { ESLint, recommended };
+  } catch (error) {
+    if (error.code !== 'ERR_MODULE_NOT_FOUND') throw error;
+    const missing = new Error(`ESLint fehlt. Das Paket bringt es seit 0.3.0 nicht mehr selbst mit. Einmal ausführen: npm i -D ${ESLINT_PACKAGES.join(' ')} (oder npx standby-design-lint init). Biome-Projekte brauchen die CLI nicht, sie binden die Dateien aus node_modules/standby-design-lint/biome/ ein.`);
+    missing.code = SETUP_ERROR;
+    throw missing;
+  }
+}
+
+export async function createLinter(root, settings) {
+  const { ESLint, recommended } = await loadEslint();
   return new ESLint({
     cwd: root,
     overrideConfigFile: true,
@@ -103,7 +116,7 @@ async function runHook() {
   const filePath = event.tool_input?.file_path;
   if (!filePath || !LINTABLE.test(filePath) || !existsSync(filePath)) return 0;
   const { root, settings } = findSettings(path.dirname(filePath));
-  const linter = createLinter(root, settings);
+  const linter = await createLinter(root, settings);
   if (await linter.isPathIgnored(filePath)) return 0;
   const ranges = changedLineRanges(event, readFileSync(filePath, 'utf8'));
   const results = keepChangedLines(await linter.lintFiles([filePath]), ranges);
@@ -119,7 +132,7 @@ async function runHook() {
 
 async function runFiles(patterns, { warn }) {
   const { root, settings } = findSettings(process.cwd());
-  const linter = createLinter(root, settings);
+  const linter = await createLinter(root, settings);
   const targets = patterns.length ? patterns : ['src'];
   const results = await linter.lintFiles(targets.map((target) => path.resolve(target)));
   return report(results, `Keine Verstöße in ${results.length} Dateien.`, { warn });
@@ -143,7 +156,7 @@ function stagedContent(filePath) {
 
 async function runChanged({ staged, base, warn }) {
   const { root, settings } = findSettings(process.cwd());
-  const linter = createLinter(root, settings);
+  const linter = await createLinter(root, settings);
   const changed = addedLines(process.cwd(), { staged, base });
   const results = [];
   for (const [filePath, ranges] of changed) {

@@ -39,17 +39,37 @@ function writeIfChanged(file, content) {
   return before === null ? 'angelegt' : 'aktualisiert';
 }
 
+export const ESLINT_PACKAGES = ['eslint', '@typescript-eslint/parser', 'typescript'];
+
 function packageManager(root) {
-  if (existsSync(path.join(root, 'pnpm-lock.yaml'))) return ['pnpm', ['add', '-D']];
-  if (existsSync(path.join(root, 'yarn.lock'))) return ['yarn', ['add', '-D']];
-  if (existsSync(path.join(root, 'bun.lockb')) || existsSync(path.join(root, 'bun.lock'))) return ['bun', ['add', '-d']];
-  return ['npm', ['install', '-D']];
+  if (existsSync(path.join(root, 'pnpm-lock.yaml')) || existsSync(path.join(root, 'pnpm-workspace.yaml'))) return 'pnpm';
+  if (existsSync(path.join(root, 'yarn.lock'))) return 'yarn';
+  if (existsSync(path.join(root, 'bun.lockb')) || existsSync(path.join(root, 'bun.lock'))) return 'bun';
+  return 'npm';
+}
+
+function addArgs(manager, root) {
+  if (manager === 'pnpm') return ['add', '-D', ...(existsSync(path.join(root, 'pnpm-workspace.yaml')) ? ['-w'] : []), '-E'];
+  if (manager === 'yarn') return ['add', '-D', '-E'];
+  if (manager === 'bun') return ['add', '-d', '--exact'];
+  return ['install', '-D', '-E'];
+}
+
+function hasPackage(root, name) {
+  const manifest = readJson(path.join(root, 'package.json'), {});
+  return Boolean(manifest.devDependencies?.[name] ?? manifest.dependencies?.[name]) || existsSync(path.join(root, 'node_modules', name, 'package.json'));
+}
+
+export function installCommand(root) {
+  const manager = packageManager(root);
+  const missing = ESLINT_PACKAGES.filter((name) => !hasPackage(root, name));
+  return [manager, [...addArgs(manager, root), PACKAGE, ...missing]];
 }
 
 function installPackage(root) {
-  const [command, args] = packageManager(root);
-  execFileSync(command, [...args, `${PACKAGE}@latest`], { cwd: root, stdio: 'inherit', shell: process.platform === 'win32' });
-  return `${command} ${args.join(' ')} ${PACKAGE}@latest`;
+  const [command, args] = installCommand(root);
+  execFileSync(command, args, { cwd: root, stdio: 'inherit', shell: process.platform === 'win32' });
+  return `${command} ${args.join(' ')}`;
 }
 
 function ensureSettings(root) {
@@ -87,10 +107,13 @@ function gitHooksDir(root) {
   }
 }
 
+const CLOSING_EXIT = /^exit(?:\s|$)/;
+
 function withLine(content, line) {
   const lines = content.split('\n').filter((existing) => !existing.includes(PACKAGE));
   while (lines.length && lines[lines.length - 1] === '') lines.pop();
-  return `${lines.join('\n')}\n${line}\n`;
+  const closing = lines.length && CLOSING_EXIT.test(lines[lines.length - 1]) ? [lines.pop()] : [];
+  return `${[...lines, line, ...closing].join('\n')}\n`;
 }
 
 function ensurePreCommit(root) {
@@ -124,12 +147,25 @@ function ensurePrepareScript(root) {
   return writeIfChanged(file, `${JSON.stringify(manifest, null, indentOf(file))}\n`);
 }
 
-function installedRange(root) {
-  const manifest = readJson(path.join(root, 'package.json'), {});
-  return manifest.devDependencies?.[PACKAGE] ?? manifest.dependencies?.[PACKAGE] ?? 'latest';
+function yarnInstall(root) {
+  const lockfile = existsSync(path.join(root, 'yarn.lock')) ? readFileSync(path.join(root, 'yarn.lock'), 'utf8') : '';
+  return lockfile.includes('yarn lockfile v1') ? 'yarn install --frozen-lockfile' : 'yarn install --immutable';
 }
 
-function workflow(range) {
+function ciSteps(root) {
+  const manager = packageManager(root);
+  const declared = readJson(path.join(root, 'package.json'), {}).packageManager ?? '';
+  if (manager === 'pnpm') {
+    const setup = declared.startsWith('pnpm@') ? '      - uses: pnpm/action-setup@v4\n' : '      - uses: pnpm/action-setup@v4\n        with:\n          version: 10\n';
+    return { setup, cache: 'pnpm', install: 'pnpm install --frozen-lockfile', run: `pnpm exec ${PACKAGE}` };
+  }
+  if (manager === 'yarn') return { setup: '      - run: corepack enable\n', cache: 'yarn', install: yarnInstall(root), run: `yarn run ${PACKAGE}` };
+  if (manager === 'bun') return { setup: '      - uses: oven-sh/setup-bun@v2\n', cache: null, install: 'bun install --frozen-lockfile', run: `bunx ${PACKAGE}` };
+  return { setup: '', cache: 'npm', install: 'npm ci', run: `npx --no-install ${PACKAGE}` };
+}
+
+function workflow(root) {
+  const { setup, cache, install, run } = ciSteps(root);
   return `name: Design-Regeln
 
 on: pull_request
@@ -141,16 +177,17 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: actions/setup-node@v4
+${setup}      - uses: actions/setup-node@v4
         with:
-          node-version: 22
-      - run: npx --yes ${PACKAGE}@${range} --since origin/\${{ github.base_ref }}
+          node-version: 22${cache ? `\n          cache: ${cache}` : ''}
+      - run: ${install}
+      - run: ${run} --since origin/\${{ github.base_ref }}
 `;
 }
 
 function ensureWorkflow(root) {
   if (!existsSync(path.join(root, '.github'))) return 'übersprungen, kein Ordner .github';
-  return writeIfChanged(path.join(root, '.github', 'workflows', 'design-lint.yml'), workflow(installedRange(root)));
+  return writeIfChanged(path.join(root, '.github', 'workflows', 'design-lint.yml'), workflow(root));
 }
 
 function withBlock(content) {

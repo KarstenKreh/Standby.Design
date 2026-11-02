@@ -8,6 +8,8 @@ The messages, the help text and the `init` report are in German. Each message en
 
 It needs Node 20.19 or newer and a `package.json` in the project root. It reads `.js`, `.jsx`, `.ts`, `.tsx` and `.mjs` files.
 
+The package has no dependencies of its own. The ESLint path needs `eslint`, `@typescript-eslint/parser` and `typescript` in the project, and `init` installs the ones that are missing. Projects with Biome load the rules as Biome plugins and need nothing else, see [Biome](#biome).
+
 The lint, the hook and `init` send no code or project data anywhere. The only network access of `init` is the package download from npm. The review opens the URL you pass in a local browser. The CI check runs on your CI runner.
 
 ## Set up and update
@@ -18,7 +20,7 @@ Run this in the root folder of the project:
 npx standby-design-lint@latest init
 ```
 
-The command installs the package as a dev dependency and sets up the following:
+The command installs the package as a dev dependency with a fixed version, together with the ESLint packages the project does not have yet. In a pnpm workspace it installs into the workspace root. Then it sets up the following:
 
 - A Claude Code hook in `.claude/settings.json`.
 - A pre-commit hook that warns and never blocks.
@@ -29,14 +31,15 @@ The command installs the package as a dev dependency and sets up the following:
 - The `standbyDesignLint` settings in `package.json`, if they are missing.
 - The entry `.design-review/` in `.gitignore`.
 
-Run the same command again to update everything to the latest version. It never adds anything twice. Hooks from other tools and your own text in `CLAUDE.md` or `AGENTS.md` stay as they are. `init` only replaces its own hook entry, its own line in the pre-commit file and its own block between the markers `<!-- standby-design-lint:start -->` and `<!-- standby-design-lint:end -->`. The workflow file and the skill are written anew on each run, so local changes to these two files are lost. The workflow uses the version range from your `devDependencies`.
+Run the same command again to update everything to the latest version. It never adds anything twice. Hooks from other tools and your own text in `CLAUDE.md` or `AGENTS.md` stay as they are. `init` only replaces its own hook entry, its own line in the pre-commit file and its own block between the markers `<!-- standby-design-lint:start -->` and `<!-- standby-design-lint:end -->`. The workflow file and the skill are written anew on each run, so local changes to these two files are lost. The workflow installs the dependencies from the lockfile and runs the installed version, so it never fetches a package past the lockfile.
 
 ### What init does in special cases
 
 - `init` uses the package manager of the project (npm, pnpm, yarn or bun). `--no-install` skips the install.
 - The pre-commit hook goes into `.husky/pre-commit` if the project uses husky. Otherwise it goes into the Git hooks folder. Without a Git repository, `init` skips it.
 - The Git hooks folder is not part of the repository. That is why `init` adds `standby-design-lint hooks || exit 0` as `prepare` script, which npm, pnpm, yarn and bun run after each install. An existing `prepare` script stays and runs first. If the package is missing, for example in a production install without dev dependencies, the install still succeeds. With husky, `init` adds no `prepare` script, because `.husky/` is already in the repository.
-- The CI workflow is only created if the project has a `.github` folder. If GitHub rejects the push because of the workflow file, run `gh auth refresh -s workflow`.
+- The pre-commit line goes before a closing `exit` line of the hook file, so it runs.
+- The CI workflow is only created if the project has a `.github` folder. It uses the package manager of the project (`npm ci`, `pnpm install --frozen-lockfile`, `yarn install --immutable` or `bun install --frozen-lockfile`). If GitHub rejects the push because of the workflow file, run `gh auth refresh -s workflow`.
 - The rules block always goes into `AGENTS.md`, which Cursor, Codex and others read. If `CLAUDE.md` is missing, `init` creates one that imports `AGENTS.md` with `@AGENTS.md`. If `CLAUDE.md` exists and does not import `AGENTS.md`, it gets the block too.
 
 ### Update through an agent
@@ -77,7 +80,7 @@ The linked rule pages are in German. The link text is a short English descriptio
 | `standby/no-disabled-by-validity` | `disabled={!isValid}`, `disabled={!isDirty}` | [A button is never disabled](https://standby.design/docs/rules/bedienung-ein-button-ist-nie-gesperrt) |
 | `standby/no-click-on-non-interactive` | `<div onClick>`, `<span onClick>` | [Name and state live in the code](https://standby.design/docs/rules/bedienung-name-und-zustand-stehen-im-code) |
 
-Classes are detected in the attributes `className`, `class` and `tw`, and in the helpers `cn()`, `clsx()`, `classnames()`, `classNames()`, `cva()`, `cx()`, `twMerge()`, `twJoin()` and `tv()`. A German list of which features of each design rule the lint can check is in [INVENTORY.md](https://github.com/KarstenKreh/Standby.Design/blob/master/packages/design-lint/INVENTORY.md).
+Classes are detected in the attributes `className`, `class`, `tw` and every attribute that ends in `ClassName` (for example `contentContainerClassName` in React Native), in templates tagged with `tw`, and in the helpers `cn()`, `clsx()`, `classnames()`, `classNames()`, `cva()`, `cx()`, `twMerge()`, `twJoin()` and `tv()`. A class with the variant `web:` is never reported: in NativeWind it is web-only on purpose. A German list of which features of each design rule the lint can check is in [INVENTORY.md](https://github.com/KarstenKreh/Standby.Design/blob/master/packages/design-lint/INVENTORY.md).
 
 ## Exceptions
 
@@ -116,6 +119,61 @@ Settings go into `package.json`. `init` adds the block if it is missing and keep
 - `ignores` lists glob patterns of files to skip. `node_modules`, `dist`, `build`, `.next`, `coverage` and `*.d.ts` files are always skipped.
 
 The CLI reads `standbyDesignLint` from the first `package.json` that has this key. It starts in the current folder and goes up. The hook starts in the folder of the edited file. The CLI does not read your ESLint configuration.
+
+## Biome
+
+The package ships the eight rules as [Biome](https://biomejs.dev) plugins (GritQL files), for Biome 2.5 or newer. A Biome project needs neither ESLint nor `init`.
+
+Install the package with a fixed version. Updates then arrive as a normal Dependabot or Renovate pull request, through the lockfile and any `minimumReleaseAge` of the project:
+
+```sh
+pnpm add -D -w -E standby-design-lint
+```
+
+Then list the rules you want in `biome.json`. Each rule exists twice: `biome/<rule>.grit` reports an error, `biome/warn/<rule>.grit` a warning. Write the path with `./node_modules/`, Biome does not resolve package names for plugins:
+
+```json
+{
+  "overrides": [
+    {
+      "includes": ["apps/mobile/**/*.tsx"],
+      "plugins": [
+        "./node_modules/standby-design-lint/biome/no-space-utilities.grit",
+        "./node_modules/standby-design-lint/biome/no-transition-all.grit",
+        "./node_modules/standby-design-lint/biome/no-click-on-non-interactive.grit",
+        "./node_modules/standby-design-lint/biome/warn/no-raw-values.grit",
+        "./node_modules/standby-design-lint/biome/warn/no-opacity-on-semantic-colors.grit",
+        "./node_modules/standby-design-lint/biome/warn/no-inline-style.grit",
+        "./node_modules/standby-design-lint/biome/warn/no-disabled-by-validity.grit",
+        {
+          "path": "./node_modules/standby-design-lint/biome/warn/no-state-classes-in-views.grit",
+          "includes": ["**", "!**/components/primitives/**"]
+        }
+      ]
+    }
+  ]
+}
+```
+
+`plugins` also works at the top level of `biome.json`. `overrides` limits the rules to part of a monorepo. The path is relative to the `biome.json` that lists it.
+
+The rules, the messages and the test cases are the same as for ESLint. Biome differs in these points:
+
+- Biome reports one finding per string and rule. The next one shows once the first is fixed.
+- `no-inline-style` reports the first fixed value of a `style` attribute, ESLint each one.
+- The settings in `standbyDesignLint` do not apply. `no-state-classes-in-views` allows states in `/components/ui/`. For another folder, give the plugin entry `includes` with `"**"` first and the folder negated, as in the example. `allowedColors` has no Biome counterpart, use an exception.
+- Run only these rules, for example in CI: `biome lint --only=plugin`. Only errors fail: `--diagnostic-level=error`.
+
+An exception goes on the line before, with a reason:
+
+```tsx
+{/* biome-ignore lint/plugin: brand color from the logo guideline */}
+<div className="bg-[#ff0000]">logo</div>
+```
+
+Rules that only apply to one project, for example NativeWind classes that do nothing on native, stay in a `.grit` file of that project, next to these.
+
+The `.grit` files are generated from the ESLint rules (`npm run build:biome` in `packages/design-lint`). A test fails when they are out of date, and a second test runs every ESLint test case through Biome.
 
 ## Manual setup
 
@@ -161,7 +219,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - run: npx --yes standby-design-lint --since origin/${{ github.base_ref }}
+          cache: npm
+      - run: npm ci
+      - run: npx --no-install standby-design-lint --since origin/${{ github.base_ref }}
 ```
 
 **ESLint**, if the project already has a flat config and you want the rules there too:

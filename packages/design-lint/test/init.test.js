@@ -5,6 +5,7 @@ import { existsSync, mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { ESLINT_PACKAGES, installCommand } from '../src/init.js';
 
 const BIN = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'bin', 'standby-design-lint.js');
 
@@ -46,7 +47,7 @@ describe('init', () => {
 
     assert.match(read(project, '.claude/skills/design-review/SKILL.md'), /name: design-review/);
     assert.match(read(project, '.git/hooks/pre-commit'), /standby-design-lint --staged --warn/);
-    assert.match(read(project, '.github/workflows/design-lint.yml'), /standby-design-lint@\^0\.2\.0 --since origin\//);
+    assert.match(read(project, '.github/workflows/design-lint.yml'), /npm ci\n.*npx --no-install standby-design-lint --since origin\//s);
     assert.deepEqual(manifest(project).standbyDesignLint.componentPaths, ['/components/ui/']);
     assert.equal(manifest(project).scripts.prepare, 'standby-design-lint hooks || exit 0');
     assert.match(read(project, 'AGENTS.md'), /get_design_rules/);
@@ -95,6 +96,38 @@ describe('init', () => {
     runInit(project);
     assert.equal(read(project, '.husky/pre-commit'), 'npx lint-staged\nnpx --no-install standby-design-lint --staged --warn\n');
     assert.equal(manifest(project).scripts, undefined);
+  });
+
+  it('puts its pre-commit line before a closing exit, so the line runs', () => {
+    mkdirSync(path.join(project, '.husky'));
+    writeFileSync(path.join(project, '.husky', 'pre-commit'), '#!/bin/sh\nset -e\nFORMAT_EXIT_CODE=0\npnpm dlx ultracite fix || FORMAT_EXIT_CODE=$?\n\nexit $FORMAT_EXIT_CODE\n');
+    runInit(project);
+    runInit(project);
+    assert.equal(read(project, '.husky/pre-commit'), '#!/bin/sh\nset -e\nFORMAT_EXIT_CODE=0\npnpm dlx ultracite fix || FORMAT_EXIT_CODE=$?\n\nnpx --no-install standby-design-lint --staged --warn\nexit $FORMAT_EXIT_CODE\n');
+  });
+
+  it('installs into the workspace root of a pnpm monorepo with a fixed version', () => {
+    writeFileSync(path.join(project, 'pnpm-lock.yaml'), '');
+    writeFileSync(path.join(project, 'pnpm-workspace.yaml'), 'packages:\n  - apps/*\n');
+    const [command, args] = installCommand(project);
+    assert.equal(command, 'pnpm');
+    assert.deepEqual(args, ['add', '-D', '-w', '-E', 'standby-design-lint', ...ESLINT_PACKAGES]);
+  });
+
+  it('adds only the ESLint packages the project does not have yet', () => {
+    writeFileSync(path.join(project, 'package.json'), JSON.stringify({ name: 'app', devDependencies: { eslint: '^9.28.0', typescript: '7.0.2' } }));
+    const [command, args] = installCommand(project);
+    assert.equal(command, 'npm');
+    assert.deepEqual(args, ['install', '-D', '-E', 'standby-design-lint', '@typescript-eslint/parser']);
+  });
+
+  it('runs the CI check from the lockfile, not through npx --yes', () => {
+    writeFileSync(path.join(project, 'pnpm-lock.yaml'), '');
+    runInit(project);
+    const workflow = read(project, '.github/workflows/design-lint.yml');
+    assert.match(workflow, /pnpm install --frozen-lockfile/);
+    assert.match(workflow, /pnpm exec standby-design-lint --since origin\//);
+    assert.doesNotMatch(workflow, /--yes|@latest/);
   });
 
   it('keeps an existing prepare script and runs its own step after it', () => {

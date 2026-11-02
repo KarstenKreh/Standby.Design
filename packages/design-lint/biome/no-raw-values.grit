@@ -1,0 +1,39 @@
+language js
+
+or { JsxString(), JsStringLiteralExpression(), JsTemplateChunkElement() } as $class where {
+  $class <: r"(?s).*(?:\[|white|black|(?:neutral|emerald|fuchsia|orange|yellow|indigo|violet|purple|slate|stone|amber|green|mauve|olive|taupe|gray|zinc|lime|teal|cyan|blue|pink|rose|mist|red|sky)-\d).*",
+  $class <: within or {
+    JsxAttribute(name=r"(?:className|class|tw|[A-Za-z]+ClassName)"),
+    JsCallExpression(callee=r"(?:.*\.)?(?:classnames|classNames|twMerge|twJoin|clsx|cva|cn|cx|tv)"),
+    JsTemplateExpression(tag=r"(?:.*\.)?tw")
+  },
+  $parts = split($class, " "),
+  $parts <: some $part where {
+    $part <: r"[\s\"'`]*((?:\[[^\]]*\]|\([^)]*\)|[^\s\"'`\[(])+)[\s\"'`]*"($token),
+    $token <: r"((?:(?:\[[^\]]*\]|\([^)]*\)|[^:\[(])*:)*)!?((?:\[[^\]]*\]|\([^)]*\)|[^:\[(!])+)!?"($variants, $utility),
+    $variants <: not r"(?:(?:\[[^\]]*\]|\([^)]*\)|[^:\[(])*:)*(?:web):(?:(?:\[[^\]]*\]|\([^)]*\)|[^:\[(])*:)*",
+    or {
+      and {
+        $utility <: r"(?s)(?:font-\[(?:['\"]|family-name:)).*",
+        $message = join(list=["„", $token, "“ setzt eine Schriftfamilie von Hand. Fix: die Familien-Klasse aus dem Theme nehmen (z. B. font-sans, font-heading). Regel: „Werte kommen aus Tokens, nie aus der Hand“ https://standby.design/docs/rules/farbe-werte-kommen-aus-tokens-nie-aus-der-hand"], separator="")
+      },
+      and {
+        $utility <: r"[^\[]*\[(.+)\]"($arbitrary),
+        $arbitrary <: not r"(?s).*var\(.*",
+        $arbitrary <: r"(?i)(?s).*(?:#[0-9a-f]{3,8}\b|\b(?:rgba?|hsla?|oklch|oklab|lab|lch|hwb|color)\().*",
+        $message = join(list=["„", $token, "“ setzt eine Farbe von Hand. Fix: die semantische Farbklasse aus dem Token-System nehmen (z. B. bg-card, text-muted-foreground). Regel: „Werte kommen aus Tokens, nie aus der Hand“ https://standby.design/docs/rules/farbe-werte-kommen-aus-tokens-nie-aus-der-hand"], separator="")
+      },
+      and {
+        $utility <: r"[^\[]*\[(.+)\]"($arbitrary),
+        $arbitrary <: not r"(?s).*var\(.*",
+        $arbitrary <: r"(?s).*(?:(?:^|[^\w-])-?\d*\.?\d+(?:px|rem|em|pt)\b).*",
+        $message = join(list=["„", $token, "“ setzt eine Größe von Hand. Fix: eine Stufe der Skala nehmen (Abstand, Radius, Schriftgröße). Fehlt die Stufe, sie in die Skala aufnehmen statt sie hier zu setzen. Regel: „Werte kommen aus Tokens, nie aus der Hand“ https://standby.design/docs/rules/farbe-werte-kommen-aus-tokens-nie-aus-der-hand"], separator="")
+      },
+      and {
+        $utility <: r"-?(?:inset-shadow|ring-offset|placeholder|decoration|inset-ring|border-x|border-y|border-t|border-r|border-b|border-l|border-s|border-e|outline|border|stroke|divide|shadow|accent|caret|text|ring|fill|from|via|bg|to)-(?:white|black|(?:neutral|emerald|fuchsia|orange|yellow|indigo|violet|purple|slate|stone|amber|green|mauve|olive|taupe|gray|zinc|lime|teal|cyan|blue|pink|rose|mist|red|sky)-\d{2,3})(?:/.*)?",
+        $message = join(list=["„", $token, "“ nimmt eine Farbe der Tailwind-Standardpalette statt eines Tokens. Fix: die semantische Farbe nehmen, die die Rolle beschreibt (z. B. bg-primary, text-foreground, border-border). Regel: „Werte kommen aus Tokens, nie aus der Hand“ https://standby.design/docs/rules/farbe-werte-kommen-aus-tokens-nie-aus-der-hand"], separator="")
+      }
+    }
+  },
+  register_diagnostic(span=$class, message=$message, severity="error")
+}

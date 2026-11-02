@@ -1,7 +1,7 @@
 import { withRule } from '../rule-docs.js';
 
-const VALIDITY_NAME = /valid|dirty|accept|agree|consent|complete|filled|empty|ready|canSubmit|canSave|hasChanges|touched/i;
-const PENDING_NAME = /pending|submitting|loading|saving|busy|fetching|mutating/i;
+export const VALIDITY_NAME = /valid|dirty|accept|agree|consent|complete|filled|empty|ready|canSubmit|canSave|hasChanges|touched/i;
+export const PENDING_NAME = /pending|submitting|loading|saving|busy|fetching|mutating/i;
 const CHILD_KEYS = ['argument', 'left', 'right', 'test', 'consequent', 'alternate', 'expression', 'callee', 'object'];
 
 function collectNames(node, names) {

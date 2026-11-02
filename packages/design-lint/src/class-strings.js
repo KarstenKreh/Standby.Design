@@ -1,5 +1,6 @@
-const CLASS_ATTRIBUTES = new Set(['className', 'class', 'tw']);
-const CLASS_HELPERS = new Set(['cn', 'clsx', 'classnames', 'classNames', 'cva', 'cx', 'twMerge', 'twJoin', 'tv']);
+export const CLASS_ATTRIBUTE = /^(?:className|class|tw|[A-Za-z]+ClassName)$/;
+export const WEB_ONLY_VARIANT = 'web';
+export const CLASS_HELPERS = new Set(['cn', 'clsx', 'classnames', 'classNames', 'cva', 'cx', 'twMerge', 'twJoin', 'tv']);
 
 function calleeName(callee) {
   if (callee.type === 'Identifier') return callee.name;
@@ -11,7 +12,7 @@ function isClassContext(ancestors) {
   for (let i = ancestors.length - 1; i >= 0; i--) {
     const node = ancestors[i];
     if (node.type === 'JSXAttribute') {
-      return node.name.type === 'JSXIdentifier' && CLASS_ATTRIBUTES.has(node.name.name);
+      return node.name.type === 'JSXIdentifier' && CLASS_ATTRIBUTE.test(node.name.name);
     }
     if (node.type === 'CallExpression' && CLASS_HELPERS.has(calleeName(node.callee))) return true;
     if (node.type === 'TaggedTemplateExpression' && calleeName(node.tag) === 'tw') return true;
@@ -53,7 +54,8 @@ export function createClassVisitor(context, onToken) {
     if (isPropertyKey(node, ancestors[ancestors.length - 1])) return;
     if (!isClassContext(ancestors)) return;
     for (const token of splitClasses(text)) {
-      onToken({ node, token, ...splitVariants(token) });
+      const parts = splitVariants(token);
+      if (!parts.variants.includes(WEB_ONLY_VARIANT)) onToken({ node, token, ...parts });
     }
   };
   return {

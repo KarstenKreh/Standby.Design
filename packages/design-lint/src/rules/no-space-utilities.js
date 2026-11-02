@@ -1,9 +1,9 @@
 import { createClassVisitor } from '../class-strings.js';
 import { withRule } from '../rule-docs.js';
 
-const SPACE = /^-?space-[xy]-/;
-const MARGIN_RESET = /^-?m[tblrsexy]?-0$/;
-const EDGE_VARIANT = /^(?:first|last|only|odd|even|not-first|not-last)$/;
+export const SPACE = /^-?space-[xy]-/;
+export const MARGIN_RESET = /^-?m[tblrsexy]?-0$/;
+export const EDGE_VARIANT = /^(?:first|last|only|odd|even|not-first|not-last)$/;
 
 export default {
   meta: {

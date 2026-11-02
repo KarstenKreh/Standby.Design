@@ -202,7 +202,7 @@
 <h2>Warum</h2>
 <p>Ein Abstand beschreibt die Beziehung zwischen zwei Elementen. Er gehört zu keinem der beiden allein. Trägt das Kind den Abstand, bringt es ihn überall mit hin, auch dorthin, wo er nicht passt. Das letzte Kind hat dann einen ungewollten Abstand nach unten, den jemand mit <code>last:mb-0</code> wieder entfernt. Damit steht die Regel an zwei Stellen.</p>
 <p><code>gap</code> löst das an einer Stelle: der Container sagt, wie weit seine Kinder auseinanderstehen. Das letzte Kind braucht keine Sonderbehandlung, nichts wird zurückgesetzt, und keine Margins fallen zusammen.</p>
-<p>Die Hilfsklasse <code>space-y</code> löst dasselbe Problem, aber über Margins an allen Kindern außer dem ersten. Sie bricht, sobald ein Kind bedingt gerendert wird oder ein Fragment dazwischenliegt, und sie funktioniert in React Native nicht.</p>
+<p>Die Hilfsklasse <code>space-y</code> löst dasselbe Problem, aber über Margins an allen Kindern außer dem ersten. Sie bricht, sobald ein Kind bedingt gerendert wird oder ein Fragment dazwischenliegt, und sie funktioniert in React Native nicht. NativeWind 4 erzeugt für <code>space-x-*</code> und <code>space-y-*</code> auf iOS und Android keine Regel. Die Kinder stehen dann ohne Abstand aneinander. Im Web von Expo stimmt der Abstand, deshalb fällt der Fehler im Browser nicht auf.</p>
 <h2>Woran Du den Verstoß erkennst</h2>
 <ul>
 <li><code>mb-*</code> oder <code>mt-*</code> an Kindern einer Liste.</li>
