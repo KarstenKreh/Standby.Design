@@ -1,0 +1,24 @@
+language js
+
+or { JsxString(), JsStringLiteralExpression(), JsTemplateChunkElement() } as $class where {
+  $class <: r"(?s).*(?:(?:hover|focus|active|pressed)).*",
+  $class <: within or {
+    JsxAttribute(name=r"(?:className|class|tw|[A-Za-z]+ClassName)"),
+    JsCallExpression(callee=r"(?:.*\.)?(?:classnames|classNames|twMerge|twJoin|clsx|cva|cn|cx|tv)"),
+    JsTemplateExpression(tag=r"(?:.*\.)?tw")
+  },
+  $filename <: not r"(?s).*(?:[/\\]components[/\\]ui[/\\]).*",
+  $parts = split($class, " "),
+  $parts <: some $part where {
+    $part <: r"[\s\"'`]*((?:\[[^\]]*\]|\([^)]*\)|[^\s\"'`\[(])+)[\s\"'`]*"($token),
+    $token <: r"((?:(?:\[[^\]]*\]|\([^)]*\)|[^:\[(])*:)*)!?((?:\[[^\]]*\]|\([^)]*\)|[^:\[(!])+)!?"($variants, $utility),
+    $variants <: not r"(?:(?:\[[^\]]*\]|\([^)]*\)|[^:\[(])*:)*(?:web):(?:(?:\[[^\]]*\]|\([^)]*\)|[^:\[(])*:)*",
+    or {
+      and {
+        $variants <: r"(?:(?:\[[^\]]*\]|\([^)]*\)|[^:\[(])*:)*(?:(?:group-|peer-)?(?:hover|focus|focus-visible|focus-within|active|pressed)(?:/[\w-]+)?):(?:(?:\[[^\]]*\]|\([^)]*\)|[^:\[(])*:)*",
+        $message = join(list=["„", $token, "“ baut einen Zustand in der Ansicht nach. Fix: die Komponente aus ", "/components/ui/", " nutzen, die diesen Zustand schon hat, oder dort eine Variante ergänzen. Regel: „Verhalten und Aussehen werden nicht in der Ansicht nachgebaut“ https://standby.design/docs/rules/bedienung-verhalten-und-aussehen-werden-nicht-in-der-ansicht-nachgebaut"], separator="")
+      }
+    }
+  },
+  register_diagnostic(span=$class, message=$message, severity="warn")
+}

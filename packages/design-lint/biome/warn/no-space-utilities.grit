@@ -1,0 +1,28 @@
+language js
+
+or { JsxString(), JsStringLiteralExpression(), JsTemplateChunkElement() } as $class where {
+  $class <: r"(?s).*(?:-?space-[xy]-|-?m[tblrsexy]?-0).*",
+  $class <: within or {
+    JsxAttribute(name=r"(?:className|class|tw|[A-Za-z]+ClassName)"),
+    JsCallExpression(callee=r"(?:.*\.)?(?:classnames|classNames|twMerge|twJoin|clsx|cva|cn|cx|tv)"),
+    JsTemplateExpression(tag=r"(?:.*\.)?tw")
+  },
+  $parts = split($class, " "),
+  $parts <: some $part where {
+    $part <: r"[\s\"'`]*((?:\[[^\]]*\]|\([^)]*\)|[^\s\"'`\[(])+)[\s\"'`]*"($token),
+    $token <: r"((?:(?:\[[^\]]*\]|\([^)]*\)|[^:\[(])*:)*)!?((?:\[[^\]]*\]|\([^)]*\)|[^:\[(!])+)!?"($variants, $utility),
+    $variants <: not r"(?:(?:\[[^\]]*\]|\([^)]*\)|[^:\[(])*:)*(?:web):(?:(?:\[[^\]]*\]|\([^)]*\)|[^:\[(])*:)*",
+    or {
+      and {
+        $utility <: r"(?s)(?:-?space-[xy]-).*",
+        $message = join(list=["„", $token, "“ legt den Abstand als Margin auf die Kinder. Fix: „flex flex-col gap-*“ oder „flex gap-*“ am Container. Regel: „Abstand über gap, nicht über Margins am Kind“ https://standby.design/docs/rules/stack-abstand-ueber-gap-nicht-ueber-margins-am-kind"], separator="")
+      },
+      and {
+        $utility <: r"(?s)(?:-?m[tblrsexy]?-0)",
+        $variants <: r"(?:(?:\[[^\]]*\]|\([^)]*\)|[^:\[(])*:)*(?:(?:first|last|only|odd|even|not-first|not-last)):(?:(?:\[[^\]]*\]|\([^)]*\)|[^:\[(])*:)*",
+        $message = join(list=["„", $token, "“ räumt einen Margin am Rand wieder ab. Fix: Margins an den Kindern entfernen und gap am Container setzen. Regel: „Abstand über gap, nicht über Margins am Kind“ https://standby.design/docs/rules/stack-abstand-ueber-gap-nicht-ueber-margins-am-kind"], separator="")
+      }
+    }
+  },
+  register_diagnostic(span=$class, message=$message, severity="warn")
+}

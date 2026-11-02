@@ -1,0 +1,22 @@
+language js
+
+or {
+  JsxAttribute(name=r"style", initializer=JsxAttributeInitializerClause(value=JsxExpressionAttributeValue(expression=JsObjectExpression(members=$members)))) where {
+    $members <: some JsPropertyObjectMember(name=$name, value=or {
+      JsStringLiteralExpression(),
+      JsNumberLiteralExpression(),
+      JsBooleanLiteralExpression(),
+      JsNullLiteralExpression(),
+      JsBigintLiteralExpression(),
+      JsRegexLiteralExpression(),
+      JsTemplateExpression(elements=[JsTemplateChunkElement()]),
+      JsTemplateExpression(elements=[]),
+      JsUnaryExpression(argument=or { JsNumberLiteralExpression(), JsStringLiteralExpression(), JsBigintLiteralExpression() })
+    }) as $property,
+    $name <: r"[\"']?(.*?)[\"']?"($key),
+    register_diagnostic(span=$property, message=join(list=["style setzt „", $key, "“ als festen Wert. Fix: als Utility-Klasse in className schreiben. Im Style bleiben nur berechnete Werte (z. B. eine Breite aus einem Prozentwert). Regel: „Utility-Klassen statt Inline-Styles“ https://standby.design/docs/rules/stack-utility-klassen-statt-inline-styles"], separator=""), severity="warn")
+  },
+  JsCallExpression(callee=r"StyleSheet\.create") as $sheet where {
+    register_diagnostic(span=$sheet, message=join(list=["StyleSheet.create legt Gestaltung neben den Klassen fest. Fix: Utility-Klassen in className nutzen. Regel: „Utility-Klassen statt Inline-Styles“ https://standby.design/docs/rules/stack-utility-klassen-statt-inline-styles"], separator=""), severity="warn")
+  }
+}

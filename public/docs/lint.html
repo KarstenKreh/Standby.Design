@@ -192,12 +192,12 @@
     <h2>Set up and update</h2>
     <p>Run this in the root folder of the project, where <code>package.json</code> is. It needs Node 20.19 or newer.</p>
     <pre><code>npx standby-design-lint@latest init</code></pre>
-    <p>The command installs the package as a dev dependency and sets up these parts:</p>
+    <p>The command installs the package as a dev dependency with a fixed version, together with the ESLint packages the project does not have yet. In a pnpm workspace it installs into the workspace root. Then it sets up these parts:</p>
     <ul>
       <li>a Claude Code hook in <code>.claude/settings.json</code></li>
       <li>a pre-commit hook, in <code>.husky/</code> if the project uses husky, otherwise in the git hooks folder</li>
       <li>a <code>prepare</code> script in <code>package.json</code>, so every <code>npm install</code> sets up the pre-commit hook for teammates, too</li>
-      <li>the CI workflow <code>.github/workflows/design-lint.yml</code>, if the project has a <code>.github</code> folder</li>
+      <li>the CI workflow <code>.github/workflows/design-lint.yml</code>, if the project has a <code>.github</code> folder. It installs from the lockfile and runs the installed version.</li>
       <li>the review skill in <code>.claude/skills/design-review</code></li>
       <li>a short rules block in <code>AGENTS.md</code> and <code>CLAUDE.md</code></li>
       <li>the <code>standbyDesignLint</code> settings in <code>package.json</code></li>
@@ -239,7 +239,20 @@
         <tr><td><code>no-click-on-non-interactive</code></td><td>Click handlers on elements that are not controls: <code>&lt;div onClick&gt;</code></td><td><a href="/docs/rules/bedienung-name-und-zustand-stehen-im-code">&bdquo;Name und Zustand stehen im Code&ldquo;</a></td></tr>
       </tbody>
     </table>
-    <p>The lint checks <code>.js</code>, <code>.jsx</code>, <code>.ts</code>, <code>.tsx</code> and <code>.mjs</code> files. It finds classes in the attributes <code>className</code>, <code>class</code> and <code>tw</code>, and in the helpers <code>cn()</code>, <code>clsx()</code>, <code>classnames()</code>, <code>cx()</code>, <code>cva()</code>, <code>twMerge()</code>, <code>twJoin()</code> and <code>tv()</code>. The messages are in German.</p>
+    <p>The lint checks <code>.js</code>, <code>.jsx</code>, <code>.ts</code>, <code>.tsx</code> and <code>.mjs</code> files. It finds classes in the attributes <code>className</code>, <code>class</code>, <code>tw</code> and every attribute that ends in <code>ClassName</code>, such as <code>contentContainerClassName</code>, and in the helpers <code>cn()</code>, <code>clsx()</code>, <code>classnames()</code>, <code>cx()</code>, <code>cva()</code>, <code>twMerge()</code>, <code>twJoin()</code> and <code>tv()</code>. A class with the variant <code>web:</code> is never reported, because NativeWind applies it on the web only. The messages are in German.</p>
+
+    <h2>Biome</h2>
+    <p>Projects that lint with <a href="https://biomejs.dev">Biome</a> 2.5 or newer get the eight rules as Biome plugins. They need neither ESLint nor <code>init</code>. Install the package with a fixed version, so updates arrive as a normal Dependabot pull request:</p>
+    <pre><code>pnpm add -D -w -E standby-design-lint</code></pre>
+    <p>Then list the rules in <code>biome.json</code>. Each rule exists twice: <code>biome/&lt;rule&gt;.grit</code> reports an error, <code>biome/warn/&lt;rule&gt;.grit</code> a warning. Biome needs the path with <code>./node_modules/</code>.</p>
+    <pre><code>"overrides": [{
+  "includes": ["apps/mobile/**/*.tsx"],
+  "plugins": [
+    "./node_modules/standby-design-lint/biome/no-space-utilities.grit",
+    "./node_modules/standby-design-lint/biome/warn/no-raw-values.grit"
+  ]
+}]</code></pre>
+    <p>Biome reports one finding per string and rule. The next one shows once the first is fixed. Component folders other than <code>/components/ui/</code> go into <code>includes</code> on the plugin entry. An exception reads <code>// biome-ignore lint/plugin: reason</code>. The <a href="https://github.com/KarstenKreh/Standby.Design/blob/master/packages/design-lint/README.md#biome">README</a> has the full example.</p>
 
     <h2>Exceptions</h2>
     <p>Some hits are on purpose, for example a brand color fixed by the logo guideline. Put an ESLint disable comment with a reason on the line before:</p>

@@ -3535,7 +3535,7 @@ Ein Abstand beschreibt die Beziehung zwischen zwei Elementen. Er gehört zu kein
 
 `gap` löst das an einer Stelle: der Container sagt, wie weit seine Kinder auseinanderstehen. Das letzte Kind braucht keine Sonderbehandlung, nichts wird zurückgesetzt, und keine Margins fallen zusammen.
 
-Die Hilfsklasse `space-y` löst dasselbe Problem, aber über Margins an allen Kindern außer dem ersten. Sie bricht, sobald ein Kind bedingt gerendert wird oder ein Fragment dazwischenliegt, und sie funktioniert in React Native nicht.
+Die Hilfsklasse `space-y` löst dasselbe Problem, aber über Margins an allen Kindern außer dem ersten. Sie bricht, sobald ein Kind bedingt gerendert wird oder ein Fragment dazwischenliegt, und sie funktioniert in React Native nicht. NativeWind 4 erzeugt für `space-x-*` und `space-y-*` auf iOS und Android keine Regel. Die Kinder stehen dann ohne Abstand aneinander. Im Web von Expo stimmt der Abstand, deshalb fällt der Fehler im Browser nicht auf.
 
 ### Woran Du den Verstoß erkennst
 

@@ -10,7 +10,7 @@ export const COLOR_PREFIXES = [
   'shadow', 'inset-shadow', 'inset-ring', 'accent', 'caret',
 ];
 
-const NON_COLOR_VALUES = new Set([
+export const NON_COLOR_VALUES = new Set([
   'xs', 'sm', 'base', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', '7xl', '8xl', '9xl',
   'none', 'inner', 'auto', 'inherit', 'current', 'transparent', 'left', 'center', 'right', 'justify', 'start', 'end',
   'wrap', 'nowrap', 'balance', 'pretty', 'clip', 'ellipsis', 'solid', 'dashed', 'dotted', 'double', 'hidden',

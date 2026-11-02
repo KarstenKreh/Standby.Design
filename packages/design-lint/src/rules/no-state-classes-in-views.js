@@ -1,7 +1,7 @@
 import { createClassVisitor } from '../class-strings.js';
 import { withRule } from '../rule-docs.js';
 
-const STATE_VARIANT = /^(?:group-|peer-)?(?:hover|focus|focus-visible|focus-within|active|pressed)(?:\/[\w-]+)?$/;
+export const STATE_VARIANT = /^(?:group-|peer-)?(?:hover|focus|focus-visible|focus-within|active|pressed)(?:\/[\w-]+)?$/;
 export const DEFAULT_COMPONENT_PATHS = ['/components/ui/'];
 
 function normalizePath(filename) {

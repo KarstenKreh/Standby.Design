@@ -55,6 +55,8 @@ export const PROJECT_SETUP_GUIDE = [
   '',
   'Run these steps in the root folder of the project (where package.json is), then report the summary to the user.',
   '',
+  'Biome project: if `biome.json` lists plugins from `node_modules/standby-design-lint/biome/`, do not run `init`. Update the fixed version of `standby-design-lint` in package.json (or merge the Dependabot pull request), run the install of the project\'s package manager, then run Biome and report new findings. Stop here.',
+  '',
   '1. Run `npx standby-design-lint@latest init`. It installs or updates the package and sets up, or updates in place:',
   '   - a Claude Code hook in `.claude/settings.json` that lints every edited line against the rules,',
   '   - a pre-commit hook that warns about new violations (husky if present, otherwise the git hooks folder),',

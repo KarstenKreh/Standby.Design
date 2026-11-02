@@ -2,7 +2,7 @@ import { createClassVisitor } from '../class-strings.js';
 import { arbitraryValue, isPaletteColor, parseColorUtility, RAW_COLOR, RAW_LENGTH } from '../tailwind.js';
 import { withRule } from '../rule-docs.js';
 
-const FONT_FAMILY = /^font-\[(?:['"]|family-name:)/;
+export const FONT_FAMILY = /^font-\[(?:['"]|family-name:)/;
 
 function classify(utility, allowedColors) {
   if (FONT_FAMILY.test(utility)) return 'fontFamily';

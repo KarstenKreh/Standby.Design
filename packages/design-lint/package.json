@@ -1,7 +1,7 @@
 {
   "name": "standby-design-lint",
-  "version": "0.2.0",
-  "description": "Enforces the standby.design design rules in code: an ESLint plugin, a CLI and a Claude Code hook that report violations with the rule and the fix.",
+  "version": "0.3.0",
+  "description": "Enforces the standby.design design rules in code: an ESLint plugin, Biome plugin files, a CLI and a Claude Code hook that report violations with the rule and the fix.",
   "license": "MIT",
   "type": "module",
   "homepage": "https://standby.design/docs/lint",
@@ -14,10 +14,13 @@
     "standby-design-lint": "./bin/standby-design-lint.js"
   },
   "exports": {
-    ".": "./src/index.js"
+    ".": "./src/index.js",
+    "./biome/*": "./biome/*",
+    "./package.json": "./package.json"
   },
   "files": [
     "bin",
+    "biome",
     "src",
     "skills",
     "README.md"
@@ -26,21 +29,37 @@
     "node": "^20.19.0 || ^22.13.0 || >=24"
   },
   "scripts": {
-    "test": "node --test test/"
-  },
-  "dependencies": {
-    "@typescript-eslint/parser": "^8.72.1",
-    "eslint": "^10.14.0",
-    "typescript": "~5.9"
+    "test": "node --test \"test/*.test.js\"",
+    "build:biome": "node scripts/build-biome.js"
   },
   "devDependencies": {
-    "playwright": "^1.64.1"
+    "@biomejs/biome": "2.5.15",
+    "@typescript-eslint/parser": "^8.72.1",
+    "eslint": "^10.14.0",
+    "playwright": "^1.64.1",
+    "typescript": "~5.9"
   },
   "peerDependencies": {
-    "playwright": ">=1.49"
+    "@biomejs/biome": ">=2.5",
+    "@typescript-eslint/parser": ">=8",
+    "eslint": ">=9",
+    "playwright": ">=1.49",
+    "typescript": ">=5"
   },
   "peerDependenciesMeta": {
+    "@biomejs/biome": {
+      "optional": true
+    },
+    "@typescript-eslint/parser": {
+      "optional": true
+    },
+    "eslint": {
+      "optional": true
+    },
     "playwright": {
+      "optional": true
+    },
+    "typescript": {
       "optional": true
     }
   }

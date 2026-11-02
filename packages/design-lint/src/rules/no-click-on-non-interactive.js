@@ -1,7 +1,7 @@
 import { withRule } from '../rule-docs.js';
 
-const NON_INTERACTIVE = new Set(['div', 'span', 'li', 'p', 'section', 'article', 'img', 'td', 'tr', 'View', 'Text']);
-const CLICK_HANDLERS = new Set(['onClick', 'onMouseDown', 'onMouseUp', 'onPointerDown', 'onPointerUp']);
+export const NON_INTERACTIVE = new Set(['div', 'span', 'li', 'p', 'section', 'article', 'img', 'td', 'tr', 'View', 'Text']);
+export const CLICK_HANDLERS = new Set(['onClick', 'onMouseDown', 'onMouseUp', 'onPointerDown', 'onPointerUp']);
 
 export default {
   meta: {
@@ -9,7 +9,7 @@ export default {
     docs: { description: 'Klickbares ist ein Button oder Link, kein div mit onClick.' },
     schema: [],
     messages: {
-      clickOnElement: withRule('nameAndState', '<{{element}}> mit {{handler}} ist für Tastatur und Screenreader kein Bedienelement. Fix: <button type="button"> oder einen Link nehmen, am besten die Button-Komponente des Projekts.'),
+      clickOnElement: withRule('nameAndState', '<{{element}}> mit {{handler}} ist für Tastatur und Screenreader kein Bedienelement. Fix: <button type=\'button\'> oder einen Link nehmen, am besten die Button-Komponente des Projekts.'),
     },
   },
   create(context) {
