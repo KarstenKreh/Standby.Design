@@ -210,7 +210,7 @@ export function biomePluginFiles() {
 export function staleBiomePlugins(dir) {
   return biomePluginFiles().filter(({ file, source }) => {
     try {
-      return readFileSync(path.join(dir, file), 'utf8') !== source;
+      return readFileSync(path.join(dir, file), 'utf8').replace(/\r\n/g, '\n') !== source;
     } catch {
       return true;
     }
