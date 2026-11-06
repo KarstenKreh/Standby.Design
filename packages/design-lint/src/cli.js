@@ -3,10 +3,11 @@ import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { addedLines } from './git-diff.js';
 import { reviewScreen } from './review.js';
-import { ESLINT_PACKAGES, initProject, formatInitReport, installHooks } from './init.js';
+import { ESLINT_PACKAGES, VUE_PARSER, initProject, formatInitReport, installHooks, usesVue } from './init.js';
 
-const LINTABLE = /\.(?:jsx|tsx|js|ts|mjs)$/;
+const LINTABLE = /\.(?:jsx|tsx|js|ts|mjs|vue)$/;
 const HOOK_MESSAGE_LIMIT = 20;
+const OWN_RULE_PREFIX = 'standby/';
 const DEFAULT_IGNORES = ['**/node_modules/**', '**/dist/**', '**/build/**', '**/.next/**', '**/coverage/**', '**/*.d.ts'];
 const USAGE = `standby-design-lint: prüft Code gegen die Design-Regeln von standby.design
 
@@ -38,26 +39,37 @@ export function findSettings(startDir) {
 
 export const SETUP_ERROR = 'STANDBY_SETUP';
 
+function setupError(message) {
+  const error = new Error(message);
+  error.code = SETUP_ERROR;
+  return error;
+}
+
 async function loadEslint() {
   try {
-    const [{ ESLint }, { recommended }] = await Promise.all([import('eslint'), import('./index.js')]);
-    return { ESLint, recommended };
+    const [{ ESLint }, standby] = await Promise.all([import('eslint'), import('./index.js')]);
+    return { ESLint, standby };
   } catch (error) {
     if (error.code !== 'ERR_MODULE_NOT_FOUND') throw error;
-    const missing = new Error(`ESLint fehlt. Das Paket bringt es seit 0.3.0 nicht mehr selbst mit. Einmal ausführen: npm i -D ${ESLINT_PACKAGES.join(' ')} (oder npx standby-design-lint init). Biome-Projekte brauchen die CLI nicht, sie binden die Dateien aus node_modules/standby-design-lint/biome/ ein.`);
-    missing.code = SETUP_ERROR;
-    throw missing;
+    throw setupError(`ESLint fehlt. Das Paket bringt es seit 0.3.0 nicht mehr selbst mit. Einmal ausführen: npm i -D ${ESLINT_PACKAGES.join(' ')} (oder npx standby-design-lint init). Biome-Projekte brauchen die CLI nicht, sie binden die Dateien aus node_modules/standby-design-lint/biome/ ein.`);
   }
 }
 
+function vueConfigs(standby, root, { componentPaths, allowedColors }) {
+  if (standby.vueParserInstalled()) return [{ ...standby.recommendedVue({ componentPaths, allowedColors }), processor: standby.vueDirectives }];
+  if (usesVue(root)) throw setupError(`${VUE_PARSER} fehlt, das Projekt nutzt aber Vue. Einmal ausführen: npm i -D ${VUE_PARSER} (oder npx standby-design-lint init).`);
+  return [];
+}
+
 export async function createLinter(root, settings) {
-  const { ESLint, recommended } = await loadEslint();
+  const { ESLint, standby } = await loadEslint();
   return new ESLint({
     cwd: root,
     overrideConfigFile: true,
     overrideConfig: [
       { ignores: [...DEFAULT_IGNORES, ...(settings.ignores ?? [])] },
-      recommended(settings),
+      standby.recommended(settings),
+      ...vueConfigs(standby, root, settings),
     ],
     errorOnUnmatchedPattern: false,
   });
@@ -72,6 +84,14 @@ export function formatResults(results) {
     }
   }
   return lines;
+}
+
+function isOwnMessage(message) {
+  return message.ruleId === null || message.ruleId.startsWith(OWN_RULE_PREFIX);
+}
+
+function withoutForeignRules(results) {
+  return results.map((result) => ({ ...result, messages: result.messages.filter(isOwnMessage) }));
 }
 
 function countProblems(results) {
@@ -119,7 +139,7 @@ async function runHook() {
   const linter = await createLinter(root, settings);
   if (await linter.isPathIgnored(filePath)) return 0;
   const ranges = changedLineRanges(event, readFileSync(filePath, 'utf8'));
-  const results = keepChangedLines(await linter.lintFiles([filePath]), ranges);
+  const results = keepChangedLines(withoutForeignRules(await linter.lintFiles([filePath])), ranges);
   const problems = countProblems(results);
   if (problems === 0) return 0;
   const lines = formatResults(results);
@@ -134,8 +154,8 @@ async function runFiles(patterns, { warn }) {
   const { root, settings } = findSettings(process.cwd());
   const linter = await createLinter(root, settings);
   const targets = patterns.length ? patterns : ['src'];
-  const results = await linter.lintFiles(targets.map((target) => path.resolve(target)));
-  return report(results, `Keine Verstöße in ${results.length} Dateien.`, { warn });
+  const results = withoutForeignRules(await linter.lintFiles(targets.map((target) => path.resolve(target))));
+  return report(results,`Keine Verstöße in ${results.length} Dateien.`, { warn });
 }
 
 function report(results, emptyText, { warn = false } = {}) {
@@ -162,7 +182,7 @@ async function runChanged({ staged, base, warn }) {
   for (const [filePath, ranges] of changed) {
     if (!LINTABLE.test(filePath) || (await linter.isPathIgnored(filePath))) continue;
     const linted = staged ? await linter.lintText(stagedContent(filePath), { filePath }) : await linter.lintFiles([filePath]);
-    results.push(...linted.map((result) => keepLines(result, ranges)));
+    results.push(...withoutForeignRules(linted).map((result) => keepLines(result, ranges)));
   }
   return report(results, `Keine Verstöße in den geänderten Zeilen (${results.length} Dateien).`, { warn });
 }

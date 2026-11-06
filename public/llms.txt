@@ -68,9 +68,10 @@ If a user asks you to build a design system with standby.design:
 ## Design lint
 
 - Page: https://standby.design/docs/lint
-- What: the npm package `standby-design-lint` checks code against the design
-  rules with eight ESLint rules. Each message names the violation, the fix and
-  the rule page. Messages and rule pages are in German. The rule ids:
+- What: the npm package `standby-design-lint` checks React and Vue code against
+  the design rules with eight ESLint rules. Each message names the violation,
+  the fix and the rule page. Messages and rule pages are in German. The rule
+  ids:
   - `standby/no-raw-values`: colors, sizes and fonts set by hand, Tailwind
     palette colors
   - `standby/no-inline-style`: fixed values in inline styles
@@ -82,6 +83,11 @@ If a user asks you to build a design system with standby.design:
   - `standby/no-space-utilities`: `space-*` utilities and `last:mb-0`
   - `standby/no-disabled-by-validity`: `disabled={!isValid}` on buttons
   - `standby/no-click-on-non-interactive`: `onClick` on `div` or `span`
+- Vue: in `.vue` files the lint checks the template (`class`, `:class` as object,
+  array or ternary, `style`, `:style`, `:disabled`, `@click` on `div` or `span`),
+  `<script>` and `transition: all` in `<style>`. It needs `vue-eslint-parser`,
+  which `init` installs. Messages point to the line in the `.vue` file. The
+  Biome plugins do not check Vue templates.
 - Setup and update, run in the project root (needs a package.json, Node 20.19
   or newer): `npx standby-design-lint@latest init`. The command installs the
   package as a dev dependency and sets up:
@@ -99,7 +105,8 @@ If a user asks you to build a design system with standby.design:
 - Strictness per stage:
   - Claude Code hook: reports violations in edited lines to the agent right
     after each edit. The agent fixes them in the same session.
-  - Pre-commit: only warns (`--warn`). The commit goes through.
+  - Pre-commit: only warns (`--warn`). The commit goes through, also on a
+    branch where the package is not installed.
   - CI workflow: fails a pull request with new violations.
   Only new or changed lines are checked, so projects with existing violations
   do not turn red.
@@ -111,7 +118,8 @@ If a user asks you to build a design system with standby.design:
 - Exceptions: write an ESLint disable comment with a reason on the line before
   the violation, for example
   `// eslint-disable-next-line standby/no-raw-values -- brand color from the logo guideline`.
-  Use the id of the rule that reports.
+  Use the id of the rule that reports. In a Vue template, use an HTML comment:
+  `<!-- eslint-disable-next-line standby/no-raw-values -- reason -->`.
 - Text roles: each text gets one role. The role sets font, size, weight and
   line height. `title-1` (h1),
   `title-2` (h3), `title-3` (h5), `figure` (h2, regular weight, tabular

@@ -5,9 +5,10 @@ import { existsSync, mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { ESLINT_PACKAGES, installCommand } from '../src/init.js';
+import { ESLINT_PACKAGES, installCommand, usesVue } from '../src/init.js';
 
 const BIN = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'bin', 'standby-design-lint.js');
+const PRE_COMMIT_LINE = '[ ! -e node_modules/.bin/standby-design-lint ] || npx --no-install standby-design-lint --staged --warn || true';
 
 function runInit(cwd) {
   return spawnSync(process.execPath, [BIN, 'init', '--no-install'], { cwd, encoding: 'utf8' });
@@ -87,14 +88,14 @@ describe('init', () => {
     assert.match(read(project, 'AGENTS.md'), /<!-- standby-design-lint:start -->/);
 
     const hook = read(project, '.git/hooks/pre-commit');
-    assert.equal(hook, '#!/bin/sh\nnpm test\nnpx --no-install standby-design-lint --staged --warn\n');
+    assert.equal(hook, `#!/bin/sh\nnpm test\n${PRE_COMMIT_LINE}\n`);
   });
 
   it('writes into husky when the project uses it, without a prepare script of its own', () => {
     mkdirSync(path.join(project, '.husky'));
     writeFileSync(path.join(project, '.husky', 'pre-commit'), 'npx lint-staged\n');
     runInit(project);
-    assert.equal(read(project, '.husky/pre-commit'), 'npx lint-staged\nnpx --no-install standby-design-lint --staged --warn\n');
+    assert.equal(read(project, '.husky/pre-commit'), `npx lint-staged\n${PRE_COMMIT_LINE}\n`);
     assert.equal(manifest(project).scripts, undefined);
   });
 
@@ -103,7 +104,7 @@ describe('init', () => {
     writeFileSync(path.join(project, '.husky', 'pre-commit'), '#!/bin/sh\nset -e\nFORMAT_EXIT_CODE=0\npnpm dlx ultracite fix || FORMAT_EXIT_CODE=$?\n\nexit $FORMAT_EXIT_CODE\n');
     runInit(project);
     runInit(project);
-    assert.equal(read(project, '.husky/pre-commit'), '#!/bin/sh\nset -e\nFORMAT_EXIT_CODE=0\npnpm dlx ultracite fix || FORMAT_EXIT_CODE=$?\n\nnpx --no-install standby-design-lint --staged --warn\nexit $FORMAT_EXIT_CODE\n');
+    assert.equal(read(project, '.husky/pre-commit'), `#!/bin/sh\nset -e\nFORMAT_EXIT_CODE=0\npnpm dlx ultracite fix || FORMAT_EXIT_CODE=$?\n\n${PRE_COMMIT_LINE}\nexit $FORMAT_EXIT_CODE\n`);
   });
 
   it('installs into the workspace root of a pnpm monorepo with a fixed version', () => {
@@ -135,6 +136,61 @@ describe('init', () => {
     runInit(project);
     runInit(project);
     assert.equal(manifest(project).scripts.prepare, 'npm run build && (standby-design-lint hooks || exit 0)');
+  });
+
+  function commit(project) {
+    const git = (...args) => spawnSync('git', ['-c', 'user.email=test@example.com', '-c', 'user.name=test', ...args], { cwd: project, encoding: 'utf8' });
+    git('add', 'package.json');
+    return git('commit', '-m', 'on a branch without the package');
+  }
+
+  it('never blocks a commit while the package is missing', () => {
+    runInit(project);
+    const result = commit(project);
+    assert.equal(result.status, 0, result.stderr);
+    assert.doesNotMatch(result.stderr, /npm error/);
+  });
+
+  it('never blocks a commit under set -e either', () => {
+    writeFileSync(path.join(project, '.git', 'hooks', 'pre-commit'), '#!/bin/sh\nset -e\n');
+    runInit(project);
+    const result = commit(project);
+    assert.equal(result.status, 0, result.stderr);
+  });
+
+  it('never blocks a commit when the installed lint itself fails', () => {
+    runInit(project);
+    const bin = path.join(project, 'node_modules', '.bin');
+    mkdirSync(bin, { recursive: true });
+    writeFileSync(path.join(bin, 'standby-design-lint'), '#!/bin/sh\nexit 2\n', { mode: 0o755 });
+    const result = commit(project);
+    assert.equal(result.status, 0, result.stderr);
+  });
+
+  it('replaces the old blocking pre-commit line on a new run', () => {
+    writeFileSync(path.join(project, '.git', 'hooks', 'pre-commit'), '#!/bin/sh\nnpx --no-install standby-design-lint --staged --warn\n');
+    runInit(project);
+    const hook = read(project, '.git/hooks/pre-commit');
+    assert.equal(hook.match(/standby-design-lint --staged/g).length, 1);
+    assert.match(hook, /\|\| true\n$/);
+  });
+
+  it('installs the Vue parser when the project uses Vue, even if another package brought it along', () => {
+    writeFileSync(path.join(project, 'package.json'), JSON.stringify({ name: 'app', dependencies: { vue: '^3.5.0' }, devDependencies: { eslint: '^9.17.0', '@typescript-eslint/parser': '^8.0.0', typescript: '~5.9' } }));
+    mkdirSync(path.join(project, 'node_modules', 'vue-eslint-parser'), { recursive: true });
+    writeFileSync(path.join(project, 'node_modules', 'vue-eslint-parser', 'package.json'), '{}');
+    assert.deepEqual(installCommand(project), ['npm', ['install', '-D', '-E', 'standby-design-lint', 'vue-eslint-parser']]);
+  });
+
+  it('recognizes Vue by tracked .vue files when the root package does not declare it', () => {
+    writeFileSync(path.join(project, 'App.vue'), '<template><div /></template>\n');
+    assert.equal(usesVue(project), false);
+    execFileSync('git', ['add', 'App.vue'], { cwd: project });
+    assert.equal(usesVue(project), true);
+  });
+
+  it('leaves the Vue parser out of projects without Vue', () => {
+    assert.equal(installCommand(project)[1].includes('vue-eslint-parser'), false);
   });
 
   it('sets up the pre-commit in a fresh clone through the hooks command', () => {

@@ -12,10 +12,10 @@ export default {
     },
   },
   create(context) {
-    return createClassVisitor(context, ({ node, token, utility }) => {
+    return createClassVisitor(context, ({ node, loc, token, utility }) => {
       const color = parseColorUtility(utility);
       if (color?.alpha && !color.arbitrary) {
-        context.report({ node, messageId: 'opacityModifier', data: { token, alpha: color.alpha } });
+        context.report({ node, loc, messageId: 'opacityModifier', data: { token, alpha: color.alpha } });
       }
     });
   },

@@ -1,7 +1,7 @@
 {
   "name": "standby-design-lint",
-  "version": "0.3.0",
-  "description": "Enforces the standby.design design rules in code: an ESLint plugin, Biome plugin files, a CLI and a Claude Code hook that report violations with the rule and the fix.",
+  "version": "0.4.0",
+  "description": "Enforces the standby.design design rules in React and Vue code: an ESLint plugin, Biome plugin files, a CLI and a Claude Code hook that report violations with the rule and the fix.",
   "license": "MIT",
   "type": "module",
   "homepage": "https://standby.design/docs/lint",
@@ -37,14 +37,16 @@
     "@typescript-eslint/parser": "^8.72.1",
     "eslint": "^10.14.0",
     "playwright": "^1.64.1",
-    "typescript": "~5.9"
+    "typescript": "~5.9",
+    "vue-eslint-parser": "^10.4.2"
   },
   "peerDependencies": {
     "@biomejs/biome": ">=2.5",
     "@typescript-eslint/parser": ">=8",
     "eslint": ">=9",
     "playwright": ">=1.49",
-    "typescript": ">=5"
+    "typescript": ">=5",
+    "vue-eslint-parser": ">=9.4"
   },
   "peerDependenciesMeta": {
     "@biomejs/biome": {
@@ -60,6 +62,9 @@
       "optional": true
     },
     "typescript": {
+      "optional": true
+    },
+    "vue-eslint-parser": {
       "optional": true
     }
   }

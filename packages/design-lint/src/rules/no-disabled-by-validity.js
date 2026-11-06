@@ -1,4 +1,5 @@
 import { withRule } from '../rule-docs.js';
+import { boundAttribute, withTemplate } from '../vue.js';
 
 export const VALIDITY_NAME = /valid|dirty|accept|agree|consent|complete|filled|empty|ready|canSubmit|canSave|hasChanges|touched/i;
 export const PENDING_NAME = /pending|submitting|loading|saving|busy|fetching|mutating/i;
@@ -26,12 +27,20 @@ export default {
     },
   },
   create(context) {
-    return {
-      'JSXAttribute[name.name="disabled"] > JSXExpressionContainer'(container) {
-        const names = collectNames(container.expression, []);
-        const validity = names.find((name) => VALIDITY_NAME.test(name) && !PENDING_NAME.test(name));
-        if (validity) context.report({ node: container, messageId: 'disabledByValidity', data: { name: validity } });
-      },
+    const check = (node, expression) => {
+      const names = collectNames(expression, []);
+      const validity = names.find((name) => VALIDITY_NAME.test(name) && !PENDING_NAME.test(name));
+      if (validity) context.report({ node, messageId: 'disabledByValidity', data: { name: validity } });
     };
+    return withTemplate(context, {
+      'JSXAttribute[name.name="disabled"] > JSXExpressionContainer'(container) {
+        check(container, container.expression);
+      },
+    }, {
+      VAttribute(attribute) {
+        const bound = boundAttribute(attribute);
+        if (bound?.name === 'disabled' && bound.expression) check(attribute.value, bound.expression);
+      },
+    });
   },
 };

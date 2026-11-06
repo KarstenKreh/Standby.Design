@@ -192,7 +192,7 @@
     <h2>Set up and update</h2>
     <p>Run this in the root folder of the project, where <code>package.json</code> is. It needs Node 20.19 or newer.</p>
     <pre><code>npx standby-design-lint@latest init</code></pre>
-    <p>The command installs the package as a dev dependency with a fixed version, together with the ESLint packages the project does not have yet. In a pnpm workspace it installs into the workspace root. Then it sets up these parts:</p>
+    <p>The command installs the package as a dev dependency with a fixed version, together with the ESLint packages the project does not have yet. A Vue project also gets <code>vue-eslint-parser</code>. In a pnpm workspace it installs into the workspace root. Then it sets up these parts:</p>
     <ul>
       <li>a Claude Code hook in <code>.claude/settings.json</code></li>
       <li>a pre-commit hook, in <code>.husky/</code> if the project uses husky, otherwise in the git hooks folder</li>
@@ -215,7 +215,7 @@
       </thead>
       <tbody>
         <tr><td>Claude Code hook</td><td>After each edit</td><td>Checks the lines the agent just wrote. The agent gets the violations back and fixes them in the same session.</td></tr>
-        <tr><td>Pre-commit</td><td>Before each commit</td><td>Checks the staged lines and prints a warning. The commit goes through.</td></tr>
+        <tr><td>Pre-commit</td><td>Before each commit</td><td>Checks the staged lines and prints a warning. The commit goes through, also on a branch where the package is not installed.</td></tr>
         <tr><td>Pull request</td><td>On each pull request</td><td>Checks the lines added since the target branch. New violations fail the check.</td></tr>
         <tr><td>Visual review</td><td>Once per finished screen</td><td>Takes screenshots, counts text styles and hands both to a fresh review subagent.</td></tr>
       </tbody>
@@ -239,7 +239,18 @@
         <tr><td><code>no-click-on-non-interactive</code></td><td>Click handlers on elements that are not controls: <code>&lt;div onClick&gt;</code></td><td><a href="/docs/rules/bedienung-name-und-zustand-stehen-im-code">&bdquo;Name und Zustand stehen im Code&ldquo;</a></td></tr>
       </tbody>
     </table>
-    <p>The lint checks <code>.js</code>, <code>.jsx</code>, <code>.ts</code>, <code>.tsx</code> and <code>.mjs</code> files. It finds classes in the attributes <code>className</code>, <code>class</code>, <code>tw</code> and every attribute that ends in <code>ClassName</code>, such as <code>contentContainerClassName</code>, and in the helpers <code>cn()</code>, <code>clsx()</code>, <code>classnames()</code>, <code>cx()</code>, <code>cva()</code>, <code>twMerge()</code>, <code>twJoin()</code> and <code>tv()</code>. A class with the variant <code>web:</code> is never reported, because NativeWind applies it on the web only. The messages are in German.</p>
+    <p>The lint checks <code>.js</code>, <code>.jsx</code>, <code>.ts</code>, <code>.tsx</code>, <code>.mjs</code> and <code>.vue</code> files. It finds classes in the attributes <code>className</code>, <code>class</code>, <code>tw</code> and every attribute that ends in <code>ClassName</code>, such as <code>contentContainerClassName</code>, and in the helpers <code>cn()</code>, <code>clsx()</code>, <code>classnames()</code>, <code>cx()</code>, <code>cva()</code>, <code>twMerge()</code>, <code>twJoin()</code> and <code>tv()</code>. A class with the variant <code>web:</code> is never reported, because NativeWind applies it on the web only. The messages are in German.</p>
+
+    <h2>Vue</h2>
+    <p>In <code>.vue</code> files, the lint checks the template, <code>&lt;script&gt;</code> and <code>&lt;style&gt;</code>. Each message points to the line in the <code>.vue</code> file, also inside a <code>class</code> attribute that spans several lines. It finds:</p>
+    <ul>
+      <li>classes in <code>class</code>, in <code>:class</code> as string, object, array, ternary or template string, and in attributes that end in <code>-class</code> or <code>Class</code>, such as <code>active-class</code></li>
+      <li>fixed values in <code>style</code> and <code>:style</code></li>
+      <li><code>transition: all</code> in <code>&lt;style&gt;</code> and in <code>style</code></li>
+      <li>locked buttons: <code>:disabled="!isValid"</code></li>
+      <li>click handlers on elements that are not controls: <code>&lt;div @click="go"&gt;</code>. <code>&lt;div @click.stop&gt;</code> without a handler is fine.</li>
+    </ul>
+    <p>In a <code>:class</code> object, the keys are the classes, so the lint checks only the keys. Classes inside a variable are out of reach, unless the script writes them in <code>cn()</code> or another helper.</p>
 
     <h2>Biome</h2>
     <p>Projects that lint with <a href="https://biomejs.dev">Biome</a> 2.5 or newer get the eight rules as Biome plugins. They need neither ESLint nor <code>init</code>. Install the package with a fixed version, so updates arrive as a normal Dependabot pull request:</p>
@@ -252,7 +263,7 @@
     "./node_modules/standby-design-lint/biome/warn/no-raw-values.grit"
   ]
 }]</code></pre>
-    <p>Biome reports one finding per string and rule. The next one shows once the first is fixed. Component folders other than <code>/components/ui/</code> go into <code>includes</code> on the plugin entry. An exception reads <code>// biome-ignore lint/plugin: reason</code>. The <a href="https://github.com/KarstenKreh/Standby.Design/blob/master/packages/design-lint/README.md#biome">README</a> has the full example.</p>
+    <p>Biome reports one finding per string and rule. The next one shows once the first is fixed. Component folders other than <code>/components/ui/</code> go into <code>includes</code> on the plugin entry. An exception reads <code>// biome-ignore lint/plugin: reason</code>. The plugins do not check Vue templates, Vue projects use the ESLint path. The <a href="https://github.com/KarstenKreh/Standby.Design/blob/master/packages/design-lint/README.md#biome">README</a> has the full example.</p>
 
     <h2>Exceptions</h2>
     <p>Some hits are on purpose, for example a brand color fixed by the logo guideline. Put an ESLint disable comment with a reason on the line before:</p>
@@ -260,7 +271,7 @@
   // eslint-disable-next-line standby/no-raw-values -- brand color from the logo guideline
   'bg-[#ff2d9c]',
 );</code></pre>
-    <p>Between JSX elements, use the block form <code>{/* eslint-disable-next-line &hellip; -- reason */}</code>. The reason after <code>--</code> tells the next reader why the rule does not apply here. The comment covers the next line only. A comment that suppresses nothing counts as a violation and fails the pull request check.</p>
+    <p>Between JSX elements, use the block form <code>{/* eslint-disable-next-line &hellip; -- reason */}</code>. In a Vue template, use an HTML comment: <code>&lt;!-- eslint-disable-next-line &hellip; -- reason --&gt;</code>. The reason after <code>--</code> tells the next reader why the rule does not apply here. The comment covers the next line only. For a <code>class</code> attribute over several lines in Vue, wrap the element in <code>eslint-disable</code> and <code>eslint-enable</code> comments. A comment that suppresses nothing counts as a violation and fails the pull request check.</p>
     <p>If the project runs its own ESLint, add <code>recommended()</code> to its config (see Settings). Otherwise that ESLint reports the disable comment as an unknown rule.</p>
 
     <h2>Visual review</h2>
