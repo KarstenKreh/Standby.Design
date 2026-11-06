@@ -34,9 +34,9 @@ export default {
   },
   create(context) {
     const allowedColors = context.options[0]?.allowedColors ?? [];
-    return createClassVisitor(context, ({ node, token, utility }) => {
+    return createClassVisitor(context, ({ node, loc, token, utility }) => {
       const kind = classify(utility, allowedColors);
-      if (kind) context.report({ node, messageId: kind, data: { token } });
+      if (kind) context.report({ node, loc, messageId: kind, data: { token } });
     });
   },
 };

@@ -25,9 +25,9 @@ export default {
     const componentPaths = context.options[0]?.componentPaths ?? DEFAULT_COMPONENT_PATHS;
     const filename = normalizePath(context.filename);
     if (componentPaths.some((path) => filename.includes(path))) return {};
-    return createClassVisitor(context, ({ node, token, variants }) => {
+    return createClassVisitor(context, ({ node, loc, token, variants }) => {
       if (variants.some((variant) => STATE_VARIANT.test(variant))) {
-        context.report({ node, messageId: 'stateInView', data: { token, paths: componentPaths.join(', ') } });
+        context.report({ node, loc, messageId: 'stateInView', data: { token, paths: componentPaths.join(', ') } });
       }
     });
   },

@@ -6,9 +6,9 @@ standby-design-lint checks code against the [design rules of standby.design](htt
 
 The messages, the help text and the `init` report are in German. Each message ends with the German rule title and the link to the rule page.
 
-It needs Node 20.19 or newer and a `package.json` in the project root. It reads `.js`, `.jsx`, `.ts`, `.tsx` and `.mjs` files.
+It needs Node 20.19 or newer and a `package.json` in the project root. It reads `.js`, `.jsx`, `.ts`, `.tsx`, `.mjs` and `.vue` files, see [Vue](#vue).
 
-The package has no dependencies of its own. The ESLint path needs `eslint`, `@typescript-eslint/parser` and `typescript` in the project, and `init` installs the ones that are missing. Projects with Biome load the rules as Biome plugins and need nothing else, see [Biome](#biome).
+The package has no dependencies of its own. The ESLint path needs `eslint`, `@typescript-eslint/parser` and `typescript` in the project, and Vue projects also `vue-eslint-parser`. `init` installs the ones that are missing. Projects with Biome load the rules as Biome plugins and need nothing else, see [Biome](#biome).
 
 The lint, the hook and `init` send no code or project data anywhere. The only network access of `init` is the package download from npm. The review opens the URL you pass in a local browser. The CI check runs on your CI runner.
 
@@ -23,7 +23,7 @@ npx standby-design-lint@latest init
 The command installs the package as a dev dependency with a fixed version, together with the ESLint packages the project does not have yet. In a pnpm workspace it installs into the workspace root. Then it sets up the following:
 
 - A Claude Code hook in `.claude/settings.json`.
-- A pre-commit hook that warns and never blocks.
+- A pre-commit hook that warns and never blocks, not even on a branch where the package is not installed.
 - A `prepare` script in `package.json`, so every `npm install` sets up the pre-commit hook. Teammates get it without running `init`.
 - A CI workflow `.github/workflows/design-lint.yml` that fails a pull request with new violations.
 - The skill `design-review` in `.claude/skills/design-review/`.
@@ -36,7 +36,8 @@ Run the same command again to update everything to the latest version. It never 
 ### What init does in special cases
 
 - `init` uses the package manager of the project (npm, pnpm, yarn or bun). `--no-install` skips the install.
-- The pre-commit hook goes into `.husky/pre-commit` if the project uses husky. Otherwise it goes into the Git hooks folder. Without a Git repository, `init` skips it.
+- `init` adds `vue-eslint-parser` if `package.json` declares `vue` or `nuxt`, or if Git tracks `.vue` files.
+- The pre-commit hook goes into `.husky/pre-commit` if the project uses husky. Otherwise it goes into the Git hooks folder. Without a Git repository, `init` skips it. Git worktrees share this folder, so `init` in one worktree sets the hook for all of them. Worktrees without the package skip the check.
 - The Git hooks folder is not part of the repository. That is why `init` adds `standby-design-lint hooks || exit 0` as `prepare` script, which npm, pnpm, yarn and bun run after each install. An existing `prepare` script stays and runs first. If the package is missing, for example in a production install without dev dependencies, the install still succeeds. With husky, `init` adds no `prepare` script, because `.husky/` is already in the repository.
 - The pre-commit line goes before a closing `exit` line of the hook file, so it runs.
 - The CI workflow is only created if the project has a `.github` folder. It uses the package manager of the project (`npm ci`, `pnpm install --frozen-lockfile`, `yarn install --immutable` or `bun install --frozen-lockfile`). If GitHub rejects the push because of the workflow file, run `gh auth refresh -s workflow`.
@@ -53,7 +54,7 @@ The same server returns the rule texts through the tool `get_design_rules`, filt
 | Stage | When | What happens |
 |---|---|---|
 | Claude Code hook | after each edit or write | Lints the changed lines and reports back to the agent (exit code 2). The agent fixes them in the same session. |
-| Pre-commit | before each commit | Lints the staged lines and warns (`--warn`). The commit goes through. |
+| Pre-commit | before each commit | Lints the staged lines and warns (`--warn`). The commit goes through, also if the package is missing or the lint fails. |
 | CI | on each pull request | Lints the lines added since the target branch. New violations fail the pull request. |
 | Review skill | once per finished screen | Screenshots, text style count and a fresh review subagent. At most two rounds of fixes. |
 
@@ -82,6 +83,22 @@ The linked rule pages are in German. The link text is a short English descriptio
 
 Classes are detected in the attributes `className`, `class`, `tw` and every attribute that ends in `ClassName` (for example `contentContainerClassName` in React Native), in templates tagged with `tw`, and in the helpers `cn()`, `clsx()`, `classnames()`, `classNames()`, `cva()`, `cx()`, `twMerge()`, `twJoin()` and `tv()`. A class with the variant `web:` is never reported: in NativeWind it is web-only on purpose. A German list of which features of each design rule the lint can check is in [INVENTORY.md](https://github.com/KarstenKreh/Standby.Design/blob/master/packages/design-lint/INVENTORY.md).
 
+## Vue
+
+In `.vue` files, the lint checks the template, the `<script>` blocks and the `<style>` blocks. Each message points to the line in the `.vue` file, also inside a `class` attribute that spans several lines.
+
+| Rule | In the template or `<style>` |
+|---|---|
+| `no-raw-values`, `no-state-classes-in-views`, `no-opacity-on-semantic-colors`, `no-space-utilities`, `no-transition-all` | `class`, `:class` as string, object, array, ternary or template string, and attributes that end in `-class` or `Class`, such as `active-class` or `:content-class` |
+| `no-inline-style` | `style="color: red"`, fixed values in `:style="{ padding: 16 }"`, also inside an array or ternary |
+| `no-transition-all` | `transition: all` and `transition-property: all` in `<style>` and in `style` |
+| `no-disabled-by-validity` | `:disabled="!isValid"` |
+| `no-click-on-non-interactive` | `<div @click="go">`, with or without modifiers. `<div @click.stop>` without a handler is fine: it only stops the event. |
+
+In an object in `:class`, the keys are the classes, the values are conditions. The lint checks only the keys. Only the classes in `:class="classes"` itself are out of reach, because the variable holds them. In `<script>`, the same applies as in other script files: classes count inside `cn()` and the other helpers. `@apply` in `<style>` is not checked.
+
+`<script lang="ts">` and TypeScript in the template work. `pug` templates are skipped.
+
 ## Exceptions
 
 If a hit is intended, write a disable comment with the reason on the line before. The reason follows `--`.
@@ -98,9 +115,18 @@ Inside JSX, use a block comment:
 <div className="bg-[#ff0000]">logo</div>
 ```
 
-The comment covers the next line only. ESLint reports a disable comment that suppresses nothing. This report counts as a violation, so the CI check fails until you remove the comment.
+In a Vue template, use an HTML comment, and in `<style>` a CSS comment:
 
-If the project runs its own ESLint, add `recommended()` to its config (see Manual setup). Otherwise that ESLint reports the disable comment as an unknown rule.
+```vue
+<!-- eslint-disable-next-line standby/no-raw-values -- brand color from the logo guideline -->
+<div class="bg-[#ff0000]">logo</div>
+```
+
+The comment covers the next line only. For a `class` attribute over several lines, wrap the element in `<!-- eslint-disable standby/… -- reason -->` and `<!-- eslint-enable standby/… -->`. ESLint reports a disable comment that suppresses nothing. This report counts as a violation, so the CI check fails until you remove the comment.
+
+If the project runs its own ESLint, a `//` comment for a `standby/` rule in a script reports there as an unknown rule. Add `recommended()` to its config (see Manual setup), and `recommendedVue()` in a Vue project. These lint all existing files, not only new lines, so check first what the project's own lint then reports. Registering the plugin without the rules does not help, because ESLint then reports the comment as unused. HTML comments in Vue templates have no such conflict, `eslint-plugin-vue` ignores them.
+
+The CLI only reads its own rules. Disable comments for rules of other plugins, such as `@typescript-eslint/no-explicit-any` or `vue/no-v-html`, cost nothing here.
 
 ## Settings
 
@@ -163,6 +189,7 @@ The rules, the messages and the test cases are the same as for ESLint. Biome dif
 - `no-inline-style` reports the first fixed value of a `style` attribute, ESLint each one.
 - The settings in `standbyDesignLint` do not apply. `no-state-classes-in-views` allows states in `/components/ui/`. For another folder, give the plugin entry `includes` with `"**"` first and the folder negated, as in the example. `allowedColors` has no Biome counterpart, use an exception.
 - Run only these rules, for example in CI: `biome lint --only=plugin`. Only errors fail: `--diagnostic-level=error`.
+- The plugins read JSX and helpers like `cn()`. In a `.vue` file, Biome only shows them the `<script>` block, not the template. Vue projects use the ESLint path, see [Vue](#vue).
 
 An exception goes on the line before, with a reason:
 
@@ -192,10 +219,10 @@ The `.grit` files are generated from the ESLint rules (`npm run build:biome` in 
 }
 ```
 
-**Pre-commit**, for example with `husky` or `simple-git-hooks`. `--warn` reports violations but lets the commit through:
+**Pre-commit**, for example with `husky` or `simple-git-hooks`. `--warn` reports violations but lets the commit through. The check at the start and `|| true` at the end keep the commit going when the package is missing or the lint fails:
 
 ```sh
-npx --no-install standby-design-lint --staged --warn
+[ ! -e node_modules/.bin/standby-design-lint ] || npx --no-install standby-design-lint --staged --warn || true
 ```
 
 **CI**, in the pull request. The command checks the lines added since the base branch:
@@ -231,7 +258,12 @@ import { recommended } from 'standby-design-lint';
 export default [recommended({ componentPaths: ['/components/ui/'] })];
 ```
 
-`recommended()` takes `componentPaths`, `allowedColors` and `files`.
+`recommended()` takes `componentPaths`, `allowedColors` and `files`. For `.vue` files, add `recommendedVue()`, which takes the same options and needs `vue-eslint-parser`:
+
+```js
+import { recommended, recommendedVue } from 'standby-design-lint';
+export default [recommended(), recommendedVue()];
+```
 
 ## Review of a screen
 

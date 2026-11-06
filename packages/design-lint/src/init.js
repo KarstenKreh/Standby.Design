@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 const PACKAGE = 'standby-design-lint';
 const PACKAGE_ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const HOOK_COMMAND = `npx --no-install ${PACKAGE} --hook`;
-const PRE_COMMIT_LINE = `npx --no-install ${PACKAGE} --staged --warn`;
+const PRE_COMMIT_LINE = `[ ! -e node_modules/.bin/${PACKAGE} ] || npx --no-install ${PACKAGE} --staged --warn || true`;
 const PREPARE_COMMAND = `${PACKAGE} hooks || exit 0`;
 const BLOCK_START = '<!-- standby-design-lint:start -->';
 const BLOCK_END = '<!-- standby-design-lint:end -->';
@@ -14,7 +14,7 @@ const AGENT_BLOCK = `${BLOCK_START}
 ## Design-Regeln (standby.design)
 
 - Farben, Abstände, Radien und Schriftgrößen kommen nur aus den Design-Tokens des Projekts. Text bekommt eine Rolle (\`text-role-*\`), keine einzelne Größe.
-- Die Regeln liefert das MCP-Tool \`get_design_rules\` von standby-design-mcp, gefiltert nach Kategorie. Meldungen von \`${PACKAGE}\` sofort beheben. Ist ein Treffer gewollt, die Ausnahme mit \`eslint-disable-next-line\` und Begründung an die Stelle schreiben.
+- Die Regeln liefert das MCP-Tool \`get_design_rules\` von standby-design-mcp, gefiltert nach Kategorie. Meldungen von \`${PACKAGE}\` sofort beheben. Ist ein Treffer gewollt, die Ausnahme mit \`eslint-disable-next-line\` und Begründung an die Stelle schreiben, in Vue-Templates als \`<!-- eslint-disable-next-line standby/… -- Grund -->\`.
 - Bevor ein Screen als fertig gilt, den Skill \`design-review\` ausführen.
 ${BLOCK_END}`;
 
@@ -40,6 +40,8 @@ function writeIfChanged(file, content) {
 }
 
 export const ESLINT_PACKAGES = ['eslint', '@typescript-eslint/parser', 'typescript'];
+export const VUE_PARSER = 'vue-eslint-parser';
+const VUE_FRAMEWORKS = ['vue', 'nuxt'];
 
 function packageManager(root) {
   if (existsSync(path.join(root, 'pnpm-lock.yaml')) || existsSync(path.join(root, 'pnpm-workspace.yaml'))) return 'pnpm';
@@ -55,14 +57,31 @@ function addArgs(manager, root) {
   return ['install', '-D', '-E'];
 }
 
-function hasPackage(root, name) {
+function declaresPackage(root, name) {
   const manifest = readJson(path.join(root, 'package.json'), {});
-  return Boolean(manifest.devDependencies?.[name] ?? manifest.dependencies?.[name]) || existsSync(path.join(root, 'node_modules', name, 'package.json'));
+  return Boolean(manifest.devDependencies?.[name] ?? manifest.dependencies?.[name]);
+}
+
+function hasPackage(root, name) {
+  return declaresPackage(root, name) || existsSync(path.join(root, 'node_modules', name, 'package.json'));
+}
+
+function tracksVueFiles(root) {
+  try {
+    return execFileSync('git', ['ls-files', '*.vue'], { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'], maxBuffer: 64 * 1024 * 1024 }).trim() !== '';
+  } catch {
+    return false;
+  }
+}
+
+export function usesVue(root) {
+  return VUE_FRAMEWORKS.some((name) => declaresPackage(root, name)) || tracksVueFiles(root);
 }
 
 export function installCommand(root) {
   const manager = packageManager(root);
   const missing = ESLINT_PACKAGES.filter((name) => !hasPackage(root, name));
+  if (usesVue(root) && !declaresPackage(root, VUE_PARSER)) missing.push(VUE_PARSER);
   return [manager, [...addArgs(manager, root), PACKAGE, ...missing]];
 }
 

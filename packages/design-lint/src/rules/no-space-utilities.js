@@ -16,11 +16,11 @@ export default {
     },
   },
   create(context) {
-    return createClassVisitor(context, ({ node, token, variants, utility }) => {
+    return createClassVisitor(context, ({ node, loc, token, variants, utility }) => {
       if (SPACE.test(utility)) {
-        context.report({ node, messageId: 'space', data: { token } });
+        context.report({ node, loc, messageId: 'space', data: { token } });
       } else if (MARGIN_RESET.test(utility) && variants.some((variant) => EDGE_VARIANT.test(variant))) {
-        context.report({ node, messageId: 'marginReset', data: { token } });
+        context.report({ node, loc, messageId: 'marginReset', data: { token } });
       }
     });
   },
