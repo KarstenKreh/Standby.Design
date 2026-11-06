@@ -8,7 +8,7 @@ import { Copy } from 'lucide-react';
 import { toast } from 'sonner';
 import { usePalette } from '@/hooks/use-palette';
 import { useThemeStore } from '@/store/theme-store';
-import { colorPrimitivesExport, colorSemanticExport, colorLlmBriefing } from '@core/color-code-export';
+import { colorPrimitivesExport, colorSemanticExport, colorThemeInlineExport, colorLlmBriefing } from '@core/color-code-export';
 import { systemUrlForHash, toolBriefing, withShareLink } from '@core/share-link';
 import { useCurrentHash } from '@core/use-hash';
 import { CodeBlock } from '@core/code-block';
@@ -22,21 +22,24 @@ export function CodeExport() {
 
   const [copyFormat, setCopyFormat] = useState<'oklch' | 'hex'>('oklch');
   const [copySemantic, setCopySemantic] = useState(true);
+  const [copyTailwind, setCopyTailwind] = useState(false);
   const [copyLlm, setCopyLlm] = useState(true);
 
   const oklchCode = useMemo(() => withShareLink('css', shareUrl, colorPrimitivesExport(store, palettes, 'oklch')), [store, palettes, shareUrl]);
   const hexCode = useMemo(() => withShareLink('css', shareUrl, colorPrimitivesExport(store, palettes, 'hex')), [store, palettes, shareUrl]);
   const semanticCode = useMemo(() => withShareLink('css', shareUrl, colorSemanticExport(store, palettes)), [store, palettes, shareUrl]);
+  const tailwindCode = useMemo(() => colorThemeInlineExport(store, palettes), [store, palettes]);
   const llmCode = useMemo(() => toolBriefing(hash, colorLlmBriefing(store, palettes)), [store, palettes, hash]);
 
   const handleCopyAll = useCallback(() => {
     const parts: string[] = [];
     parts.push(copyFormat === 'oklch' ? oklchCode : hexCode);
     if (copySemantic) parts.push(semanticCode);
+    if (copyTailwind) parts.push(tailwindCode);
     if (copyLlm) parts.push(llmCode);
     const combined = parts.join('\n\n');
     navigator.clipboard.writeText(combined).then(() => toast('All selected sections copied!'));
-  }, [copyFormat, copySemantic, copyLlm, oklchCode, hexCode, semanticCode, llmCode]);
+  }, [copyFormat, copySemantic, copyTailwind, copyLlm, oklchCode, hexCode, semanticCode, tailwindCode, llmCode]);
 
   return (
     <div>
@@ -86,6 +89,10 @@ export function CodeExport() {
                   <span className="text-caption">Semantic Tokens</span>
                 </label>
                 <label className="flex items-center gap-2 cursor-pointer">
+                  <Checkbox checked={copyTailwind} onCheckedChange={(v) => setCopyTailwind(!!v)} />
+                  <span className="text-caption">Tailwind v4 Utilities</span>
+                </label>
+                <label className="flex items-center gap-2 cursor-pointer">
                   <Checkbox checked={copyLlm} onCheckedChange={(v) => setCopyLlm(!!v)} />
                   <span className="text-caption">LLM Instructions</span>
                 </label>
@@ -104,6 +111,7 @@ export function CodeExport() {
           <TabsTrigger value="oklch">Primitives OKLCH</TabsTrigger>
           <TabsTrigger value="hex">Primitives Hex</TabsTrigger>
           <TabsTrigger value="semantic">Semantic</TabsTrigger>
+          <TabsTrigger value="tailwind">Tailwind v4</TabsTrigger>
           <TabsTrigger value="llm">LLM Briefing</TabsTrigger>
         </TabsList>
         <TabsContent value="oklch">
@@ -120,6 +128,15 @@ export function CodeExport() {
             </span>
           </div>
           <CodeBlock code={semanticCode} mode="css" />
+        </TabsContent>
+        <TabsContent value="tailwind">
+          <div className="flex items-center gap-2 mb-3">
+            <Badge variant="secondary">Tailwind v4</Badge>
+            <span className="text-caption text-muted-foreground">
+              Turns the semantic tokens into utilities like bg-primary — paste after the semantic block
+            </span>
+          </div>
+          <CodeBlock code={tailwindCode} mode="css" />
         </TabsContent>
         <TabsContent value="llm">
           <div className="flex items-center gap-2 mb-3">

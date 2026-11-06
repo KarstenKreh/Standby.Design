@@ -21,9 +21,9 @@ tags:
 
 ## Warum
 
-Ohne Text liest der Screenreader den Dateinamen vor oder gar nichts. Mit Text bei einem Schmuckbild hört der Nutzer Rauschen.
+Ohne Text liest der Screenreader den Dateinamen vor oder gar nichts. Hat ein Schmuckbild einen Text, hört der Nutzer etwas, das ihm nichts sagt.
 
-Ein leeres `alt=""` ist dabei kein Versehen, sondern der Standard in HTML: Es sagt dem Screenreader „überspringen“. Fehlt das `alt` ganz, liest er stattdessen den Dateinamen vor. Schmuck ist ein Bild ohne Information, etwa ein Hintergrundmuster oder eine Deko-Illustration.
+Ein leeres `alt=""` ist dabei Absicht und in HTML der Standard. Es sagt dem Screenreader „überspringen“. Fehlt das `alt` ganz, liest er stattdessen den Dateinamen vor. Schmuck ist ein Bild ohne Information, etwa ein Hintergrundmuster oder eine Deko-Illustration.
 
 Text in einem Bild lässt sich nicht vergrößern, nicht übersetzen, nicht kopieren und nicht vorlesen.
 

@@ -1,0 +1,12 @@
+language js
+
+or {
+  JsxOpeningElement(name=$element, attributes=$attributes),
+  JsxSelfClosingElement(name=$element, attributes=$attributes)
+} where {
+  $element <: r"(?:section|article|span|View|Text|div|img|li|td|tr|p)",
+  $attributes <: some JsxAttribute(name=$handler) as $attribute where {
+    $handler <: r"(?:onPointerDown|onMouseDown|onPointerUp|onMouseUp|onClick)"
+  },
+  register_diagnostic(span=$attribute, message=join(list=["<", $element, "> mit ", $handler, " ist für Tastatur und Screenreader kein Bedienelement. Fix: <button type='button'> oder einen Link nehmen, am besten die Button-Komponente des Projekts. Regel: „Name und Zustand stehen im Code“ https://standby.design/docs/rules/bedienung-name-und-zustand-stehen-im-code"], separator=""), severity="error")
+}

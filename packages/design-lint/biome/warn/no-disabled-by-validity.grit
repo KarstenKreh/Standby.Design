@@ -1,0 +1,9 @@
+language js
+
+JsxAttribute(name=r"disabled", initializer=JsxAttributeInitializerClause(value=JsxExpressionAttributeValue() as $value)) where {
+  $value <: contains or { JsReferenceIdentifier(), JsName() } as $name where {
+    $name <: r"(?i)(?s).*(?:valid|dirty|accept|agree|consent|complete|filled|empty|ready|canSubmit|canSave|hasChanges|touched).*",
+    $name <: not r"(?i)(?s).*(?:pending|submitting|loading|saving|busy|fetching|mutating).*"
+  },
+  register_diagnostic(span=$value, message=join(list=["disabled hängt an „", $name, "“. Ein Button wird nicht gesperrt, weil etwas fehlt. Fix: aktiv lassen und beim Klick am Feld zeigen, was fehlt. Gesperrt nur, solange die Anfrage läuft (z. B. disabled={isPending}). Regel: „Ein Button ist nie gesperrt“ https://standby.design/docs/rules/bedienung-ein-button-ist-nie-gesperrt"], separator=""), severity="warn")
+}

@@ -20,9 +20,9 @@ tags:
 
 ## Warum
 
-Gewicht ist ein Budget. Jeder laute Button macht den wichtigen leiser, und eine Ansicht mit drei gefüllten Buttons sagt dem Nutzer nicht mehr, wo es weitergeht.
+Gewicht ist ein Budget. Jeder laute Button macht den wichtigen leiser. Stehen drei gefüllte Buttons in einer Ansicht, erkennt der Nutzer nicht mehr, wo es weitergeht.
 
-Eine Beschriftung wie „Keine Änderungen“ macht aus dem Knopf eine Anzeige. Der Nutzer kann nicht vorhersagen, was ein Klick auslöst. Wechselt die Beschriftung mit dem Zustand, springt außerdem die Breite des Knopfes.
+Mit einer Beschriftung wie „Keine Änderungen“ zeigt der Knopf einen Zustand an. Der Nutzer kann nicht vorhersagen, was ein Klick auslöst. Wechselt die Beschriftung mit dem Zustand, springt außerdem die Breite des Knopfes.
 
 „Speichern“ allein reicht, solange die Seite nur einen Gegenstand hat. Gibt es mehrere, nennt der Knopf seinen: „Fehlzeiten speichern“. Eine Menge darf dabei stehen, weil sie den Umfang der Handlung beschreibt: „3 Monate speichern“.
 

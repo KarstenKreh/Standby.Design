@@ -1,5 +1,5 @@
 import type { DesignSystem } from './design-system';
-import { colorCssExport, colorLlmBriefing } from './color-code-export';
+import { colorCssExport, colorLlmBriefing, colorTailwindExport } from './color-code-export';
 import {
   generateCssExport as generateTypeCss,
   generateTailwindV4Export as generateTypeTailwind,
@@ -40,7 +40,7 @@ function sectionExports(system: DesignSystem): Record<SystemSection, SectionExpo
   const colorCss = () => colorCssExport(system.color, system.palettes);
 
   return {
-    color: { css: colorCss, tailwind: colorCss, briefing: () => colorLlmBriefing(system.color, system.palettes), tokens: () => ({}) },
+    color: { css: colorCss, tailwind: () => colorTailwindExport(system.color, system.palettes), briefing: () => colorLlmBriefing(system.color, system.palettes), tokens: () => ({}) },
     type: {
       css: () => generateTypeCss(typeOpts),
       tailwind: () => generateTypeTailwind(typeOpts),

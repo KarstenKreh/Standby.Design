@@ -22,7 +22,7 @@ tags:
 
 ## Warum
 
-„1.250“ heißt in Deutschland tausendzweihundertfünfzig und in den USA eins Komma zwei fünf. „03/04/2026“ ist der 3. April oder der 4. März. Eine falsch gelesene Zahl fällt nicht als Fehler auf. Sie wird geglaubt.
+„1.250“ heißt in Deutschland tausendzweihundertfünfzig und in den USA eins Komma zwei fünf. „03/04/2026“ ist der 3. April oder der 4. März. Eine falsch gelesene Zahl fällt nicht als Fehler auf. Der Nutzer hält sie für richtig.
 
 Die Zeichen dafür sind für jeden Sprachraum gepflegt: Dezimalzeichen, Tausendertrennung, Stellung des Währungszeichens, Reihenfolge im Datum, 12 oder 24 Stunden. Die Quelle ist Unicode CLDR. `Intl` im Browser, ICU, Android und iOS lesen daraus. Ein selbst gebautes Muster kennt nur die Sprachräume, an die sein Autor gedacht hat. Beispiele für die Zahl 1234567,5, den Betrag 1234,50 € und den 19. Oktober 2026:
 
@@ -34,7 +34,7 @@ Die Zeichen dafür sind für jeden Sprachraum gepflegt: Dezimalzeichen, Tausende
 | fr-FR | 1 234 567,5 | 1 234,50 € | 19/10/2026 |
 | en-IN | 12,34,567.5 | €1,234.50 | 19/10/2026 |
 
-Die Tabelle ist kein Nachschlagewerk. Das ist CLDR.
+Die Tabelle zeigt nur Beispiele. Nachschlagen musst Du in CLDR.
 
 ## Was CLDR offen lässt
 

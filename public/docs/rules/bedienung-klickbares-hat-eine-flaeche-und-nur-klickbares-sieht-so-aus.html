@@ -155,14 +155,28 @@
     .rule-meta dt { color: var(--muted-foreground); }
     .rule-meta dd { color: var(--foreground); }
     .agent-hint { font-size: 0.875rem; }
+    .site-footer {
+      margin-top: 4rem;
+      font-size: var(--text-caption);
+      color: var(--muted-foreground);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    .site-footer .pirate-line {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 0.25rem 0 1.75rem;
+      font-size: 0.875rem;
+    }
+    .site-footer svg { width: 1.8em; height: 1.8em; }
     .legal-links {
       display: flex;
       justify-content: center;
       flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-top: 3.5rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid var(--border);
+      gap: 0.25rem;
     }
     .legal-links a {
       padding: 0.6rem 1rem;
@@ -186,10 +200,10 @@
 <aside class="callout callout-tip"><p class="callout-title">Regel</p><p>Alles, was man anklicken kann, ist ein Button, mindestens in der stillsten Variante (<code>ghost</code>), für Navigation als Button um einen Link herum. Nackte Textlinks sind nicht erlaubt, auch nicht in Fußzeilen. Umgekehrt bekommt nichts das Aussehen eines Bedienelements, das keine Handlung hat.</p>
 </aside>
 <h2>Warum</h2>
-<p>Ein nackter Textlink ist auf dem Handy kaum zu treffen. Die Zeilenhöhe von Text ist keine Trefferfläche, und der Daumen ist kein Mauszeiger. Die Höhe eines Buttons in Standardgröße ist genau dafür da: sie ist die Fläche, die ein Finger sicher trifft.</p>
-<p>Der zweite Grund ist Erkennbarkeit. Eine Fläche sagt „hier kannst Du drücken&quot;, bevor der Nutzer den Text gelesen hat. Ein Textlink sagt es erst danach, und in einer Fußzeile voller Text gar nicht.</p>
-<p>Der Wunsch hinter dem Textlink ist meistens „das soll unauffällig sein&quot;. Das ist ein berechtigter Wunsch, aber die Antwort darauf ist Schriftfarbe und Schriftgröße, nicht eine kleinere Fläche. Dezent heißt leise, nicht schwer zu treffen.</p>
-<p>Ein toter Klick lässt den Nutzer zweifeln, ob die Seite kaputt ist. Danach traut er auch den echten Knöpfen weniger.</p>
+<p>Ein nackter Textlink ist auf dem Handy kaum zu treffen. Die Zeilenhöhe von Text ist als Trefferfläche zu klein, und ein Daumen trifft ungenauer als ein Mauszeiger. Ein Button in Standardgröße ist genau so hoch, dass ein Finger ihn sicher trifft.</p>
+<p>Der zweite Grund ist Erkennbarkeit. Eine Fläche zeigt, dass man hier drücken kann, bevor der Nutzer den Text gelesen hat. Ein Textlink zeigt es erst danach, in einer Fußzeile voller Text gar nicht.</p>
+<p>Der Wunsch hinter dem Textlink ist meistens „das soll unauffällig sein&quot;. Der Wunsch ist berechtigt. Unauffällig wird ein Element über Schriftfarbe und Schriftgröße, die Fläche bleibt gleich groß. Ein dezentes Element ist leise, aber genauso leicht zu treffen.</p>
+<p>Klickt der Nutzer auf etwas, das nichts tut, fragt er sich, ob die Seite kaputt ist. Danach traut er auch den echten Knöpfen weniger.</p>
 <h2>Hart und weich</h2>
 <div class="table-wrap"><table>
 <thead>
@@ -249,7 +263,7 @@
   volle Trefferfläche
 </code></pre>
 <h2>Grenzen</h2>
-<p>Die einzige Ausnahme ist ein Wort oder eine Wortgruppe <strong>mitten im Fließtext</strong>, etwa ein Verweis innerhalb eines Absatzes in den Rechtstexten. Dort wäre eine Fläche der Fremdkörper. Sobald der Link auf einer eigenen Zeile steht, gilt die Regel wieder.</p>
+<p>Die einzige Ausnahme ist ein Wort oder eine Wortgruppe <strong>mitten im Fließtext</strong>, etwa ein Verweis innerhalb eines Absatzes in den Rechtstexten. Dort passt eine Fläche nicht in den Text. Sobald der Link auf einer eigenen Zeile steht, gilt die Regel wieder.</p>
 <h2>Quelle</h2>
 <p>Vercel AGENTS.md › Touch &amp; Drag („If it looks clickable, it must be clickable&quot;). Vercel Guidelines › Interactions („No dead zones&quot;).</p>
 <h2>Verwandt</h2>
@@ -261,14 +275,20 @@
 </ul>
 
 
-    <nav class="legal-links">
-      <a href="/">Home</a>
-      <a href="/docs/mcp">MCP Server</a>
-      <a href="/docs/rules">Design Rules</a>
-      <a href="/docs/research">Research</a>
-      <a href="/impressum.html">Impressum</a>
-      <a href="/datenschutz.html">Datenschutz</a>
-    </nav>
+    <footer class="site-footer">
+      <div class="pirate-line">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8.2 12.1c-.3.2-.5.6-.4.9c0 .7.7 1.2 1.3 1.2s1.2-.5 1.2-1.2q-.9-.6-2.1-.9M22 11l1-4s-2 0-5-2s-3-4-6-4s-3 2-6 4s-5 2-5 2l1 4h.1c-.1.3-.1.7-.1 1c0 3.5 1.8 6.6 4.5 8.4l-.5.9c6.4 4.1 12 0 12 0l-.5-.9c2.7-1.8 4.5-4.9 4.5-8.4zM11.3 4.5L9.9 3.1l.7-.7L12 3.8l1.4-1.4l.7.7l-1.4 1.4l1.4 1.4l-.7.7L12 5.2l-1.4 1.4l-.7-.7zm-2 4c1-.3 2-.5 2.7-.5c2.2 0 5.9 1.6 7.8 2.4c.1.3.1.6.1.9zm4.3 10.6c-.7.4-1.4.7-2.2.8c-.5-.4-.5-1.2 0-1.6c.4-.4 1.3-.6 1.8-.1c.3.1.4.6.4.9m6.4-5.7c-.5 2.1-1.8 4-3.5 5.2L15 16H9l-1.5 2.6C5.4 17.2 4 14.8 4 12c0-.5.1-1 .2-1.5c.5-.2 1.1-.5 1.8-.8l7.1 1.9V14c0 .5.4 1 1 1h2c.5 0 1-.4 1-1v-1.4z"/></svg>
+        No copyright — take what you need, make it yours.
+      </div>
+      <nav class="legal-links">
+        <a href="/docs/mcp">MCP Server</a>
+        <a href="/docs/rules">Design Rules</a>
+        <a href="/docs/lint">Design Lint</a>
+        <a href="/docs/research">Research</a>
+        <a href="/impressum.html">Imprint</a>
+        <a href="/privacy.html">Privacy</a>
+      </nav>
+    </footer>
   </main>
 </body>
 </html>

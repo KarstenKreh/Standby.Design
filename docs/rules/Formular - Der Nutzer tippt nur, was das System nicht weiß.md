@@ -20,11 +20,11 @@ tags:
 
 ## Warum
 
-Jedes Feld kostet den Nutzer Zeit und ist eine Fehlerquelle. Was das System selbst weiß, muss es selbst tragen.
+Jedes Feld kostet den Nutzer Zeit und ist eine Fehlerquelle. Was das System selbst weiß, füllt es selbst aus.
 
 Browser, Passwortmanager und Handytastatur helfen nur, wenn sie den Zweck kennen.
 
-Dazu gehört das Gegenteil: Wo die Hilfe stört, bleibt sie aus. Bei E-Mail, Codes und Nutzernamen ist die Rechtschreibprüfung aus, und Felder ohne Anmeldung, etwa die Suche, rufen keinen Passwortmanager auf. Einmalcodes tragen `autocomplete="one-time-code"`, dann bietet das Handy den Code aus der SMS an.
+Umgekehrt bleibt die Hilfe aus, wo sie stört. Bei E-Mail, Codes und Nutzernamen ist die Rechtschreibprüfung aus, und Felder ohne Anmeldung, etwa die Suche, rufen keinen Passwortmanager auf. Einmalcodes tragen `autocomplete="one-time-code"`, dann bietet das Handy den Code aus der SMS an.
 
 ## Hart und weich
 

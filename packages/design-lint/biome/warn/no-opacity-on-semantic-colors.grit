@@ -1,0 +1,25 @@
+language js
+
+or { JsxString(), JsStringLiteralExpression(), JsTemplateChunkElement() } as $class where {
+  $class <: r"(?s).*(?:/).*",
+  $class <: within or {
+    JsxAttribute(name=r"(?:className|class|tw|[A-Za-z]+ClassName)"),
+    JsCallExpression(callee=r"(?:.*\.)?(?:classnames|classNames|twMerge|twJoin|clsx|cva|cn|cx|tv)"),
+    JsTemplateExpression(tag=r"(?:.*\.)?tw")
+  },
+  $parts = split($class, " "),
+  $parts <: some $part where {
+    $part <: r"[\s\"'`]*((?:\[[^\]]*\]|\([^)]*\)|[^\s\"'`\[(])+)[\s\"'`]*"($token),
+    $token <: r"((?:(?:\[[^\]]*\]|\([^)]*\)|[^:\[(])*:)*)!?((?:\[[^\]]*\]|\([^)]*\)|[^:\[(!])+)!?"($variants, $utility),
+    $variants <: not r"(?:(?:\[[^\]]*\]|\([^)]*\)|[^:\[(])*:)*(?:web):(?:(?:\[[^\]]*\]|\([^)]*\)|[^:\[(])*:)*",
+    or {
+      and {
+        $utility <: r"-?(?:inset-shadow|ring-offset|placeholder|decoration|inset-ring|border-x|border-y|border-t|border-r|border-b|border-l|border-s|border-e|outline|border|stroke|divide|shadow|accent|caret|text|ring|fill|from|via|bg|to)-([^/\[(][^/]*)/(.+)"($value, $alpha),
+        $value <: not r"\d.*",
+        $value <: not r"(?:origin-padding|origin-content|blend-multiply|origin-border|transparent|clip-text|no-repeat|ellipsis|inherit|current|justify|balance|contain|center|nowrap|pretty|dashed|dotted|double|hidden|offset|scroll|repeat|inner|right|start|solid|inset|fixed|local|cover|base|none|auto|left|wrap|clip|2xl|3xl|4xl|5xl|6xl|7xl|8xl|9xl|end|xs|sm|md|lg|xl|x|y|t|r|b|l|s|e)",
+        $message = join(list=["„", $token, "“ erfindet mit „/", $alpha, "“ eine neue Farbe. Fix: die benannte Stufe nehmen (z. B. bg-primary-subtle, hover:bg-primary-hover). Soll ein ganzes Element ausblenden, opacity-* nutzen. Regel: „Keine Deckkraft-Modifier auf semantischen Farben“ https://standby.design/docs/rules/stack-keine-deckkraft-modifier-auf-semantischen-farben"], separator="")
+      }
+    }
+  },
+  register_diagnostic(span=$class, message=$message, severity="warn")
+}

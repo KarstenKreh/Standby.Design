@@ -41,12 +41,8 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://standby.design/docs/research</loc>
+    <loc>https://standby.design/docs/lint</loc>
     <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://standby.design/docs/research/bewegung-wahrnehmung</loc>
-    <priority>0.6</priority>
   </url>
   <url>
     <loc>https://standby.design/docs/rules</loc>
@@ -245,7 +241,7 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://standby.design/docs/rules/layout-erst-abstand-dann-flaeche-dann-linie</loc>
+    <loc>https://standby.design/docs/rules/layout-erst-abstand-dann-flaeche-oder-linie</loc>
     <priority>0.6</priority>
   </url>
   <url>
@@ -293,6 +289,10 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://standby.design/docs/rules/typografie-jeder-textstil-hat-eine-rolle</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://standby.design/docs/rules/typografie-zahlenspalten-stehen-rechtsbuendig</loc>
     <priority>0.6</priority>
   </url>
@@ -302,6 +302,14 @@
   </url>
   <url>
     <loc>https://standby.design/docs/rules/zustand-rot-ist-nicht-ein-rot</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://standby.design/docs/research</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://standby.design/docs/research/bewegung-wahrnehmung</loc>
     <priority>0.6</priority>
   </url>
 </urlset>

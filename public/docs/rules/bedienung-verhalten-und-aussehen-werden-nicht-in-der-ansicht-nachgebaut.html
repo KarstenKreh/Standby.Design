@@ -155,14 +155,28 @@
     .rule-meta dt { color: var(--muted-foreground); }
     .rule-meta dd { color: var(--foreground); }
     .agent-hint { font-size: 0.875rem; }
+    .site-footer {
+      margin-top: 4rem;
+      font-size: var(--text-caption);
+      color: var(--muted-foreground);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    .site-footer .pirate-line {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 0.25rem 0 1.75rem;
+      font-size: 0.875rem;
+    }
+    .site-footer svg { width: 1.8em; height: 1.8em; }
     .legal-links {
       display: flex;
       justify-content: center;
       flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-top: 3.5rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid var(--border);
+      gap: 0.25rem;
     }
     .legal-links a {
       padding: 0.6rem 1rem;
@@ -186,10 +200,10 @@
 <aside class="callout callout-tip"><p class="callout-title">Regel</p><p>Eine Ansicht setzt vorhandene Elemente zusammen. Sie definiert weder ihr Verhalten noch ihr Aussehen neu. Wer in einer Ansicht Hover, Fokus, Fläche, Radius oder Padding von Hand schreibt, hat etwas nachgebaut, das an einer gemeinsamen Stelle schon festgelegt ist.</p>
 </aside>
 <h2>Warum</h2>
-<p>Was in der Ansicht steht, bekommt die nächste Änderung nicht mit. Es ist nicht auffindbar, weil niemand weiß, dass es existiert, und es ist nicht zählbar, weil es keinen Namen hat.</p>
-<p>In einer gewachsenen Anwendung findet man dafür schnell mehrere hundert Stellen: die Karte gibt es gar nicht als benanntes Aussehen, sondern als Hunderte handgebauter Flächen mit uneinheitlichem Radius und Padding. Jede einzelne war zum Zeitpunkt ihrer Entstehung richtig. Zusammen ergeben sie kein System mehr, sondern mehrere hundert Meinungen darüber, wie eine Karte aussieht.</p>
-<p>Beim Verhalten ist es dasselbe, nur unsichtbarer. Schreibt eine Ansicht ihren eigenen Hover, hat sie das Drücken neu gebaut — mit eigener Dauer, eigener Stufe und eigener Richtung. Ändert sich die Regel im System, ändert sich diese Stelle nicht mit, und niemand merkt es, weil sie ja aussieht wie vorher.</p>
-<p>Der Nachbau passiert selten aus Absicht. Er passiert, weil das vorhandene Aussehen eine Kleinigkeit nicht kann. Genau dann ist der richtige Schritt, dieses Aussehen zu erweitern oder ein neues zu benennen — nicht, es in der Ansicht zu umgehen. Sonst gibt es die Kleinigkeit ab jetzt zweimal.</p>
+<p>Was in der Ansicht steht, bleibt bei der nächsten Änderung, wie es war. Niemand findet es, weil niemand weiß, dass es existiert. Niemand kann es zählen, weil es keinen Namen hat.</p>
+<p>In einer gewachsenen Anwendung findet man schnell mehrere hundert solcher Stellen. Die Karte gibt es dann nicht als benanntes Aussehen, nur als Hunderte handgebauter Flächen mit uneinheitlichem Radius und Padding. Jede einzelne war richtig, als sie entstand. Zusammen ergeben sie kein System mehr. Jede Stelle legt anders fest, wie eine Karte aussieht.</p>
+<p>Beim Verhalten ist es dasselbe, nur schwerer zu sehen. Schreibt eine Ansicht ihren eigenen Hover, hat sie das Drücken neu gebaut, mit eigener Dauer, Stufe und Richtung. Ändert sich die Regel im System, ändert sich diese Stelle nicht mit. Niemand merkt es, weil sie aussieht wie vorher.</p>
+<p>Selten baut jemand absichtlich nach. Meist kann das vorhandene Aussehen eine Kleinigkeit nicht. Dann erweitert er dieses Aussehen oder benennt ein neues. Umgeht er es in der Ansicht, gibt es die Kleinigkeit ab jetzt zweimal.</p>
 <h2>Woran Du den Verstoß erkennst</h2>
 <ul>
 <li>Ein <code>Pressable</code> oder ein <code>div</code> mit <code>onClick</code> trägt in der Ansicht Fläche, Radius und Padding.</li>
@@ -213,7 +227,7 @@
 </code></pre>
 <p>Ein häufiger Name wie Button ist in Ordnung. Er ist die Abkürzung für ein bekanntes Paar aus Verhalten und Aussehen, siehe <a href="/docs/rules/bedienung-verhalten-und-aussehen-bleiben-getrennt">Verhalten und Aussehen bleiben getrennt</a>.</p>
 <h2>Grenzen</h2>
-<p>Eine Anordnung, die es genau einmal gibt — eine bestimmte Kachel, ein bestimmtes Kopfelement —, gehört in den Bereichsordner ihres Themas. Das ist kein Verstoß: sie setzt vorhandene Elemente zusammen. Sie legt kein neues Verhalten und kein neues Aussehen fest.</p>
+<p>Eine Anordnung, die es genau einmal gibt, etwa eine bestimmte Kachel oder ein bestimmtes Kopfelement, gehört in den Bereichsordner ihres Themas. Das ist kein Verstoß. Sie setzt vorhandene Elemente zusammen. Sie legt kein neues Verhalten und kein neues Aussehen fest.</p>
 <h2>Verwandt</h2>
 <ul>
 <li><a href="/docs/rules/bedienung-verhalten-und-aussehen-bleiben-getrennt">Verhalten und Aussehen bleiben getrennt</a></li>
@@ -222,14 +236,20 @@
 </ul>
 
 
-    <nav class="legal-links">
-      <a href="/">Home</a>
-      <a href="/docs/mcp">MCP Server</a>
-      <a href="/docs/rules">Design Rules</a>
-      <a href="/docs/research">Research</a>
-      <a href="/impressum.html">Impressum</a>
-      <a href="/datenschutz.html">Datenschutz</a>
-    </nav>
+    <footer class="site-footer">
+      <div class="pirate-line">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8.2 12.1c-.3.2-.5.6-.4.9c0 .7.7 1.2 1.3 1.2s1.2-.5 1.2-1.2q-.9-.6-2.1-.9M22 11l1-4s-2 0-5-2s-3-4-6-4s-3 2-6 4s-5 2-5 2l1 4h.1c-.1.3-.1.7-.1 1c0 3.5 1.8 6.6 4.5 8.4l-.5.9c6.4 4.1 12 0 12 0l-.5-.9c2.7-1.8 4.5-4.9 4.5-8.4zM11.3 4.5L9.9 3.1l.7-.7L12 3.8l1.4-1.4l.7.7l-1.4 1.4l1.4 1.4l-.7.7L12 5.2l-1.4 1.4l-.7-.7zm-2 4c1-.3 2-.5 2.7-.5c2.2 0 5.9 1.6 7.8 2.4c.1.3.1.6.1.9zm4.3 10.6c-.7.4-1.4.7-2.2.8c-.5-.4-.5-1.2 0-1.6c.4-.4 1.3-.6 1.8-.1c.3.1.4.6.4.9m6.4-5.7c-.5 2.1-1.8 4-3.5 5.2L15 16H9l-1.5 2.6C5.4 17.2 4 14.8 4 12c0-.5.1-1 .2-1.5c.5-.2 1.1-.5 1.8-.8l7.1 1.9V14c0 .5.4 1 1 1h2c.5 0 1-.4 1-1v-1.4z"/></svg>
+        No copyright — take what you need, make it yours.
+      </div>
+      <nav class="legal-links">
+        <a href="/docs/mcp">MCP Server</a>
+        <a href="/docs/rules">Design Rules</a>
+        <a href="/docs/lint">Design Lint</a>
+        <a href="/docs/research">Research</a>
+        <a href="/impressum.html">Imprint</a>
+        <a href="/privacy.html">Privacy</a>
+      </nav>
+    </footer>
   </main>
 </body>
 </html>

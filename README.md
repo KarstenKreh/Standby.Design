@@ -4,6 +4,8 @@ Multi-Tool-Hub unter **standby.design** — kleine Tools für Designer und Entwi
 
 MCP-Server für KI-Agenten: https://standby.design/docs/mcp
 
+Design-Regeln im Code prüfen: https://standby.design/docs/lint
+
 ## Struktur
 
 ```

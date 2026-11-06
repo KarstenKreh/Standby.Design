@@ -22,9 +22,9 @@ tags:
 
 Darunter kann ein Teil der Nutzer den Text nicht lesen oder das Feld nicht finden, egal wie stimmig es aussieht.
 
-Die Untergrenze gilt in jedem Zustand, nicht nur in Ruhe: auch bei Hover, Gedrückt und Fokus, und in beiden Modi. Wird ein dunkler Knopf im Hellen beim Hover heller (siehe [[Bedienung - Kurze Zustände verschieben, dauerhafte wechseln die Palette]]), darf seine Beschriftung trotzdem nicht unter 4,5:1 fallen.
+Die Untergrenze gilt in jedem Zustand, also auch bei Hover, Gedrückt und Fokus, und in beiden Modi. Wird ein dunkler Knopf im Hellen beim Hover heller (siehe [[Bedienung - Kurze Zustände verschieben, dauerhafte wechseln die Palette]]), darf seine Beschriftung trotzdem nicht unter 4,5:1 fallen.
 
-Wer schlecht sieht, stellt das System auf hohen Kontrast. Dann verschwinden Hintergrundfarben und Schatten, und was nur über sie gebaut ist, ist weg.
+Wer schlecht sieht, stellt das System auf hohen Kontrast. Dann verschwinden Hintergrundfarben und Schatten. Was nur durch sie erkennbar war, sieht er nicht mehr.
 
 ## Hart und weich
 
@@ -58,7 +58,7 @@ WCAG 1.4.3 Contrast (Minimum), 1.4.11 Non-text Contrast. Vercel › Design („M
 ## Verwandt
 
 - [[Zustand - Rot ist nicht ein Rot]]
-- [[Layout - Erst Abstand, dann Fläche, dann Linie]]
+- [[Layout - Erst Abstand, dann Fläche oder Linie]]
 - [[Bedienung - Kurze Zustände verschieben, dauerhafte wechseln die Palette]]
 - [[Stack - Was der Browser mitbringt, wird gestaltet oder ersetzt]]
 - [[Bedienung - Der Fokus ist sichtbar und hat immer einen Ort]]

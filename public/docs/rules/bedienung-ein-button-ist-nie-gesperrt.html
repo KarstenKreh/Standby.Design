@@ -155,14 +155,28 @@
     .rule-meta dt { color: var(--muted-foreground); }
     .rule-meta dd { color: var(--foreground); }
     .agent-hint { font-size: 0.875rem; }
+    .site-footer {
+      margin-top: 4rem;
+      font-size: var(--text-caption);
+      color: var(--muted-foreground);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    .site-footer .pirate-line {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 0.25rem 0 1.75rem;
+      font-size: 0.875rem;
+    }
+    .site-footer svg { width: 1.8em; height: 1.8em; }
     .legal-links {
       display: flex;
       justify-content: center;
       flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-top: 3.5rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid var(--border);
+      gap: 0.25rem;
     }
     .legal-links a {
       padding: 0.6rem 1rem;
@@ -186,10 +200,10 @@
 <aside class="callout callout-tip"><p class="callout-title">Regel</p><p>Graue keinen Button aus. Fehlt etwas, bleibt er aktiv und zeigt beim Klick, was fehlt. Steht etwas Grundsätzliches im Weg, wird er durch die Handlung ersetzt, die es löst. Gesperrt ist er nur, solange eine Anfrage läuft.</p>
 </aside>
 <h2>Warum</h2>
-<p>Ein ausgegrauter Button ist eine Sackgasse ohne Erklärung. Der Nutzer sieht, dass er nicht weiterkommt, aber nicht warum. Er sucht das Formular nach dem fehlenden Häkchen ab, oder er gibt auf.</p>
-<p>Ein aktiver Button beantwortet die Frage beim Klick. Das fehlende Feld markiert sich, die Meldung sagt, was zu tun ist, und der Fehler verschwindet, sobald das Feld stimmt. Das ist derselbe Weg wie in <a href="/docs/rules/fluss-ein-fehler-steht-dort-wo-er-entstanden-ist">Ein Fehler steht dort, wo er entstanden ist</a>.</p>
-<p>Steht kein Feld im Weg, sondern eine Grenze, etwa ein volles Kontingent oder ein fehlender Tarif, ist der gesperrte Button die falsche Handlung am richtigen Ort. „Mitglied einladen“ wird dann zu „Mehr Plätze buchen“. Der Nutzer sieht sofort, was ihn weiterbringt.</p>
-<p>Die eine Sperre, die bleibt, schützt vor doppeltem Absenden. Während die Anfrage läuft, ist ein zweiter Klick nie gewollt.</p>
+<p>Bei einem ausgegrauten Button sieht der Nutzer, dass er nicht weiterkommt, aber nicht warum. Er sucht das Formular nach dem fehlenden Häkchen ab, oder er gibt auf.</p>
+<p>Ein aktiver Button zeigt beim Klick, was fehlt. Das fehlende Feld wird markiert, die Meldung sagt, was zu tun ist, und der Fehler verschwindet, sobald das Feld stimmt. Das ist derselbe Weg wie in <a href="/docs/rules/fluss-ein-fehler-steht-dort-wo-er-entstanden-ist">Ein Fehler steht dort, wo er entstanden ist</a>.</p>
+<p>Manchmal hält eine Grenze den Nutzer auf, etwa ein volles Kontingent oder ein fehlender Tarif. Dann steht an der Stelle des Buttons die Handlung, die die Grenze aufhebt. „Mitglied einladen“ wird dann zu „Mehr Plätze buchen“. Der Nutzer sieht sofort, was ihn weiterbringt.</p>
+<p>Gesperrt wird ein Button nur, während eine Anfrage läuft. So geht nichts doppelt raus. Ein zweiter Klick ist in dieser Zeit nie gewollt.</p>
 <h2>Die Fälle</h2>
 <div class="table-wrap"><table>
 <thead>
@@ -232,7 +246,7 @@
 <td>hart</td>
 </tr>
 <tr>
-<td>Ohne Recht wird die Handlung nicht gezeigt, nicht ausgegraut</td>
+<td>Ohne Recht wird die Handlung ausgeblendet statt ausgegraut</td>
 <td>hart</td>
 </tr>
 <tr>
@@ -250,7 +264,7 @@
 </ul>
 <h2>Grenzen</h2>
 <p>Steht der Grund unmittelbar neben dem Button und ist ohne Lesen zu sehen, darf er gesperrt sein. Das Beispiel ist der Senden-Knopf neben einem leeren Chatfeld.</p>
-<p>Ein Wert, den man sehen, aber nicht ändern darf, ist kein gesperrtes Feld, sondern Text. Er steht lesbar und kopierbar da, ohne Rahmen und ohne Bedienzeichen.</p>
+<p>Einen Wert, den man sehen, aber nicht ändern darf, zeigt die Ansicht als Text statt als gesperrtes Feld. Er steht lesbar und kopierbar da, ohne Rahmen und ohne Bedienzeichen.</p>
 <p>Sperren, die sich aus dem Bild erklären, bleiben erlaubt: „Zurück“ auf der ersten Seite, „Weiter“ auf der letzten.</p>
 <h2>Quelle</h2>
 <p>Vercel Web Interface Guidelines › Forms („Don’t pre-disable submit“, „Keep submit enabled until submission starts“, „Loading buttons show spinner and keep original label“). Carbon › Patterns › Disabled states (Disabled, Read-only, Hidden).</p>
@@ -262,14 +276,20 @@
 </ul>
 
 
-    <nav class="legal-links">
-      <a href="/">Home</a>
-      <a href="/docs/mcp">MCP Server</a>
-      <a href="/docs/rules">Design Rules</a>
-      <a href="/docs/research">Research</a>
-      <a href="/impressum.html">Impressum</a>
-      <a href="/datenschutz.html">Datenschutz</a>
-    </nav>
+    <footer class="site-footer">
+      <div class="pirate-line">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8.2 12.1c-.3.2-.5.6-.4.9c0 .7.7 1.2 1.3 1.2s1.2-.5 1.2-1.2q-.9-.6-2.1-.9M22 11l1-4s-2 0-5-2s-3-4-6-4s-3 2-6 4s-5 2-5 2l1 4h.1c-.1.3-.1.7-.1 1c0 3.5 1.8 6.6 4.5 8.4l-.5.9c6.4 4.1 12 0 12 0l-.5-.9c2.7-1.8 4.5-4.9 4.5-8.4zM11.3 4.5L9.9 3.1l.7-.7L12 3.8l1.4-1.4l.7.7l-1.4 1.4l1.4 1.4l-.7.7L12 5.2l-1.4 1.4l-.7-.7zm-2 4c1-.3 2-.5 2.7-.5c2.2 0 5.9 1.6 7.8 2.4c.1.3.1.6.1.9zm4.3 10.6c-.7.4-1.4.7-2.2.8c-.5-.4-.5-1.2 0-1.6c.4-.4 1.3-.6 1.8-.1c.3.1.4.6.4.9m6.4-5.7c-.5 2.1-1.8 4-3.5 5.2L15 16H9l-1.5 2.6C5.4 17.2 4 14.8 4 12c0-.5.1-1 .2-1.5c.5-.2 1.1-.5 1.8-.8l7.1 1.9V14c0 .5.4 1 1 1h2c.5 0 1-.4 1-1v-1.4z"/></svg>
+        No copyright — take what you need, make it yours.
+      </div>
+      <nav class="legal-links">
+        <a href="/docs/mcp">MCP Server</a>
+        <a href="/docs/rules">Design Rules</a>
+        <a href="/docs/lint">Design Lint</a>
+        <a href="/docs/research">Research</a>
+        <a href="/impressum.html">Imprint</a>
+        <a href="/privacy.html">Privacy</a>
+      </nav>
+    </footer>
   </main>
 </body>
 </html>

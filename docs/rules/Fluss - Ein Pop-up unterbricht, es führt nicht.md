@@ -1,6 +1,6 @@
 ---
 dateCreated: 2026-08-27
-description: Ein Pop-up gehört dem System, nicht dem Nutzer. Es ist für einen Hinweis da, der jetzt eine Entscheidung braucht. Alles, was der Nutzer selbst tun will, ist ein Screen.
+description: Mit einem Pop-up spricht das System den Nutzer an. Es ist für einen Hinweis da, der jetzt eine Entscheidung braucht. Alles, was der Nutzer selbst tun will, ist ein Screen.
 type: design-rule
 scope: universal
 applies-to:
@@ -22,37 +22,37 @@ tags:
 
 ### Ein Pop-up gehört dem System, nicht dem Nutzer
 
-Das ist der Kern, und alles Weitere folgt daraus. Ein Pop-up ist eine Unterbrechung, und unterbrechen darf nur, wer etwas zu sagen hat, das nicht warten kann. Es ist das Werkzeug, mit dem die Anwendung den Nutzer anspricht.
+Alles Weitere folgt aus diesem Punkt. Ein Pop-up unterbricht den Nutzer. Das darf die Anwendung nur, wenn sie ihm etwas sagen muss, das nicht warten kann. Mit einem Pop-up spricht die Anwendung den Nutzer an.
 
-Ein Formular ist das Gegenteil. Da spricht nicht die Anwendung, da arbeitet der Nutzer. Es ist keine Unterbrechung, sondern das, weswegen er gekommen ist.
+Bei einem Formular ist es umgekehrt. Dort arbeitet der Nutzer. Das Formular unterbricht ihn nicht, er ist dafür gekommen.
 
-Ein Formular in einem Pop-up hat deshalb nicht die falsche Größe, sondern die falsche Richtung. Es benutzt das Werkzeug für das Anhalten, um jemanden weitergehen zu lassen. „Verlassen ohne zu speichern?" ist richtig herum: die Anwendung sagt etwas, der Nutzer antwortet, es ist vorbei. „Kontakt anlegen" ist verkehrt herum.
+Ein Formular im Pop-up ist deshalb auch dann falsch, wenn das Pop-up größer wird, denn die Richtung stimmt nicht. Ein Pop-up hält den Nutzer an, im Formular soll er aber weiterarbeiten. Bei „Verlassen ohne zu speichern?" stimmt die Richtung. Die Anwendung sagt etwas, der Nutzer antwortet, und das Pop-up ist zu. Bei „Kontakt anlegen" stimmt sie nicht.
 
 ### Ein Pop-up verspricht Kürze und bricht das Versprechen
 
-Wer alles andere wegnimmt, geht einen Handel ein: das hier ist gleich vorbei. Ein Formular hält die Anwendung stattdessen minutenlang fest.
+Ein Pop-up verdeckt alles andere. Damit verspricht es, dass es gleich wieder vorbei ist. Ein Formular hält die Anwendung aber minutenlang fest.
 
-Der Preis dafür ist konkreter, als er klingt. Was der Nutzer beim Ausfüllen braucht, liegt fast immer hinter dem Pop-up: die Liste, aus der er kommt, der Wert in der Tabelle daneben, der Name, den er gerade nachsehen wollte. **Er sieht es. Er kann es nicht anfassen.** Das Pop-up zeigt ihm den Zusammenhang und verbietet ihn gleichzeitig. Bei einem Hinweis stört das nicht, bei einer Aufgabe ist es genau das Falsche.
+Das hat eine konkrete Folge. Was der Nutzer beim Ausfüllen braucht, liegt fast immer hinter dem Pop-up: die Liste, aus der er kommt, der Wert in der Tabelle daneben, der Name, den er gerade nachsehen wollte. **Er sieht es, kann es aber nicht bedienen.** Das Pop-up zeigt ihm den Zusammenhang und sperrt ihn zugleich. Bei einem Hinweis stört das nicht. Bei einer Aufgabe hindert es ihn an der Arbeit.
 
 ### Das Pop-up erzeugt seine eigene Nachfrage
 
-Der beste Beweis, dass ein Formular dort nicht hingehört, liefert das Muster selbst. Ein Formular im Pop-up braucht eine Warnung beim Schließen, denn die Eingaben verschwinden mit dem Fenster. Also legt man ein zweites Pop-up darüber: „Änderungen verwerfen?"
+Dass ein Formular dort nicht hingehört, zeigt das Muster selbst. Ein Formular im Pop-up braucht eine Warnung beim Schließen, denn die Eingaben verschwinden mit dem Fenster. Also legt man ein zweites Pop-up darüber: „Änderungen verwerfen?"
 
-Das Muster braucht sich selbst, um den Schaden zu heilen, den es selbst anrichtet. Bei einem Screen stellt sich die Frage gar nicht erst so scharf, weil er einen Ort hat, an den man zurückkommt.
+Das Pop-up braucht also ein zweites Pop-up, um ein Problem aufzufangen, das es selbst verursacht. Bei einem Screen ist die Frage weniger dringend, weil der Nutzer an diesen Ort zurückkommen kann.
 
 ### Tiefe hat keine Anzeige
 
-Jede andere Form von Navigation zeigt dem Nutzer, wo er ist: ein Pfad, ein Zurück, ein aktiver Reiter. Für gestapelte Fenster gibt es das nicht. Nirgends auf dem Bildschirm steht, dass man drei Ebenen tief steckt.
+Jede andere Form von Navigation zeigt dem Nutzer, wo er ist: ein Pfad, ein Zurück, ein aktiver Reiter. Für gestapelte Fenster gibt es das nicht. Nirgends auf dem Bildschirm steht, dass man im dritten gestapelten Fenster ist.
 
-Deshalb hat Deine Frage keine gute Antwort: **ich bin in Fenster 3 und muss zurück nach Fenster 1.** Was passiert mit Fenster 2? Was mit dem, was in Fenster 3 schon eingegeben wurde? Was macht der Zurück-Knopf des Geräts? Das Problem ist nicht, dass sich das schwer bauen lässt. Das Problem ist, dass es dem Nutzer nicht gezeigt werden kann, weil es keine Darstellung für Tiefe gibt.
+Deshalb hat Deine Frage keine gute Antwort: **ich bin in Fenster 3 und muss zurück nach Fenster 1.** Was passiert mit Fenster 2? Was mit dem, was in Fenster 3 schon eingegeben wurde? Was macht der Zurück-Knopf des Geräts? Das Problem liegt nicht darin, dass sich das schwer bauen lässt. Die Anwendung kann es dem Nutzer nicht zeigen, weil es keine Darstellung für Tiefe gibt.
 
 ### Ein Screen hat eine Adresse, ein Pop-up nicht
 
-Alles, woran jemand länger als einen Moment arbeitet, muss adressierbar sein: verlinkbar, nach einem Absturz wiederherstellbar, im Verlauf auffindbar, an einen Kollegen schickbar. Ein Formular im Pop-up kann nichts davon. Es existiert nur, solange niemand danebentippt.
+Alles, woran jemand länger als einen Moment arbeitet, muss adressierbar sein: verlinkbar, nach einem Absturz wiederherstellbar, im Verlauf auffindbar, an einen Kollegen schickbar. Ein Formular im Pop-up kann nichts davon. Es ist weg, sobald jemand danebentippt.
 
 ### Verschachtelte Pop-ups sind eine Sackgasse für die Tastatur
 
-Ein Pop-up muss den Fokus einsperren, sonst tabbt man hinter das Fenster. Liegt eines im anderen, liegen zwei Fallen ineinander. Wer nicht mit der Maus arbeitet, findet aus so einer Verschachtelung schwer wieder heraus. Für ein einzelnes „Ja oder Nein" ist die Falle harmlos, für ein Formular ist sie es nicht.
+Ein Pop-up muss den Fokus einsperren, sonst tabbt man hinter das Fenster. Liegt eines im anderen, ist der Fokus doppelt eingesperrt. Wer nicht mit der Maus arbeitet, findet aus so einer Verschachtelung schwer wieder heraus. Bei einem einzelnen „Ja oder Nein" schadet das nicht. Bei einem Formular schon.
 
 ## Der Test
 
@@ -61,7 +61,7 @@ Zwei Fragen, in dieser Reihenfolge:
 1. **Braucht es mehr als eine Eingabe?** Dann ist es ein Screen.
 2. **Geht es um mehr als einen konkreten Hinweis?** Dann ist es ein Screen.
 
-Bleibt beides „nein", darf es ein Pop-up sein. Der Test ist die praktische Fassung der Richtungsfrage von oben: eine einzelne Antwort gibt der Nutzer der Anwendung, ab der zweiten arbeitet er. Er ist bewusst scharf, weil die Grauzone genau der Ort ist, an dem die Fenster anfangen sich zu stapeln.
+Bleibt beides „nein", darf es ein Pop-up sein. Der Test setzt die Richtungsfrage von oben praktisch um. Mit einer einzelnen Eingabe antwortet der Nutzer der Anwendung. Ab der zweiten arbeitet er. Der Test ist bewusst streng, weil sich gerade in Grenzfällen die Fenster zu stapeln beginnen.
 
 ## Was ein Pop-up darf
 
@@ -71,7 +71,7 @@ Bleibt beides „nein", darf es ein Pop-up sein. Der Test ist die praktische Fas
 
 In allen drei Fällen redet die Anwendung, und der Nutzer antwortet mit einem Wort.
 
-Solange ein Pop-up offen ist, ist alles dahinter still: Die Seite scrollt nicht mit, und weder Tab noch Screenreader erreichen etwas dahinter. Sonst bedient der Nutzer eine Seite, die er nicht sieht.
+Solange ein Pop-up offen ist, reagiert nichts dahinter. Die Seite scrollt nicht mit, und weder Tab noch Screenreader erreichen etwas dahinter. Sonst bedient der Nutzer eine Seite, die er nicht sieht.
 
 ## Woran Du den Verstoß erkennst
 
@@ -117,9 +117,9 @@ Nicht jedes Ding, das über dem Inhalt liegt, ist ein Pop-up im Sinne dieser Reg
 - Datums- und Zeitauswahl an einem Feld
 - Kurzmeldung, die von selbst geht und nichts blockiert
 
-Sie unterbrechen nicht, sie erweitern das Element darunter. Der Unterschied ist nicht die Technik, sondern die Richtung: sie tun, was der Nutzer gerade will, statt ihn anzuhalten.
+Sie unterbrechen nicht, sie erweitern das Element darunter. Entscheidend ist die Richtung, die Technik ist dafür egal. Sie tun, was der Nutzer gerade will, und halten ihn nicht an.
 
-Ein Panel, das von der Seite oder von unten einfährt, ist kein Schlupfloch. Steht ein Formular darin, gilt die Regel genauso: es hat keine Adresse und stapelt genauso.
+Ein Panel, das von der Seite oder von unten einfährt, ist keine Ausnahme. Steht ein Formular darin, gilt die Regel genauso. Es hat keine Adresse und lässt sich genauso stapeln.
 
 ## Verwandt
 

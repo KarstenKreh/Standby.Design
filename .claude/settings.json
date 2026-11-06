@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|MultiEdit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/packages/design-lint/bin/standby-design-lint.js\" --hook",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}

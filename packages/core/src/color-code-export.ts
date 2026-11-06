@@ -579,7 +579,7 @@ ${accentPalettes.map(a => `- **${a.name}** (\`--${a.cssName}\`): \`-foreground\`
 ## How to Use
 
 1. **Use semantic tokens** (\`--primary\`, \`--background\`, etc.) in component code — never reference primitive step numbers directly.
-2. **Tailwind v4**: The export ships plain CSS custom properties. To get utilities like \`bg-primary\` or \`text-foreground\`, map the variables once via \`@theme inline { --color-primary: var(--primary); … }\` — see tailwindcss.com/docs/theme.
+2. **Tailwind v4**: The Tailwind export ends with an \`@theme inline\` block that maps every semantic token to a color utility (\`bg-primary\`, \`text-foreground\`, \`border-border-muted\` …). Paste it after the semantic tokens. The plain CSS export works without Tailwind.
 3. **Dark mode**: Add \`.dark\` to \`<html>\` or a container. All semantic tokens remap automatically.
 4. **Surface depth — three levels, never more**: \`--background\` (the page) → \`--card\` (sits on the page) → \`--elevated\` (sits on a card: input fills, lists inside cards, dropdowns, selected rows). Each level is exactly one step lighter than the one below it, in both light and dark mode. Depth does not stack: a field inside a list inside a card still uses \`--elevated\`, not a fourth tone. \`--muted\` runs the other way (recessed, one step darker than \`--card\`) and is not part of the ladder.
 5. **Borders**: Default to \`--border-muted\` for subtle separation (dividers, table rows). Use \`--border\` for visible borders (cards, panels). Form controls (\`input\`, \`select\`, \`textarea\`) always use \`--input\` — never \`--border\`.
@@ -648,6 +648,20 @@ export function colorSemanticExport(state: ColorSeedState, pal: ThemePalettes): 
 
 export function colorCssExport(state: ColorSeedState, pal: ThemePalettes): string {
   return colorPrimitivesExport(state, pal, 'oklch') + '\n' + colorSemanticExport(state, pal);
+}
+
+export function generateColorThemeInline(semanticCss: string): string {
+  const names = [...new Set([...semanticCss.matchAll(/^\s*--([a-z0-9-]+):/gm)].map((match) => match[1]))];
+  const rows = names.map((name) => `  --color-${name}: var(--${name});`);
+  return `/* Tailwind v4 — semantic tokens as color utilities (bg-primary, text-foreground, border-border …) */\n@theme inline {\n${rows.join('\n')}\n}\n`;
+}
+
+export function colorThemeInlineExport(state: ColorSeedState, pal: ThemePalettes): string {
+  return generateColorThemeInline(colorSemanticExport(state, pal));
+}
+
+export function colorTailwindExport(state: ColorSeedState, pal: ThemePalettes): string {
+  return colorCssExport(state, pal) + '\n' + colorThemeInlineExport(state, pal);
 }
 
 export function colorLlmBriefing(state: ColorSeedState, pal: ThemePalettes): string {

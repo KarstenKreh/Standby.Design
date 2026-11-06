@@ -155,14 +155,28 @@
     .rule-meta dt { color: var(--muted-foreground); }
     .rule-meta dd { color: var(--foreground); }
     .agent-hint { font-size: 0.875rem; }
+    .site-footer {
+      margin-top: 4rem;
+      font-size: var(--text-caption);
+      color: var(--muted-foreground);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    .site-footer .pirate-line {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 0.25rem 0 1.75rem;
+      font-size: 0.875rem;
+    }
+    .site-footer svg { width: 1.8em; height: 1.8em; }
     .legal-links {
       display: flex;
       justify-content: center;
       flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-top: 3.5rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid var(--border);
+      gap: 0.25rem;
     }
     .legal-links a {
       padding: 0.6rem 1rem;
@@ -183,7 +197,7 @@
     <h1>Rot ist nicht ein Rot</h1>
     <dl class="rule-meta"><div><dt>Geltung</dt><dd>universal · web, react-native</dd></div></dl>
 
-<aside class="callout callout-tip"><p class="callout-title">Regel</p><p>Lege für jede Zustandsbedeutung — Fehler, Warnung, Erfolg, Hinweis — mehrere Werte fest, nicht einen. Welcher gilt, entscheidet der Untergrund, auf dem die Farbe landet.</p>
+<aside class="callout callout-tip"><p class="callout-title">Regel</p><p>Lege für jede Zustandsbedeutung (Fehler, Warnung, Erfolg, Hinweis) mehrere Werte fest, nicht einen. Welcher gilt, entscheidet der Untergrund, auf dem die Farbe landet.</p>
 </aside>
 <h2>Warum</h2>
 <p>Nimm ein einziges Rot und lass es drei Aufgaben erledigen:</p>
@@ -198,9 +212,9 @@
    ▸ Fläche                      → das kräftige Rot
    ▸ Text darauf                 → helle Gegenfarbe
 </code></pre>
-<p>Aufgabe 1 verlangt viel Kontrast, Aufgabe 2 verlangt in derselben Zeile wenig <strong>und</strong> viel. Ein einziger Wert kann das nicht. Nimmt man ihn trotzdem, ist entweder der Text nicht zu lesen oder die Fläche zu laut — meistens beides an verschiedenen Stellen.</p>
-<p>Das ist derselbe Gedanke wie bei heller und dunkler Erscheinung: dieselbe Bedeutung, verschiedene Werte, je nach Umgebung. Nur läuft die Unterscheidung hier nicht über den Modus, sondern über den Untergrund.</p>
-<p>Fehlt diese Familie, wird pro Einsatzort geraten. Man landet bei Konstruktionen wie „die Grundfarbe mit zehn Prozent Deckkraft als Fläche und dieselbe Grundfarbe als Text darauf&quot;. Bei Rot sieht das gerade noch brauchbar aus, bei Gelb nicht mehr, und in der hellen Erscheinung bei keinem von beiden.</p>
+<p>Aufgabe 1 verlangt viel Kontrast, Aufgabe 2 verlangt in derselben Zeile wenig <strong>und</strong> viel. Ein einziger Wert kann das nicht. Nimmt man ihn trotzdem, ist entweder der Text nicht zu lesen oder die Fläche zu auffällig, meistens beides an verschiedenen Stellen.</p>
+<p>Das ist derselbe Gedanke wie bei heller und dunkler Erscheinung: dieselbe Bedeutung, verschiedene Werte, je nach Umgebung. Hier hängen die Werte aber vom Untergrund ab statt vom Modus.</p>
+<p>Fehlt diese Familie, rät jeder pro Einsatzort einen Wert. Heraus kommen Konstruktionen wie „die Grundfarbe mit zehn Prozent Deckkraft als Fläche und dieselbe Grundfarbe als Text darauf&quot;. Bei Rot sieht das gerade noch brauchbar aus, bei Gelb nicht mehr, und in der hellen Erscheinung bei keinem von beiden.</p>
 <h2>Was eine Familie abdecken muss</h2>
 <div class="table-wrap"><table>
 <thead>
@@ -222,23 +236,23 @@
 <td>der kräftige Wert <strong>plus</strong> eine Gegenfarbe für den Text darauf</td>
 </tr>
 </tbody></table></div>
-<p>Wie die Werte heißen und wie viele es genau sind, entscheidet das Projekt. Dass es mehr als einen braucht, entscheidet der Kontrast.</p>
+<p>Wie die Werte heißen und wie viele es genau sind, entscheidet das Projekt. Dass es mehr als einen braucht, folgt aus dem Kontrast.</p>
 <h2>Woran Du den Verstoß erkennst</h2>
 <ul>
 <li>Ein Badge wird aus der Grundfarbe mit Deckkraft und derselben Grundfarbe als Text gebaut.</li>
 <li>Ein voll eingefärbter Knopf hat weißen Text statt der zugehörigen Gegenfarbe.</li>
-<li>Dieselbe Zustandsfarbe steht einmal als Fläche und einmal als Fließtext, und beim Text muss man die Augen zusammenkneifen.</li>
+<li>Dieselbe Zustandsfarbe steht einmal als Fläche und einmal als Fließtext, und der Text ist schwer zu lesen.</li>
 <li>Ein Zustand ist in einer Erscheinung gut lesbar und in der anderen nicht.</li>
 </ul>
 <h2>Zustandsfarben neben Markenfarben</h2>
-<p><strong>Empfehlung, keine Vorschrift:</strong> Grün und Rot möglichst nicht auch als Marken- oder Strukturfarbe einsetzen. Sonst kann der Nutzer nicht mehr unterscheiden, ob eine grüne Fläche etwas bedeutet oder nur zur Marke gehört — und wenn er das einmal falsch gelernt hat, übersieht er später die Fläche, die wirklich etwas bedeutet.</p>
-<p>Ist die Marke nun einmal grün oder rot, ist das kein Grund, sie zu ändern. Dann braucht es zwei Dinge:</p>
+<p><strong>Empfehlung, keine Vorschrift:</strong> Grün und Rot möglichst nicht auch als Marken- oder Strukturfarbe einsetzen. Sonst kann der Nutzer nicht mehr unterscheiden, ob eine grüne Fläche etwas bedeutet oder nur zur Marke gehört. Hat er das einmal falsch gelernt, übersieht er später die Fläche, die wirklich etwas bedeutet.</p>
+<p>Ist die Marke grün oder rot, ist das kein Grund, sie zu ändern. Dann braucht es zwei Dinge:</p>
 <ul>
-<li>Die Zustandsfarben liegen sichtbar neben der Markenfarbe, nicht auf ihr. Ein anderer Farbton, eine andere Sättigung, irgendetwas, das den Unterschied trägt.</li>
-<li>Der Zustand hängt nicht an der Farbe allein. Ein Zeichen, ein Wort oder ein Symbol trägt die Bedeutung mit, siehe <a href="/docs/rules/farbe-farbe-traegt-nie-allein">Farbe trägt nie allein</a>. Das ist ohnehin schon Pflicht, hier wird es nur besonders wichtig.</li>
+<li>Die Zustandsfarben unterscheiden sich sichtbar von der Markenfarbe. Den Unterschied macht ein anderer Farbton, eine andere Sättigung oder ein anderes Merkmal.</li>
+<li>Der Zustand hängt nicht an der Farbe allein. Ein Zeichen, ein Wort oder ein Symbol trägt die Bedeutung mit, siehe <a href="/docs/rules/farbe-farbe-traegt-nie-allein">Farbe trägt nie allein</a>. Das ist ohnehin Pflicht, hier aber besonders wichtig.</li>
 </ul>
 <h2>Grenzen</h2>
-<p>Auf einer Marketing- oder Titelseite mit eigener Haut gilt das nicht, dort regiert die Marke. Die Regel gilt für die Anwendung, in der Farbe eine Aussage über Daten ist.</p>
+<p>Auf einer Marketing- oder Titelseite mit eigener Haut gilt das nicht, dort hat die Marke Vorrang. Die Regel gilt für die Anwendung, in der Farbe eine Aussage über Daten ist.</p>
 <h2>Verwandt</h2>
 <ul>
 <li><a href="/docs/rules/zustand-eine-bedeutung-ueberall-gleich">Eine Bedeutung, überall gleich</a></li>
@@ -247,14 +261,20 @@
 </ul>
 
 
-    <nav class="legal-links">
-      <a href="/">Home</a>
-      <a href="/docs/mcp">MCP Server</a>
-      <a href="/docs/rules">Design Rules</a>
-      <a href="/docs/research">Research</a>
-      <a href="/impressum.html">Impressum</a>
-      <a href="/datenschutz.html">Datenschutz</a>
-    </nav>
+    <footer class="site-footer">
+      <div class="pirate-line">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8.2 12.1c-.3.2-.5.6-.4.9c0 .7.7 1.2 1.3 1.2s1.2-.5 1.2-1.2q-.9-.6-2.1-.9M22 11l1-4s-2 0-5-2s-3-4-6-4s-3 2-6 4s-5 2-5 2l1 4h.1c-.1.3-.1.7-.1 1c0 3.5 1.8 6.6 4.5 8.4l-.5.9c6.4 4.1 12 0 12 0l-.5-.9c2.7-1.8 4.5-4.9 4.5-8.4zM11.3 4.5L9.9 3.1l.7-.7L12 3.8l1.4-1.4l.7.7l-1.4 1.4l1.4 1.4l-.7.7L12 5.2l-1.4 1.4l-.7-.7zm-2 4c1-.3 2-.5 2.7-.5c2.2 0 5.9 1.6 7.8 2.4c.1.3.1.6.1.9zm4.3 10.6c-.7.4-1.4.7-2.2.8c-.5-.4-.5-1.2 0-1.6c.4-.4 1.3-.6 1.8-.1c.3.1.4.6.4.9m6.4-5.7c-.5 2.1-1.8 4-3.5 5.2L15 16H9l-1.5 2.6C5.4 17.2 4 14.8 4 12c0-.5.1-1 .2-1.5c.5-.2 1.1-.5 1.8-.8l7.1 1.9V14c0 .5.4 1 1 1h2c.5 0 1-.4 1-1v-1.4z"/></svg>
+        No copyright — take what you need, make it yours.
+      </div>
+      <nav class="legal-links">
+        <a href="/docs/mcp">MCP Server</a>
+        <a href="/docs/rules">Design Rules</a>
+        <a href="/docs/lint">Design Lint</a>
+        <a href="/docs/research">Research</a>
+        <a href="/impressum.html">Imprint</a>
+        <a href="/privacy.html">Privacy</a>
+      </nav>
+    </footer>
   </main>
 </body>
 </html>

@@ -21,7 +21,7 @@ tags:
 
 ## Warum
 
-Wer langsam tippt oder kurz weg ist, verliert sonst seine Arbeit an eine Uhr, die er nicht sieht.
+Wer langsam tippt oder kurz weg ist, verliert sonst seine Arbeit, weil eine Frist abläuft, die er nicht sieht.
 
 ## Woran Du den Verstoß erkennst
 

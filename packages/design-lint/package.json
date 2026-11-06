@@ -1,0 +1,71 @@
+{
+  "name": "standby-design-lint",
+  "version": "0.4.0",
+  "description": "Enforces the standby.design design rules in React and Vue code: an ESLint plugin, Biome plugin files, a CLI and a Claude Code hook that report violations with the rule and the fix.",
+  "license": "MIT",
+  "type": "module",
+  "homepage": "https://standby.design/docs/lint",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KarstenKreh/Standby.Design.git",
+    "directory": "packages/design-lint"
+  },
+  "bin": {
+    "standby-design-lint": "./bin/standby-design-lint.js"
+  },
+  "exports": {
+    ".": "./src/index.js",
+    "./biome/*": "./biome/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "bin",
+    "biome",
+    "src",
+    "skills",
+    "README.md"
+  ],
+  "engines": {
+    "node": "^20.19.0 || ^22.13.0 || >=24"
+  },
+  "scripts": {
+    "test": "node --test \"test/*.test.js\"",
+    "build:biome": "node scripts/build-biome.js"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.15",
+    "@typescript-eslint/parser": "^8.72.1",
+    "eslint": "^10.14.0",
+    "playwright": "^1.64.1",
+    "typescript": "~5.9",
+    "vue-eslint-parser": "^10.4.2"
+  },
+  "peerDependencies": {
+    "@biomejs/biome": ">=2.5",
+    "@typescript-eslint/parser": ">=8",
+    "eslint": ">=9",
+    "playwright": ">=1.49",
+    "typescript": ">=5",
+    "vue-eslint-parser": ">=9.4"
+  },
+  "peerDependenciesMeta": {
+    "@biomejs/biome": {
+      "optional": true
+    },
+    "@typescript-eslint/parser": {
+      "optional": true
+    },
+    "eslint": {
+      "optional": true
+    },
+    "playwright": {
+      "optional": true
+    },
+    "typescript": {
+      "optional": true
+    },
+    "vue-eslint-parser": {
+      "optional": true
+    }
+  }
+}

@@ -27,7 +27,7 @@ Wer per Sprache diktiert oder sich vertippt, löst sonst Handlungen aus, die er 
 
 Das Auge folgt dem Bild, die Tab-Taste und der Screenreader folgen dem Code. Solange beides gleich ist, merkt niemand etwas. Weichen sie ab, springt der Fokus quer über den Schirm.
 
-Ein typischer Fall: Am Desktop steht „Abbrechen“ links und „Speichern“ rechts, am Handy soll „Speichern“ oben stehen. Steht „Speichern“ dafür im Code zuerst und dreht CSS die Reihenfolge am Desktop um, landet der erste Tab rechts und der zweite links. Optisch fällt das nie auf, beim Bedienen sofort.
+Ein typischer Fall: Am Desktop steht „Abbrechen“ links und „Speichern“ rechts, am Handy soll „Speichern“ oben stehen. Steht „Speichern“ dafür im Code zuerst und dreht CSS die Reihenfolge am Desktop um, landet der erste Tab rechts und der zweite links. Beim Ansehen fällt das nicht auf. Wer mit der Tastatur bedient, merkt es sofort.
 
 ## Hart und weich
 
@@ -53,7 +53,7 @@ Bewegungen, deren Weg selbst die Eingabe ist, etwa Freihandzeichnen.
 
 Kürzel, die nur gelten, solange das Element den Fokus hat, etwa Pfeiltasten in einer Liste.
 
-Rein dekorative Elemente ohne Text und ohne Bedienung. Braucht ein kleiner Schirm eine andere Reihenfolge, wird sie dort im Code anders gebaut, nicht per CSS umgedreht.
+Rein dekorative Elemente ohne Text und ohne Bedienung. Braucht ein kleiner Schirm eine andere Reihenfolge, wird sie dort im Code anders gebaut. CSS dreht sie nicht um.
 
 ## Quelle
 

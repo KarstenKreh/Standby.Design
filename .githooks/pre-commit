@@ -1,0 +1,7 @@
+#!/bin/sh
+LINT_DIR="$(git rev-parse --show-toplevel)/packages/design-lint"
+if [ ! -d "$LINT_DIR/node_modules" ]; then
+  echo "standby-design-lint: übersprungen, erst 'npm install' in packages/design-lint ausführen."
+  exit 0
+fi
+exec node "$LINT_DIR/bin/standby-design-lint.js" --staged --warn

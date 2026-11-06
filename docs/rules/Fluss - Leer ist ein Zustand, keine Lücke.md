@@ -20,13 +20,13 @@ tags:
 
 ## Warum
 
-Vor einer leeren Fläche kann der Nutzer drei Dinge vermuten: es lädt noch, es ist etwas kaputt, oder es gibt wirklich nichts. Er hat keine Möglichkeit zu unterscheiden, und alle drei führen zu verschiedenem Verhalten — warten, neu laden, weitermachen. Ohne Antwort wählt er falsch.
+Vor einer leeren Fläche kann der Nutzer drei Dinge vermuten: es lädt noch, es ist etwas kaputt, oder es gibt wirklich nichts. Er kann die drei nicht unterscheiden, und jeder Fall verlangt etwas anderes: warten, neu laden oder weitermachen. Ohne Antwort wählt er falsch.
 
-Dazu kommt: der leere Zustand ist bei jedem neuen Nutzer der **erste** Zustand. Er sieht ihn, bevor er irgendetwas anderes sieht. Eine Anwendung, deren erster Eindruck eine unbeschriebene Fläche ist, wirkt nicht aufgeräumt, sondern unfertig.
+Außerdem ist der leere Zustand bei jedem neuen Nutzer der **erste** Zustand. Er sieht ihn, bevor er irgendetwas anderes sieht. Zeigt eine Anwendung als Erstes eine unbeschriebene Fläche, wirkt sie unfertig statt aufgeräumt.
 
 ## Drei Sorten leer, drei Antworten
 
-Der häufigste Fehler ist nicht der fehlende leere Zustand, sondern derselbe Text für alle drei Fälle.
+Der häufigste Fehler ist derselbe Text für alle drei Fälle. Er kommt öfter vor als ein fehlender leerer Zustand.
 
 | Fall | Was der Nutzer wissen muss | Ton |
 |---|---|---|
@@ -34,12 +34,12 @@ Der häufigste Fehler ist nicht der fehlende leere Zustand, sondern derselbe Tex
 | **Nichts gefunden** | Wonach gesucht wurde, und wie er die Suche lockert | sachlich, mit Weg zurück |
 | **Nichts mehr offen** | Dass er fertig ist | bestätigend, ohne Aktion |
 
-„Keine Daten vorhanden" beantwortet keinen der drei Fälle. Beim dritten ist es sogar falsch: dort ist leer das gute Ergebnis, und der Text sollte das sagen statt einen Mangel zu melden.
+„Keine Daten vorhanden" beantwortet keinen der drei Fälle. Beim dritten ist der Text sogar falsch. Dort ist leer das gute Ergebnis, und der Text sollte das sagen statt einen Mangel zu melden.
 
 ## Was ein leerer Zustand tut
 
 - Er nennt den Grund in einem Satz.
-- Er bietet den nächsten Schritt an, wenn es einen gibt — und nur einen.
+- Er bietet den nächsten Schritt an, wenn es einen gibt, und zwar nur einen.
 - Er steht an derselben Stelle, an der später der Inhalt steht, und verschiebt das Layout nicht.
 - Er bleibt im Verhältnis. Eine große Illustration für eine leere Liste in einer Karte ist mehr Aufwand als der Inhalt, den sie ersetzt.
 
@@ -53,7 +53,7 @@ Der häufigste Fehler ist nicht der fehlende leere Zustand, sondern derselbe Tex
 
 ## Grenzen
 
-Nicht jede leere Fläche braucht Text. Eine Spalte in einer Tabelle, ein einzelnes Feld, ein Diagrammabschnitt ohne Wert — dort reicht ein Strich oder ein Zeichen für „kein Wert", siehe [[Zustand - Eine Bedeutung, überall gleich]]. Die Regel gilt für Bereiche, die als Ganzes leer sind.
+Nicht jede leere Fläche braucht Text. Bei einer Spalte in einer Tabelle, einem einzelnen Feld oder einem Diagrammabschnitt ohne Wert reicht ein Strich oder ein Zeichen für „kein Wert", siehe [[Zustand - Eine Bedeutung, überall gleich]]. Die Regel gilt für Bereiche, die als Ganzes leer sind.
 
 ## Verwandt
 

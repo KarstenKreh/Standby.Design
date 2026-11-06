@@ -4,13 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Der Divider ist die Unterkante einer Section — Design Rules — standby.design</title>
-  <meta name="description" content="Die Trennlinie ist keine eigene Komponente, sondern die untere Kante eines Abschnitts. Sie läuft von Kante zu Kante, der letzte Abschnitt hat keine." />
+  <meta name="description" content="Die Trennlinie ist die untere Kante eines Abschnitts und keine eigene Komponente. Sie läuft von Kante zu Kante, der letzte Abschnitt hat keine." />
   <link rel="canonical" href="https://standby.design/docs/rules/layout-der-divider-ist-die-unterkante-einer-section" />
   <link rel="alternate" type="text/markdown" href="https://standby.design/docs/rules.md" title="Design Rules (Markdown)" />
 
   <meta property="og:type" content="article" />
   <meta property="og:title" content="Der Divider ist die Unterkante einer Section — Design Rules — standby.design" />
-  <meta property="og:description" content="Die Trennlinie ist keine eigene Komponente, sondern die untere Kante eines Abschnitts. Sie läuft von Kante zu Kante, der letzte Abschnitt hat keine." />
+  <meta property="og:description" content="Die Trennlinie ist die untere Kante eines Abschnitts und keine eigene Komponente. Sie läuft von Kante zu Kante, der letzte Abschnitt hat keine." />
   <meta property="og:url" content="https://standby.design/docs/rules/layout-der-divider-ist-die-unterkante-einer-section" />
   <meta property="og:site_name" content="standby.design" />
   <meta property="og:image" content="https://standby.design/og-image?tool=github" />
@@ -155,14 +155,28 @@
     .rule-meta dt { color: var(--muted-foreground); }
     .rule-meta dd { color: var(--foreground); }
     .agent-hint { font-size: 0.875rem; }
+    .site-footer {
+      margin-top: 4rem;
+      font-size: var(--text-caption);
+      color: var(--muted-foreground);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    .site-footer .pirate-line {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 0.25rem 0 1.75rem;
+      font-size: 0.875rem;
+    }
+    .site-footer svg { width: 1.8em; height: 1.8em; }
     .legal-links {
       display: flex;
       justify-content: center;
       flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-top: 3.5rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid var(--border);
+      gap: 0.25rem;
     }
     .legal-links a {
       padding: 0.6rem 1rem;
@@ -183,10 +197,10 @@
     <h1>Der Divider ist die Unterkante einer Section</h1>
     <dl class="rule-meta"><div><dt>Geltung</dt><dd>universal · web, react-native</dd></div></dl>
 
-<aside class="callout callout-tip"><p class="callout-title">Regel</p><p>Baue Trennlinien nie als eigenes Element. Die Linie ist die untere Kante eines Abschnitts, sie läuft von Kartenkante zu Kartenkante, und der letzte Abschnitt bekommt keine. Sobald Linien im Spiel sind, bekommt jeder Abschnitt oben und unten Padding.</p>
+<aside class="callout callout-tip"><p class="callout-title">Regel</p><p>Baue Trennlinien nie als eigenes Element. Die Linie ist die untere Kante eines Abschnitts, sie läuft von Kartenkante zu Kartenkante, und der letzte Abschnitt bekommt keine. Sobald es Linien gibt, bekommt jeder Abschnitt oben und unten Padding.</p>
 </aside>
 <h2>Warum</h2>
-<p>Eine Trennlinie als eigenes Element ist ein Kind ohne Inhalt. Sie muss von Hand an die richtige Stelle gesetzt werden, sie wird beim Umsortieren vergessen, und am Ende steht eine Linie unter dem letzten Abschnitt oder es stehen zwei Linien direkt übereinander. Als Kante des Abschnitts kann das nicht passieren: wer den Abschnitt verschiebt, verschiebt die Linie mit, und die Regel „letzter bekommt keine&quot; ist eine einzige Bedingung statt einer Entscheidung pro Einsatzort.</p>
+<p>Eine Trennlinie als eigenes Element ist ein Kind ohne Inhalt. Sie muss von Hand an die richtige Stelle gesetzt werden, sie wird beim Umsortieren vergessen, und am Ende steht eine Linie unter dem letzten Abschnitt oder es stehen zwei Linien direkt übereinander. Ist die Linie die Kante des Abschnitts, kann das nicht passieren. Wer den Abschnitt verschiebt, verschiebt die Linie mit. Die Regel „letzter bekommt keine&quot; ist dann eine einzige Bedingung statt einer Entscheidung pro Einsatzort.</p>
 <p>Das zusätzliche Padding oben ist nötig, weil der Inhalt sonst an der Linie klebt. Ohne Linie liefert der untere Abstand des Vorgängers den Abstand schon.</p>
 <h2>Woran Du den Verstoß erkennst</h2>
 <ul>
@@ -210,24 +224,29 @@
 ╚═══════════════════════════════════════════════════╝
 </code></pre>
 <h2>Grenzen</h2>
-<p>Die Regel sagt, wie eine Trennlinie gebaut wird, nicht wann es eine braucht. Das steht in <a href="/docs/rules/layout-erst-abstand-dann-flaeche-dann-linie">Erst Abstand, dann Fläche, dann Linie</a>.</p>
+<p>Die Regel sagt, wie eine Trennlinie gebaut wird, nicht wann es eine braucht. Das steht in <a href="/docs/rules/layout-erst-abstand-dann-flaeche-oder-linie">Erst Abstand, dann Fläche oder Linie</a>.</p>
 <p>Ein Primitive, das die Kante zeichnet, ist erlaubt, solange es die Unterkante des Abschnitts ist. Ein eigenes Kind zwischen zwei Abschnitten ist es nicht. Der Name der Hilfsklasse ändert das nicht.</p>
 <h2>Verwandt</h2>
 <ul>
-<li><a href="/docs/rules/layout-erst-abstand-dann-flaeche-dann-linie">Erst Abstand, dann Fläche, dann Linie</a></li>
+<li><a href="/docs/rules/layout-erst-abstand-dann-flaeche-oder-linie">Erst Abstand, dann Fläche oder Linie</a></li>
 <li><a href="/docs/rules/layout-die-karte-hat-kein-padding">Die Karte hat kein Padding</a></li>
-<li><a href="/docs/rules/layout-erst-abstand-dann-flaeche-dann-linie">Erst Abstand, dann Fläche, dann Linie</a></li>
 </ul>
 
 
-    <nav class="legal-links">
-      <a href="/">Home</a>
-      <a href="/docs/mcp">MCP Server</a>
-      <a href="/docs/rules">Design Rules</a>
-      <a href="/docs/research">Research</a>
-      <a href="/impressum.html">Impressum</a>
-      <a href="/datenschutz.html">Datenschutz</a>
-    </nav>
+    <footer class="site-footer">
+      <div class="pirate-line">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8.2 12.1c-.3.2-.5.6-.4.9c0 .7.7 1.2 1.3 1.2s1.2-.5 1.2-1.2q-.9-.6-2.1-.9M22 11l1-4s-2 0-5-2s-3-4-6-4s-3 2-6 4s-5 2-5 2l1 4h.1c-.1.3-.1.7-.1 1c0 3.5 1.8 6.6 4.5 8.4l-.5.9c6.4 4.1 12 0 12 0l-.5-.9c2.7-1.8 4.5-4.9 4.5-8.4zM11.3 4.5L9.9 3.1l.7-.7L12 3.8l1.4-1.4l.7.7l-1.4 1.4l1.4 1.4l-.7.7L12 5.2l-1.4 1.4l-.7-.7zm-2 4c1-.3 2-.5 2.7-.5c2.2 0 5.9 1.6 7.8 2.4c.1.3.1.6.1.9zm4.3 10.6c-.7.4-1.4.7-2.2.8c-.5-.4-.5-1.2 0-1.6c.4-.4 1.3-.6 1.8-.1c.3.1.4.6.4.9m6.4-5.7c-.5 2.1-1.8 4-3.5 5.2L15 16H9l-1.5 2.6C5.4 17.2 4 14.8 4 12c0-.5.1-1 .2-1.5c.5-.2 1.1-.5 1.8-.8l7.1 1.9V14c0 .5.4 1 1 1h2c.5 0 1-.4 1-1v-1.4z"/></svg>
+        No copyright — take what you need, make it yours.
+      </div>
+      <nav class="legal-links">
+        <a href="/docs/mcp">MCP Server</a>
+        <a href="/docs/rules">Design Rules</a>
+        <a href="/docs/lint">Design Lint</a>
+        <a href="/docs/research">Research</a>
+        <a href="/impressum.html">Imprint</a>
+        <a href="/privacy.html">Privacy</a>
+      </nav>
+    </footer>
   </main>
 </body>
 </html>

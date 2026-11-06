@@ -20,13 +20,13 @@ tags:
 
 ## Warum
 
-Ein Fehler ist eine Anweisung, keine Meldung. Der Nutzer will nicht wissen, was das System nicht konnte, sondern was er jetzt macht. „Ungültiges Format" sagt ihm nichts. „Bitte im Format TT.MM.JJJJ eingeben" sagt ihm alles.
+Eine Fehlermeldung sagt dem Nutzer, was er jetzt tun soll. Was das System nicht konnte, hilft ihm dabei nicht. „Ungültiges Format" sagt ihm nicht, was er ändern soll. „Bitte im Format TT.MM.JJJJ eingeben" sagt es ihm.
 
-Deshalb muss er auch dort stehen, wo gehandelt wird. Steht der Fehler weit weg von dem Feld, das er betrifft, muss der Nutzer die Verbindung selbst herstellen — bei drei Fehlern in einem Formular ist das eine Suchaufgabe.
+Deshalb steht der Fehler dort, wo der Nutzer handelt. Steht er weit weg von dem Feld, das er betrifft, muss der Nutzer die Verbindung selbst herstellen. Bei drei Fehlern in einem Formular muss er dann suchen.
 
-Und das Wichtigste, das am häufigsten verletzt wird: **die Eingaben bleiben.** Ein Fehler, der das Formular leert, bestraft den Nutzer für einen Tippfehler. Nach dem zweiten Mal macht er nicht weiter.
+**Die Eingaben bleiben stehen.** Das ist der wichtigste Punkt, und er wird am häufigsten verletzt. Leert ein Fehler das Formular, muss der Nutzer wegen eines Tippfehlers alles neu eingeben. Nach dem zweiten Mal macht er nicht weiter.
 
-Sonst erfährt ein Screenreader-Nutzer nie, dass gespeichert wurde oder dass es keine Treffer gibt.
+Ohne Live-Bereich erfährt ein Screenreader-Nutzer nie, dass gespeichert wurde oder dass es keine Treffer gibt.
 
 ## Wann der Fehler kommt
 
@@ -44,11 +44,11 @@ Das Feld nimmt dabei jede Eingabe an, siehe [[Formular - Was der Nutzer tippt od
 | Etwas ist außerhalb des Blicks passiert | Kurzmeldung |
 | Der Nutzer ist im Begriff, etwas zu verlieren | Pop-up, siehe [[Fluss - Ein Pop-up unterbricht, es führt nicht]] |
 
-Kein Pop-up für Eingabefehler. Das Pop-up nimmt genau das Formular weg, in dem der Nutzer den Fehler beheben soll.
+Kein Pop-up für Eingabefehler. Das Pop-up verdeckt genau das Formular, in dem der Nutzer den Fehler beheben soll.
 
 ## Kurzmeldungen
 
-Eine Kurzmeldung (Toast) ist ein gutes Werkzeug, wenn sie das Richtige tut: bestätigen, dass etwas passiert ist, dessen Ergebnis man gerade nicht sieht. Gespeichert, verschickt, in den Papierkorb gelegt.
+Eine Kurzmeldung (Toast) eignet sich, um zu bestätigen, dass etwas passiert ist, dessen Ergebnis man gerade nicht sieht. Gespeichert, verschickt, in den Papierkorb gelegt.
 
 Dafür gelten drei Bedingungen:
 
@@ -56,9 +56,9 @@ Dafür gelten drei Bedingungen:
 - Sie ist nie der einzige Ort einer wichtigen Information. Was der Nutzer später noch braucht, gehört an eine bleibende Stelle.
 - Sie erscheint nicht für einen Fehler, den man an einem Feld beheben kann. Der gehört ans Feld.
 
-Ist eine Handlung rückgängig zu machen, gehört das Angebot dazu in die Kurzmeldung („Gelöscht — rückgängig"). Das ist ihr stärkster Einsatz, weil sie damit eine Bestätigung vorher überflüssig macht.
+Ist eine Handlung rückgängig zu machen, gehört das Angebot dazu in die Kurzmeldung („Gelöscht — rückgängig"). So nützt sie am meisten, weil dann keine Bestätigungsfrage vorher nötig ist.
 
-Eine Kurzmeldung mit Handlung bleibt stehen, solange der Mauszeiger auf ihr liegt oder sie den Fokus hat, und sie ist per Tastatur erreichbar. Sonst ist das Angebot weg, bevor ein langsamer Nutzer es greifen kann.
+Eine Kurzmeldung mit Handlung bleibt stehen, solange der Mauszeiger auf ihr liegt oder sie den Fokus hat, und sie ist per Tastatur erreichbar. Sonst ist das Angebot weg, bevor ein langsamer Nutzer es nutzen kann.
 
 ## Was in einer Meldung steht
 
@@ -88,7 +88,7 @@ Hart. Weich: `polite` oder `assertive`. Vorgabe `polite`.
 
 ## Grenzen
 
-Fehler, die die ganze Anwendung betreffen — keine Verbindung, abgelaufene Anmeldung —, gehören an eine Stelle, die über allem liegt. Sie betreffen kein einzelnes Feld, und der Nutzer muss sie sehen, bevor er weitertippt.
+Fehler, die die ganze Anwendung betreffen (etwa keine Verbindung oder eine abgelaufene Anmeldung), gehören an eine Stelle, die über allem liegt. Sie betreffen kein einzelnes Feld, und der Nutzer muss sie sehen, bevor er weitertippt.
 
 Fehler, die nach [[Bedienung - Der Fokus ist sichtbar und hat immer einen Ort]] ohnehin den Fokus bekommen.
 

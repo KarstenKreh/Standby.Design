@@ -1,6 +1,6 @@
 ---
 dateCreated: 2026-08-27
-description: Der Platz für Inhalt wird reserviert, bevor er eintrifft. Sehr kurze Wartezeiten zeigen gar nichts, lange sagen was passiert.
+description: Der Platz für Inhalt wird reserviert, bevor er eintrifft. Sehr kurze Wartezeiten zeigen gar nichts, lange sagen, was passiert.
 type: design-rule
 scope: universal
 applies-to:
@@ -24,15 +24,15 @@ tags:
 
 ### Nichts darf springen
 
-Trifft der Inhalt ein und schiebt alles darunter nach unten, verliert der Nutzer seine Stelle. Schlimmer: er hat vielleicht schon gezielt und drückt jetzt auf etwas anderes, als er treffen wollte. Das ist kein Schönheitsfehler, das ist eine Fehlbedienung, die die Oberfläche verursacht hat.
+Trifft der Inhalt ein und schiebt alles darunter nach unten, verliert der Nutzer seine Stelle. Hat er schon gezielt, drückt er jetzt vielleicht auf etwas anderes, als er treffen wollte. Dann hat die Oberfläche eine Fehlbedienung verursacht, und das wiegt schwerer als ein Schönheitsfehler.
 
-Deshalb wird der Platz vorher belegt, in der Form, die der Inhalt haben wird. Ein Platzhalter, der die Umrisse des echten Aufbaus zeigt, tut zwei Dinge auf einmal: er hält den Platz und er sagt schon, was kommt.
+Deshalb wird der Platz vorher belegt, in der Form, die der Inhalt haben wird. Ein Platzhalter, der die Umrisse des echten Aufbaus zeigt, hält den Platz und zeigt schon, was kommt.
 
 ### Ein Zeichen, das sofort wieder geht, stört mehr als die Wartezeit
 
-Unter etwa einer Zehntelsekunde wirkt eine Reaktion unmittelbar, da braucht es gar keine Rückmeldung. Bis etwa einer Sekunde bleibt der Gedanke des Nutzers zusammenhängend, er wartet, ohne abzuschweifen. Erst darüber verliert er den Faden und braucht etwas, das ihn hält.
+Unter etwa einer Zehntelsekunde wirkt eine Reaktion unmittelbar, da braucht es gar keine Rückmeldung. Bis etwa einer Sekunde bleibt der Gedanke des Nutzers zusammenhängend, er wartet, ohne abzuschweifen. Erst darüber verliert er den Faden und braucht eine Rückmeldung.
 
-Ein Ladezeichen, das aufblitzt und sofort verschwindet, macht die Oberfläche deshalb nicht hilfreicher, sondern unruhiger. Es meldet ein Problem, das es nicht gab.
+Ein Ladezeichen, das aufblitzt und sofort verschwindet, hilft deshalb nicht weiter und macht die Oberfläche unruhiger. Es meldet ein Problem, das es nicht gab.
 
 ### Der Nutzer wartet auf einen Teil, nicht auf alles
 
@@ -49,7 +49,7 @@ Lädt ein Bereich, wird auch nur dieser Bereich als ladend gezeigt. Eine ganze S
 
 Die Zahlen sind eine Vorgabe. Hart ist die Staffelung: erst nichts, dann Form, dann Auskunft.
 
-Ist ein Ladehinweis einmal erschienen, bleibt er eine Mindestzeit stehen. Kommt die Antwort kurz nach der Schwelle, blitzt er sonst für ein paar Millisekunden auf, genau das Flackern, das die Schwelle verhindern soll.
+Ist ein Ladehinweis einmal erschienen, bleibt er eine Mindestzeit stehen. Kommt die Antwort kurz nach der Schwelle, blitzt er sonst für ein paar Millisekunden auf. Genau dieses Flackern soll die Schwelle verhindern.
 
 | | Status |
 |---|---|
@@ -72,7 +72,7 @@ Ist ein Ladehinweis einmal erschienen, bleibt er eine Mindestzeit stehen. Kommt 
 
 Beim ersten Start einer Anwendung, wenn noch gar keine Form bekannt ist, ist ein einfacher Ladehinweis in Ordnung. Die Regel greift dort, wo der Aufbau schon feststeht und nur die Daten fehlen.
 
-Ein Vorgang, den der Nutzer selbst ausgelöst hat und dessen Ergebnis er abwartet — ein Export, eine Zahlung —, darf ihn festhalten. Er muss dann aber wissen, woran er ist.
+Ein Vorgang, den der Nutzer selbst ausgelöst hat und dessen Ergebnis er abwartet (etwa ein Export oder eine Zahlung), darf ihn festhalten. Er muss dann aber wissen, woran er ist.
 
 ## Verwandt
 

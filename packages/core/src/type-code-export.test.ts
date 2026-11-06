@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { generateCssExport, generateTailwindV4Export, generateLlmBriefing } from './type-code-export';
-import { customScale } from './scale';
+import { generateCssExport, generateTailwindV4Export, generateLlmBriefing, typeDesignTokens, TEXT_ROLES } from './type-code-export';
+import { customScale, traditionalScale, DEFAULT_TRADITIONAL, DEFAULT_TRADITIONAL_MOBILE } from './scale';
 
 function makeOpts() {
   const levels = customScale(1.0, 1.272);
@@ -103,5 +103,44 @@ describe('generateLlmBriefing', () => {
     const output = generateLlmBriefing(makeOpts());
     expect(output).not.toContain('for fluid scaling');
     expect(output).toContain('Font sizes are static');
+  });
+});
+
+describe('text roles', () => {
+  it('exports one class per role in the CSS export', () => {
+    const output = generateCssExport(makeOpts());
+    for (const r of TEXT_ROLES) expect(output).toContain(`.text-role-${r.role} {`);
+    expect(output).toMatch(/\.text-role-meta \{[^}]*font-size: var\(--text-caption\);/);
+    expect(output).toMatch(/\.text-role-figure \{[^}]*font-weight: 400;[^}]*tabular-nums/);
+  });
+
+  it('exports Tailwind utilities', () => {
+    const output = generateTailwindV4Export(makeOpts());
+    expect(output).toContain('@utility text-role-title-1 {');
+    expect(output).toMatch(/@utility text-role-title-1 \{[^}]*font-weight: var\(--font-weight-heading\);/);
+  });
+
+  it('exports role tokens with the heading weight for titles', () => {
+    const tokens = typeDesignTokens({ ...makeOpts(), headingWeight: 700 }) as { textRole: Record<string, { $value: { fontWeight: number } }> };
+    expect(Object.keys(tokens.textRole)).toEqual(TEXT_ROLES.map((r) => r.role));
+    expect(tokens.textRole['title-2'].$value.fontWeight).toBe(700);
+    expect(tokens.textRole.label.$value.fontWeight).toBe(500);
+  });
+
+  it('lists the roles in the briefing', () => {
+    const output = generateLlmBriefing(makeOpts());
+    expect(output).toContain('## Text Roles');
+    expect(output).toContain('`text-role-meta`');
+  });
+
+  it('keeps two scale steps between titles of the same weight', () => {
+    const order = ['display', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'body-l', 'body-m', 'body-s', 'caption'];
+    const titles = TEXT_ROLES.filter((r) => r.role.startsWith('title-')).map((r) => order.indexOf(r.level));
+    for (let i = 1; i < titles.length; i++) expect(titles[i] - titles[i - 1]).toBeGreaterThanOrEqual(2);
+  });
+
+  it('covers every role level in the traditional scale', () => {
+    const levels = traditionalScale(DEFAULT_TRADITIONAL, DEFAULT_TRADITIONAL_MOBILE).map((l) => l.level);
+    for (const r of TEXT_ROLES) expect(levels).toContain(r.level);
   });
 });

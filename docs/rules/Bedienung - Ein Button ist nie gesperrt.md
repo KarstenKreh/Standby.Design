@@ -20,13 +20,13 @@ tags:
 
 ## Warum
 
-Ein ausgegrauter Button ist eine Sackgasse ohne Erklärung. Der Nutzer sieht, dass er nicht weiterkommt, aber nicht warum. Er sucht das Formular nach dem fehlenden Häkchen ab, oder er gibt auf.
+Bei einem ausgegrauten Button sieht der Nutzer, dass er nicht weiterkommt, aber nicht warum. Er sucht das Formular nach dem fehlenden Häkchen ab, oder er gibt auf.
 
-Ein aktiver Button beantwortet die Frage beim Klick. Das fehlende Feld markiert sich, die Meldung sagt, was zu tun ist, und der Fehler verschwindet, sobald das Feld stimmt. Das ist derselbe Weg wie in [[Fluss - Ein Fehler steht dort, wo er entstanden ist]].
+Ein aktiver Button zeigt beim Klick, was fehlt. Das fehlende Feld wird markiert, die Meldung sagt, was zu tun ist, und der Fehler verschwindet, sobald das Feld stimmt. Das ist derselbe Weg wie in [[Fluss - Ein Fehler steht dort, wo er entstanden ist]].
 
-Steht kein Feld im Weg, sondern eine Grenze, etwa ein volles Kontingent oder ein fehlender Tarif, ist der gesperrte Button die falsche Handlung am richtigen Ort. „Mitglied einladen“ wird dann zu „Mehr Plätze buchen“. Der Nutzer sieht sofort, was ihn weiterbringt.
+Manchmal hält eine Grenze den Nutzer auf, etwa ein volles Kontingent oder ein fehlender Tarif. Dann steht an der Stelle des Buttons die Handlung, die die Grenze aufhebt. „Mitglied einladen“ wird dann zu „Mehr Plätze buchen“. Der Nutzer sieht sofort, was ihn weiterbringt.
 
-Die eine Sperre, die bleibt, schützt vor doppeltem Absenden. Während die Anfrage läuft, ist ein zweiter Klick nie gewollt.
+Gesperrt wird ein Button nur, während eine Anfrage läuft. So geht nichts doppelt raus. Ein zweiter Klick ist in dieser Zeit nie gewollt.
 
 ## Die Fälle
 
@@ -43,7 +43,7 @@ Die eine Sperre, die bleibt, schützt vor doppeltem Absenden. Während die Anfra
 |---|---|
 | Kein Button ist gesperrt, außer während einer Anfrage | hart |
 | Beim Klick auf einen unvollständigen Stand zeigt die Ansicht, was fehlt | hart |
-| Ohne Recht wird die Handlung nicht gezeigt, nicht ausgegraut | hart |
+| Ohne Recht wird die Handlung ausgeblendet statt ausgegraut | hart |
 | Wie der Fehler erscheint | weich, Vorgabe am Feld nach [[Fluss - Ein Fehler steht dort, wo er entstanden ist]] |
 
 ## Woran Du den Verstoß erkennst
@@ -58,7 +58,7 @@ Die eine Sperre, die bleibt, schützt vor doppeltem Absenden. Während die Anfra
 
 Steht der Grund unmittelbar neben dem Button und ist ohne Lesen zu sehen, darf er gesperrt sein. Das Beispiel ist der Senden-Knopf neben einem leeren Chatfeld.
 
-Ein Wert, den man sehen, aber nicht ändern darf, ist kein gesperrtes Feld, sondern Text. Er steht lesbar und kopierbar da, ohne Rahmen und ohne Bedienzeichen.
+Einen Wert, den man sehen, aber nicht ändern darf, zeigt die Ansicht als Text statt als gesperrtes Feld. Er steht lesbar und kopierbar da, ohne Rahmen und ohne Bedienzeichen.
 
 Sperren, die sich aus dem Bild erklären, bleiben erlaubt: „Zurück“ auf der ersten Seite, „Weiter“ auf der letzten.
 

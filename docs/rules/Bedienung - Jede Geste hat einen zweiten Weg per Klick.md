@@ -21,9 +21,9 @@ tags:
 
 ## Warum
 
-Nicht jeder kann ziehen oder präzise wischen. Und keine Geste ist sichtbar.
+Nicht jeder kann ziehen oder präzise wischen. Außerdem sieht man keiner Geste an, dass es sie gibt.
 
-Nachgebaut wird nicht die Geste, sondern das Ergebnis. Eine Liste, die man per Ziehen sortiert, bekommt „Nach oben“ und „Nach unten“ im Menü der Zeile. Was man per Wischen löscht, lässt sich auch im Menü löschen. Ein Regler reagiert auf Pfeiltasten. Eine Funktion, die auf Schütteln reagiert, lässt sich abschalten.
+Der zweite Weg liefert das Ergebnis der Geste. Eine Liste, die man per Ziehen sortiert, bekommt „Nach oben“ und „Nach unten“ im Menü der Zeile. Was man per Wischen löscht, lässt sich auch im Menü löschen. Ein Regler reagiert auf Pfeiltasten. Eine Funktion, die auf Schütteln reagiert, lässt sich abschalten.
 
 ## Woran Du den Verstoß erkennst
 

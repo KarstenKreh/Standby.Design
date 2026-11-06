@@ -1,6 +1,6 @@
 ---
 dateCreated: 2026-08-27
-description: Gestaltung läuft über Utility-Klassen. Inline-Styles und Style-Objekte sind ein Ausstieg aus dem Design-System.
+description: Gestaltung läuft über Utility-Klassen. Inline-Styles und Style-Objekte umgehen das Design-System.
 type: design-rule
 scope: stack
 applies-to:
@@ -20,9 +20,9 @@ tags:
 
 ## Warum
 
-Ein Inline-Style ist der bequemste Weg an allen Regeln vorbei. Er kennt keine Tokens, keine Breakpoints, keinen hellen Modus und keine Zustände. Er gewinnt außerdem gegen jede Klasse, sodass eine spätere Korrektur über das System nicht mehr greift — die Stelle ist tot für jede Änderung, die nicht genau dort ansetzt.
+Mit einem Inline-Style umgeht man am bequemsten alle Regeln. Er kennt keine Tokens, keine Breakpoints, keinen hellen Modus und keine Zustände. Er hat außerdem Vorrang vor jeder Klasse. Eine spätere Korrektur über das System greift dort deshalb nicht mehr. Die Stelle ändert sich nur noch, wenn jemand genau dort ansetzt.
 
-Utility-Klassen sind dagegen durchsuchbar. Man findet alle Stellen mit einem bestimmten Abstand, kann sie zählen und in einem Zug umstellen. Das ist der Unterschied zwischen einem System und einer Sammlung von Einzelfällen.
+Utility-Klassen sind dagegen durchsuchbar. Man findet alle Stellen mit einem bestimmten Abstand, kann sie zählen und in einem Zug umstellen. So lässt sich die Gestaltung als System pflegen. Inline-Styles bleiben eine Sammlung von Einzelfällen.
 
 ## Woran Du den Verstoß erkennst
 
@@ -46,7 +46,7 @@ Utility-Klassen sind dagegen durchsuchbar. Man findet alle Stellen mit einem bes
 
 ## Grenzen
 
-Werte, die zur Laufzeit berechnet werden — die Breite eines Balkens aus einem Prozentwert, eine Position aus einer Messung —, gehören in einen Style. Sie sind Daten, keine Gestaltung. Alles andere daneben bleibt in Klassen.
+Manche Werte werden erst zur Laufzeit berechnet, etwa die Breite eines Balkens aus einem Prozentwert oder eine Position aus einer Messung. Sie gehören in einen Style. Sie sind Daten, keine Gestaltung. Alles andere daneben bleibt in Klassen.
 
 ## Verwandt
 

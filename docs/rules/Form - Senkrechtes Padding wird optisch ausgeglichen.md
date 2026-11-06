@@ -17,15 +17,15 @@ tags:
 # Senkrechtes Padding wird optisch ausgeglichen
 
 > [!TIP] Regel
-> Setze das senkrechte Padding eine Spur kleiner als das waagerechte, wenn es rundherum gleich aussehen soll. Gleich gemessen ist nicht gleich gesehen.
+> Setze das senkrechte Padding eine Spur kleiner als das waagerechte, wenn es rundherum gleich aussehen soll. Gleiche Werte sehen nicht gleich aus.
 
 ## Warum
 
-Senkrechter Weißraum wirkt größer als waagerechter desselben Maßes. Setzt Du rundherum denselben Wert, sieht die Fläche oben und unten luftiger aus als an den Seiten, obwohl das Lineal etwas anderes sagt. Die kleine Absenkung gleicht das aus.
+Senkrechter Weißraum wirkt größer als waagerechter desselben Maßes. Setzt Du rundherum denselben Wert, sieht die Fläche oben und unten luftiger aus als an den Seiten, obwohl die Werte gleich sind. Die kleine Absenkung gleicht das aus.
 
-Das ist keine Frage des Geschmacks, sondern Wahrnehmung, und sie ist in der Gestaltung seit langem bekannt. Derselbe Effekt eine Ebene tiefer: ein waagerechter Strich wirkt dicker als ein senkrechter gleicher Breite. Schriftgestalter ziehen die Waagerechten in einem Buchstaben deshalb dünner als die Senkrechten, sonst wirkt das Zeichen kopflastig. Wer es misst, findet den Unterschied. Wer es liest, sieht ihn nicht — und genau das ist das Ziel.
+Das liegt an der Wahrnehmung, mit Geschmack hat es nichts zu tun. In der Gestaltung ist der Effekt seit langem bekannt. Er zeigt sich auch im Kleinen. Ein waagerechter Strich wirkt dicker als ein senkrechter gleicher Breite. Schriftgestalter ziehen die Waagerechten in einem Buchstaben deshalb dünner als die Senkrechten, sonst wirkt das Zeichen kopflastig. Wer nachmisst, findet den Unterschied. Beim Lesen sieht man ihn nicht, und das ist so gewollt.
 
-Es ist derselbe Gedanke wie bei optischer statt mathematischer Zentrierung: das Auge entscheidet, nicht das Maßband.
+Es ist derselbe Gedanke wie bei optischer statt mathematischer Zentrierung. Maßgeblich ist, was das Auge sieht.
 
 ## Hart und weich
 
@@ -35,7 +35,7 @@ Es ist derselbe Gedanke wie bei optischer statt mathematischer Zentrierung: das 
 | Der Ausgleichswert ist eine benannte Stufe der Skala, kein Wert in der Ansicht | hart |
 | Um wie viel kleiner | weich, Vorgabe 14 gegen 16, also etwa ein Achtel |
 
-Der Abstand zwischen den beiden Werten darf klein sein. Er soll nicht auffallen, er soll die Auffälligkeit beseitigen.
+Der Abstand zwischen den beiden Werten darf klein sein. Der Ausgleich soll selbst nicht auffallen, nur die ungleiche Wirkung beseitigen.
 
 ## Woran Du den Verstoß erkennst
 
@@ -62,9 +62,9 @@ Der Abstand zwischen den beiden Werten darf klein sein. Er soll nicht auffallen,
 
 ## Der Ausgleichswert braucht eine eigene Stufe
 
-Übliche Abstands-Skalen springen von 12 auf 16 und kennen den Wert dazwischen nicht. Wer ihn dann im Code von Hand setzt, hat ihn ab da an jeder Stelle einzeln stehen.
+Übliche Abstands-Skalen springen von 12 auf 16 und kennen den Wert dazwischen nicht. Setzt ihn dann jemand von Hand, steht er ab da an jeder Stelle einzeln im Code.
 
-Der Ausgleichswert gehört deshalb als benannte Stufe in die Skala, mit einem Namen, der sagt wofür er da ist. Sonst wird er jedes Mal neu erfunden, und beim dritten Mal ist er nicht mehr derselbe.
+Der Ausgleichswert gehört deshalb als benannte Stufe in die Skala, mit einem Namen, der sagt wofür er da ist. Sonst setzt ihn jeder neu, und schon nach wenigen Stellen weichen die Werte voneinander ab.
 
 ## Grenzen
 

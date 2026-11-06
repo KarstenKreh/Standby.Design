@@ -22,9 +22,9 @@ tags:
 
 ## Warum
 
-Ohne diese Trennung wird das Aussehen zum Verhalten. „Der Knopf ist blau" wird zu „blau heißt anklickbar", und beim nächsten Umbau kippt mit der Farbe auch die Bedienlogik. Mit der Trennung kannst Du das Aussehen wechseln, ohne dass sich ändert, was das Element tut. Und Du kannst etwas Neues bauen, indem Du nur sein Verhalten benennst, statt sein Aussehen neu zu erfinden.
+Ohne diese Trennung hängt das Verhalten am Aussehen. Aus „Der Knopf ist blau" wird „blau heißt anklickbar". Ändert der nächste Umbau die Farbe, ändert sich auch die Bedienlogik. Mit der Trennung kannst Du das Aussehen wechseln, ohne dass sich ändert, was das Element tut. Und Du kannst etwas Neues bauen, indem Du nur sein Verhalten benennst, statt sein Aussehen neu zu erfinden.
 
-Für einen Agenten ist die Tabelle der Verhaltensarten die Antwort auf die häufigste Frage überhaupt: was wird hier eingesetzt? Nicht „nimm einen Button", sondern „das ist ein dauerhafter Zustand, also `toggleable`, also Schalter oder Reiter".
+Ein Agent fragt am häufigsten, welches Element er hier einsetzt. Die Tabelle der Verhaltensarten beantwortet das. Statt „nimm einen Button" heißt es dann „das ist ein dauerhafter Zustand, also `toggleable`, also Schalter oder Reiter".
 
 ## Die fünf Verhaltensarten
 
@@ -36,13 +36,13 @@ Für einen Agenten ist die Tabelle der Verhaltensarten die Antwort auf die häuf
 | `navigable` | Bringt den Nutzer an eine andere Stelle |
 | `readable` | Zeigt nur an, nimmt keine Bedienung entgegen |
 
-Die Verhaltensarten entsprechen dem, was ein blinder Nutzer heute schon erlebt: der Accessibility Tree kennt Verhalten, kein Aussehen. Sie sind damit keine Wette auf eine Abstraktion, sondern die Wahrheit der Plattform.
+Die Verhaltensarten entsprechen dem, was ein blinder Nutzer heute schon erlebt. Der Accessibility Tree kennt Verhalten, kein Aussehen. Die Verhaltensarten bilden also ab, was die Plattform schon kennt, und sind keine ausgedachte Abstraktion.
 
 ## Das Element im Code
 
 Jede Verhaltensart hat ihr Bauteil im Code. `navigable` ist ein Link mit Adresse, `pressable` und `toggleable` sind ein `button`, `editable` ist ein Feld mit verbundener Beschriftung, `readable` ist Text. Ein Kasten mit Klick sieht für die Maus genauso aus, aber die Tastatur erreicht ihn nicht, der Screenreader erkennt ihn nicht, und ein Link lässt sich nicht in einem neuen Tab öffnen. Gibt es kein passendes Bauteil, etwa für Tabs oder eine Kombi-Box, gilt das Muster aus der ARIA APG.
 
-Eine Rolle im Code ist ein Versprechen. Wer behauptet, etwas sei ein Menü, Tabs oder ein Raster, baut auch die Tastaturbedienung dazu, sonst erwartet der Nutzer Pfeiltasten, die nichts tun. Eine Hauptnavigation ist deshalb keine Menü-Rolle, sondern eine Liste von Links.
+Eine Rolle im Code weckt beim Nutzer Erwartungen. Wer etwas als Menü, Tabs oder Raster auszeichnet, baut auch die Tastaturbedienung dazu. Sonst drückt der Nutzer Pfeiltasten, die nichts tun. Eine Hauptnavigation ist deshalb eine Liste von Links ohne Menü-Rolle.
 
 ## Das Wörterbuch
 
@@ -60,7 +60,7 @@ Bekannte Paare aus Verhalten und Aussehen, die einen Namen tragen. Der Name der 
 | Fließtext-Link | navigable | text | verdickte Unterstreichung | `a` mit `href` |
 | Badge | readable | badge | — | Text |
 
-Chip und Badge sind verwandt, aber nicht gleich. Der Chip ist ein kleiner Umschalter, etwa ein Filter, der an oder aus ist. Das Badge hebt nur eine Information als Etikett hervor. Weil das Auge Gleiches für Gleichartiges hält, sehen die beiden nicht gleich aus: Das Badge ist schmaler und hat nur ein knappes Padding, der Chip hat die Polsterung eines Bedienelements. So sieht man vor dem Klick, was sich drücken lässt.
+Chip und Badge sind verwandt, aber nicht gleich. Der Chip ist ein kleiner Umschalter, etwa ein Filter, der an oder aus ist. Das Badge hebt nur eine Information als Etikett hervor. Was gleich aussieht, hält der Nutzer für gleichartig. Deshalb sehen die beiden verschieden aus. Das Badge ist schmaler und hat nur ein knappes Padding, der Chip hat die Polsterung eines Bedienelements. So sieht man vor dem Klick, was sich drücken lässt.
 
 ## Woran Du den Verstoß erkennst
 
@@ -76,9 +76,9 @@ Chip und Badge sind verwandt, aber nicht gleich. Der Chip ist ein kleiner Umscha
 
 ## Grenzen
 
-Zusammengesetzte Gebilde — Dropdown, Datepicker, Dialog — bestehen aus mehreren Elementen und bekommen keine eigene Verhaltensart. Ihr Auslöser ist `pressable`, ihre Einträge sind `navigable` oder `toggleable`.
+Zusammengesetzte Gebilde wie Dropdown, Datepicker oder Dialog bestehen aus mehreren Elementen und bekommen keine eigene Verhaltensart. Ihr Auslöser ist `pressable`, ihre Einträge sind `navigable` oder `toggleable`.
 
-Und nicht jede Kombination ergibt Sinn. Welche verboten sind, gehört in die Grammatik des Projekts, nicht in diese Notiz.
+Nicht jede Kombination ergibt Sinn. Welche verboten sind, gehört in die Grammatik des Projekts, nicht in diese Notiz.
 
 ## Verwandt
 

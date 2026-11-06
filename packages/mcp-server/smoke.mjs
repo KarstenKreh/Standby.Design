@@ -161,6 +161,16 @@ if (!res.content[0].text.includes('get_design_rules')) {
 }
 console.log('=== llm-briefing links the design rules OK ===');
 
+res = await client.callTool({ name: 'update_project', arguments: {} });
+if (!res.content[0].text.includes('npx standby-design-lint@latest init')) {
+  throw new Error('update_project does not name the init command: ' + res.content[0].text.slice(0, 400));
+}
+res = await client.callTool({ name: 'export_design_system', arguments: { url, format: 'css' } });
+if (!res.content[0].text.includes('.text-role-meta')) {
+  throw new Error('css export is missing the text role classes');
+}
+console.log('=== update_project and text roles OK ===');
+
 // Error paths
 res = await client.callTool({ name: 'generate_color_palette', arguments: { brandHex: 'nope' } });
 console.log('\n=== invalid hex →', res.isError ? 'isError OK' : 'MISSING isError', '===\n' + res.content[0].text);

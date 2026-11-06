@@ -1,0 +1,29 @@
+language js
+
+or {
+  or { JsxString(), JsStringLiteralExpression(), JsTemplateChunkElement() } as $class where {
+    $class <: r"(?s).*(?:transition-all).*",
+    $class <: within or {
+      JsxAttribute(name=r"(?:className|class|tw|[A-Za-z]+ClassName)"),
+      JsCallExpression(callee=r"(?:.*\.)?(?:classnames|classNames|twMerge|twJoin|clsx|cva|cn|cx|tv)"),
+      JsTemplateExpression(tag=r"(?:.*\.)?tw")
+    },
+    $parts = split($class, " "),
+    $parts <: some $part where {
+      $part <: r"[\s\"'`]*((?:\[[^\]]*\]|\([^)]*\)|[^\s\"'`\[(])+)[\s\"'`]*"($token),
+      $token <: r"((?:(?:\[[^\]]*\]|\([^)]*\)|[^:\[(])*:)*)!?((?:\[[^\]]*\]|\([^)]*\)|[^:\[(!])+)!?"($variants, $utility),
+      $variants <: not r"(?:(?:\[[^\]]*\]|\([^)]*\)|[^:\[(])*:)*(?:web):(?:(?:\[[^\]]*\]|\([^)]*\)|[^:\[(])*:)*",
+      or {
+        and {
+          $utility <: r"transition-all",
+          $message = join(list=["„transition-all“", " animiert jede Eigenschaft, auch das Layout. Fix: nur die Eigenschaften nennen, die sich ändern (z. B. transition-colors, transition-opacity, transition-transform), Dauer aus den Motion-Tokens. Regel: „Bewegung hat einen Wert und hält nichts auf“ https://standby.design/docs/rules/bedienung-bewegung-hat-einen-wert-und-haelt-nichts-auf"], separator="")
+        }
+      }
+    },
+    register_diagnostic(span=$class, message=$message, severity="error")
+  },
+  JsPropertyObjectMember(name=r"transition", value=JsStringLiteralExpression() as $value) where {
+    $value <: r"[\"'`]\s*all\b.*",
+    register_diagnostic(span=$value, message=join(list=["„transition: all“", " animiert jede Eigenschaft, auch das Layout. Fix: nur die Eigenschaften nennen, die sich ändern (z. B. transition-colors, transition-opacity, transition-transform), Dauer aus den Motion-Tokens. Regel: „Bewegung hat einen Wert und hält nichts auf“ https://standby.design/docs/rules/bedienung-bewegung-hat-einen-wert-und-haelt-nichts-auf"], separator=""), severity="error")
+  }
+}
