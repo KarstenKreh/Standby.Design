@@ -10,7 +10,7 @@ import { registerGenerateTools } from './tools-generate.js';
 import { registerSystemTools } from './tools-system.js';
 import { registerRuleTools } from './tools-rules.js';
 
-export const SERVER_VERSION = '0.6.3';
+export const SERVER_VERSION = '0.6.4';
 
 export function createServer(): McpServer {
   const server = new McpServer(
