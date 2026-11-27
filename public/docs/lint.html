@@ -192,7 +192,8 @@
     <h2>Set up and update</h2>
     <p>Run this in the root folder of the project, where <code>package.json</code> is. It needs Node 20.19 or newer.</p>
     <pre><code>npx standby-design-lint@latest init</code></pre>
-    <p>The command installs the package as a dev dependency with a fixed version, together with the ESLint packages the project does not have yet. A Vue project also gets <code>vue-eslint-parser</code>. In a pnpm workspace it installs into the workspace root. Then it sets up these parts:</p>
+    <p>The command picks one of two ways and names it in the first line of its report. A project with ESLint gets the ESLint way. A project with <a href="#biome">Biome</a> and without ESLint gets the Biome way, which adds no ESLint, no parser and no second TypeScript to the lockfile. <code>--eslint</code> or <code>--biome</code> sets the way by hand.</p>
+    <p>The command installs the package as a dev dependency with a fixed version. On the ESLint way it adds the ESLint packages the project does not have yet, and <code>vue-eslint-parser</code> in a Vue project. In a pnpm workspace it installs into the workspace root. Then it sets up these parts:</p>
     <ul>
       <li>a Claude Code hook in <code>.claude/settings.json</code></li>
       <li>a pre-commit hook, in <code>.husky/</code> if the project uses husky, otherwise in the git hooks folder</li>
@@ -204,6 +205,7 @@
       <li><code>.design-review/</code> in <code>.gitignore</code></li>
     </ul>
     <p>Run the same command again to update. It never adds an entry twice. Hooks from other tools and your own text in <code>CLAUDE.md</code> and <code>AGENTS.md</code> stay as they are. The workflow file and the skill are written anew on each run, so local changes to these two files are lost.</p>
+    <p>If the project only allows packages of a certain age (<code>minimumReleaseAge</code> in pnpm, <code>min-release-age</code> in npm), <code>init</code> respects it. If the newest version is too young, it installs the newest allowed version through the package manager and lets that version set up the project. If none can, it changes nothing and names the date from which the update works. If <code>.claude</code> is a symlink, for example to <code>.agents</code>, the hook and the skill go into the folder it points to.</p>
     <p>With the <a href="/docs/mcp">standby.design MCP server</a> connected, you can tell the agent &ldquo;Get the latest standby update&rdquo; (German: &bdquo;Hol Dir das Update&ldquo;). The agent calls the tool <code>update_project</code>, which returns the steps. Then it runs <code>init</code>.</p>
     <p>GitHub only accepts the workflow file from a token with the <code>workflow</code> scope. If the push is rejected, run this and push again:</p>
     <pre><code>gh auth refresh -s workflow</code></pre>
@@ -239,7 +241,7 @@
         <tr><td><code>no-click-on-non-interactive</code></td><td>Click handlers on elements that are not controls: <code>&lt;div onClick&gt;</code></td><td><a href="/docs/rules/bedienung-name-und-zustand-stehen-im-code">&bdquo;Name und Zustand stehen im Code&ldquo;</a></td></tr>
       </tbody>
     </table>
-    <p>The lint checks <code>.js</code>, <code>.jsx</code>, <code>.ts</code>, <code>.tsx</code>, <code>.mjs</code> and <code>.vue</code> files. It finds classes in the attributes <code>className</code>, <code>class</code>, <code>tw</code> and every attribute that ends in <code>ClassName</code>, such as <code>contentContainerClassName</code>, and in the helpers <code>cn()</code>, <code>clsx()</code>, <code>classnames()</code>, <code>cx()</code>, <code>cva()</code>, <code>twMerge()</code>, <code>twJoin()</code> and <code>tv()</code>. A class with the variant <code>web:</code> is never reported, because NativeWind applies it on the web only. The messages are in German.</p>
+    <p>The lint checks <code>.js</code>, <code>.jsx</code>, <code>.ts</code>, <code>.tsx</code>, <code>.mjs</code>, <code>.vue</code> and <code>.astro</code> files. It finds classes in the attributes <code>className</code>, <code>class</code>, <code>tw</code> and every attribute that ends in <code>ClassName</code>, such as <code>contentContainerClassName</code>, and in the helpers <code>cn()</code>, <code>clsx()</code>, <code>classnames()</code>, <code>cx()</code>, <code>cva()</code>, <code>twMerge()</code>, <code>twJoin()</code> and <code>tv()</code>. A class with the variant <code>web:</code> is never reported, because NativeWind applies it on the web only. The messages are in German.</p>
 
     <h2>Vue</h2>
     <p>In <code>.vue</code> files, the lint checks the template, <code>&lt;script&gt;</code> and <code>&lt;style&gt;</code>. Each message points to the line in the <code>.vue</code> file, also inside a <code>class</code> attribute that spans several lines. It finds:</p>
@@ -252,10 +254,16 @@
     </ul>
     <p>In a <code>:class</code> object, the keys are the classes, so the lint checks only the keys. Classes inside a variable are out of reach, unless the script writes them in <code>cn()</code> or another helper.</p>
 
-    <h2>Biome</h2>
-    <p>Projects that lint with <a href="https://biomejs.dev">Biome</a> 2.5 or newer get the eight rules as Biome plugins. They need neither ESLint nor <code>init</code>. Install the package with a fixed version, so updates arrive as a normal Dependabot pull request:</p>
-    <pre><code>pnpm add -D -w -E standby-design-lint</code></pre>
-    <p>Then list the rules in <code>biome.json</code>. Each rule exists twice: <code>biome/&lt;rule&gt;.grit</code> reports an error, <code>biome/warn/&lt;rule&gt;.grit</code> a warning. Biome needs the path with <code>./node_modules/</code>.</p>
+    <p><code>.vue</code> files need the ESLint way. On the Biome way they are not checked.</p>
+
+    <h2>Astro</h2>
+    <p>In <code>.astro</code> files, the lint checks the markup below the frontmatter, on both ways and without an Astro parser. It finds classes in <code>class</code>, <code>class:list</code> and <code>class={&hellip;}</code>, fixed values in <code>style="&hellip;"</code> and <code>transition: all</code> in <code>style</code>. The messages are the same as in JSX. The frontmatter, <code>&lt;script&gt;</code> and <code>&lt;style&gt;</code> blocks and classes inside a variable are not checked. An exception is an HTML comment on the line before the element: <code>&lt;!-- biome-ignore lint/plugin: reason --&gt;</code> or <code>&lt;!-- eslint-disable-next-line standby/&hellip; -- reason --&gt;</code>.</p>
+
+    <h2 id="biome">Biome</h2>
+    <p>Projects that lint with <a href="https://biomejs.dev">Biome</a> 2.5 or newer and without ESLint get every stage through <code>init</code>: hook, pre-commit, CI workflow, review skill and rules block. The lockfile gets <code>standby-design-lint</code> and nothing else. This also holds in a pnpm workspace with the hoisted linker.</p>
+    <p>The CLI runs the Biome of the project with a configuration of its own that holds only the eight rules as plugins. It does not read or change <code>biome.json</code>, and the CI workflow does not run the project's own check a second time. Component folders, allowed colors and ignores come from <code>standbyDesignLint</code> in <code>package.json</code>, see <a href="#settings">Settings</a>. Messages, rule links and &ldquo;only new or changed lines&rdquo; are the same as on the ESLint way.</p>
+    <p>An exception reads <code>// biome-ignore lint/plugin: reason</code> on the line before, or <code>{/* biome-ignore lint/plugin: reason */}</code> between JSX elements. <code>eslint-disable</code> comments do nothing in a Biome project. The rules block in <code>AGENTS.md</code> names the spelling that works.</p>
+    <p>For findings in the editor and in <code>biome check</code>, you can also list the rules in <code>biome.json</code>. Each rule exists twice: <code>biome/&lt;rule&gt;.grit</code> reports an error, <code>biome/warn/&lt;rule&gt;.grit</code> a warning. Biome needs the path with <code>./node_modules/</code>.</p>
     <pre><code>"overrides": [{
   "includes": ["apps/mobile/**/*.tsx"],
   "plugins": [
@@ -263,10 +271,10 @@
     "./node_modules/standby-design-lint/biome/warn/no-raw-values.grit"
   ]
 }]</code></pre>
-    <p>Biome reports one finding per string and rule. The next one shows once the first is fixed. Component folders other than <code>/components/ui/</code> go into <code>includes</code> on the plugin entry. An exception reads <code>// biome-ignore lint/plugin: reason</code>. The plugins do not check Vue templates, Vue projects use the ESLint path. The <a href="https://github.com/KarstenKreh/Standby.Design/blob/master/packages/design-lint/README.md#biome">README</a> has the full example.</p>
+    <p>Biome reports one finding per string and rule. The next one shows once the first is fixed. The shipped files allow hover and focus styles in <code>/components/ui/</code> only. <code>npx standby-design-lint biome &lt;folder&gt;</code> writes files with the component folders and allowed colors of your settings. The plugins do not check Vue templates, Vue projects use the ESLint way. The <a href="https://github.com/KarstenKreh/Standby.Design/blob/master/packages/design-lint/README.md#biome">README</a> has the full example.</p>
 
     <h2>Exceptions</h2>
-    <p>Some hits are on purpose, for example a brand color fixed by the logo guideline. Put an ESLint disable comment with a reason on the line before:</p>
+    <p>Some hits are on purpose, for example a brand color fixed by the logo guideline. On the Biome way, write a <code>biome-ignore</code> comment, see <a href="#biome">Biome</a>. On the ESLint way, put an ESLint disable comment with a reason on the line before:</p>
     <pre><code>const logo = cn(
   // eslint-disable-next-line standby/no-raw-values -- brand color from the logo guideline
   'bg-[#ff2d9c]',
@@ -300,7 +308,7 @@ npx standby-design-lint review http://localhost:5173/settings</code></pre>
     </table>
     <p>The three title levels sit two steps apart on the type scale.</p>
 
-    <h2>Settings</h2>
+    <h2 id="settings">Settings</h2>
     <p><code>init</code> adds this block if <code>package.json</code> has none. A second run keeps your settings. All keys are optional, the <code>ignores</code> entry is an example.</p>
     <pre><code>"standbyDesignLint": {
   "componentPaths": ["/components/ui/"],
@@ -311,7 +319,10 @@ npx standby-design-lint review http://localhost:5173/settings</code></pre>
       <li><code>componentPaths</code> lists the folders of the base components. Hover and focus styles are allowed only there.</li>
       <li><code>allowedColors</code> lists Tailwind palette colors you allow, for example <code>"white"</code>.</li>
       <li><code>ignores</code> lists glob patterns the lint skips. <code>node_modules</code>, <code>dist</code>, <code>build</code>, <code>.next</code>, <code>coverage</code> and <code>*.d.ts</code> files are always skipped.</li>
+      <li><code>engine</code> sets the way: <code>"eslint"</code> or <code>"biome"</code>. <code>init</code> writes <code>"biome"</code> in a Biome project.</li>
+      <li><code>rulesFile</code> names the file with the project's own copy of the design rules. The rules block in <code>AGENTS.md</code> then names this file as the source that counts.</li>
     </ul>
+    <p>In a monorepo, the settings go into the <code>package.json</code> of the root. List each folder of base components, for example <code>"/packages/ui/src/components/"</code>.</p>
     <p>If the project already has an ESLint config, add the rules there:</p>
     <pre><code>import { recommended } from 'standby-design-lint';
 export default [recommended({ componentPaths: ['/components/ui/'] })];</code></pre>
@@ -320,7 +331,7 @@ export default [recommended({ componentPaths: ['/components/ui/'] })];</code></p
     <p>The hook runs only in Claude Code. Cursor, Codex and other agents read the rules block in <code>AGENTS.md</code>. Their violations show up in the pre-commit warning and fail the pull request check. They can run the review command directly. If the project has no <code>CLAUDE.md</code>, <code>init</code> creates one that imports <code>AGENTS.md</code>.</p>
 
     <h2>Privacy</h2>
-    <p>The lint and <code>init</code> run locally and send no code or project data anywhere. The only network access of <code>init</code> is the package download from npm. The review opens the URL you pass in a local browser.</p>
+    <p>The lint and <code>init</code> run locally and send no code or project data anywhere. The only network access of <code>init</code> is the package download from npm and, in a project with a minimum release age, a query for the release dates of the package. The review opens the URL you pass in a local browser.</p>
 
     <h2>Links</h2>
     <ul>

@@ -165,6 +165,9 @@ res = await client.callTool({ name: 'update_project', arguments: {} });
 if (!res.content[0].text.includes('npx standby-design-lint@latest init')) {
   throw new Error('update_project does not name the init command: ' + res.content[0].text.slice(0, 400));
 }
+if (!res.content[0].text.includes('biome-ignore lint/plugin') || !res.content[0].text.includes('minimumReleaseAge')) {
+  throw new Error('update_project does not describe the Biome way and the release age gate');
+}
 res = await client.callTool({ name: 'export_design_system', arguments: { url, format: 'css' } });
 if (!res.content[0].text.includes('.text-role-meta')) {
   throw new Error('css export is missing the text role classes');

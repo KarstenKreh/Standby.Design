@@ -1,18 +1,28 @@
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { addedLines } from './git-diff.js';
 import { reviewScreen } from './review.js';
+import { SETUP_ERROR, setupError } from './errors.js';
+import { DEFAULT_IGNORES, ignoreMatcher } from './ignores.js';
+import { createBiomeEngine, findBiome } from './biome/engine.js';
+import { BIOME_RULES, writeBiomePlugins } from './biome/generate.js';
+import { MARKUP_FILE, lintMarkup } from './markup.js';
 import { ESLINT_PACKAGES, VUE_PARSER, initProject, formatInitReport, installHooks, usesVue } from './init.js';
 
-const LINTABLE = /\.(?:jsx|tsx|js|ts|mjs|vue)$/;
+export { SETUP_ERROR };
+
+const LINTABLE = /\.(?:jsx|tsx|js|ts|mjs|vue|astro)$/;
 const HOOK_MESSAGE_LIMIT = 20;
 const OWN_RULE_PREFIX = 'standby/';
-const DEFAULT_IGNORES = ['**/node_modules/**', '**/dist/**', '**/build/**', '**/.next/**', '**/coverage/**', '**/*.d.ts'];
+const SKIPPED_FOLDERS = new Set(['node_modules', '.git']);
+const ENGINES = ['eslint', 'biome'];
 const USAGE = `standby-design-lint: prüft Code gegen die Design-Regeln von standby.design
 
   standby-design-lint init       richtet Hook, Pre-Commit, CI, Skill und Agenten-Anweisung ein oder aktualisiert sie
+                                 erkennt selbst, ob das Projekt ESLint oder nur Biome nutzt (--eslint, --biome legt es fest)
   standby-design-lint hooks      richtet nur den Pre-Commit ein (läuft über das prepare-Skript bei npm install)
+  standby-design-lint biome <ordner>  schreibt die Regeln als Biome-Plugins mit den Einstellungen des Projekts (für biome.json)
   standby-design-lint [Pfade…]   prüft Dateien oder Ordner (Vorgabe: src)
   standby-design-lint --staged   prüft nur die Zeilen, die für den Commit vorgemerkt sind (Pre-Commit)
   standby-design-lint --since <ref>  prüft nur die Zeilen, die seit <ref> dazukamen (CI, z. B. origin/main)
@@ -21,7 +31,8 @@ const USAGE = `standby-design-lint: prüft Code gegen die Design-Regeln von stan
   --warn                         meldet Verstöße, endet aber mit Exit-Code 0 (für den Pre-Commit)
 
 Einstellungen stehen in package.json unter "standbyDesignLint":
-  { "componentPaths": ["/components/ui/"], "allowedColors": [], "ignores": [] }`;
+  { "componentPaths": ["/components/ui/"], "allowedColors": [], "ignores": [] }
+  "engine": "biome" prüft mit dem Biome des Projekts statt mit ESLint. "rulesFile" nennt die Regeldatei des Projekts.`;
 
 export function findSettings(startDir) {
   let dir = path.resolve(startDir);
@@ -37,21 +48,14 @@ export function findSettings(startDir) {
   }
 }
 
-export const SETUP_ERROR = 'STANDBY_SETUP';
-
-function setupError(message) {
-  const error = new Error(message);
-  error.code = SETUP_ERROR;
-  return error;
-}
-
-async function loadEslint() {
+async function loadEslint(root) {
   try {
     const [{ ESLint }, standby] = await Promise.all([import('eslint'), import('./index.js')]);
     return { ESLint, standby };
   } catch (error) {
     if (error.code !== 'ERR_MODULE_NOT_FOUND') throw error;
-    throw setupError(`ESLint fehlt. Das Paket bringt es seit 0.3.0 nicht mehr selbst mit. Einmal ausführen: npm i -D ${ESLINT_PACKAGES.join(' ')} (oder npx standby-design-lint init). Biome-Projekte brauchen die CLI nicht, sie binden die Dateien aus node_modules/standby-design-lint/biome/ ein.`);
+    const biome = findBiome(root) ? ' Dieses Projekt hat Biome: "engine": "biome" in package.json unter "standbyDesignLint" prüft ohne ESLint.' : '';
+    throw setupError(`ESLint fehlt. Das Paket bringt es seit 0.3.0 nicht mehr selbst mit. Einmal ausführen: npm i -D ${ESLINT_PACKAGES.join(' ')} (oder npx standby-design-lint init).${biome}`, { missing: 'eslint' });
   }
 }
 
@@ -61,9 +65,17 @@ function vueConfigs(standby, root, { componentPaths, allowedColors }) {
   return [];
 }
 
-export async function createLinter(root, settings) {
-  const { ESLint, standby } = await loadEslint();
-  return new ESLint({
+function isOwnMessage(message) {
+  return message.ruleId === null || message.ruleId.startsWith(OWN_RULE_PREFIX);
+}
+
+function withoutForeignRules(results) {
+  return results.map((result) => ({ ...result, messages: result.messages.filter(isOwnMessage) }));
+}
+
+async function createEslintEngine(root, settings) {
+  const { ESLint, standby } = await loadEslint(root);
+  const eslint = new ESLint({
     cwd: root,
     overrideConfigFile: true,
     overrideConfig: [
@@ -73,6 +85,62 @@ export async function createLinter(root, settings) {
     ],
     errorOnUnmatchedPattern: false,
   });
+  const collect = (results) => ({ results: withoutForeignRules(results), checked: results.length });
+  return {
+    name: 'eslint',
+    isIgnored: (file) => eslint.isPathIgnored(file),
+    lintFiles: async (paths) => collect(await eslint.lintFiles(paths)),
+    async lintTexts(entries) {
+      const results = [];
+      for (const { filePath, text } of entries) results.push(...(await eslint.lintText(text, { filePath })));
+      return collect(results);
+    },
+  };
+}
+
+export async function createEngine(root, settings) {
+  if (settings.engine && !ENGINES.includes(settings.engine)) {
+    throw setupError(`"engine": "${settings.engine}" in package.json kennt das Paket nicht. Erlaubt: ${ENGINES.join(', ')}.`);
+  }
+  if (settings.engine === 'biome') return createBiomeEngine(root, settings);
+  try {
+    return await createEslintEngine(root, settings);
+  } catch (error) {
+    if (error.missing !== 'eslint' || settings.engine === 'eslint' || !findBiome(root)) throw error;
+    return createBiomeEngine(root, settings);
+  }
+}
+
+function markupFilesIn(target, isIgnored) {
+  if (!existsSync(target) || isIgnored(target)) return [];
+  if (!statSync(target).isDirectory()) return MARKUP_FILE.test(target) ? [target] : [];
+  return readdirSync(target, { withFileTypes: true })
+    .filter((entry) => !SKIPPED_FOLDERS.has(entry.name))
+    .flatMap((entry) => markupFilesIn(path.join(target, entry.name), isIgnored));
+}
+
+export function createLinter(root, settings) {
+  const isIgnoredMarkup = ignoreMatcher(root, settings.ignores);
+  let engine;
+  const code = async () => (engine ??= await createEngine(root, settings));
+  const markupResult = ({ filePath, text }) => ({ filePath, messages: lintMarkup(text, filePath, settings) });
+  const merge = (markup, linted) => ({ results: [...markup, ...linted.results], checked: markup.length + linted.checked });
+  const none = { results: [], checked: 0 };
+  return {
+    async isIgnored(file) {
+      return MARKUP_FILE.test(file) ? isIgnoredMarkup(file) : (await code()).isIgnored(file);
+    },
+    async lintFiles(paths) {
+      const markup = paths.flatMap((target) => markupFilesIn(target, isIgnoredMarkup)).map((filePath) => markupResult({ filePath, text: readFileSync(filePath, 'utf8') }));
+      const rest = paths.filter((target) => !MARKUP_FILE.test(target));
+      return merge(markup, rest.length ? await (await code()).lintFiles(rest) : none);
+    },
+    async lintTexts(entries) {
+      const markup = entries.filter(({ filePath }) => MARKUP_FILE.test(filePath)).map(markupResult);
+      const rest = entries.filter(({ filePath }) => !MARKUP_FILE.test(filePath));
+      return merge(markup, rest.length ? await (await code()).lintTexts(rest) : none);
+    },
+  };
 }
 
 export function formatResults(results) {
@@ -84,14 +152,6 @@ export function formatResults(results) {
     }
   }
   return lines;
-}
-
-function isOwnMessage(message) {
-  return message.ruleId === null || message.ruleId.startsWith(OWN_RULE_PREFIX);
-}
-
-function withoutForeignRules(results) {
-  return results.map((result) => ({ ...result, messages: result.messages.filter(isOwnMessage) }));
 }
 
 function countProblems(results) {
@@ -123,8 +183,8 @@ export function changedLineRanges(event, content) {
 
 function keepLines(result, ranges) {
   if (!ranges) return result;
-  const touched = (line) => ranges.some(([start, end]) => line >= start && line <= end);
-  return { ...result, messages: result.messages.filter((message) => touched(message.line)) };
+  const touched = ({ line, spanEnd = line }) => ranges.some(([start, end]) => line <= end && spanEnd >= start);
+  return { ...result, messages: result.messages.filter(touched) };
 }
 
 function keepChangedLines(results, ranges) {
@@ -136,10 +196,10 @@ async function runHook() {
   const filePath = event.tool_input?.file_path;
   if (!filePath || !LINTABLE.test(filePath) || !existsSync(filePath)) return 0;
   const { root, settings } = findSettings(path.dirname(filePath));
-  const linter = await createLinter(root, settings);
-  if (await linter.isPathIgnored(filePath)) return 0;
+  const linter = createLinter(root, settings);
+  if (await linter.isIgnored(filePath)) return 0;
   const ranges = changedLineRanges(event, readFileSync(filePath, 'utf8'));
-  const results = keepChangedLines(withoutForeignRules(await linter.lintFiles([filePath])), ranges);
+  const results = keepChangedLines((await linter.lintFiles([path.resolve(filePath)])).results, ranges);
   const problems = countProblems(results);
   if (problems === 0) return 0;
   const lines = formatResults(results);
@@ -152,10 +212,10 @@ async function runHook() {
 
 async function runFiles(patterns, { warn }) {
   const { root, settings } = findSettings(process.cwd());
-  const linter = await createLinter(root, settings);
+  const linter = createLinter(root, settings);
   const targets = patterns.length ? patterns : ['src'];
-  const results = withoutForeignRules(await linter.lintFiles(targets.map((target) => path.resolve(target))));
-  return report(results,`Keine Verstöße in ${results.length} Dateien.`, { warn });
+  const { results, checked } = await linter.lintFiles(targets.map((target) => path.resolve(target)));
+  return report(results, `Keine Verstöße in ${checked} Dateien.`, { warn });
 }
 
 function report(results, emptyText, { warn = false } = {}) {
@@ -171,20 +231,28 @@ function report(results, emptyText, { warn = false } = {}) {
 }
 
 function stagedContent(filePath) {
-  return execFileSync('git', ['show', `:./${path.basename(filePath)}`], { cwd: path.dirname(filePath), encoding: 'utf8' });
+  return execFileSync('git', ['show', `:./${path.basename(filePath)}`], { cwd: path.dirname(filePath), encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
+}
+
+function pathKey(filePath) {
+  const resolved = path.resolve(filePath);
+  return process.platform === 'win32' ? resolved.toLowerCase() : resolved;
 }
 
 async function runChanged({ staged, base, warn }) {
   const { root, settings } = findSettings(process.cwd());
-  const linter = await createLinter(root, settings);
-  const changed = addedLines(process.cwd(), { staged, base });
-  const results = [];
-  for (const [filePath, ranges] of changed) {
-    if (!LINTABLE.test(filePath) || (await linter.isPathIgnored(filePath))) continue;
-    const linted = staged ? await linter.lintText(stagedContent(filePath), { filePath }) : await linter.lintFiles([filePath]);
-    results.push(...withoutForeignRules(linted).map((result) => keepLines(result, ranges)));
+  const linter = createLinter(root, settings);
+  const changed = new Map();
+  for (const [filePath, ranges] of addedLines(process.cwd(), { staged, base })) {
+    if (LINTABLE.test(filePath) && !(await linter.isIgnored(filePath))) changed.set(filePath, ranges);
   }
-  return report(results, `Keine Verstöße in den geänderten Zeilen (${results.length} Dateien).`, { warn });
+  const files = [...changed.keys()];
+  const linted = !files.length ? { results: [] }
+    : staged ? await linter.lintTexts(files.map((filePath) => ({ filePath, text: stagedContent(filePath) })))
+      : await linter.lintFiles(files);
+  const rangesOf = new Map([...changed].map(([filePath, ranges]) => [pathKey(filePath), ranges]));
+  const results = linted.results.filter((result) => rangesOf.has(pathKey(result.filePath))).map((result) => keepLines(result, rangesOf.get(pathKey(result.filePath))));
+  return report(results, `Keine Verstöße in den geänderten Zeilen (${files.length} Dateien).`, { warn });
 }
 
 async function runReview(argv) {
@@ -213,6 +281,25 @@ function runInstallHooks() {
   return 0;
 }
 
+function runBiomePlugins(argv) {
+  const target = argv.find((arg) => !arg.startsWith('--'));
+  if (!target) {
+    process.stderr.write('standby-design-lint biome <ordner>\n');
+    return 2;
+  }
+  const { settings } = findSettings(process.cwd());
+  writeBiomePlugins(path.resolve(target), settings);
+  const folder = path.relative(process.cwd(), path.resolve(target)).replace(/\\/g, '/');
+  process.stdout.write(`${BIOME_RULES.length} Regeln als Biome-Plugins in ${folder} geschrieben, als Warnung in ${folder}/warn. Sie tragen die Einstellungen aus package.json. In biome.json unter "plugins" eintragen, z. B. "./${folder}/${BIOME_RULES[0]}.grit". Nach einer Änderung der Einstellungen oder einem Update neu schreiben.\n`);
+  return 0;
+}
+
+function runInit(argv) {
+  const route = ENGINES.find((engine) => argv.includes(`--${engine}`));
+  process.stdout.write(`${formatInitReport(initProject(process.cwd(), { install: !argv.includes('--no-install'), route }))}\n`);
+  return 0;
+}
+
 export async function main(argv) {
   if (argv.includes('--help') || argv.includes('-h')) {
     process.stdout.write(`${USAGE}\n`);
@@ -220,11 +307,9 @@ export async function main(argv) {
   }
   if (argv.includes('--hook')) return runHook();
   if (argv[0] === 'review') return runReview(argv.slice(1));
-  if (argv[0] === 'init') {
-    process.stdout.write(`${formatInitReport(initProject(process.cwd(), { install: !argv.includes('--no-install') }))}\n`);
-    return 0;
-  }
+  if (argv[0] === 'init') return runInit(argv);
   if (argv[0] === 'hooks') return runInstallHooks();
+  if (argv[0] === 'biome') return runBiomePlugins(argv.slice(1));
   const warn = argv.includes('--warn');
   if (argv.includes('--staged')) return runChanged({ staged: true, warn });
   const base = optionValue(argv, '--since');

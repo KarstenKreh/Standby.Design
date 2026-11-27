@@ -68,8 +68,9 @@ If a user asks you to build a design system with standby.design:
 ## Design lint
 
 - Page: https://standby.design/docs/lint
-- What: the npm package `standby-design-lint` checks React and Vue code against
-  the design rules with eight ESLint rules. Each message names the violation,
+- What: the npm package `standby-design-lint` checks React, Vue and Astro code
+  against the design rules with eight lint rules. It runs with ESLint, or with
+  Biome alone in a project without ESLint. Each message names the violation,
   the fix and the rule page. Messages and rule pages are in German. The rule
   ids:
   - `standby/no-raw-values`: colors, sizes and fonts set by hand, Tailwind
@@ -86,8 +87,22 @@ If a user asks you to build a design system with standby.design:
 - Vue: in `.vue` files the lint checks the template (`class`, `:class` as object,
   array or ternary, `style`, `:style`, `:disabled`, `@click` on `div` or `span`),
   `<script>` and `transition: all` in `<style>`. It needs `vue-eslint-parser`,
-  which `init` installs. Messages point to the line in the `.vue` file. The
-  Biome plugins do not check Vue templates.
+  which `init` installs. Messages point to the line in the `.vue` file. Vue
+  needs the ESLint way, the Biome way does not check `.vue` files.
+- Astro: in `.astro` files the lint checks the markup below the frontmatter
+  (`class`, `class:list`, `class={…}`, fixed values in `style="…"`), on both
+  ways and without an Astro parser. Frontmatter, `<script>` and `<style>` are
+  not checked.
+- Two ways. `init` picks one and names it in the first line of its report:
+  - ESLint way, for a project with ESLint. `init` adds the ESLint packages
+    that are missing.
+  - Biome way, for a project with Biome 2.5 or newer and without ESLint. Hook,
+    pre-commit and CI run the Biome of the project with the rules as plugins.
+    The lockfile gets only `standby-design-lint`: no ESLint, no parser, no
+    second TypeScript. `biome.json` is not read and not changed. This also
+    holds in a pnpm workspace with the hoisted linker.
+  Messages, rule links and "only new or changed lines" are the same on both
+  ways. `--eslint` or `--biome` sets the way by hand.
 - Setup and update, run in the project root (needs a package.json, Node 20.19
   or newer): `npx standby-design-lint@latest init`. The command installs the
   package as a dev dependency and sets up:
@@ -102,6 +117,18 @@ If a user asks you to build a design system with standby.design:
   - `.design-review/` in `.gitignore`
   Running it again only updates and never duplicates entries. Hooks from other
   tools and your own text in CLAUDE.md and AGENTS.md stay.
+- Minimum release age: if the project only allows packages of a certain age
+  (`minimumReleaseAge` in pnpm-workspace.yaml, `min-release-age` in .npmrc),
+  `init` respects it. It sets up the newest allowed version, or it changes
+  nothing and names the date from which the update works. Never go around the
+  lockfile, the age gate or `trustPolicy`.
+- If `.claude` is a symlink, for example to `.agents`, hook and skill go into
+  the folder it points to.
+- Settings in package.json under `standbyDesignLint`: `componentPaths` (folders
+  of base components, in a monorepo for example `/packages/ui/src/components/`),
+  `allowedColors`, `ignores`, `engine` (`eslint` or `biome`) and `rulesFile`
+  (the project's own copy of the rules, named in the rules block as the source
+  that counts). They hold on both ways.
 - Strictness per stage:
   - Claude Code hook: reports violations in edited lines to the agent right
     after each edit. The agent fixes them in the same session.
@@ -115,8 +142,12 @@ If a user asks you to build a design system with standby.design:
 - Update through the MCP server: tell the agent "Get the latest standby
   update" (German: "Hol Dir das Update"). It calls `update_project`, which
   returns the steps, and runs init.
-- Exceptions: write an ESLint disable comment with a reason on the line before
-  the violation, for example
+- Exceptions on the Biome way: `// biome-ignore lint/plugin: reason` on the
+  line before, `{/* biome-ignore lint/plugin: reason */}` between JSX elements,
+  `<!-- biome-ignore lint/plugin: reason -->` in `.astro` files.
+  `eslint-disable` does nothing in a Biome project.
+- Exceptions on the ESLint way: write an ESLint disable comment with a reason
+  on the line before the violation, for example
   `// eslint-disable-next-line standby/no-raw-values -- brand color from the logo guideline`.
   Use the id of the rule that reports. In a Vue template, use an HTML comment:
   `<!-- eslint-disable-next-line standby/no-raw-values -- reason -->`.
@@ -133,7 +164,8 @@ If a user asks you to build a design system with standby.design:
   skill `design-review` runs the review, starts a fresh review subagent and
   fixes the findings, in at most two rounds.
 - Everything runs locally. The lint and init send no code or project data.
-  The only network access is the package download from npm.
+  The only network access is the package download from npm and, in a project
+  with a minimum release age, a query for the release dates of the package.
 - npm: https://www.npmjs.com/package/standby-design-lint
 - Source: https://github.com/KarstenKreh/Standby.Design/tree/master/packages/design-lint
 

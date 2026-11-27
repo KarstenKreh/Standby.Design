@@ -8,6 +8,8 @@ import { fileURLToPath } from 'node:url';
 import { ESLINT_PACKAGES, installCommand, usesVue } from '../src/init.js';
 
 const BIN = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'bin', 'standby-design-lint.js');
+const { version } = JSON.parse(readFileSync(path.join(path.dirname(BIN), '..', 'package.json'), 'utf8'));
+const OWN = `standby-design-lint@${version}`;
 const PRE_COMMIT_LINE = '[ ! -e node_modules/.bin/standby-design-lint ] || npx --no-install standby-design-lint --staged --warn || true';
 
 function runInit(cwd) {
@@ -112,14 +114,14 @@ describe('init', () => {
     writeFileSync(path.join(project, 'pnpm-workspace.yaml'), 'packages:\n  - apps/*\n');
     const [command, args] = installCommand(project);
     assert.equal(command, 'pnpm');
-    assert.deepEqual(args, ['add', '-D', '-w', '-E', 'standby-design-lint', ...ESLINT_PACKAGES]);
+    assert.deepEqual(args, ['add', '-D', '-w', '-E', OWN, ...ESLINT_PACKAGES]);
   });
 
   it('adds only the ESLint packages the project does not have yet', () => {
     writeFileSync(path.join(project, 'package.json'), JSON.stringify({ name: 'app', devDependencies: { eslint: '^9.28.0', typescript: '7.0.2' } }));
     const [command, args] = installCommand(project);
     assert.equal(command, 'npm');
-    assert.deepEqual(args, ['install', '-D', '-E', 'standby-design-lint', '@typescript-eslint/parser']);
+    assert.deepEqual(args, ['install', '-D', '-E', OWN, '@typescript-eslint/parser']);
   });
 
   it('runs the CI check from the lockfile, not through npx --yes', () => {
@@ -179,7 +181,7 @@ describe('init', () => {
     writeFileSync(path.join(project, 'package.json'), JSON.stringify({ name: 'app', dependencies: { vue: '^3.5.0' }, devDependencies: { eslint: '^9.17.0', '@typescript-eslint/parser': '^8.0.0', typescript: '~5.9' } }));
     mkdirSync(path.join(project, 'node_modules', 'vue-eslint-parser'), { recursive: true });
     writeFileSync(path.join(project, 'node_modules', 'vue-eslint-parser', 'package.json'), '{}');
-    assert.deepEqual(installCommand(project), ['npm', ['install', '-D', '-E', 'standby-design-lint', 'vue-eslint-parser']]);
+    assert.deepEqual(installCommand(project), ['npm', ['install', '-D', '-E', OWN, 'vue-eslint-parser']]);
   });
 
   it('recognizes Vue by tracked .vue files when the root package does not declare it', () => {

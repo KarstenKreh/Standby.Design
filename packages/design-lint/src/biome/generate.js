@@ -75,8 +75,9 @@ function messages(rule) {
   return rule.meta.messages;
 }
 
-function rawValues(severity) {
+function rawValues(severity, { allowedColors = [] } = {}) {
   const text = messages(noRawValues);
+  const allowed = allowedColors.length ? [`$utility <: not ${gritRegex(`-?${COLOR_PREFIX}-${alternation(allowedColors)}(?:/.*)?`)}`] : [];
   const arbitrary = [`$utility <: ${gritRegex('[^\\[]*\\[(.+)\\]')}($arbitrary)`, `$arbitrary <: not ${gritRegex('(?s).*var\\(.*')}`];
   return classRule({
     severity,
@@ -85,7 +86,7 @@ function rawValues(severity) {
       { conditions: [`$utility <: ${gritRegex(fullMatch(FONT_FAMILY))}`], text: message(text.fontFamily, { token: '$token' }) },
       { conditions: [...arbitrary, `$arbitrary <: ${gritRegex(containsMatch(RAW_COLOR))}`], text: message(text.color, { token: '$token' }) },
       { conditions: [...arbitrary, `$arbitrary <: ${gritRegex(containsMatch(RAW_LENGTH))}`], text: message(text.length, { token: '$token' }) },
-      { conditions: [`$utility <: ${gritRegex(`-?${COLOR_PREFIX}-${PALETTE_COLOR}(?:/.*)?`)}`], text: message(text.palette, { token: '$token' }) },
+      { conditions: [`$utility <: ${gritRegex(`-?${COLOR_PREFIX}-${PALETTE_COLOR}(?:/.*)?`)}`, ...allowed], text: message(text.palette, { token: '$token' }) },
     ],
   });
 }
@@ -105,14 +106,14 @@ function opacityModifiers(severity) {
   });
 }
 
-function stateClasses(severity) {
+function stateClasses(severity, { componentPaths = DEFAULT_COMPONENT_PATHS } = {}) {
   return classRule({
     severity,
     hint: '(?:hover|focus|active|pressed)',
-    guard:`\n  $filename <: not ${gritRegex(pathPattern(DEFAULT_COMPONENT_PATHS))},`,
+    guard:`\n  $filename <: not ${gritRegex(pathPattern(componentPaths))},`,
     checks: [{
       conditions: [`$variants <: ${gritRegex(withVariant(STATE_VARIANT))}`],
-      text: message(messages(noStateClassesInViews).stateInView, { token: '$token', paths: DEFAULT_COMPONENT_PATHS.join(', ') }),
+      text: message(messages(noStateClassesInViews).stateInView, { token: '$token', paths: componentPaths.join(', ') }),
     }],
   });
 }
@@ -198,13 +199,17 @@ const BUILDERS = {
 
 export const BIOME_RULES = Object.keys(BUILDERS);
 
-export function gritSource(rule, severity) {
-  return `language js\n\n${BUILDERS[rule](severity)}\n`;
+function pluginSettings({ componentPaths, allowedColors } = {}) {
+  return { componentPaths: componentPaths?.length ? componentPaths : undefined, allowedColors: allowedColors ?? [] };
 }
 
-export function biomePluginFiles() {
+export function gritSource(rule, severity, settings) {
+  return `language js\n\n${BUILDERS[rule](severity, pluginSettings(settings))}\n`;
+}
+
+export function biomePluginFiles(settings) {
   return Object.entries(SEVERITIES).flatMap(([severity, folder]) =>
-    BIOME_RULES.map((rule) => ({ file: path.posix.join(folder, `${rule}.grit`), source: gritSource(rule, severity) })));
+    BIOME_RULES.map((rule) => ({ file: path.posix.join(folder, `${rule}.grit`), source: gritSource(rule, severity, settings) })));
 }
 
 export function staleBiomePlugins(dir) {
@@ -217,8 +222,8 @@ export function staleBiomePlugins(dir) {
   }).map(({ file }) => file);
 }
 
-export function writeBiomePlugins(dir) {
-  for (const { file, source } of biomePluginFiles()) {
+export function writeBiomePlugins(dir, settings) {
+  for (const { file, source } of biomePluginFiles(settings)) {
     mkdirSync(path.dirname(path.join(dir, file)), { recursive: true });
     writeFileSync(path.join(dir, file), source);
   }
