@@ -608,6 +608,179 @@ Apple HIG › Layout („Determine layout based on size classes, not device type
 - Jeder Textbehälter hält jede Textmenge aus
 - Fließtext hat eine Höchstbreite
 
+## Eine Entität hat ihren Screen, ein Teil bleibt bei ihr
+
+Fluss · https://standby.design/docs/rules/fluss-eine-entitaet-hat-ihren-screen-ein-teil-bleibt-bei-ihr
+
+**Geltung:** universal · web, react-native
+
+> **Regel**
+> Gib jeder eigenständigen Entität einen eigenen Screen mit Adresse. Dort stehen alle ihre Details. Eine Liste oder Tabelle zeigt Entitäten nur in Kurzform und führt zum Screen. Ein Teil bleibt auf dem Screen der Entität, zu der es gehört.
+
+### Warum
+
+Eine Anwendung besteht aus Dingen, die der Nutzer beim Namen nennt: ein Gespräch, ein Kontakt, eine Rechnung. Das sind die Entitäten. Der Nutzer sucht sie, öffnet sie und schickt sie weiter. Dafür braucht jede einen Ort mit Adresse, einem Zurück und einem Titel.
+
+Stehen zwei Entitäten mit allen Details auf einem Screen, hat keine von beiden diesen Ort. Der Titel passt nur zu einer, und der Link zeigt auf beide. Jede neue Funktion landet dann auf derselben Seite, weil sie schon da ist. So bläht eine Seite auf. Statt einer neuen Ebene entsteht ein Knopf, der ein Menü öffnet, das wieder ein Menü öffnet.
+
+Wer zuerst die Entitäten benennt und dann die Screens baut, muss diese Frage nicht bei jeder Funktion neu stellen. Die Screens folgen aus den Entitäten.
+
+### Entität oder Teil
+
+Nicht alles, was einen Namen hat, ist eine Entität. Ein Teil existiert nur innerhalb einer Entität und hat keinen eigenen Ort.
+
+| | Eigenständige Entität | Teil |
+|---|---|---|
+| Existiert ohne etwas anderes | ja | nein, nur innerhalb einer Entität |
+| Der Nutzer sucht es für sich | ja | nein |
+| Taucht an mehreren Stellen auf | oft | nie |
+| Wird die Entität gelöscht | bleibt es | ist es weg |
+| Ort | eigener Screen | Screen seiner Entität |
+
+Der Test: **Würde der Nutzer das Ding außerhalb seiner Umgebung suchen?** Wenn ja, ist es eine Entität.
+
+Beispiel Transkript-Editor: Das Gespräch ist die Entität. Absätze, Sprecherwechsel und Kommentare an Textstellen sind Teile. Sie bleiben im Editor, auch in einer ausklappbaren Spalte. Ein Sprecher ist ein Teil, solange er nur in diesem Gespräch vorkommt. Gibt es ein Verzeichnis der Sprecher über alle Gespräche, wird er zur Entität. Dann zeigt der Editor nur Name und Farbe, die Details stehen auf dem Screen des Sprechers.
+
+### Hart und weich
+
+| | Status |
+|---|---|
+| Jede eigenständige Entität hat einen eigenen Screen mit Adresse | hart |
+| Alle Details einer Entität stehen nur auf ihrem Screen | hart |
+| Eine Liste zeigt die Kurzform und führt zum Screen | hart |
+| Ein Teil bekommt keinen eigenen Screen | hart |
+| Welche Felder die Kurzform zeigt | weich, Vorgabe: was zum Wiedererkennen und Auswählen nötig ist |
+
+### Woran Du den Verstoß erkennst
+
+- Ein Screen hat zwei Titel, oder der Titel braucht ein „und“.
+- Eine Tabellenzeile klappt auf und zeigt alle Details einer Entität mit eigenen Aktionen.
+- Eine Zeile trägt mehr als zwei, drei Aktionen statt eines Wegs zum Detail.
+- Eine Entität lässt sich nicht verlinken.
+- Die Details einer Entität stehen in einem Pop-up oder in einem Panel ohne Adresse.
+- Ein Kommentar, ein Absatz oder eine Zeile hat einen eigenen Screen, obwohl niemand es außerhalb seiner Entität sucht.
+
+### Richtig / falsch
+
+```
+        RICHTIG                             FALSCH
+
+  ┌───────────────────────┐           ┌───────────────────────┐
+  │ Kontakte              │           │ Kontakte              │
+  │ Anna Berg       ›     │           │ ▾ Anna Berg           │
+  │ Tom Kraus       ›     │           │   Mail  [_________]   │
+  │ Lea Sommer      ›     │           │   Firma [_________]   │
+  └───────────────────────┘           │   Notizen, Termine …  │
+             │                        │   [Speichern] [⋯]     │
+             ▼                        │ ▾ Tom Kraus           │
+  ┌───────────────────────┐           │   Mail  [_________]   │
+  │ ‹ Kontakte            │           │   …                   │
+  │ Anna Berg             │           └───────────────────────┘
+  │ Mail, Firma, Notizen, │            zwei Entitäten mit allen
+  │ Termine               │            Details auf einem Screen,
+  └───────────────────────┘            keine hat eine Adresse
+   Liste in Kurzform,
+   Detail mit eigener Adresse
+```
+
+### Grenzen
+
+- **Vergleich:** Zwei Entitäten stehen nebeneinander mit allen Details, wenn Vergleichen der Anlass ist.
+- **Liste und Detail nebeneinander** auf breiten Bildschirmen, wie im Mail-Programm. Es bleibt ein Detail zur Zeit, und es hat eine eigene Adresse.
+- **Übersichten und Dashboards** zeigen viele Entitäten in Kurzform. Das ist eine Liste und kein Verstoß.
+
+Innerhalb einer Entität entscheidet Der Anlass schneidet, die Menge wählt die Form, ob sie einen Screen oder mehrere bekommt.
+
+### Quelle
+
+Sophia Prater, Object-Oriented UX: erst die Objekte und ihre Beziehungen, dann die Screens. Eric Evans, Domain-Driven Design (2003), Aggregat: ein Teil lebt nur innerhalb seiner Wurzel. Die Übertragung des Aggregats auf Screens ist eine Einschätzung dieser Sammlung.
+
+### Verwandt
+
+- Der Anlass schneidet, die Menge wählt die Form
+- Ein Pop-up unterbricht, es führt nicht
+- Der Zustand der Ansicht steht in der Adresse
+
+## Der Anlass schneidet, die Menge wählt die Form
+
+Fluss · https://standby.design/docs/rules/fluss-der-anlass-schneidet-die-menge-waehlt-die-form
+
+**Geltung:** universal · web, react-native
+
+> **Regel**
+> Fass zusammen, was der Nutzer aus demselben Anlass braucht. Trenn, was verschiedene Anlässe hat. Ob die Trennung ein Abschnitt mit Überschrift oder ein eigener Screen wird, entscheidet die Menge. Tiefe ist immer eine Ebene mit Adresse, nie ein Menü im Menü.
+
+### Warum
+
+Ob zwei Funktionen verwandt sind, ist eine Frage des Grades. Ähnlichkeit hat keine natürliche Grenze, also lässt sich darüber nicht sicher entscheiden. Der Anlass dagegen ist eindeutig: Der Nutzer kommt für eine Sache. Was er in demselben Besuch braucht, steht zusammen. Was er nie zusammen braucht, stört sich gegenseitig.
+
+Der Schnitt und die Form sind zwei Fragen. Wo geschnitten wird, entscheidet der Anlass, und das steht fest. Ob ein Abschnitt oder ein Screen daraus wird, entscheidet die Menge, und das darf sich ändern. Wird eine Seite voller, werden aus Abschnitten Screens. Die Überschriften bleiben dieselben und werden zu Einträgen der Navigation. Niemand muss entscheiden, wie verwandt etwas ist.
+
+Eine Ebene zeigt dem Nutzer, wo er ist: Pfad, Zurück, Adresse. Ein Menü, das ein weiteres Menü öffnet, zeigt das nicht. Der Nutzer muss den Weg im Kopf behalten, und beim nächsten Besuch findet er die Funktion nicht wieder.
+
+### Der Test
+
+Bevor eine Funktion auf eine bestehende Seite kommt, drei Fragen in dieser Reihenfolge:
+
+1. **Anlass:** Fülle den Satz „Der Nutzer kommt hierher, um ___.“ Passt die neue Funktion in denselben Satz, ohne „und“? Dann gehört sie auf die Seite.
+2. **Gegenstand:** Verändert die Funktion dieselbe Entität wie die Seite? Verändert sie eine andere, gilt Eine Entität hat ihren Screen, ein Teil bleibt bei ihr.
+3. **Erreichbarkeit:** Braucht die Funktion ein zweites Öffnen, um erreichbar zu sein? Dann fehlt eine Ebene.
+
+### Drei sichere Zeichen für eine Trennung
+
+Bleibt der Anlass unklar, trennt jedes dieser Zeichen sicher:
+
+| Zeichen | Beispiel |
+|---|---|
+| Anderes Speichern | Das eine wirkt sofort, das andere braucht einen Knopf |
+| Andere Folgen | Konto löschen steht nicht neben der App-Sprache |
+| Anderer Nutzer | Das eine darf jeder, das andere nur der Admin |
+
+### Die Form
+
+| Menge | Form |
+|---|---|
+| Alle Abschnitte passen in eine Ansicht | eine Seite, Abschnitte mit Überschrift |
+| Die Abschnitte passen nicht mehr in eine Ansicht | jeder Abschnitt wird ein Screen, seine Überschrift ein Eintrag der Navigation |
+
+Beispiel Kontoeinstellungen: „Lizenz, Zahlung, Rechnungen“ ist ein Screen, weil der Nutzer kommt, um sein Abo zu regeln. „Tastenbelegung“ hat einen anderen Anlass und ist ein eigener Screen. „Gefahrenzone“ steht für sich, weil die Folgen andere sind. „Einstellungen“ selbst ist keine Entität, sondern eine Ebene der Navigation über mehreren.
+
+### Hart und weich
+
+| | Status |
+|---|---|
+| Verschiedene Anlässe stehen in verschiedenen Abschnitten oder Screens | hart |
+| Ein Menü öffnet kein weiteres Menü, Reiter stehen nicht in Reitern | hart |
+| Der Test läuft, bevor eine Funktion auf eine bestehende Seite kommt | hart |
+| Abschnitt oder eigener Screen | weich, nach Menge |
+| Ab wann geteilt wird | weich, Vorgabe: sobald nicht mehr alle Abschnitte in eine Ansicht passen |
+
+### Woran Du den Verstoß erkennst
+
+- Ein Menü öffnet ein Menü.
+- Reiter stehen in Reitern.
+- Ein Aufklappbereich enthält eigene Aktionen oder ein Formular.
+- Ein „Mehr“-Menü sammelt Funktionen, die mit dem Anlass der Ansicht nichts zu tun haben.
+- Der Anlass-Satz der Seite braucht ein „und“.
+- Mehrere Abschnitte einer Seite speichern je für sich.
+
+### Grenzen
+
+- Eine Ebene entsteht nur für eine eigene Entität oder einen eigenen Anlass. Filter, Sortierung und ein einzelner Wert bleiben auf der Seite, siehe Konfiguration bekommt eine Seite, Ansichts-Einstellungen bleiben.
+- Ein Aufklappmenü oder eine Auswahlliste an einem Bedienelement ist kein Menü im Menü, solange daraus nichts Weiteres aufgeht.
+- Eine Zwischenseite ohne eigenen Inhalt ist auch ein Fehler. Wer drei Funktionen hat, braucht keine drei Ebenen.
+
+### Quelle
+
+GOV.UK Service Manual › Form structure und Design Notes › „One thing per page“ (2015): eine Sache pro Seite, nicht kurze Seiten. Nielsen Norman Group › Progressive Disclosure: Seltenes wandert auf einen nachgeordneten Screen. Nielsen Norman Group › Card Sorting: Wo Nutzer die Grenze ziehen, zeigt am Ende nur der Test mit ihnen. Anlass und die drei Zeichen sind die Annäherung dieser Sammlung dafür.
+
+### Verwandt
+
+- Eine Entität hat ihren Screen, ein Teil bleibt bei ihr
+- Konfiguration bekommt eine Seite, Ansichts-Einstellungen bleiben
+- Ein Pop-up unterbricht, es führt nicht
+- Die Titel bilden eine Gliederung
+
 ## Ein Pop-up unterbricht, es führt nicht
 
 Fluss · https://standby.design/docs/rules/fluss-ein-pop-up-unterbricht-es-fuehrt-nicht
@@ -722,6 +895,8 @@ Ein Panel, das von der Seite oder von unten einfährt, ist keine Ausnahme. Steht
 
 ### Verwandt
 
+- Eine Entität hat ihren Screen, ein Teil bleibt bei ihr
+- Der Anlass schneidet, die Menge wählt die Form
 - Der Fokus ist sichtbar und hat immer einen Ort
 - Jede Ansicht folgt dem Platz und bricht bei 320 Pixeln um
 - Klickbares hat eine Fläche, und nur Klickbares sieht so aus
@@ -1089,6 +1264,7 @@ Ein leerer Zustand, dem eine Konfiguration fehlt, darf direkt zur Einstellungsse
 
 ### Verwandt
 
+- Der Anlass schneidet, die Menge wählt die Form
 - Ein Pop-up unterbricht, es führt nicht
 - Ein Fehler steht dort, wo er entstanden ist
 

@@ -133,6 +133,10 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://standby.design/docs/rules/fluss-der-anlass-schneidet-die-menge-waehlt-die-form</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://standby.design/docs/rules/fluss-der-platz-ist-da-bevor-die-daten-kommen</loc>
     <priority>0.6</priority>
   </url>
@@ -158,6 +162,10 @@
   </url>
   <url>
     <loc>https://standby.design/docs/rules/fluss-eine-eingabe-wechselt-nie-von-selbst-den-ort</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://standby.design/docs/rules/fluss-eine-entitaet-hat-ihren-screen-ein-teil-bleibt-bei-ihr</loc>
     <priority>0.6</priority>
   </url>
   <url>
