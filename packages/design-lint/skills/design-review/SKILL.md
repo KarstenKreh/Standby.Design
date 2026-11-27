@@ -9,16 +9,17 @@ Der Lint-Hook prüft beim Schreiben, was im Code steht. Dieses Review prüft, wa
 
 ## Ablauf
 
-1. **Screen erreichbar machen.** Die App läuft lokal, Du kennst die URL des Screens, mit allen Daten, die er im Normalfall zeigt.
-2. **Screenshots und Zählung erzeugen:**
+1. **Entitäten und Anlass aufschreiben.** Bei einem neuen Screen oder einer neuen Funktion, bevor Du das Review startest. Drei Zeilen: welche Entität der Screen zeigt, welche Teile zu ihr gehören, und der Satz „Der Nutzer kommt hierher, um ___.“ Braucht der Satz ein „und“ oder zeigt der Screen zwei Entitäten mit allen Details, schneide zuerst neu, siehe [Eine Entität hat ihren Screen](https://standby.design/docs/rules/fluss-eine-entitaet-hat-ihren-screen-ein-teil-bleibt-bei-ihr) und [Der Anlass schneidet](https://standby.design/docs/rules/fluss-der-anlass-schneidet-die-menge-waehlt-die-form). Bei einer kleinen Änderung an einem bestehenden Screen entfällt dieser Schritt.
+2. **Screen erreichbar machen.** Die App läuft lokal, Du kennst die URL des Screens, mit allen Daten, die er im Normalfall zeigt.
+3. **Screenshots und Zählung erzeugen:**
    ```
    npx standby-design-lint review <url>
    ```
    Im Repo von standby.design selbst: `node packages/design-lint/bin/standby-design-lint.js review <url>`.
    Das legt unter `.design-review/<screen>/` je einen ganzseitigen Screenshot bei 1280 und 375 Pixeln Breite ab und schreibt `report.md` mit der Textstil-Zählung.
-3. **Einen Review-Subagenten starten**, ohne Wissen darüber, wie der Screen gebaut wurde. Er bekommt nur die Pfade der beiden Screenshots, den Pfad von `report.md` und die Prüfliste unten. Auftrag: Screenshots ansehen, jede Frage der Prüfliste beantworten, höchstens zehn Befunde zurückgeben, je Befund Stelle im Bild, Regel und konkrete Änderung. Keine Befunde erfinden, um auf eine Zahl zu kommen.
-4. **Befunde beheben.** Was im Code liegt, behebst Du direkt. Dann Schritt 2 einmal wiederholen. Höchstens zwei Runden, danach nicht weiter drehen.
-5. **Berichten.** Was offen bleibt oder eine Gestaltungsentscheidung braucht, legst Du dem Menschen mit dem Screenshot vor.
+4. **Einen Review-Subagenten starten**, ohne Wissen darüber, wie der Screen gebaut wurde. Er bekommt nur die Pfade der beiden Screenshots, den Pfad von `report.md`, die drei Zeilen aus Schritt 1 und die Prüfliste unten. Auftrag: Screenshots ansehen, jede Frage der Prüfliste beantworten, höchstens zehn Befunde zurückgeben, je Befund Stelle im Bild, Regel und konkrete Änderung. Keine Befunde erfinden, um auf eine Zahl zu kommen.
+5. **Befunde beheben.** Was im Code liegt, behebst Du direkt. Dann Schritt 3 einmal wiederholen. Höchstens zwei Runden, danach nicht weiter drehen.
+6. **Berichten.** Was offen bleibt oder eine Gestaltungsentscheidung braucht, legst Du dem Menschen mit dem Screenshot vor.
 
 ## Prüfliste für den Subagenten
 
@@ -29,6 +30,7 @@ Der Lint-Hook prüft beim Schreiben, was im Code steht. Dieses Review prüft, wa
 5. **Abstand vor Linie** ([Erst Abstand, dann Fläche oder Linie](https://standby.design/docs/rules/layout-erst-abstand-dann-flaeche-oder-linie)): Gibt es Linien oder Rahmen, wo Abstand allein gruppieren würde? Karten in Karten?
 6. **Schmale Breite** ([Jede Ansicht folgt dem Platz](https://standby.design/docs/rules/layout-jede-ansicht-folgt-dem-platz-und-bricht-bei-320-pixeln-um)): Ist bei 375 Pixeln etwas abgeschnitten, überlappt oder nur waagerecht scrollbar?
 7. **Farbe** ([Farbe trägt nie allein](https://standby.design/docs/rules/farbe-farbe-traegt-nie-allein)): Wird ein Zustand nur über Farbe gezeigt?
+8. **Entität und Anlass** ([Eine Entität hat ihren Screen](https://standby.design/docs/rules/fluss-eine-entitaet-hat-ihren-screen-ein-teil-bleibt-bei-ihr), [Der Anlass schneidet](https://standby.design/docs/rules/fluss-der-anlass-schneidet-die-menge-waehlt-die-form)): Passt alles Sichtbare zu der Entität und dem Anlass-Satz aus Schritt 1? Stehen zwei Entitäten mit allen Details auf dem Screen? Gibt es einen Bereich, der einem anderen Anlass dient und einen eigenen Abschnitt oder Screen bräuchte?
 
 ## Kosten
 
