@@ -66,5 +66,6 @@ Ein leerer Zustand, dem eine Konfiguration fehlt, darf direkt zur Einstellungsse
 
 ## Verwandt
 
+- [[Fluss - Der Anlass schneidet, die Menge wählt die Form]]
 - [[Fluss - Ein Pop-up unterbricht, es führt nicht]]
 - [[Fluss - Ein Fehler steht dort, wo er entstanden ist]]

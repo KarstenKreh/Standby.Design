@@ -123,6 +123,8 @@ Ein Panel, das von der Seite oder von unten einfährt, ist keine Ausnahme. Steht
 
 ## Verwandt
 
+- [[Fluss - Eine Entität hat ihren Screen, ein Teil bleibt bei ihr]]
+- [[Fluss - Der Anlass schneidet, die Menge wählt die Form]]
 - [[Bedienung - Der Fokus ist sichtbar und hat immer einen Ort]]
 - [[Layout - Jede Ansicht folgt dem Platz und bricht bei 320 Pixeln um]]
 - [[Bedienung - Klickbares hat eine Fläche, und nur Klickbares sieht so aus]]

@@ -69,6 +69,8 @@ Dazu sagt `applies-to`, für welche Techniken eine Regel gedacht ist. Damit läs
 
 | Regel | Scope | Kern |
 |---|---|---|
+| [[Fluss - Eine Entität hat ihren Screen, ein Teil bleibt bei ihr]] | universal | Jede Entität hat einen Screen mit allen Details. Listen zeigen Kurzform. Teile bleiben bei ihrer Entität |
+| [[Fluss - Der Anlass schneidet, die Menge wählt die Form]] | universal | Ein Anlass, ein Abschnitt. Die Menge macht Screens daraus. Nie ein Menü im Menü |
 | [[Fluss - Ein Pop-up unterbricht, es führt nicht]] | universal | Mehr als eine Eingabe oder mehr als ein Hinweis: dann ein eigener Screen |
 | [[Fluss - Leer ist ein Zustand, keine Lücke]] | universal | Drei Sorten leer, drei Antworten. Eine unbeschriebene Fläche ist keine |
 | [[Fluss - Der Platz ist da, bevor die Daten kommen]] | universal | Nichts springt. Unter 200ms gar kein Ladehinweis |
