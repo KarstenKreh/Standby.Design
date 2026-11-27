@@ -86,6 +86,11 @@ file is the how-to-not-get-stuck.
   `git config core.hooksPath .githooks`), CI the lines of a PR and fails.
   Other projects get all of it with `npx standby-design-lint@latest init`.
   Run `npm install` in `packages/design-lint` first.
+  The CLI checks in one of two ways (`createEngine` in `src/cli.js`): with
+  ESLint, or with the Biome of the project and generated `.grit` files
+  (`src/biome/engine.js`, for projects without ESLint). `.astro` files go
+  through `src/markup.js` on both ways. After a rule change run
+  `npm run build:biome`; the tests compare both ways.
   Existing violations in the apps are known; they only show up when a line
   is touched.
 - Verify MCP server changes with `npm run smoke` (end-to-end stdio test);

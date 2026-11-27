@@ -6,11 +6,14 @@ standby-design-lint checks code against the [design rules of standby.design](htt
 
 The messages, the help text and the `init` report are in German. Each message ends with the German rule title and the link to the rule page.
 
-It needs Node 20.19 or newer and a `package.json` in the project root. It reads `.js`, `.jsx`, `.ts`, `.tsx`, `.mjs` and `.vue` files, see [Vue](#vue).
+It needs Node 20.19 or newer and a `package.json` in the project root. It reads `.js`, `.jsx`, `.ts`, `.tsx`, `.mjs`, `.vue` and `.astro` files, see [Vue](#vue) and [Astro](#astro).
 
-The package has no dependencies of its own. The ESLint path needs `eslint`, `@typescript-eslint/parser` and `typescript` in the project, and Vue projects also `vue-eslint-parser`. `init` installs the ones that are missing. Projects with Biome load the rules as Biome plugins and need nothing else, see [Biome](#biome).
+The package has no dependencies of its own. It checks in one of two ways, and `init` picks the one that fits the project:
 
-The lint, the hook and `init` send no code or project data anywhere. The only network access of `init` is the package download from npm. The review opens the URL you pass in a local browser. The CI check runs on your CI runner.
+- **ESLint way**, for projects with ESLint. It needs `eslint`, `@typescript-eslint/parser` and `typescript` in the project, and Vue projects also `vue-eslint-parser`. `init` installs the ones that are missing.
+- **Biome way**, for projects with Biome and without ESLint. Hook, pre-commit and CI run the Biome of the project with the rules as plugins. The lockfile gets `standby-design-lint` and nothing else: no ESLint, no parser, no second TypeScript. See [Biome](#biome).
+
+The lint, the hook and `init` send no code or project data anywhere. The only network access of `init` is the package download from npm and, in a project with a minimum release age, a query for the release dates of the package (`npm view standby-design-lint time`). The review opens the URL you pass in a local browser. The CI check runs on your CI runner.
 
 ## Set up and update
 
@@ -20,7 +23,9 @@ Run this in the root folder of the project:
 npx standby-design-lint@latest init
 ```
 
-The command installs the package as a dev dependency with a fixed version, together with the ESLint packages the project does not have yet. In a pnpm workspace it installs into the workspace root. Then it sets up the following:
+The command first decides the way. A project that declares `eslint` or has an ESLint config gets the ESLint way. A project with `biome.json` or `@biomejs/biome` and without ESLint gets the Biome way. The first line of the report names the way and the reason. `--eslint` or `--biome` sets it by hand.
+
+Then the command installs the package as a dev dependency, with the fixed version that runs `init`. On the ESLint way it adds the ESLint packages the project does not have yet. On the Biome way it adds nothing else, and `biome.json`, ESLint and TypeScript of the project stay untouched. In a pnpm workspace it installs into the workspace root. Then it sets up the following:
 
 - A Claude Code hook in `.claude/settings.json`.
 - A pre-commit hook that warns and never blocks, not even on a branch where the package is not installed.
@@ -35,13 +40,16 @@ Run the same command again to update everything to the latest version. It never 
 
 ### What init does in special cases
 
-- `init` uses the package manager of the project (npm, pnpm, yarn or bun). `--no-install` skips the install.
+- `init` uses the package manager of the project (npm, pnpm, yarn or bun). `--no-install` skips the install. If the project already has the version that runs `init`, nothing is installed.
+- **Minimum release age.** If the project only allows packages of a certain age (`minimumReleaseAge` in `pnpm-workspace.yaml`, `minimum-release-age` or npm's `min-release-age` in `.npmrc`), `init` asks the registry for the release dates before it changes anything. If the version that runs is too young, `init` installs the newest allowed version through the package manager and lets that version set up the project. If no allowed version can do this, `init` changes nothing and names the date from which the update works. No path goes around the lockfile, the age gate or `trustPolicy`. An entry for `standby-design-lint` in `minimumReleaseAgeExclude` lifts the gate.
+- If `.claude` is a symlink, for example to `.agents`, the hook and the skill go into the folder it points to. This also holds in a checkout where Git wrote the symlink as a text file (`core.symlinks=false`, common on Windows). The report names the real folder.
 - `init` adds `vue-eslint-parser` if `package.json` declares `vue` or `nuxt`, or if Git tracks `.vue` files.
 - The pre-commit hook goes into `.husky/pre-commit` if the project uses husky. Otherwise it goes into the Git hooks folder. Without a Git repository, `init` skips it. Git worktrees share this folder, so `init` in one worktree sets the hook for all of them. Worktrees without the package skip the check.
 - The Git hooks folder is not part of the repository. That is why `init` adds `standby-design-lint hooks || exit 0` as `prepare` script, which npm, pnpm, yarn and bun run after each install. An existing `prepare` script stays and runs first. If the package is missing, for example in a production install without dev dependencies, the install still succeeds. With husky, `init` adds no `prepare` script, because `.husky/` is already in the repository.
-- The pre-commit line goes before a closing `exit` line of the hook file, so it runs.
-- The CI workflow is only created if the project has a `.github` folder. It uses the package manager of the project (`npm ci`, `pnpm install --frozen-lockfile`, `yarn install --immutable` or `bun install --frozen-lockfile`). If GitHub rejects the push because of the workflow file, run `gh auth refresh -s workflow`.
-- The rules block always goes into `AGENTS.md`, which Cursor, Codex and others read. If `CLAUDE.md` is missing, `init` creates one that imports `AGENTS.md` with `@AGENTS.md`. If `CLAUDE.md` exists and does not import `AGENTS.md`, it gets the block too.
+- The pre-commit line goes before a closing `exit` line of the hook file, so it runs. An empty `.husky/pre-commit` gets this one line and still never blocks a commit.
+- The CI workflow is only created if the project has a `.github` folder. It uses the package manager of the project (`npm ci`, `pnpm install --frozen-lockfile`, `yarn install --immutable` or `bun install --frozen-lockfile`) and the Node version from `.nvmrc` or `.node-version`, otherwise Node 22. It runs only the design rules, never the lint or check script of the project. If GitHub rejects the push because of the workflow file, run `gh auth refresh -s workflow`.
+- The rules block always goes into `AGENTS.md`, which Cursor, Codex and others read. If `CLAUDE.md` is missing, `init` creates one that imports `AGENTS.md` with `@AGENTS.md`. If `CLAUDE.md` exists and does not import `AGENTS.md`, it gets the block too. The block names the exception comment that works on the way of the project.
+- If the project keeps its own copy of the rules, name the file in `rulesFile` (see [Settings](#settings)). The block then says that this file counts and that `get_design_rules` is the reference.
 
 ### Update through an agent
 
@@ -99,7 +107,32 @@ In an object in `:class`, the keys are the classes, the values are conditions. T
 
 `<script lang="ts">` and TypeScript in the template work. `pug` templates are skipped.
 
+`.vue` files need the ESLint way. On the Biome way they are not checked, and the `init` report says so.
+
+## Astro
+
+In `.astro` files, the lint checks the markup below the frontmatter, on both ways and without ESLint, Biome or an Astro parser. The messages are the same as in JSX.
+
+| Rule | In the markup |
+|---|---|
+| `no-raw-values`, `no-state-classes-in-views`, `no-opacity-on-semantic-colors`, `no-space-utilities`, `no-transition-all` | `class="…"`, `class:list={[…]}`, `class={…}` with strings, template strings, ternaries and helpers, and attributes that end in `Class` or `-class` |
+| `no-inline-style` | Fixed values in `style="color: red"` |
+| `no-transition-all` | `transition: all` in `style="…"` |
+
+Not checked: the frontmatter between the `---` lines, `<script>` and `<style>` blocks, classes that a variable holds, and the rules `no-disabled-by-validity` and `no-click-on-non-interactive`. In an expression, each string counts as classes, also a string that is compared, as in `variant === "primary"`.
+
+An exception is an HTML comment on the line before the element, in the spelling of either way:
+
+```astro
+<!-- biome-ignore lint/plugin: brand color from the logo guideline -->
+<div class="bg-[#ff0000]">logo</div>
+```
+
+`<!-- eslint-disable-next-line standby/no-raw-values -- reason -->` works the same. With a rule id it covers only that rule.
+
 ## Exceptions
+
+On the Biome way, an exception is a `biome-ignore` comment, see [Biome](#biome). The rest of this section is about the ESLint way.
 
 If a hit is intended, write a disable comment with the reason on the line before. The reason follows `--`.
 
@@ -142,21 +175,37 @@ Settings go into `package.json`. `init` adds the block if it is missing and keep
 
 - `componentPaths` lists the folders where states like `hover:` are allowed. Put the folder of your base components here.
 - `allowedColors` allows single colors of the Tailwind palette, for example `"white"`.
-- `ignores` lists glob patterns of files to skip. `node_modules`, `dist`, `build`, `.next`, `coverage` and `*.d.ts` files are always skipped.
+- `ignores` lists glob patterns of files to skip, relative to the folder of this `package.json`. `node_modules`, `dist`, `build`, `.next`, `coverage` and `*.d.ts` files are always skipped.
+- `engine` sets the way: `"eslint"` or `"biome"`. `init` writes `"biome"` in a Biome project. Without the key, the CLI takes ESLint if the project has it, otherwise Biome.
+- `rulesFile` names the file with the project's own copy of the design rules, for example `"docs/design/README.md"`. The rules block in `AGENTS.md` then names this file as the source that counts.
 
-The CLI reads `standbyDesignLint` from the first `package.json` that has this key. It starts in the current folder and goes up. The hook starts in the folder of the edited file. The CLI does not read your ESLint configuration.
+In a monorepo, the settings go into the `package.json` of the root and hold for all packages. List each folder of base components, for example `"/packages/ui/src/components/"` next to `"/components/ui/"`.
+
+The CLI reads `standbyDesignLint` from the first `package.json` that has this key. It starts in the current folder and goes up. The hook starts in the folder of the edited file. The CLI reads neither your ESLint configuration nor your `biome.json`.
 
 ## Biome
 
-The package ships the eight rules as [Biome](https://biomejs.dev) plugins (GritQL files), for Biome 2.5 or newer. A Biome project needs neither ESLint nor `init`.
+The package ships the eight rules as [Biome](https://biomejs.dev) plugins (GritQL files), for Biome 2.5 or newer. A Biome project needs no ESLint.
 
-Install the package with a fixed version. Updates then arrive as a normal Dependabot or Renovate pull request, through the lockfile and any `minimumReleaseAge` of the project:
+### The Biome way: hook, pre-commit and CI
 
-```sh
-pnpm add -D -w -E standby-design-lint
-```
+`npx standby-design-lint@latest init` in a project with Biome and without ESLint sets up every stage: Claude Code hook, pre-commit, CI workflow, review skill and rules block. It writes `"engine": "biome"` into the settings.
 
-Then list the rules you want in `biome.json`. Each rule exists twice: `biome/<rule>.grit` reports an error, `biome/warn/<rule>.grit` a warning. Write the path with `./node_modules/`, Biome does not resolve package names for plugins:
+The CLI then runs the Biome of the project (`@biomejs/biome` in `node_modules`, also in a hoisted pnpm workspace) with a configuration of its own that holds only the eight plugins. This has three effects:
+
+- The project's `biome.json` is not read and not changed. `biome check` of the project runs as before, and the CI workflow does not run it a second time.
+- `componentPaths`, `allowedColors` and `ignores` come from `standbyDesignLint` in `package.json`, as on the ESLint way. A later `init` keeps them.
+- Messages, rule links and "only new or changed lines" are the same as on the ESLint way.
+
+The plugin files for your settings are written to the temp folder of the system, not into the project.
+
+An update is a normal dependency update: Dependabot or Renovate raise the fixed version through the lockfile and any `minimumReleaseAge` of the project. `init` with the new version then refreshes the hook, the skill and the rules block.
+
+### Plugins in biome.json
+
+For findings in the editor and in `biome check`, list the rules in `biome.json` too. This is optional and independent of the Biome way above.
+
+Each rule exists twice: `biome/<rule>.grit` reports an error, `biome/warn/<rule>.grit` a warning. Each rule exists twice: `biome/<rule>.grit` reports an error, `biome/warn/<rule>.grit` a warning. Write the path with `./node_modules/`, Biome does not resolve package names for plugins:
 
 ```json
 {
@@ -187,11 +236,18 @@ The rules, the messages and the test cases are the same as for ESLint. Biome dif
 
 - Biome reports one finding per string and rule. The next one shows once the first is fixed.
 - `no-inline-style` reports the first fixed value of a `style` attribute, ESLint each one.
-- The settings in `standbyDesignLint` do not apply. `no-state-classes-in-views` allows states in `/components/ui/`. For another folder, give the plugin entry `includes` with `"**"` first and the folder negated, as in the example. `allowedColors` has no Biome counterpart, use an exception.
+- The files in `node_modules/standby-design-lint/biome/` do not know the settings in `standbyDesignLint`: `no-state-classes-in-views` allows states in `/components/ui/` only, and no palette color is allowed. To get files with your `componentPaths` and `allowedColors`, run `npx standby-design-lint biome tools/standby-biome` and list the files of that folder instead. Run it again after a change of the settings or an update. Without it, give the plugin entry `includes` with `"**"` first and the folder negated, as in the example.
 - Run only these rules, for example in CI: `biome lint --only=plugin`. Only errors fail: `--diagnostic-level=error`.
 - The plugins read JSX and helpers like `cn()`. In a `.vue` file, Biome only shows them the `<script>` block, not the template. Vue projects use the ESLint path, see [Vue](#vue).
 
-An exception goes on the line before, with a reason:
+An exception goes on the line before, with a reason. `eslint-disable` comments do nothing in a Biome project:
+
+```tsx
+// biome-ignore lint/plugin: brand color from the logo guideline
+export const Logo = () => <div className="bg-[#ff0000]">logo</div>;
+```
+
+Inside JSX, use a block comment:
 
 ```tsx
 {/* biome-ignore lint/plugin: brand color from the logo guideline */}
@@ -317,12 +373,15 @@ The three titles sit two steps apart on the type scale.
 <!-- standby-design-lint:end -->
 ```
 
+On the Biome way, the second point names `// biome-ignore lint/plugin: <reason>` as the exception and says that `eslint-disable` does nothing in the project. If the project tracks `.astro` files, it also names the HTML comment. With `rulesFile` set, it names that file as the source that counts.
+
 ## Commands
 
 | Command | What it does |
 |---|---|
-| `standby-design-lint init` | Sets up or updates hook, pre-commit, CI, skill and agent instructions. |
+| `standby-design-lint init` | Sets up or updates hook, pre-commit, CI, skill and agent instructions. `--eslint` or `--biome` sets the way, `--no-install` skips the install. |
 | `standby-design-lint hooks` | Sets up only the pre-commit hook. The `prepare` script runs it on each install. |
+| `standby-design-lint biome <folder>` | Writes the rules as Biome plugin files with the settings of the project, for `biome.json`. |
 | `standby-design-lint [paths…]` | Checks files or folders. The default is `src`. |
 | `standby-design-lint --staged` | Checks only the staged lines (pre-commit). |
 | `standby-design-lint --since <ref>` | Checks only the lines added since `<ref>`, for example `origin/main` (CI). |

@@ -1,7 +1,9 @@
-import { copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync, chmodSync } from 'node:fs';
+import { existsSync, lstatSync, mkdirSync, readFileSync, readlinkSync, statSync, writeFileSync, chmodSync } from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { setupError } from './errors.js';
+import { checkReleaseAge, compareVersions, releaseAgeGate, releaseTimes } from './release-age.js';
 
 const PACKAGE = 'standby-design-lint';
 const PACKAGE_ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -10,13 +12,33 @@ const PRE_COMMIT_LINE = `[ ! -e node_modules/.bin/${PACKAGE} ] || npx --no-insta
 const PREPARE_COMMAND = `${PACKAGE} hooks || exit 0`;
 const BLOCK_START = '<!-- standby-design-lint:start -->';
 const BLOCK_END = '<!-- standby-design-lint:end -->';
-const AGENT_BLOCK = `${BLOCK_START}
+const GATE_AWARE_SINCE = '0.5.0';
+const ROUTES = { eslint: 'ESLint', biome: 'Biome, ohne ESLint' };
+const ESLINT_CONFIGS = ['eslint.config.js', 'eslint.config.mjs', 'eslint.config.cjs', 'eslint.config.ts', 'eslint.config.mts', '.eslintrc', '.eslintrc.js', '.eslintrc.cjs', '.eslintrc.json', '.eslintrc.yml', '.eslintrc.yaml'];
+const BIOME_CONFIGS = ['biome.json', 'biome.jsonc'];
+const EXCEPTIONS = {
+  eslint: 'die Ausnahme mit `eslint-disable-next-line` und Begründung an die Stelle schreiben, in Vue-Templates als `<!-- eslint-disable-next-line standby/… -- Grund -->`.',
+  biome: 'die Ausnahme mit `// biome-ignore lint/plugin: <Grund>` in die Zeile davor schreiben, in JSX als `{/* biome-ignore lint/plugin: <Grund> */}`. `eslint-disable` wirkt in diesem Projekt nicht.',
+};
+const ASTRO_EXCEPTIONS = {
+  eslint: ' In `.astro`-Dateien als `<!-- eslint-disable-next-line standby/… -- Grund -->` vor dem Element.',
+  biome: ' In `.astro`-Dateien als `<!-- biome-ignore lint/plugin: <Grund> -->` vor dem Element.',
+};
+
+function rulesSource(rulesFile) {
+  if (!rulesFile) return 'Die Regeln liefert das MCP-Tool `get_design_rules` von standby-design-mcp, gefiltert nach Kategorie.';
+  return `Für dieses Projekt gelten die Regeln in \`${rulesFile}\`. Das MCP-Tool \`get_design_rules\` von standby-design-mcp zeigt den Stand von standby.design zum Nachschlagen. Weicht er ab, gilt die Datei im Projekt.`;
+}
+
+export function agentBlock({ route = 'eslint', rulesFile, astro = false } = {}) {
+  return `${BLOCK_START}
 ## Design-Regeln (standby.design)
 
 - Farben, Abstände, Radien und Schriftgrößen kommen nur aus den Design-Tokens des Projekts. Text bekommt eine Rolle (\`text-role-*\`), keine einzelne Größe.
-- Die Regeln liefert das MCP-Tool \`get_design_rules\` von standby-design-mcp, gefiltert nach Kategorie. Meldungen von \`${PACKAGE}\` sofort beheben. Ist ein Treffer gewollt, die Ausnahme mit \`eslint-disable-next-line\` und Begründung an die Stelle schreiben, in Vue-Templates als \`<!-- eslint-disable-next-line standby/… -- Grund -->\`.
+- ${rulesSource(rulesFile)} Meldungen von \`${PACKAGE}\` sofort beheben. Ist ein Treffer gewollt, ${EXCEPTIONS[route]}${astro ? ASTRO_EXCEPTIONS[route] : ''}
 - Bevor ein Screen als fertig gilt, den Skill \`design-review\` ausführen.
 ${BLOCK_END}`;
+}
 
 function ownVersion() {
   return JSON.parse(readFileSync(path.join(PACKAGE_ROOT, 'package.json'), 'utf8')).version;
@@ -66,45 +88,133 @@ function hasPackage(root, name) {
   return declaresPackage(root, name) || existsSync(path.join(root, 'node_modules', name, 'package.json'));
 }
 
-function tracksVueFiles(root) {
+function tracksFiles(root, glob) {
   try {
-    return execFileSync('git', ['ls-files', '*.vue'], { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'], maxBuffer: 64 * 1024 * 1024 }).trim() !== '';
+    return execFileSync('git', ['ls-files', glob], { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'], maxBuffer: 64 * 1024 * 1024 }).trim() !== '';
   } catch {
     return false;
   }
 }
 
 export function usesVue(root) {
-  return VUE_FRAMEWORKS.some((name) => declaresPackage(root, name)) || tracksVueFiles(root);
+  return VUE_FRAMEWORKS.some((name) => declaresPackage(root, name)) || tracksFiles(root, '*.vue');
 }
 
-export function installCommand(root) {
+function hasAny(root, files) {
+  return files.some((file) => existsSync(path.join(root, file)));
+}
+
+export function detectRoute(root, forced) {
+  if (forced) return { route: forced, reason: `gewählt mit --${forced}` };
+  const engine = readJson(path.join(root, 'package.json'), {}).standbyDesignLint?.engine;
+  if (ROUTES[engine]) return { route: engine, reason: '"engine" in package.json' };
+  if (declaresPackage(root, 'eslint') || hasAny(root, ESLINT_CONFIGS)) return { route: 'eslint', reason: 'das Projekt nutzt ESLint' };
+  if (declaresPackage(root, '@biomejs/biome') || hasAny(root, BIOME_CONFIGS)) return { route: 'biome', reason: 'das Projekt nutzt Biome und kein ESLint' };
+  return { route: 'eslint', reason: 'weder ESLint noch Biome gefunden' };
+}
+
+function installedVersion(root) {
+  return readJson(path.join(root, 'node_modules', PACKAGE, 'package.json'), {}).version;
+}
+
+export function installCommand(root, { route = detectRoute(root).route, version = ownVersion() } = {}) {
   const manager = packageManager(root);
-  const missing = ESLINT_PACKAGES.filter((name) => !hasPackage(root, name));
-  if (usesVue(root) && !declaresPackage(root, VUE_PARSER)) missing.push(VUE_PARSER);
-  return [manager, [...addArgs(manager, root), PACKAGE, ...missing]];
+  const packages = declaresPackage(root, PACKAGE) && installedVersion(root) === version ? [] : [`${PACKAGE}@${version}`];
+  if (route === 'eslint') {
+    packages.push(...ESLINT_PACKAGES.filter((name) => !hasPackage(root, name)));
+    if (usesVue(root) && !declaresPackage(root, VUE_PARSER)) packages.push(VUE_PARSER);
+  }
+  return packages.length ? [manager, [...addArgs(manager, root), ...packages]] : null;
 }
 
-function installPackage(root) {
-  const [command, args] = installCommand(root);
-  execFileSync(command, args, { cwd: root, stdio: 'inherit', shell: process.platform === 'win32' });
+function runCommand(command, args, cwd) {
+  execFileSync(command, args, { cwd, stdio: 'inherit', shell: process.platform === 'win32' });
+}
+
+function installPackage(root, { route, version = ownVersion() }, run) {
+  const install = installCommand(root, { route, version });
+  if (!install) return `${PACKAGE} ${version} ist schon installiert`;
+  const [command, args] = install;
+  try {
+    run(command, args, root);
+  } catch {
+    const gate = releaseAgeGate(root, command);
+    const hint = gate ? ` Das Projekt erlaubt nur Pakete ab einem Mindestalter (${gate.source}). Ist die Version zu jung, später noch einmal ausführen. Die Sperre nicht umgehen.` : '';
+    throw setupError(`„${command} ${args.join(' ')}“ ist fehlgeschlagen, die Meldung steht darüber. init hat nichts eingerichtet.${hint}`);
+  }
   return `${command} ${args.join(' ')}`;
 }
 
-function ensureSettings(root) {
+function formatDate(date) {
+  return date.toLocaleString('de-DE', { dateStyle: 'medium', timeStyle: 'short' });
+}
+
+function tooYoung(root, { times, now }) {
+  const gate = releaseAgeGate(root, packageManager(root));
+  if (!gate) return null;
+  const verdict = checkReleaseAge({ version: ownVersion(), gate, times: times(root), now });
+  return verdict.allowed ? null : { ...verdict, gate };
+}
+
+function setUpWithAllowedVersion(root, { allowedFrom, newestAllowed, gate }, { route, forced, run }) {
+  const waiting = `${PACKAGE} ${ownVersion()} ist in diesem Projekt erst ab ${formatDate(allowedFrom)} erlaubt (${gate.source}).`;
+  if (!newestAllowed || compareVersions(newestAllowed, GATE_AWARE_SINCE) < 0) {
+    throw setupError(`${waiting} Eine ältere Version, die das Projekt so einrichten kann, gibt es nicht. Nichts wurde geändert. Danach noch einmal ausführen: npx ${PACKAGE}@latest init. Die Sperre nicht umgehen.`);
+  }
+  installPackage(root, { route: 'biome', version: newestAllowed }, run);
+  run(process.execPath, [path.join(root, 'node_modules', PACKAGE, 'bin', `${PACKAGE}.js`), 'init', ...(forced ? [`--${route}`] : [])], root);
+  return `${waiting} Eingerichtet ist ${newestAllowed}, die neueste erlaubte Version.`;
+}
+
+function ensureSettings(root, route) {
   const file = path.join(root, 'package.json');
   const manifest = readJson(file, null);
-  if (manifest.standbyDesignLint) return 'unverändert';
-  manifest.standbyDesignLint = { componentPaths: ['/components/ui/'], allowedColors: [], ignores: [] };
+  const current = manifest.standbyDesignLint;
+  const engine = route === 'biome' ? { engine: 'biome' } : {};
+  if (current && (route !== 'biome' || current.engine)) return 'unverändert';
+  manifest.standbyDesignLint = current ? { ...engine, ...current } : { ...engine, componentPaths: ['/components/ui/'], allowedColors: [], ignores: [] };
   return writeIfChanged(file, `${JSON.stringify(manifest, null, indentOf(file))}\n`);
+}
+
+function isDirectory(target) {
+  try {
+    return statSync(target).isDirectory();
+  } catch {
+    return false;
+  }
+}
+
+export function claudeFolder(root) {
+  const link = path.join(root, '.claude');
+  const linked = (dir) => ({ dir, label: path.relative(root, dir).replace(/\\/g, '/'), via: ' (über .claude)' });
+  let stat;
+  try {
+    stat = lstatSync(link);
+  } catch {
+    return { dir: link, label: '.claude', via: '' };
+  }
+  if (stat.isSymbolicLink()) {
+    const dir = path.resolve(root, readlinkSync(link).replace(/^\\\\\?\\/, ''));
+    mkdirSync(dir, { recursive: true });
+    return linked(dir);
+  }
+  if (stat.isFile()) {
+    const target = readFileSync(link, 'utf8').trim();
+    const dir = path.resolve(root, target);
+    if (!target || /[\r\n]/.test(target) || !isDirectory(dir)) {
+      throw setupError('.claude ist eine Datei, kein Ordner. Ist sie ein Symlink, den Git als Text ausgecheckt hat (core.symlinks=false), muss der Zielordner existieren.');
+    }
+    return linked(dir);
+  }
+  return { dir: link, label: '.claude', via: '' };
 }
 
 function isOurHook(entry) {
   return (entry.hooks ?? []).some((hook) => String(hook.command ?? '').includes(PACKAGE));
 }
 
-function ensureClaudeHook(root) {
-  const file = path.join(root, '.claude', 'settings.json');
+function ensureClaudeHook(claude) {
+  const file = path.join(claude, 'settings.json');
   const settings = readJson(file, {});
   settings.hooks ??= {};
   const others = (settings.hooks.PostToolUse ?? []).filter((entry) => !isOurHook(entry));
@@ -112,14 +222,14 @@ function ensureClaudeHook(root) {
   return writeIfChanged(file, `${JSON.stringify(settings, null, indentOf(file))}\n`);
 }
 
-function ensureSkill(root) {
+function ensureSkill(claude) {
   const source = path.join(PACKAGE_ROOT, 'skills', 'design-review', 'SKILL.md');
-  return writeIfChanged(path.join(root, '.claude', 'skills', 'design-review', 'SKILL.md'), readFileSync(source, 'utf8'));
+  return writeIfChanged(path.join(claude, 'skills', 'design-review', 'SKILL.md'), readFileSync(source, 'utf8'));
 }
 
 function gitHooksDir(root) {
   try {
-    const dir = execFileSync('git', ['rev-parse', '--git-path', 'hooks'], { cwd: root, encoding: 'utf8' }).trim();
+    const dir = execFileSync('git', ['rev-parse', '--git-path', 'hooks'], { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
     return path.resolve(root, dir);
   } catch {
     return null;
@@ -183,6 +293,11 @@ function ciSteps(root) {
   return { setup: '', cache: 'npm', install: 'npm ci', run: `npx --no-install ${PACKAGE}` };
 }
 
+function nodeVersion(root) {
+  const file = ['.nvmrc', '.node-version'].find((name) => existsSync(path.join(root, name)));
+  return file ? `node-version-file: ${file}` : 'node-version: 22';
+}
+
 function workflow(root) {
   const { setup, cache, install, run } = ciSteps(root);
   return `name: Design-Regeln
@@ -198,7 +313,7 @@ jobs:
           fetch-depth: 0
 ${setup}      - uses: actions/setup-node@v4
         with:
-          node-version: 22${cache ? `\n          cache: ${cache}` : ''}
+          ${nodeVersion(root)}${cache ? `\n          cache: ${cache}` : ''}
       - run: ${install}
       - run: ${run} --since origin/\${{ github.base_ref }}
 `;
@@ -209,21 +324,23 @@ function ensureWorkflow(root) {
   return writeIfChanged(path.join(root, '.github', 'workflows', 'design-lint.yml'), workflow(root));
 }
 
-function withBlock(content) {
+function withBlock(content, block) {
   const start = content.indexOf(BLOCK_START);
   const end = content.indexOf(BLOCK_END);
-  if (start !== -1 && end > start) return content.slice(0, start) + AGENT_BLOCK + content.slice(end + BLOCK_END.length);
-  return `${content.replace(/\s*$/, '')}${content.trim() ? '\n\n' : ''}${AGENT_BLOCK}\n`;
+  if (start !== -1 && end > start) return content.slice(0, start) + block + content.slice(end + BLOCK_END.length);
+  return `${content.replace(/\s*$/, '')}${content.trim() ? '\n\n' : ''}${block}\n`;
 }
 
-function ensureAgentInstructions(root) {
+function ensureAgentInstructions(root, route) {
   const agents = path.join(root, 'AGENTS.md');
   const claude = path.join(root, 'CLAUDE.md');
+  const rulesFile = readJson(path.join(root, 'package.json'), {}).standbyDesignLint?.rulesFile;
+  const block = agentBlock({ route, rulesFile, astro: tracksFiles(root, '*.astro') });
   const readOrEmpty = (file) => (existsSync(file) ? readFileSync(file, 'utf8') : '');
-  const steps = [['AGENTS.md', writeIfChanged(agents, withBlock(readOrEmpty(agents)))]];
+  const steps = [['AGENTS.md', writeIfChanged(agents, withBlock(readOrEmpty(agents), block))]];
   if (!existsSync(claude)) return [...steps, ['CLAUDE.md', writeIfChanged(claude, '@AGENTS.md\n')]];
   if (readOrEmpty(claude).split(/\r?\n/).includes('@AGENTS.md')) return [...steps, ['CLAUDE.md', 'unverändert']];
-  return [...steps, ['CLAUDE.md', writeIfChanged(claude, withBlock(readOrEmpty(claude)))]];
+  return [...steps, ['CLAUDE.md', writeIfChanged(claude, withBlock(readOrEmpty(claude), block))]];
 }
 
 function ensureGitignore(root) {
@@ -233,26 +350,40 @@ function ensureGitignore(root) {
   return writeIfChanged(file, `${content.replace(/\s*$/, '')}${content.trim() ? '\n' : ''}.design-review/\n`);
 }
 
-export function initProject(root, { install = true } = {}) {
+function routeNotes(root, route) {
+  if (route !== 'biome') return [];
+  const notes = ['Der Biome-Weg prüft .js, .jsx, .ts, .tsx und .mjs mit dem Biome des Projekts, .astro-Dateien prüft das Paket selbst. biome.json, ESLint und TypeScript bleiben unberührt.'];
+  if (usesVue(root)) notes.push('.vue-Dateien prüft nur der ESLint-Weg. Im Biome-Weg bleiben sie ungeprüft.');
+  return notes;
+}
+
+export function initProject(root, { install = true, route: forced, times = releaseTimes, now = Date.now(), run = runCommand } = {}) {
   if (!existsSync(path.join(root, 'package.json'))) {
-    throw new Error(`Kein package.json in ${root}. init im Wurzelordner des Projekts ausführen.`);
+    throw setupError(`Kein package.json in ${root}. init im Wurzelordner des Projekts ausführen.`);
   }
+  const { route, reason } = detectRoute(root, forced);
+  if (install) {
+    const young = tooYoung(root, { times, now });
+    if (young) return { delegated: setUpWithAllowedVersion(root, young, { route, forced, run }) };
+  }
+  const claude = claudeFolder(root);
   const steps = [];
-  if (install) steps.push(['Paket', installPackage(root)]);
-  steps.push(['Einstellungen in package.json', ensureSettings(root)]);
-  steps.push(['Claude-Code-Hook in .claude/settings.json', ensureClaudeHook(root)]);
-  steps.push(['Skill .claude/skills/design-review', ensureSkill(root)]);
+  if (install) steps.push(['Paket', installPackage(root, { route }, run)]);
+  steps.push(['Einstellungen in package.json', ensureSettings(root, route)]);
+  steps.push([`Claude-Code-Hook in ${claude.label}/settings.json${claude.via}`, ensureClaudeHook(claude.dir)]);
+  steps.push([`Skill ${claude.label}/skills/design-review${claude.via}`, ensureSkill(claude.dir)]);
   const preCommit = installHooks(root);
   steps.push([`Pre-Commit${preCommit.file ? ` (${preCommit.file})` : ''}, warnt nur`, preCommit.status]);
   steps.push(['prepare-Skript in package.json, richtet den Pre-Commit bei jedem npm install ein', ensurePrepareScript(root)]);
   steps.push(['CI .github/workflows/design-lint.yml, blockiert neue Verstöße im PR', ensureWorkflow(root)]);
-  for (const [name, status] of ensureAgentInstructions(root)) steps.push([`Agenten-Anweisung ${name}`, status]);
+  for (const [name, status] of ensureAgentInstructions(root, route)) steps.push([`Agenten-Anweisung ${name}`, status]);
   steps.push(['.gitignore (.design-review/)', ensureGitignore(root)]);
-  return steps;
+  return { steps, way: `${ROUTES[route]} (${reason})`, notes: routeNotes(root, route) };
 }
 
-export function formatInitReport(steps) {
-  const lines = [`${PACKAGE} ${ownVersion()} eingerichtet:`, ...steps.map(([name, status]) => `  ${name}: ${status}`)];
-  lines.push('', 'Ein zweiter Lauf aktualisiert alles auf die neueste Version.');
+export function formatInitReport({ steps, way, notes = [], delegated }) {
+  if (delegated) return delegated;
+  const lines = [`${PACKAGE} ${ownVersion()} eingerichtet, Weg: ${way}`, ...steps.map(([name, status]) => `  ${name}: ${status}`)];
+  lines.push('', ...notes, `Ein neuer Lauf mit npx ${PACKAGE}@latest init aktualisiert alles auf die neueste Version.`);
   return lines.join('\n');
 }
