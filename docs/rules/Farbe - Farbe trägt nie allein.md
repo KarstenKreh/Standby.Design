@@ -35,6 +35,7 @@ Für einen von zwölf Männern sehen Rot und Grün gleich aus. In einer Legende 
 | Merkmal | Beispiel | Reicht, wenn |
 |---|---|---|
 | Eigene Fläche | gewähltes Segment, ausgewählte Kachel | die Fläche sich mit 3:1 vom Grund abhebt oder einen Rand mit 3:1 hat |
+| Schatten | gewähltes Segment, das über der Leiste liegt | die Kante der Fläche 3:1 zum Grund erreicht. Ein weicher Schatten schafft das selten, und im dunklen Modus verschwindet er fast. Dann trägt ein zweites Merkmal den Zustand, etwa fette Schrift oder ein feiner Rand |
 | Rand | gewählte Karte, Chip | der Rand 3:1 zum Grund hat und die anderen keinen tragen |
 | Strich, Unterstreichung | Tab, Fließtext-Link | er mindestens 2 Pixel stark ist und 3:1 zum Grund hat |
 | Punkt, Balken | Chip, Navigations-Zeile | er 3:1 zum Grund hat |
@@ -57,7 +58,7 @@ Weißt Du nicht, welches Merkmal passt, nimm diese.
 |---|---|
 | Switch | Position des Knopfs |
 | Tab | Strich darunter oder fette Schrift |
-| Segment | eigene Fläche |
+| Segment | eigene Fläche, mit Schatten zusätzlich fette Schrift |
 | Chip | eigene Fläche oder Punkt vorn |
 | Navigations-Zeile | Balken links oder eigene Fläche |
 | Fließtext-Link | Unterstreichung |
