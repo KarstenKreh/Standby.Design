@@ -1,6 +1,6 @@
 {
   "name": "standby-design-lint",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Enforces the standby.design design rules in React, Vue and Astro code, with ESLint or with Biome alone: a CLI, a Claude Code hook, pre-commit and CI that report violations with the rule and the fix.",
   "license": "MIT",
   "type": "module",
