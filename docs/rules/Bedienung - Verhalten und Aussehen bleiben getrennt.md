@@ -48,7 +48,7 @@ Eine Rolle im Code weckt beim Nutzer Erwartungen. Wer etwas als Menü, Tabs oder
 
 Bekannte Paare aus Verhalten und Aussehen, die einen Namen tragen. Der Name der Zeile ist die Abkürzung für das Paar. Die Namen in der Spalte Aussehen sind die Vorgabe. Ein Projekt darf sie anders nennen.
 
-| Name | Verhalten | Aussehen | Eigenes Zeichen für „aktiv" | Element im Code |
+| Name | Verhalten | Aussehen | Vorgabe für „aktiv" | Element im Code |
 |---|---|---|---|---|
 | Button | pressable | press | — | `button` |
 | Icon-Button | pressable | press, nur Icon | — | `button` mit Namen |

@@ -4,13 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Farbe trägt nie allein — Design Rules — standby.design</title>
-  <meta name="description" content="Trägt Farbe allein eine Information, bekommen Zustand oder Datenreihe ein zweites Merkmal." />
+  <meta name="description" content="Zustände und Datenreihen sind auch ohne Farbton erkennbar. Ein Merkmal reicht: Fläche, Rand, Strich, Punkt, Fett, Position oder Helligkeit." />
   <link rel="canonical" href="https://standby.design/docs/rules/farbe-farbe-traegt-nie-allein" />
   <link rel="alternate" type="text/markdown" href="https://standby.design/docs/rules.md" title="Design Rules (Markdown)" />
 
   <meta property="og:type" content="article" />
   <meta property="og:title" content="Farbe trägt nie allein — Design Rules — standby.design" />
-  <meta property="og:description" content="Trägt Farbe allein eine Information, bekommen Zustand oder Datenreihe ein zweites Merkmal." />
+  <meta property="og:description" content="Zustände und Datenreihen sind auch ohne Farbton erkennbar. Ein Merkmal reicht: Fläche, Rand, Strich, Punkt, Fett, Position oder Helligkeit." />
   <meta property="og:url" content="https://standby.design/docs/rules/farbe-farbe-traegt-nie-allein" />
   <meta property="og:site_name" content="standby.design" />
   <meta property="og:image" content="https://standby.design/og-image?tool=github" />
@@ -197,18 +197,78 @@
     <h1>Farbe trägt nie allein</h1>
     <dl class="rule-meta"><div><dt>Geltung</dt><dd>universal · web, react-native</dd></div></dl>
 
-<aside class="callout callout-tip"><p class="callout-title">Regel</p><p>Trägt Farbe eine Information, die sonst nirgends steht, zeig sie mit einem zweiten Merkmal. Das gilt für jeden dauerhaften Zustand und jede Datenreihe. Bei Zuständen ist es Position, Strich, Balken, Punkt oder Unterstreichung, und es gehört zum Element. Bei Datenreihen ist es eine direkte Beschriftung, die Form der Marker oder die Strichart. Nennt ein Text die Information schon, betont die Farbe nur und braucht kein zweites Zeichen.</p>
+<aside class="callout callout-tip"><p class="callout-title">Regel</p><p>Zeige jeden dauerhaften Zustand und jede Datenreihe so, dass man sie auch ohne Farbton erkennt. Bei Zuständen reicht ein Merkmal: eine eigene Fläche, ein Rand, ein Strich oder eine Unterstreichung, ein Punkt oder Balken, fette Schrift, ein gefülltes Icon, eine Position oder ein Helligkeitsunterschied von mindestens 3:1. Ein zweites Zeichen obendrauf braucht es nicht. Bei Datenreihen ist es eine direkte Beschriftung, die Form der Marker oder die Strichart. Nennt ein Text die Information schon, betont die Farbe nur und braucht kein Merkmal.</p>
 </aside>
 <h2>Warum</h2>
-<p>Rund jeder zwölfte Mann sieht Rot und Grün nicht auseinander. Hebt sich ein aktiver Tab nur durch die Textfarbe ab, kann dieser Mann ihn nicht von den vier anderen Tabs unterscheiden. Dasselbe gilt bei starkem Sonnenlicht, auf schlecht kalibrierten Bildschirmen und bei jedem, der die Ansicht nur kurz überfliegt.</p>
-<p>Das zweite Zeichen kostet nichts. Es ist ohnehin da, sobald das Element sauber gebaut ist: der Knopf des Switch steht rechts, unter dem Tab liegt ein Strich, vor dem Chip sitzt ein Punkt. Der Fehler entsteht nur, wenn ein Zustand nachträglich „schnell über die Farbe&quot; gelöst wird.</p>
+<p>Rund jeder zwölfte Mann sieht Rot und Grün nicht auseinander. Hebt sich ein aktiver Tab nur durch den Farbton der Schrift ab, kann dieser Mann ihn nicht von den vier anderen Tabs unterscheiden. Dasselbe gilt bei starkem Sonnenlicht, auf schlecht kalibrierten Bildschirmen und bei jedem, der die Ansicht nur kurz überfliegt.</p>
+<p>Verboten ist nur der Farbton allein. Alles, was auch in Graustufen sichtbar bleibt, trägt den Zustand: eine Fläche, ein Rand, ein Gewicht, eine Position. Auch Helligkeit zählt. Unterscheiden sich zwei Farben in der Helligkeit um mindestens 3:1, ist das nach WCAG schon ein eigenes Merkmal.</p>
+<p>Ein Merkmal genügt. Ein gewähltes Segment mit eigener Fläche braucht keinen Punkt dazu, ein fetter aktiver Tab keinen Strich. Mehrere Zeichen für denselben Zustand machen die Ansicht unruhig und sagen nichts Neues.</p>
 <p>Für einen von zwölf Männern sehen Rot und Grün gleich aus. In einer Legende nur aus Farbfeldern kann er keine Reihe zuordnen.</p>
-<h2>Die Zeichen je Element</h2>
+<h2>Was reicht</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Merkmal</th>
+<th>Beispiel</th>
+<th>Reicht, wenn</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Eigene Fläche</td>
+<td>gewähltes Segment, ausgewählte Kachel</td>
+<td>die Fläche sich mit 3:1 vom Grund abhebt oder einen Rand mit 3:1 hat</td>
+</tr>
+<tr>
+<td>Schatten</td>
+<td>gewähltes Segment, das über der Leiste liegt</td>
+<td>die Kante der Fläche 3:1 zum Grund erreicht. Ein weicher Schatten schafft das selten, und im dunklen Modus verschwindet er fast. Dann trägt ein zweites Merkmal den Zustand, etwa fette Schrift oder ein feiner Rand</td>
+</tr>
+<tr>
+<td>Rand</td>
+<td>gewählte Karte, Chip</td>
+<td>der Rand 3:1 zum Grund hat und die anderen keinen tragen</td>
+</tr>
+<tr>
+<td>Strich, Unterstreichung</td>
+<td>Tab, Fließtext-Link</td>
+<td>er mindestens 2 Pixel stark ist und 3:1 zum Grund hat</td>
+</tr>
+<tr>
+<td>Punkt, Balken</td>
+<td>Chip, Navigations-Zeile</td>
+<td>er 3:1 zum Grund hat</td>
+</tr>
+<tr>
+<td>Fette Schrift</td>
+<td>Tab, Segment, Navigations-Zeile</td>
+<td>das Gewicht um mindestens zwei Stufen springt, etwa von 400 auf 600, und die Breite für den fetten Schnitt reserviert ist</td>
+</tr>
+<tr>
+<td>Gefülltes Icon</td>
+<td>Tab-Leiste in der App</td>
+<td>die inaktiven Icons nur umrandet sind</td>
+</tr>
+<tr>
+<td>Position</td>
+<td>Switch</td>
+<td>der Knopf sichtbar die Seite wechselt</td>
+</tr>
+<tr>
+<td>Helligkeit</td>
+<td>Tab, Segment</td>
+<td>aktiv und inaktiv mindestens 3:1 zueinander haben und beide die Kontrastgrenzen zum Grund einhalten</td>
+</tr>
+</tbody></table></div>
+<p>Die Helligkeit allein ist die schwächste Wahl. Sie erfüllt die Regel, fällt beim Überfliegen aber am wenigsten auf. Nimm sie, wenn die Ansicht ruhig bleiben soll, und prüfe, ob der Zustand auf den ersten Blick klar ist.</p>
+<h2>Der Test</h2>
+<p>Schalte die Ansicht auf Graustufen. Siehst Du auf einen Blick, welcher Tab, welches Segment, welche Kachel an ist, reicht das Merkmal. Siehst Du es erst beim zweiten Hinsehen, reicht es nicht.</p>
+<h2>Vorgaben je Element</h2>
+<p>Weißt Du nicht, welches Merkmal passt, nimm diese.</p>
 <div class="table-wrap"><table>
 <thead>
 <tr>
 <th>Element</th>
-<th>Zweites Zeichen</th>
+<th>Vorgabe</th>
 </tr>
 </thead>
 <tbody><tr>
@@ -217,19 +277,23 @@
 </tr>
 <tr>
 <td>Tab</td>
-<td>Strich darunter</td>
+<td>Strich darunter oder fette Schrift</td>
+</tr>
+<tr>
+<td>Segment</td>
+<td>eigene Fläche, mit Schatten zusätzlich fette Schrift</td>
 </tr>
 <tr>
 <td>Chip</td>
-<td>Punkt vorn</td>
+<td>eigene Fläche oder Punkt vorn</td>
 </tr>
 <tr>
 <td>Navigations-Zeile</td>
-<td>Balken links</td>
+<td>Balken links oder eigene Fläche</td>
 </tr>
 <tr>
 <td>Fließtext-Link</td>
-<td>verdickte Unterstreichung</td>
+<td>Unterstreichung</td>
 </tr>
 <tr>
 <td>Button, Icon-Button</td>
@@ -244,14 +308,38 @@
 <td>— (nicht bedienbar)</td>
 </tr>
 </tbody></table></div>
-<p>Wo ein Strich steht, hat das Element einen dauerhaften Zustand und braucht das Zeichen. Wo keiner steht, hat es keinen.</p>
 <h2>Hart und weich</h2>
-<p>Hart: ein zweites Merkmal. Weich: welches. Vorgabe direkte Beschriftung am Ende der Linie.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Ein dauerhafter Zustand und eine Datenreihe sind in Graustufen erkennbar</td>
+<td>hart</td>
+</tr>
+<tr>
+<td>Das Merkmal hat 3:1 zum Grund oder zum anderen Zustand</td>
+<td>hart</td>
+</tr>
+<tr>
+<td>Welches Merkmal</td>
+<td>weich, Vorgabe aus der Tabelle oben</td>
+</tr>
+<tr>
+<td>Merkmal einer Datenreihe</td>
+<td>weich, Vorgabe direkte Beschriftung am Ende der Linie</td>
+</tr>
+</tbody></table></div>
 <h2>Woran Du den Verstoß erkennst</h2>
 <ul>
-<li>Der aktive Tab unterscheidet sich nur in der Textfarbe.</li>
-<li>Eine ausgewählte Kachel ist nur farblich hervorgehoben.</li>
+<li>Der aktive Tab unterscheidet sich nur im Farbton der Schrift.</li>
+<li>Eine ausgewählte Kachel hat nur eine getönte Fläche, die sich in Graustufen kaum abhebt.</li>
 <li>In Graustufen ist nicht mehr erkennbar, welches Element an ist. Das ist der schnellste Test.</li>
+<li>Ein Element trägt mehrere Zeichen für denselben Zustand, etwa Fläche, Strich und Punkt zugleich. Das ist derselbe Fehler, nur andersherum.</li>
+<li>Der aktive Tab wird fett, und die Tabs daneben rutschen zur Seite.</li>
 <li>Legende nur aus Farbkästchen.</li>
 <li>Zwei Linien, die sich nur im Farbton unterscheiden.</li>
 <li>Kreisdiagramm ohne Beschriftung an den Stücken.</li>
@@ -262,7 +350,7 @@
 <p>Diagramme mit genau einer Reihe.</p>
 <p>Farbe, die nur betont, was ein Text daneben schon sagt. Eine rote Kennzahl unter dem Titel „Frist überschritten“ braucht keinen zusätzlichen Punkt. Den Zustand trägt der Text, die Farbe lenkt nur den Blick. Ein Punkt in derselben Farbe würde ohnehin nichts unterscheiden, denn Warnung und Fehler sähen in Graustufen gleich aus.</p>
 <h2>Quelle</h2>
-<p>WCAG 1.4.1 Use of Color, 1.4.11 Non-text Contrast. Vercel › Design („Accessible charts&quot;).</p>
+<p>WCAG 1.4.1 Use of Color mit der Erklärung „Understanding 1.4.1“: Ein Helligkeitsunterschied von mindestens 3:1 gilt als eigenes Merkmal. WCAG 1.4.11 Non-text Contrast. Vercel › Design („Accessible charts&quot;).</p>
 <h2>Verwandt</h2>
 <ul>
 <li><a href="/docs/rules/bedienung-kurze-zustaende-verschieben-dauerhafte-wechseln-die-palette">Kurze Zustände verschieben, dauerhafte wechseln die Palette</a></li>
