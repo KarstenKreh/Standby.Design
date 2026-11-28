@@ -160,7 +160,7 @@ Dazu sagt `applies-to`, für welche Techniken eine Regel gedacht ist. Damit läs
 | [[Farbe - Werte kommen aus Tokens, nie aus der Hand]] | universal | Kein Hex, keine Pixelzahl in der Ansicht. Dazu: was Material ist |
 | [[Farbe - Hell und Dunkel sind zwei Entwürfe, keine Umkehrung]] | universal | Beide Erscheinungen einzeln festgelegt und einzeln geprüft. Der Nutzer entscheidet |
 | [[Farbe - Kontrast hat eine Untergrenze]] | universal | Text 4,5:1, Grenzen 3:1, in jedem Zustand. Systemkontrast wird beachtet |
-| [[Farbe - Farbe trägt nie allein]] | universal | Trägt Farbe allein eine Information, bekommen Zustand oder Datenreihe ein zweites Merkmal |
+| [[Farbe - Farbe trägt nie allein]] | universal | Zustände und Datenreihen sind ohne Farbton erkennbar. Ein Merkmal reicht: Fläche, Rand, Strich, Punkt, Fett oder Helligkeit |
 
 ## Stack
 
